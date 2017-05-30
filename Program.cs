@@ -58,7 +58,7 @@ namespace ParserTenders
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last или prev или curr в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44 или prev44 или curr44 в качестве аргумента");
                 return;
             }
 
@@ -83,6 +83,9 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTender44(Periodparsing);
                     break;
+                default:
+                    Console.WriteLine("Неправильно указан аргумент, используйте last44, curr44, prev44");
+                    break;
             }
 
         }
@@ -91,19 +94,24 @@ namespace ParserTenders
         {
             GetSettings set = new GetSettings();
             _database = set.Database;
-            _logPath44 = set.LogPathContracts44;
+            _logPath44 = set.LogPathTenders44;
             _prefix = set.Prefix;
             _user = set.UserDB;
             _pass = set.PassDB;
-            _tempPath44 = set.TempPathContracts44;
+            _tempPath44 = set.TempPathTenders44;
             _server = set.Server;
             _port = set.Port;
             string tmp = set.Years;
             string[] temp_years = tmp.Split(new char[] {','});
 
-            foreach (var s in temp_years.Select(v => $"{v.Trim()}"))
+            foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))
             {
                 _years.Add(s);
+            }
+            if (String.IsNullOrEmpty(TempPath) || String.IsNullOrEmpty(LogPath))
+            {
+                Console.WriteLine("Не получится создать папки для парсинга");
+                Environment.Exit(0);
             }
 
             if (Directory.Exists(TempPath))
@@ -120,11 +128,12 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(LogPath);
             }
-            FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Contracts44_{LocalDate:dd_MM_yyyy}.log";
+            FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
         }
 
         private static void ParserTender44(TypeArguments arg)
         {
+            Log.Logger("Время начала парсинга Tenders44");
             
         }
     }

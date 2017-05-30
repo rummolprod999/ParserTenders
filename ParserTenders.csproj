@@ -46,7 +46,10 @@
   <ItemGroup>
     <Compile Include="ConnectToDb.cs" />
     <Compile Include="GetSettings.cs" />
+    <Compile Include="IParser.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="ParserTend44.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeArguments.cs" />

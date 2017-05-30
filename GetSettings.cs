@@ -7,15 +7,15 @@ namespace ParserTenders
     public class GetSettings
     {
         public readonly string Database;
-        public readonly string TempPathContracts44;
-        public readonly string LogPathContracts44;
+        public readonly string TempPathTenders44;
+        public readonly string LogPathTenders44;
         public readonly string Prefix;
         public readonly string UserDB;
         public readonly string PassDB;
         public readonly string Server;
         public readonly int Port;
         public readonly string Years;
-        
+
         public GetSettings()
         {
             XmlDocument xDoc = new XmlDocument();
@@ -30,11 +30,11 @@ namespace ParserTenders
                         case "database":
                             Database = xnode.InnerText;
                             break;
-                        case "tempdir_contracts44":
-                            TempPathContracts44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                        case "tempdir_tenders44":
+                            TempPathTenders44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
-                        case "logdir_contracts44":
-                            LogPathContracts44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                        case "logdir_tenders44":
+                            LogPathTenders44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "prefix":
                             Prefix = xnode.InnerText;
@@ -58,7 +58,7 @@ namespace ParserTenders
                 }
             }
 
-            if (String.IsNullOrEmpty(LogPathContracts44) || String.IsNullOrEmpty(TempPathContracts44) || String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) || String.IsNullOrEmpty(Years))
+            if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) || String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) || String.IsNullOrEmpty(Years))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);
