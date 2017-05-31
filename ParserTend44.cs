@@ -172,6 +172,7 @@ namespace ParserTenders
             {
                 return;
             }
+
             try
             {
                 ParsingXML(f, region, region_id, typefile);

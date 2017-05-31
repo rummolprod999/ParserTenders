@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders
@@ -12,6 +14,15 @@ namespace ParserTenders
 
         public override void Parsing()
         {
+            string xml = GetXml(file.ToString());
+            JObject root = (JObject)t.SelectToken("export");
+            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            if (firstOrDefault != null)
+            {
+                JToken tender = firstOrDefault.First;
+                int id = (int)tender.SelectToken("id");
+                Console.WriteLine(id);
+            }
         }
     }
 }
