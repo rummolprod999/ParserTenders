@@ -29,6 +29,7 @@ namespace ParserTenders
         public static string StrArg;
         public static TypeArguments Periodparsing;
         public static string PathProgram;
+
         public static string TempPath
         {
             get
@@ -39,9 +40,10 @@ namespace ParserTenders
 
                 return "";
             }
-
         }
-        public static string LogPath {
+
+        public static string LogPath
+        {
             get
             {
                 if (Periodparsing == TypeArguments.Curr44 || Periodparsing == TypeArguments.Prev44 ||
@@ -50,7 +52,6 @@ namespace ParserTenders
 
                 return "";
             }
-
         }
 
         public static void Main(string[] args)
@@ -87,7 +88,6 @@ namespace ParserTenders
                     Console.WriteLine("Неправильно указан аргумент, используйте last44, curr44, prev44");
                     break;
             }
-
         }
 
         private static void Init(TypeArguments arg)
@@ -134,7 +134,9 @@ namespace ParserTenders
         private static void ParserTender44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders44");
-            
+            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
+            t44.Parsing();*/
+            Log.Logger("Время окончания парсинга Tenders44");
         }
     }
 }

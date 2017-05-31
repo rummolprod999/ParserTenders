@@ -8,6 +8,7 @@ namespace ParserTenders
         DataTable GetRegions();
         WorkWithFtp ClientFtp44();
         void GetListFileArch(string Arch, string PathParse, string region);
-        string GetArch(string Arch, string PathParse);
+        void GetListFileArch(string Arch, string PathParse, string region, int region_id);
+        string GetArch44(string Arch, string PathParse);
     }
 }

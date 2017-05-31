@@ -36,14 +36,20 @@
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClearText.cs" />
     <Compile Include="ConnectToDb.cs" />
     <Compile Include="GetSettings.cs" />
     <Compile Include="IParser.cs" />
@@ -52,7 +58,17 @@
     <Compile Include="ParserTend44.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TenderTypeCancel.cs" />
+    <Compile Include="TenderTypeCancelFailure.cs" />
+    <Compile Include="TenderTypeDateChange.cs" />
+    <Compile Include="TenderType44.cs" />
+    <Compile Include="TenderTypeLotCancel.cs" />
+    <Compile Include="TenderTypeProlongation.cs" />
     <Compile Include="TypeArguments.cs" />
+    <Compile Include="TypeFile44.cs" />
+    <Compile Include="Tender.cs" />
+    <Compile Include="TenderTypeOrgChange.cs" />
+    <Compile Include="Unzipped.cs" />
     <Compile Include="WorkWithFtp.cs" />
   </ItemGroup>
   <ItemGroup>
