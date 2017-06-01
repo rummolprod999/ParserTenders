@@ -23,7 +23,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не удалось извлечь файл", e);
+                    Log.Logger("Не удалось извлечь файл", e, filea);
                     try
                     {
                         var MyProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"{filea} -d {l_dir}")};

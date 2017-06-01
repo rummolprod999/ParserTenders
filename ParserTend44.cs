@@ -230,7 +230,16 @@ namespace ParserTenders
         public override List<String> GetListArchLast(string PathParse, string RegionPath)
         {
             WorkWithFtp ftp = ClientFtp44();
-            ftp.ChangeWorkingDirectory(PathParse);
+            try
+            {
+                ftp.ChangeWorkingDirectory(PathParse);
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Не удалось найти путь ftp", PathParse, e);
+                return new List<string>();
+            }
+
             List<String> archtemp = ftp.ListDirectory();
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
             return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
@@ -240,7 +249,16 @@ namespace ParserTenders
         {
             List<String> arch = new List<string>();
             WorkWithFtp ftp = ClientFtp44();
-            ftp.ChangeWorkingDirectory(PathParse);
+            try
+            {
+                ftp.ChangeWorkingDirectory(PathParse);
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Не удалось найти путь ftp", PathParse, e);
+                return arch;
+            }
+
             List<String> archtemp = ftp.ListDirectory();
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
             foreach (var a in archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
@@ -278,7 +296,16 @@ namespace ParserTenders
         {
             List<String> arch = new List<string>();
             WorkWithFtp ftp = ClientFtp44();
-            ftp.ChangeWorkingDirectory(PathParse);
+            try
+            {
+                ftp.ChangeWorkingDirectory(PathParse);
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Не удалось найти путь ftp", PathParse, e);
+                return arch;
+            }
+
             List<String> archtemp = ftp.ListDirectory();
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
