@@ -28,8 +28,8 @@ namespace ParserTenders
                     {
                         var MyProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"{filea} -d {l_dir}")};
                         MyProcess.Start();
-                        Log.Logger("Извлекли файл альтернативным методом", filea);
                         MyProcess.WaitForExit();
+                        Log.Logger("Извлекли файл альтернативным методом", filea);
                         return l_dir;
                     }
                     catch (Exception exception)

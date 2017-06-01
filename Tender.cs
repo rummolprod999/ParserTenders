@@ -9,6 +9,7 @@ namespace ParserTenders
         protected readonly FileInfo file;
         protected readonly string region;
         protected readonly int region_id;
+        protected readonly string file_path;
 
         public Tender(FileInfo f, string region, int region_id, JObject json)
         {
@@ -16,6 +17,7 @@ namespace ParserTenders
             file = f;
             this.region = region;
             this.region_id = region_id;
+            file_path = file.ToString();
         }
 
         public virtual void Parsing()
