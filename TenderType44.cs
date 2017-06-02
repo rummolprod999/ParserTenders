@@ -1,17 +1,29 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders
 {
     public class TenderType44 : Tender
     {
+        public event Action<int> AddTender44;
+
         public TenderType44(FileInfo f, string region, int region_id, JObject json)
             : base(f, region, region_id, json)
         {
+            AddTender44 += delegate(int d)
+            {
+                if (d > 0)
+                    Program.Addtender44++;
+                else
+                    Log.Logger("Не удалось добавить Tender44", file_path);
+            };
         }
 
         public override void Parsing()
@@ -61,8 +73,13 @@ namespace ParserTenders
                     }
 
                     reader.Close();
-                    string docPublishDate = ((string) tender.SelectToken("docPublishDate") ?? "").Trim();
+                    string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
+                                             "").Trim('"');
                     string date_version = docPublishDate;
+                    /*JsonReader readerj = new JsonTextReader(new StringReader(tender.ToString()));
+                    readerj.DateParseHandling = DateParseHandling.None;
+                    JObject o = JObject.Load(readerj);
+                    Console.WriteLine(o["docPublishDate"]);*/
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
                     string notice_version = "";
@@ -83,8 +100,7 @@ namespace ParserTenders
                         {
                             foreach (DataRow row in dt.Rows)
                             {
-                                string date_trim = docPublishDate.Substring(0, 19);
-                                DateTime date_new = DateTime.Parse(date_trim);
+                                DateTime date_new = DateTime.Parse(docPublishDate);
                                 DateTime date_old = (DateTime) row["doc_publish_date"];
                                 if (date_new > date_old)
                                 {
@@ -207,6 +223,88 @@ namespace ParserTenders
                             cmd7.ExecuteNonQuery();
                             id_placing_way = (int) cmd7.LastInsertedId;
                         }
+                    }
+                    int id_etp = 0;
+                    string ETP_code = ((string) tender.SelectToken("ETP.code") ?? "").Trim();
+                    string ETP_name = ((string) tender.SelectToken("ETP.name") ?? "").Trim();
+                    string ETP_url = ((string) tender.SelectToken("ETP.url") ?? "").Trim();
+                    if (!String.IsNullOrEmpty(ETP_code))
+                    {
+                        string select_etp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
+                        MySqlCommand cmd7 = new MySqlCommand(select_etp, connect);
+                        cmd7.Prepare();
+                        cmd7.Parameters.AddWithValue("@code", ETP_code);
+                        MySqlDataReader reader4 = cmd7.ExecuteReader();
+                        if (reader4.HasRows)
+                        {
+                            reader4.Read();
+                            id_etp = reader4.GetInt32("id_etp");
+                            reader4.Close();
+                        }
+                        else
+                        {
+                            reader4.Close();
+                            string insert_etp =
+                                $"INSERT INTO {Program.Prefix}etp SET code= @code, name= @name, url= @url, conf=0";
+                            MySqlCommand cmd8 = new MySqlCommand(insert_etp, connect);
+                            cmd8.Prepare();
+                            cmd8.Parameters.AddWithValue("@code", ETP_code);
+                            cmd8.Parameters.AddWithValue("@name", ETP_name);
+                            cmd8.Parameters.AddWithValue("@url", ETP_url);
+                            cmd8.ExecuteNonQuery();
+                            id_etp = (int) cmd8.LastInsertedId;
+                        }
+                    }
+                    string end_date =
+                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collecting.endDate") ?? "") ??
+                     "").Trim('"');
+                    string scoring_date =
+                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.scoring.date") ?? "") ??
+                     "").Trim('"');
+                    string bidding_date =
+                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.bidding.date") ?? "") ??
+                     "").Trim('"');
+                    string insert_tender =
+                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
+                    MySqlCommand cmd9 = new MySqlCommand(insert_tender, connect);
+                    cmd9.Prepare();
+                    cmd9.Parameters.AddWithValue("@id_region", region_id);
+                    cmd9.Parameters.AddWithValue("@id_xml", id_t);
+                    cmd9.Parameters.AddWithValue("@purchase_number", purchaseNumber);
+                    cmd9.Parameters.AddWithValue("@doc_publish_date", docPublishDate);
+                    cmd9.Parameters.AddWithValue("@href", href);
+                    cmd9.Parameters.AddWithValue("@purchase_object_info", purchaseObjectInfo);
+                    cmd9.Parameters.AddWithValue("@type_fz", 44);
+                    cmd9.Parameters.AddWithValue("@id_organizer", id_organizer);
+                    cmd9.Parameters.AddWithValue("@id_placing_way", id_placing_way);
+                    cmd9.Parameters.AddWithValue("@id_etp", id_etp);
+                    cmd9.Parameters.AddWithValue("@end_date", end_date);
+                    cmd9.Parameters.AddWithValue("@scoring_date", scoring_date);
+                    cmd9.Parameters.AddWithValue("@bidding_date", bidding_date);
+                    cmd9.Parameters.AddWithValue("@cancel", cancel_status);
+                    cmd9.Parameters.AddWithValue("@date_version", date_version);
+                    cmd9.Parameters.AddWithValue("@num_version", num_version);
+                    cmd9.Parameters.AddWithValue("@notice_version", notice_version);
+                    cmd9.Parameters.AddWithValue("@xml", xml);
+                    cmd9.Parameters.AddWithValue("@print_form", printform);
+                    int res_insert_tender = cmd9.ExecuteNonQuery();
+                    int id_tender = (int) cmd9.LastInsertedId;
+                    AddTender44?.Invoke(res_insert_tender);
+                    if (cancel_status == 0)
+                    {
+                        string update_contract =
+                            $"UPDATE {Program.Prefix}contract_sign SET id_tender = @id_tender WHERE purchase_number = @purchase_number";
+                        MySqlCommand cmd10 = new MySqlCommand(update_contract, connect);
+                        cmd10.Prepare();
+                        cmd10.Parameters.AddWithValue("@purchase_number", purchaseNumber);
+                        cmd10.Parameters.AddWithValue("@id_tender", id_tender);
+                        cmd10.ExecuteNonQuery();
+                    }
+                    List<JToken> attachment = new List<JToken>();
+                    var attachments_obj = tender.SelectToken("attachments.attachment");
+                    if (attachments_obj != null && attachments_obj.Type != JTokenType.Null)
+                    {
+                        
                     }
                 }
             }

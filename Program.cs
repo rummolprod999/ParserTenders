@@ -29,7 +29,6 @@ namespace ParserTenders
         public static string StrArg;
         public static TypeArguments Periodparsing;
         public static string PathProgram;
-
         public static string TempPath
         {
             get
@@ -53,6 +52,7 @@ namespace ParserTenders
                 return "";
             }
         }
+        public static int Addtender44 = 0;
 
         public static void Main(string[] args)
         {
