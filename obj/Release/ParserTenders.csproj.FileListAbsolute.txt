@@ -1,0 +1,10 @@
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/ParserTenders.exe.config
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/ParserTenders.exe
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release//ParserTenders.pdb
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csprojResolveAssemblyReference.cache
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CoreCompileInputs.cache
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.exe
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.pdb

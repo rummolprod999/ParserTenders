@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
@@ -30,11 +31,31 @@ namespace ParserTenders
             int t = xmlt.Length;
             if (t >= 2)
             {
-                xml = xmlt[t - 2] + "/" + xmlt[t - 1];
-                return xml;
+                string sxml = xmlt[t - 2] + "/" + xmlt[t - 1];
+                return sxml;
             }
 
             return "";
+        }
+
+        public List<JToken> GetElements(JToken j, string s)
+        {
+            List<JToken> els = new List<JToken>();
+            var els_obj = j.SelectToken(s);
+            if (els_obj != null && els_obj.Type != JTokenType.Null)
+            {
+                switch (els_obj.Type)
+                {
+                    case JTokenType.Object:
+                        els.Add(els_obj);
+                        break;
+                    case JTokenType.Array:
+                        els.AddRange(els_obj);
+                        break;
+                }
+            }
+
+            return els;
         }
     }
 }

@@ -300,11 +300,175 @@ namespace ParserTenders
                         cmd10.Parameters.AddWithValue("@id_tender", id_tender);
                         cmd10.ExecuteNonQuery();
                     }
-                    List<JToken> attachment = new List<JToken>();
-                    var attachments_obj = tender.SelectToken("attachments.attachment");
-                    if (attachments_obj != null && attachments_obj.Type != JTokenType.Null)
+                    List<JToken> attachments = GetElements(tender, "attachments.attachment");
+                    foreach (var att in attachments)
                     {
-                        
+                        string attach_name = ((string) att.SelectToken("fileName") ?? "").Trim();
+                        string attach_description = ((string) att.SelectToken("docDescription") ?? "").Trim();
+                        string attach_url = ((string) att.SelectToken("url") ?? "").Trim();
+                        if (!String.IsNullOrEmpty(attach_name))
+                        {
+                            string insert_attach =
+                                $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
+                            MySqlCommand cmd11 = new MySqlCommand(insert_attach, connect);
+                            cmd11.Prepare();
+                            cmd11.Parameters.AddWithValue("@id_tender", id_tender);
+                            cmd11.Parameters.AddWithValue("@file_name", attach_name);
+                            cmd11.Parameters.AddWithValue("@url", attach_url);
+                            cmd11.Parameters.AddWithValue("@description", attach_description);
+                            cmd11.ExecuteNonQuery();
+                        }
+                    }
+
+                    int lotNumber = 1;
+                    List<JToken> lots = GetElements(tender, "lot");
+                    if (lots.Count == 0)
+                        lots = GetElements(tender, "lots.lot");
+                    foreach (var lot in lots)
+                    {
+                        string lot_max_price = ((string) lot.SelectToken("maxPrice") ?? "").Trim();
+                        string lot_currency = ((string) lot.SelectToken("currency.name") ?? "").Trim();
+                        string lot_finance_source = ((string) lot.SelectToken("financeSource") ?? "").Trim();
+                        string insert_lot =
+                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
+                        MySqlCommand cmd12 = new MySqlCommand(insert_lot, connect);
+                        cmd12.Prepare();
+                        cmd12.Parameters.AddWithValue("@id_tender", id_tender);
+                        cmd12.Parameters.AddWithValue("@lot_number", lotNumber);
+                        cmd12.Parameters.AddWithValue("@max_price", lot_max_price);
+                        cmd12.Parameters.AddWithValue("@currency", lot_currency);
+                        cmd12.Parameters.AddWithValue("@finance_source", lot_finance_source);
+                        cmd12.ExecuteNonQuery();
+                        int id_lot = (int) cmd12.LastInsertedId;
+                        if (id_lot < 1)
+                            Log.Logger("Не получили id лота", file_path);
+                        lotNumber++;
+                        List<JToken> customerRequirements =
+                            GetElements(lot, "customerRequirements.customerRequirement");
+                        foreach (var customerRequirement in customerRequirements)
+                        {
+                            string kladr_place =
+                            ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
+                             "").Trim();
+                            if (String.IsNullOrEmpty(kladr_place))
+                                kladr_place =
+                                ((string) customerRequirement.SelectToken(
+                                     "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
+                            string delivery_place =
+                                ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.deliveryPlace") ?? "")
+                                .Trim();
+                            if (String.IsNullOrEmpty(delivery_place))
+                                delivery_place =
+                                ((string) customerRequirement.SelectToken(
+                                     "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
+                            string delivery_term =
+                                ((string) customerRequirement.SelectToken("deliveryTerm") ?? "").Trim();
+                            string application_guarantee_amount =
+                                ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
+                            string contract_guarantee_amount =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
+                            string application_settlement_account =
+                            ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
+                             "").Trim();
+                            string application_personal_account =
+                                ((string) customerRequirement.SelectToken("applicationGuarantee.personalAccount") ?? "")
+                                .Trim();
+                            string application_bik =
+                                ((string) customerRequirement.SelectToken("applicationGuarantee.bik") ?? "").Trim();
+                            string contract_settlement_account =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.settlementAccount") ?? "")
+                                .Trim();
+                            string contract_personal_account =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.personalAccount") ?? "")
+                                .Trim();
+                            string contract_bik =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.bik") ?? "").Trim();
+                            string customer_regNum = ((string) customerRequirement.SelectToken("customer.regNum") ?? "")
+                                .Trim();
+                            string customer_full_name =
+                                ((string) customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
+                            string customer_requirement_max_price =
+                                ((string) customerRequirement.SelectToken("maxPrice") ?? "").Trim();
+
+                            if (!String.IsNullOrEmpty(customer_regNum))
+                            {
+                                string select_customer =
+                                    $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                MySqlCommand cmd13 = new MySqlCommand(select_customer, connect);
+                                cmd13.Prepare();
+                                cmd13.Parameters.AddWithValue("@reg_num", customer_regNum);
+                                MySqlDataReader reader5 = cmd13.ExecuteReader();
+                                if (reader5.HasRows)
+                                {
+                                    reader5.Read();
+                                    id_customer = reader5.GetInt32("id_customer");
+                                    reader5.Close();
+                                }
+                                else
+                                {
+                                    reader5.Close();
+                                    string customer_inn = "";
+                                    if (!String.IsNullOrEmpty(organizer_inn))
+                                    {
+                                        if (organizer_reg_num == customer_regNum)
+                                        {
+                                            customer_inn = organizer_inn;
+                                        }
+                                    }
+                                    string insert_customer =
+                                        $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, inn = @inn";
+                                    MySqlCommand cmd14 = new MySqlCommand(insert_customer, connect);
+                                    cmd14.Prepare();
+                                    cmd14.Parameters.AddWithValue("@reg_num", customer_regNum);
+                                    cmd14.Parameters.AddWithValue("@full_name", customer_full_name);
+                                    cmd14.Parameters.AddWithValue("@inn", customer_inn);
+                                    cmd14.ExecuteNonQuery();
+                                    id_customer = (int) cmd14.LastInsertedId;
+
+                                }
+                            }
+                            else
+                            {
+                                if (!String.IsNullOrEmpty(customer_full_name))
+                                {
+                                    string select_cust_name = $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                    MySqlCommand cmd15 = new MySqlCommand(select_cust_name, connect);
+                                    cmd15.Prepare();
+                                    cmd15.Parameters.AddWithValue("@full_name", customer_full_name);
+                                    MySqlDataReader reader6 = cmd15.ExecuteReader();
+                                    if (reader6.HasRows)
+                                    {
+                                        reader6.Read();
+                                        id_customer = reader6.GetInt32("id_customer");
+                                        Log.Logger("Получили id_customer по customer_full_name", file_path);
+                                    }
+                                    reader6.Close();
+                                }
+                            }
+
+                            string insert_customer_requirement = $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
+                            MySqlCommand cmd16 = new MySqlCommand(insert_customer_requirement, connect);
+                            cmd16.Prepare();
+                            cmd16.Parameters.AddWithValue("@id_lot", id_lot);
+                            cmd16.Parameters.AddWithValue("@id_customer", id_customer);
+                            cmd16.Parameters.AddWithValue("@kladr_place", kladr_place);
+                            cmd16.Parameters.AddWithValue("@delivery_place", delivery_place);
+                            cmd16.Parameters.AddWithValue("@delivery_term", delivery_term);
+                            cmd16.Parameters.AddWithValue("@application_guarantee_amount", application_guarantee_amount);
+                            cmd16.Parameters.AddWithValue("@application_settlement_account", application_settlement_account);
+                            cmd16.Parameters.AddWithValue("@application_personal_account", application_personal_account);
+                            cmd16.Parameters.AddWithValue("@application_bik", application_bik);
+                            cmd16.Parameters.AddWithValue("@contract_guarantee_amount", contract_guarantee_amount);
+                            cmd16.Parameters.AddWithValue("@contract_settlement_account", contract_settlement_account);
+                            cmd16.Parameters.AddWithValue("@contract_personal_account", contract_personal_account);
+                            cmd16.Parameters.AddWithValue("@contract_bik", contract_bik);
+                            cmd16.Parameters.AddWithValue("@max_price", customer_requirement_max_price);
+                            cmd16.ExecuteNonQuery();
+                            if (id_customer == 0)
+                            {
+                                Log.Logger("Нет id_customer", file_path);
+                            }
+                        }
                     }
                 }
             }
