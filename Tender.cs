@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
@@ -117,11 +118,14 @@ namespace ParserTenders
             adapter.Fill(dt);
             if (dt.Rows.Count > 0)
             {
-                foreach (DataRow row in dt.Rows)
+                var distr_dt = dt.AsEnumerable().Distinct(DataRowComparer.Default);
+                foreach (DataRow row in distr_dt)
                 {
-                    string name = ((string) row["name"]).Trim();
-                    string okpd_name = ((string) row["okpd_name"]).Trim();
-                    string inn_c = "";
+                    string name = (!row.IsNull("name"))?((string) row["name"]).Trim(): "";
+                    string okpd_name = (!row.IsNull("okpd_name"))?((string) row["okpd_name"]).Trim(): "";
+                    string inn_c = (!row.IsNull("inn"))?((string) row["inn"]).Trim(): "";
+                    string full_name_c = (!row.IsNull("inn"))?((string) row["inn"]).Trim(): "";
+                    res_string += $"{name} {okpd_name} {inn_c} {full_name_c}".Trim();
                 }
             }
         }

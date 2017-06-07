@@ -7,6 +7,7 @@ using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace ParserTenders
 {
@@ -82,6 +83,8 @@ namespace ParserTenders
                     Console.WriteLine(o["docPublishDate"]);*/
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
+                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != 1)
+                        printform = printform.Substring(9, printform.Length-12);
                     string notice_version = "";
                     int num_version = 0;
                     int cancel_status = 0;
@@ -522,6 +525,8 @@ namespace ParserTenders
                             if (String.IsNullOrEmpty(okpd_name))
                                 okpd_name = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
                             string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
+                            if(!String.IsNullOrEmpty(name))
+                                name = Regex.Replace(name, @"\t|\n|\r", "");
                             string quantity_value = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();
                             string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
