@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace ParserTenders
 {
@@ -140,6 +141,9 @@ namespace ParserTenders
             ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationEA44_0126300029115000948_6597318.xml");
             t44.ParsingXML(f, "br", 32, TypeFile44.TypeTen44);
+            string s = "gsdg    rghdfh rerfhgh   \n\n\ng";
+            s = Regex.Replace(s, @"\s+", " ");
+            Console.WriteLine(s);
         }
     }
 }
