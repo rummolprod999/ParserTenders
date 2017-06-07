@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders
@@ -56,6 +59,71 @@ namespace ParserTenders
             }
 
             return els;
+        }
+
+        public void GetOKPD(string okpd2_code, out int okpd2_group_code, out string okpd2_group_level1_code)
+        {
+            if (okpd2_code.Length > 1)
+            {
+                int dot = okpd2_code.IndexOf(".");
+                if (dot != -1)
+                {
+                    string okpd2_group_code_temp = okpd2_code.Substring(0, dot);
+                    okpd2_group_code_temp = okpd2_group_code_temp.Substring(0, 2);
+                    int temp_okpd2_group_code;
+                    if (!Int32.TryParse(okpd2_group_code_temp, out temp_okpd2_group_code))
+                    {
+                        temp_okpd2_group_code = 0;
+                    }
+                    okpd2_group_code = temp_okpd2_group_code;
+                }
+                else
+                {
+                    okpd2_group_code = 0;
+                }
+            }
+            else
+            {
+                okpd2_group_code = 0;
+            }
+            if (okpd2_code.Length > 3)
+            {
+                int dot = okpd2_code.IndexOf(".");
+                if (dot != -1)
+                {
+                    okpd2_group_level1_code = okpd2_code.Substring(dot + 1, 1);
+                }
+                else
+                {
+                    okpd2_group_level1_code = "";
+                }
+            }
+            else
+            {
+                okpd2_group_level1_code = "";
+            }
+        }
+
+        public void TenderKwords(MySqlConnection connect, int id_tender)
+        {
+            string res_string = "";
+            string select_pur_obj =
+                $"SELECT DISTINCT po.name, po.okpd_name, cus.inn, cus.full_name FROM {Program.Prefix}customer AS cus RIGHT JOIN {Program.Prefix}purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
+            MySqlCommand cmd1 = new MySqlCommand(select_pur_obj, connect);
+            cmd1.Prepare();
+            cmd1.Parameters.AddWithValue("@id_tender", id_tender);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd1};
+            adapter.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    string name = ((string) row["name"]).Trim();
+                    string okpd_name = ((string) row["okpd_name"]).Trim();
+                    string inn_c = "";
+                }
+            }
         }
     }
 }

@@ -424,14 +424,14 @@ namespace ParserTenders
                                     cmd14.Parameters.AddWithValue("@inn", customer_inn);
                                     cmd14.ExecuteNonQuery();
                                     id_customer = (int) cmd14.LastInsertedId;
-
                                 }
                             }
                             else
                             {
                                 if (!String.IsNullOrEmpty(customer_full_name))
                                 {
-                                    string select_cust_name = $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                    string select_cust_name =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
                                     MySqlCommand cmd15 = new MySqlCommand(select_cust_name, connect);
                                     cmd15.Prepare();
                                     cmd15.Parameters.AddWithValue("@full_name", customer_full_name);
@@ -446,7 +446,8 @@ namespace ParserTenders
                                 }
                             }
 
-                            string insert_customer_requirement = $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
+                            string insert_customer_requirement =
+                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
                             MySqlCommand cmd16 = new MySqlCommand(insert_customer_requirement, connect);
                             cmd16.Prepare();
                             cmd16.Parameters.AddWithValue("@id_lot", id_lot);
@@ -454,9 +455,12 @@ namespace ParserTenders
                             cmd16.Parameters.AddWithValue("@kladr_place", kladr_place);
                             cmd16.Parameters.AddWithValue("@delivery_place", delivery_place);
                             cmd16.Parameters.AddWithValue("@delivery_term", delivery_term);
-                            cmd16.Parameters.AddWithValue("@application_guarantee_amount", application_guarantee_amount);
-                            cmd16.Parameters.AddWithValue("@application_settlement_account", application_settlement_account);
-                            cmd16.Parameters.AddWithValue("@application_personal_account", application_personal_account);
+                            cmd16.Parameters.AddWithValue("@application_guarantee_amount",
+                                application_guarantee_amount);
+                            cmd16.Parameters.AddWithValue("@application_settlement_account",
+                                application_settlement_account);
+                            cmd16.Parameters.AddWithValue("@application_personal_account",
+                                application_personal_account);
                             cmd16.Parameters.AddWithValue("@application_bik", application_bik);
                             cmd16.Parameters.AddWithValue("@contract_guarantee_amount", contract_guarantee_amount);
                             cmd16.Parameters.AddWithValue("@contract_settlement_account", contract_settlement_account);
@@ -469,7 +473,170 @@ namespace ParserTenders
                                 Log.Logger("Нет id_customer", file_path);
                             }
                         }
+
+                        List<JToken> preferenses = GetElements(lot, "preferenses.preferense");
+                        foreach (var preferense in preferenses)
+                        {
+                            string preferense_name = ((string) preferense.SelectToken("name") ?? "").Trim();
+                            string insert_preference =
+                                $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
+                            MySqlCommand cmd17 = new MySqlCommand(insert_preference, connect);
+                            cmd17.Prepare();
+                            cmd17.Parameters.AddWithValue("@id_lot", id_lot);
+                            cmd17.Parameters.AddWithValue("@name", preferense_name);
+                            cmd17.ExecuteNonQuery();
+                        }
+
+                        List<JToken> requirements = GetElements(lot, "requirements.requirement");
+                        foreach (var requirement in requirements)
+                        {
+                            string requirement_name = ((string) requirement.SelectToken("name") ?? "").Trim();
+                            string requirement_content = ((string) requirement.SelectToken("content") ?? "").Trim();
+                            string requirement_code = ((string) requirement.SelectToken("code") ?? "").Trim();
+                            string insert_requirement =
+                                $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, name = @name, content = @content, code = @code";
+                            MySqlCommand cmd18 = new MySqlCommand(insert_requirement, connect);
+                            cmd18.Prepare();
+                            cmd18.Parameters.AddWithValue("@id_lot", id_lot);
+                            cmd18.Parameters.AddWithValue("@name", requirement_name);
+                            cmd18.Parameters.AddWithValue("@content", requirement_content);
+                            cmd18.Parameters.AddWithValue("@code", requirement_code);
+                            cmd18.ExecuteNonQuery();
+                        }
+                        string restrict_info = ((string) lot.SelectToken("restrictInfo") ?? "").Trim();
+                        string foreign_info = ((string) lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
+                        string insert_restrict =
+                            $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
+                        MySqlCommand cmd19 = new MySqlCommand(insert_restrict, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", id_lot);
+                        cmd19.Parameters.AddWithValue("@foreign_info", foreign_info);
+                        cmd19.Parameters.AddWithValue("@info", restrict_info);
+                        cmd19.ExecuteNonQuery();
+                        List<JToken> purchaseobjects = GetElements(lot, "purchaseObjects.purchaseObject");
+                        foreach (var purchaseobject in purchaseobjects)
+                        {
+                            string okpd2_code = ((string) purchaseobject.SelectToken("OKPD2.code") ?? "").Trim();
+                            string okpd_code = ((string) purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
+                            string okpd_name = ((string) purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
+                            if (String.IsNullOrEmpty(okpd_name))
+                                okpd_name = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
+                            string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
+                            string quantity_value = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
+                                .Trim();
+                            string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
+                            string okei = ((string) purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
+                            string sum_p = ((string) purchaseobject.SelectToken("sum") ?? "").Trim();
+                            int okpd2_group_code = 0;
+                            string okpd2_group_level1_code = "";
+                            if (!String.IsNullOrEmpty(okpd2_code))
+                            {
+                                GetOKPD(okpd2_code, out okpd2_group_code, out okpd2_group_level1_code);
+                            }
+
+                            List<JToken> customerquantities =
+                                GetElements(purchaseobject, "customerQuantities.customerQuantity");
+                            foreach (var customerquantity in customerquantities)
+                            {
+                                string customer_quantity_value =
+                                    ((string) customerquantity.SelectToken("quantity") ?? "").Trim();
+                                string cust_regNum = ((string) customerquantity.SelectToken("customer.regNum") ?? "")
+                                    .Trim();
+                                string cust_full_name =
+                                    ((string) customerquantity.SelectToken("customer.fullName") ?? "").Trim();
+                                int id_customer_q = 0;
+                                if (!String.IsNullOrEmpty(cust_regNum))
+                                {
+                                    string select_customer_q =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                    MySqlCommand cmd20 = new MySqlCommand(select_customer_q, connect);
+                                    cmd20.Prepare();
+                                    cmd20.Parameters.AddWithValue("@reg_num", cust_regNum);
+                                    MySqlDataReader reader7 = cmd20.ExecuteReader();
+                                    if (reader7.HasRows)
+                                    {
+                                        reader7.Read();
+                                        id_customer_q = reader7.GetInt32("id_customer");
+                                        reader7.Close();
+                                    }
+                                    else
+                                    {
+                                        reader7.Close();
+                                        string insert_customer_q =
+                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
+                                        MySqlCommand cmd21 = new MySqlCommand(insert_customer_q, connect);
+                                        cmd21.Prepare();
+                                        cmd21.Parameters.AddWithValue("@reg_num", cust_regNum);
+                                        cmd21.Parameters.AddWithValue("@full_name", cust_full_name);
+                                        cmd21.ExecuteNonQuery();
+                                        id_customer_q = (int) cmd21.LastInsertedId;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!String.IsNullOrEmpty(cust_full_name))
+                                    {
+                                        string select_cust_name_q =
+                                            $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                        MySqlCommand cmd22 = new MySqlCommand(select_cust_name_q, connect);
+                                        cmd22.Prepare();
+                                        cmd22.Parameters.AddWithValue("@full_name", cust_full_name);
+                                        MySqlDataReader reader8 = cmd22.ExecuteReader();
+                                        if (reader8.HasRows)
+                                        {
+                                            reader8.Read();
+                                            id_customer_q = reader8.GetInt32("id_customer");
+                                            Log.Logger("Получили id_customer_q по customer_full_name", file_path);
+                                        }
+                                        reader8.Close();
+                                    }
+                                }
+                                string insert_customerquantity =
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                MySqlCommand cmd23 = new MySqlCommand(insert_customerquantity, connect);
+                                cmd23.Prepare();
+                                cmd23.Parameters.AddWithValue("@id_lot", id_lot);
+                                cmd23.Parameters.AddWithValue("@id_customer", id_customer_q);
+                                cmd23.Parameters.AddWithValue("@okpd2_code", okpd2_code);
+                                cmd23.Parameters.AddWithValue("@okpd2_group_code", okpd2_group_code);
+                                cmd23.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2_group_level1_code);
+                                cmd23.Parameters.AddWithValue("@okpd_code", okpd_code);
+                                cmd23.Parameters.AddWithValue("@okpd_name", okpd_name);
+                                cmd23.Parameters.AddWithValue("@name", name);
+                                cmd23.Parameters.AddWithValue("@quantity_value", quantity_value);
+                                cmd23.Parameters.AddWithValue("@price", price);
+                                cmd23.Parameters.AddWithValue("@okei", okei);
+                                cmd23.Parameters.AddWithValue("@sum", sum_p);
+                                cmd23.Parameters.AddWithValue("@customer_quantity_value", customer_quantity_value);
+                                cmd23.ExecuteNonQuery();
+                                if (id_customer_q == 0)
+                                    Log.Logger("Нет id_customer_q", file_path);
+                            }
+
+                            if (customerquantities.Count == 0)
+                            {
+                                string insert_customerquantity =
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                MySqlCommand cmd24 = new MySqlCommand(insert_customerquantity, connect);
+                                cmd24.Prepare();
+                                cmd24.Parameters.AddWithValue("@id_lot", id_lot);
+                                cmd24.Parameters.AddWithValue("@id_customer", id_customer);
+                                cmd24.Parameters.AddWithValue("@okpd2_code", okpd2_code);
+                                cmd24.Parameters.AddWithValue("@okpd2_group_code", okpd2_group_code);
+                                cmd24.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2_group_level1_code);
+                                cmd24.Parameters.AddWithValue("@okpd_code", okpd_code);
+                                cmd24.Parameters.AddWithValue("@okpd_name", okpd_name);
+                                cmd24.Parameters.AddWithValue("@name", name);
+                                cmd24.Parameters.AddWithValue("@quantity_value", quantity_value);
+                                cmd24.Parameters.AddWithValue("@price", price);
+                                cmd24.Parameters.AddWithValue("@okei", okei);
+                                cmd24.Parameters.AddWithValue("@sum", sum_p);
+                                cmd24.Parameters.AddWithValue("@customer_quantity_value", quantity_value);
+                                cmd24.ExecuteNonQuery();
+                            }
+                        }
                     }
+                    TenderKwords(connect, id_tender);
                 }
             }
             else
