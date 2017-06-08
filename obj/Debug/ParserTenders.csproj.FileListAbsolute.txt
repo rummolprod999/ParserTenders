@@ -8,3 +8,4 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Debug/ParserTenders.pdb
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/Newtonsoft.Json.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/Newtonsoft.Json.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/System.ValueTuple.dll

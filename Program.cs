@@ -54,6 +54,7 @@ namespace ParserTenders
             }
         }
         public static int Addtender44 = 0;
+        public static int AddtenderSign = 0;
 
         public static void Main(string[] args)
         {
@@ -139,11 +140,8 @@ namespace ParserTenders
             t44.Parsing();*/
             Log.Logger("Время окончания парсинга Tenders44");
             ParserTend44 t44 = new ParserTend44(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationEA44_0126300029115000948_6597318.xml");
-            t44.ParsingXML(f, "br", 32, TypeFile44.TypeTen44);
-            string s = "gsdg    rghdfh rerfhgh   \n\n\ng";
-            s = Regex.Replace(s, @"\s+", " ");
-            Console.WriteLine(s);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsContractSign_0145100003416000077_9060552.xml");
+            t44.ParsingXML(f, "br", 32, TypeFile44.TypeSign);
         }
     }
 }

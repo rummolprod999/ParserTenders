@@ -223,6 +223,10 @@ namespace ParserTenders
                         TenderTypeCancelFailure h = new TenderTypeCancelFailure(f, region, region_id, json);
                         h.Parsing();
                         break;
+                    case TypeFile44.TypeSign:
+                        TenderTypeSign n = new TenderTypeSign(f, region, region_id, json);
+                        n.Parsing();
+                        break;
                 }
             }
         }

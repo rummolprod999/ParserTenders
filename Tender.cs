@@ -110,7 +110,7 @@ namespace ParserTenders
         {
             string res_string = "";
             string select_pur_obj =
-                $"SELECT DISTINCT po.name, po.okpd_name, cus.inn, cus.full_name FROM {Program.Prefix}customer AS cus RIGHT JOIN {Program.Prefix}purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
+                $"SELECT DISTINCT po.name, po.okpd_name FROM {Program.Prefix}purchase_object AS po LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
             MySqlCommand cmd1 = new MySqlCommand(select_pur_obj, connect);
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@id_tender", id_tender);
@@ -122,13 +122,13 @@ namespace ParserTenders
                 var distr_dt = dt.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (DataRow row in distr_dt)
                 {
-                    string name = (!row.IsNull("name")) ? ((string) row["name"]).Trim() : "";
-                    string okpd_name = (!row.IsNull("okpd_name")) ? ((string) row["okpd_name"]).Trim() : "";
-                    string inn_c = (!row.IsNull("inn")) ? ((string) row["inn"]).Trim() : "";
-                    string full_name_c = (!row.IsNull("inn")) ? ((string) row["inn"]).Trim() : "";
-                    res_string += $"{name} {okpd_name} {inn_c} {full_name_c} ";
+                    string name = !row.IsNull("name") ? ((string) row["name"]) : "";
+                    string okpd_name = (!row.IsNull("okpd_name")) ? ((string) row["okpd_name"]) : "";
+                    res_string += $"{name} {okpd_name} ";
                 }
             }
+
+
             string select_attach = $"SELECT file_name FROM {Program.Prefix}attachment WHERE id_tender = @id_tender";
             MySqlCommand cmd2 = new MySqlCommand(select_attach, connect);
             cmd2.Prepare();
@@ -141,7 +141,7 @@ namespace ParserTenders
                 var distr_dt = dt2.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (DataRow row in distr_dt)
                 {
-                    string att_name = (!row.IsNull("file_name")) ? ((string) row["file_name"]).Trim() : "";
+                    string att_name = (!row.IsNull("file_name")) ? ((string) row["file_name"]) : "";
                     res_string += $" {att_name}";
                 }
             }
@@ -160,7 +160,7 @@ namespace ParserTenders
                 foreach (DataRow row in dt3.Rows)
                 {
                     string pur_ob = (!row.IsNull("purchase_object_info"))
-                        ? ((string) row["purchase_object_info"]).Trim()
+                        ? ((string) row["purchase_object_info"])
                         : "";
                     id_org = (!row.IsNull("id_organizer")) ? (int) row["id_organizer"] : 0;
                     res_string = $"{pur_ob} {res_string}";
@@ -181,13 +181,34 @@ namespace ParserTenders
                 {
                     foreach (DataRow row in dt4.Rows)
                     {
-                        string inn_org = (!row.IsNull("inn")) ? ((string) row["inn"]).Trim() : "";
-                        string name_org = (!row.IsNull("full_name")) ? ((string) row["full_name"]).Trim() : "";
+                        string inn_org = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
+                        string name_org = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
                         res_string += $" {inn_org} {name_org}";
                     }
                 }
             }
-            res_string = Regex.Replace(res_string, @"\t|\n|\r", "");
+
+            string select_customer =
+                $"SELECT DISTINCT cus.inn, cus.full_name FROM {Program.Prefix}customer AS cus LEFT JOIN {Program.Prefix}purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
+            MySqlCommand cmd6 = new MySqlCommand(select_customer, connect);
+            cmd6.Prepare();
+            cmd6.Parameters.AddWithValue("@id_tender", id_tender);
+            DataTable dt5 = new DataTable();
+            MySqlDataAdapter adapter5 = new MySqlDataAdapter {SelectCommand = cmd6};
+            adapter5.Fill(dt5);
+            if (dt5.Rows.Count > 0)
+            {
+                var distr_dt = dt5.AsEnumerable().Distinct(DataRowComparer.Default);
+                foreach (DataRow row in distr_dt)
+                {
+                    string inn_c = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
+                    string full_name_c = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
+                    res_string += $"{inn_c} {full_name_c} ";
+                }
+            }
+
+            res_string = Regex.Replace(res_string, @"\s+", " ");
+            res_string = res_string.Trim();
             string update_tender =
                 $"UPDATE {Program.Prefix}tender SET tender_kwords = @tender_kwords WHERE id_tender = @id_tender";
             MySqlCommand cmd5 = new MySqlCommand(update_tender, connect);
@@ -198,6 +219,34 @@ namespace ParserTenders
             if (res_t != 1)
             {
                 Log.Logger("Не удалось обновить tender_kwords", file_path);
+            }
+        }
+
+        public void AddVerNumber(MySqlConnection connect, string purchaseNumber)
+        {
+            int ver_num = 1;
+            string select_tenders =
+                $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchaseNumber ORDER BY UNIX_TIMESTAMP(doc_publish_date) ASC";
+            MySqlCommand cmd1 = new MySqlCommand(select_tenders, connect);
+            cmd1.Prepare();
+            cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
+            DataTable dt1 = new DataTable();
+            MySqlDataAdapter adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            adapter1.Fill(dt1);
+            if (dt1.Rows.Count > 0)
+            {
+                string update_tender =
+                    $"UPDATE {Program.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
+                foreach (DataRow ten in dt1.Rows)
+                {
+                    int id_tender = (int) ten["id_tender"];
+                    MySqlCommand cmd2 = new MySqlCommand(update_tender, connect);
+                    cmd2.Prepare();
+                    cmd2.Parameters.AddWithValue("@id_tender", id_tender);
+                    cmd2.Parameters.AddWithValue("@num_version", ver_num);
+                    cmd2.ExecuteNonQuery();
+                    ver_num++;
+                }
             }
         }
     }

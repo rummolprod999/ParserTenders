@@ -526,7 +526,7 @@ namespace ParserTenders
                                 okpd_name = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
                             string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
                             if(!String.IsNullOrEmpty(name))
-                                name = Regex.Replace(name, @"\t|\n|\r", "");
+                                name = Regex.Replace(name, @"\s+", " ");
                             string quantity_value = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();
                             string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
@@ -641,12 +641,14 @@ namespace ParserTenders
                             }
                         }
                     }
+
+                    AddVerNumber(connect, purchaseNumber);
                     TenderKwords(connect, id_tender);
                 }
             }
             else
             {
-                Log.Logger("Не могу найти тег тендера", file_path);
+                Log.Logger("Не могу найти тег Tender44", file_path);
             }
         }
     }
