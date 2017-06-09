@@ -189,7 +189,7 @@ namespace ParserTenders
                             cmd5.Parameters.AddWithValue("@contact_phone", organizer_phone);
                             cmd5.Parameters.AddWithValue("@contact_fax", organizer_fax);
                             cmd5.ExecuteNonQuery();
-                            id_customer = (int) cmd5.LastInsertedId;
+                            id_organizer = (int) cmd5.LastInsertedId;
                         }
                     }
                     else

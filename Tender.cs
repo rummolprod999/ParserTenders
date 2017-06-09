@@ -203,7 +203,7 @@ namespace ParserTenders
                 {
                     string inn_c = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
                     string full_name_c = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
-                    res_string += $"{inn_c} {full_name_c} ";
+                    res_string += $" {inn_c} {full_name_c}";
                 }
             }
 
