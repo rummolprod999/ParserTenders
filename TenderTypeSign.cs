@@ -194,7 +194,28 @@ namespace ParserTenders
                         Log.Logger("Нет supplier_inn в TenderSign", file_path);
                     }
 
-                    string insert_contract = $"INSERT INTO {Program.Prefix}contract_sign SET";
+                    string insert_contract = $"INSERT INTO {Program.Prefix}contract_sign SET id_tender = @id_tender, id_sign = @id_sign, purchase_number = @purchase_number, sign_number = @sign_number, sign_date = @sign_date, id_customer = @id_customer, customer_reg_num = @customer_reg_num, id_supplier = @id_supplier, contract_sign_price = @contract_sign_price, sign_currency = @sign_currency, conclude_contract_right = @conclude_contract_right, protocole_date = @protocole_date, supplier_contact = @supplier_contact, supplier_email = @supplier_email, supplier_contact_phone = @supplier_contact_phone, supplier_contact_fax = @supplier_contact_fax, xml = @xml";
+                    MySqlCommand cmd5 = new MySqlCommand(insert_contract, connect);
+                    cmd5.Prepare();
+                    cmd5.Parameters.AddWithValue("@id_tender", id_tender);
+                    cmd5.Parameters.AddWithValue("@id_sign", id_sign);
+                    cmd5.Parameters.AddWithValue("@purchase_number", purchaseNumber);
+                    cmd5.Parameters.AddWithValue("@sign_number", sign_number);
+                    cmd5.Parameters.AddWithValue("@sign_date", sign_date);
+                    cmd5.Parameters.AddWithValue("@id_customer", id_customer);
+                    cmd5.Parameters.AddWithValue("@customer_reg_num", customer_reg_num);
+                    cmd5.Parameters.AddWithValue("@id_supplier", id_supplier);
+                    cmd5.Parameters.AddWithValue("@contract_sign_price", contract_sign_price);
+                    cmd5.Parameters.AddWithValue("@sign_currency", sign_currency);
+                    cmd5.Parameters.AddWithValue("@conclude_contract_right", conclude_contract_right);
+                    cmd5.Parameters.AddWithValue("@protocole_date", protocole_date);
+                    cmd5.Parameters.AddWithValue("@supplier_contact", supplier_contact);
+                    cmd5.Parameters.AddWithValue("@supplier_email", supplier_email);
+                    cmd5.Parameters.AddWithValue("@supplier_contact_phone", supplier_contact_phone);
+                    cmd5.Parameters.AddWithValue("@supplier_contact_fax", supplier_contact_fax);
+                    cmd5.Parameters.AddWithValue("@xml", xml);
+                    int res_cont = cmd5.ExecuteNonQuery();
+                    AddTenderSign?.Invoke(res_cont);
                 }
             }
             else

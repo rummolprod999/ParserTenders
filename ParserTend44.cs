@@ -137,15 +137,15 @@ namespace ParserTenders
                         }
                         foreach (var f in array_datechange)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeDatechange);
+                            Bolter(f, region, region_id, TypeFile44.TypeDateChange);
                         }
                         foreach (var f in array_orgchange)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeOrgchange);
+                            Bolter(f, region, region_id, TypeFile44.TypeOrgChange);
                         }
                         foreach (var f in array_lotcancel)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeLotcancel);
+                            Bolter(f, region, region_id, TypeFile44.TypeLotCancel);
                         }
                         foreach (var f in array_cancel)
                         {
@@ -203,15 +203,15 @@ namespace ParserTenders
                         TenderTypeProlongation b = new TenderTypeProlongation(f, region, region_id, json);
                         b.Parsing();
                         break;
-                    case TypeFile44.TypeDatechange:
+                    case TypeFile44.TypeDateChange:
                         TenderTypeDateChange c = new TenderTypeDateChange(f, region, region_id, json);
                         c.Parsing();
                         break;
-                    case TypeFile44.TypeOrgchange:
+                    case TypeFile44.TypeOrgChange:
                         TenderTypeOrgChange d = new TenderTypeOrgChange(f, region, region_id, json);
                         d.Parsing();
                         break;
-                    case TypeFile44.TypeLotcancel:
+                    case TypeFile44.TypeLotCancel:
                         TenderTypeLotCancel e = new TenderTypeLotCancel(f, region, region_id, json);
                         e.Parsing();
                         break;

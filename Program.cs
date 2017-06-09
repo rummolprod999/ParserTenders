@@ -55,6 +55,12 @@ namespace ParserTenders
         }
         public static int Addtender44 = 0;
         public static int AddtenderSign = 0;
+        public static int AddDateChange = 0;
+        public static int AddProlongation = 0;
+        public static int AddOrgChange = 0;
+        public static int AddLotCancel = 0;
+        public static int AddCancel = 0;
+        public static int AddCancelFailure = 0;
 
         public static void Main(string[] args)
         {
@@ -136,12 +142,21 @@ namespace ParserTenders
         private static void ParserTender44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders44");
-            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
-            t44.Parsing();*/
-            Log.Logger("Время окончания парсинга Tenders44");
             ParserTend44 t44 = new ParserTend44(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsContractSign_0145100003416000077_9060552.xml");
-            t44.ParsingXML(f, "br", 32, TypeFile44.TypeSign);
+            t44.Parsing();
+            /*Log.Logger("Время окончания парсинга Tenders44");
+            ParserTend44 t44 = new ParserTend44(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationCancelFailure_0328300028016000028_7111.xml");
+            t44.ParsingXML(f, "br", 32, TypeFile44.TypeCancelFailure);*/
+            Log.Logger("Добавили tender44", Addtender44);
+            Log.Logger("Добавили tenderSign", AddtenderSign);
+            Log.Logger("Добавили DateChange", AddDateChange);
+            Log.Logger("Добавили Prolongation", AddProlongation);
+            Log.Logger("Добавили OrgChange", AddOrgChange);
+            Log.Logger("Добавили LotCancel", AddLotCancel);
+            Log.Logger("Добавили Cancel", AddCancel);
+            Log.Logger("Добавили CancelFailure", AddCancelFailure);
+            Log.Logger("Время окончания парсинга Tenders44");
         }
     }
 }

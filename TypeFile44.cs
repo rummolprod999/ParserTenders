@@ -7,8 +7,8 @@ namespace ParserTenders
         TypeCancelFailure,
         TypeSign,
         TypeProlongation,
-        TypeDatechange,
-        TypeOrgchange,
-        TypeLotcancel
+        TypeDateChange,
+        TypeOrgChange,
+        TypeLotCancel
     }
 }
