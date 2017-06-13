@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Security.Permissions;
 using System.Threading;
+using FluentFTP;
 using MySql.Data.MySqlClient;
 
 namespace ParserTenders
@@ -56,10 +58,39 @@ namespace ParserTenders
             return arch;
         }
 
-        public WorkWithFtp ClientFtp44()
+        public virtual List<String> GetListArchLast(string PathParse, string RegionPath, string purchase)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchDaily(string PathParse, string RegionPath, string purchase)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+
+        public WorkWithFtp ClientFtp44_old()
         {
             WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
             return ftpCl;
+        }
+
+        public FtpClient ClientFtp44()
+        {
+            FtpClient client = new FtpClient("ftp://ftp.zakupki.gov.ru", "free", "free");
+            client.Connect();
+            return client;
+        }
+
+        public FtpClient ClientFtp223()
+        {
+            FtpClient client = new FtpClient("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
+            client.Connect();
+            return client;
         }
 
         public virtual void GetListFileArch(string Arch, string PathParse, string region)
@@ -69,7 +100,17 @@ namespace ParserTenders
         public virtual void GetListFileArch(string Arch, string PathParse, string region, int region_id)
         {
         }
+
+        public virtual void GetListFileArch(string Arch, string PathParse, string region, int region_id,
+            string purchase)
+        {
+        }
+
         public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
+        {
+        }
+        
+        public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile223 typefile)
         {
         }
 
@@ -81,10 +122,48 @@ namespace ParserTenders
             {
                 try
                 {
-                    string FileOnServer = $"{PathParse}/{Arch}";
+                    /*string FileOnServer = $"{PathParse}/{Arch}";*/
+                    string FileOnServer = $"{Arch}";
                     file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
-                    WorkWithFtp ftp = ClientFtp44();
-                    ftp.DownloadFile(FileOnServer, file);
+                    FtpClient ftp = ClientFtp44();
+                    ftp.SetWorkingDirectory(PathParse);
+                    ftp.DownloadFile(file, FileOnServer);
+                    ftp.Disconnect();
+                    if (count > 0)
+                    {
+                        Log.Logger("Удалось скачать архив после попытки", count);
+                    }
+                    return file;
+                }
+                catch (Exception e)
+                {
+                    Log.Logger("Не удалось скачать файл", Arch, e);
+                    if (count > 50)
+                    {
+                        return file;
+                    }
+
+                    count++;
+                    Thread.Sleep(5000);
+                }
+            }
+        }
+
+        public string GetArch223(string Arch, string PathParse)
+        {
+            string file = "";
+            int count = 0;
+            while (true)
+            {
+                try
+                {
+                    /*string FileOnServer = $"{PathParse}/{Arch}";*/
+                    string FileOnServer = $"{Arch}";
+                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
+                    FtpClient ftp = ClientFtp223();
+                    ftp.SetWorkingDirectory(PathParse);
+                    ftp.DownloadFile(file, FileOnServer);
+                    ftp.Disconnect();
                     if (count > 0)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
@@ -120,7 +199,7 @@ namespace ParserTenders
                 var dt = ds.Tables[0];
                 foreach (DataRow row in dt.Rows)
                 {
-                    string reg_num = (string)row["reg_num"];
+                    string reg_num = (string) row["reg_num"];
                     MySqlCommand cmd = new MySqlCommand(get_org, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@reg_num", reg_num);
@@ -135,7 +214,6 @@ namespace ParserTenders
                         cmd2.Parameters.AddWithValue("@reg_num", reg_num);
                         cmd2.Parameters.AddWithValue("@inn", org_inn);
                         cmd2.ExecuteNonQuery();
-
                     }
                     else
                     {

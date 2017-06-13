@@ -3,6 +3,8 @@
 	<database>tenders_test</database>
 	<tempdir_tenders44>temp_tenders44</tempdir_tenders44>
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
+	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
+	<logdir_tenders223>log_tenders223</logdir_tenders223>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

@@ -12,6 +12,8 @@ namespace ParserTenders
         private static string _database;
         private static string _tempPath44;
         private static string _logPath44;
+        private static string _tempPath223;
+        private static string _logPath223;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -30,6 +32,7 @@ namespace ParserTenders
         public static string StrArg;
         public static TypeArguments Periodparsing;
         public static string PathProgram;
+
         public static string TempPath
         {
             get
@@ -37,6 +40,8 @@ namespace ParserTenders
                 if (Periodparsing == TypeArguments.Curr44 || Periodparsing == TypeArguments.Prev44 ||
                     Periodparsing == TypeArguments.Last44)
                     return _tempPath44;
+                else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
+                    return _tempPath223;
 
                 return "";
             }
@@ -49,10 +54,13 @@ namespace ParserTenders
                 if (Periodparsing == TypeArguments.Curr44 || Periodparsing == TypeArguments.Prev44 ||
                     Periodparsing == TypeArguments.Last44)
                     return _logPath44;
+                else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
+                    return _logPath223;
 
                 return "";
             }
         }
+
         public static int Addtender44 = 0;
         public static int AddtenderSign = 0;
         public static int AddDateChange = 0;
@@ -67,7 +75,7 @@ namespace ParserTenders
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44 или prev44 или curr44 в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, prev223, daily223 в качестве аргумента");
                 return;
             }
 
@@ -92,8 +100,19 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTender44(Periodparsing);
                     break;
+                case "last223":
+                    Periodparsing = TypeArguments.Last223;
+                    Init(Periodparsing);
+                    ParserTender223(Periodparsing);
+                    break;
+                case "daily223":
+                    Periodparsing = TypeArguments.Last223;
+                    Init(Periodparsing);
+                    ParserTender223(Periodparsing);
+                    break;
                 default:
-                    Console.WriteLine("Неправильно указан аргумент, используйте last44, curr44, prev44");
+                    Console.WriteLine(
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, prev223, daily223 ");
                     break;
             }
         }
@@ -103,10 +122,12 @@ namespace ParserTenders
             GetSettings set = new GetSettings();
             _database = set.Database;
             _logPath44 = set.LogPathTenders44;
+            _logPath223 = set.LogPathTenders223;
             _prefix = set.Prefix;
             _user = set.UserDB;
             _pass = set.PassDB;
             _tempPath44 = set.TempPathTenders44;
+            _tempPath223 = set.TempPathTenders223;
             _server = set.Server;
             _port = set.Port;
             string tmp = set.Years;
@@ -136,7 +157,10 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(LogPath);
             }
-            FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
+            if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
+                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
+            else if (arg == TypeArguments.Daily223 || arg == TypeArguments.Last223)
+                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
         }
 
         private static void ParserTender44(TypeArguments arg)
@@ -157,6 +181,13 @@ namespace ParserTenders
             Log.Logger("Добавили Cancel", AddCancel);
             Log.Logger("Добавили CancelFailure", AddCancelFailure);
             Log.Logger("Время окончания парсинга Tenders44");
+        }
+
+        private static void ParserTender223(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Tenders223");
+            ParserTend223 t223 = new ParserTend223(Periodparsing);
+            t223.Parsing();
         }
     }
 }

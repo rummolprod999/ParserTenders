@@ -9,3 +9,5 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/Newtonsoft.Json.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/Newtonsoft.Json.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/System.ValueTuple.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/FluentFTP.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/FluentFTP.xml

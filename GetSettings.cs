@@ -9,6 +9,8 @@ namespace ParserTenders
         public readonly string Database;
         public readonly string TempPathTenders44;
         public readonly string LogPathTenders44;
+        public readonly string TempPathTenders223;
+        public readonly string LogPathTenders223;
         public readonly string Prefix;
         public readonly string UserDB;
         public readonly string PassDB;
@@ -35,6 +37,12 @@ namespace ParserTenders
                             break;
                         case "logdir_tenders44":
                             LogPathTenders44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tenders223":
+                            TempPathTenders223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "logdir_tenders223":
+                            LogPathTenders223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "prefix":
                             Prefix = xnode.InnerText;

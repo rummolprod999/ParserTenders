@@ -1,4 +1,5 @@
 using System.Data;
+using FluentFTP;
 
 namespace ParserTenders
 {
@@ -6,9 +7,10 @@ namespace ParserTenders
     {
         void Parsing();
         DataTable GetRegions();
-        WorkWithFtp ClientFtp44();
         void GetListFileArch(string Arch, string PathParse, string region);
         void GetListFileArch(string Arch, string PathParse, string region, int region_id);
+        void GetListFileArch(string Arch, string PathParse, string region, int region_id, string purchase);
         string GetArch44(string Arch, string PathParse);
+        string GetArch223(string Arch, string PathParse);
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using FluentFTP;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -60,7 +61,7 @@ namespace ParserTenders
 
                 if (arch.Count == 0)
                 {
-                    Log.Logger("Получен пустой список архивов", row["path"]);
+                    Log.Logger("Получен пустой список архивов", PathParse);
                     continue;
                 }
 
@@ -168,7 +169,7 @@ namespace ParserTenders
 
         public override void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
         {
-            if (!f.Name.EndsWith(".xml", StringComparison.Ordinal))
+            if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))
             {
                 return;
             }
@@ -233,39 +234,37 @@ namespace ParserTenders
 
         public override List<String> GetListArchLast(string PathParse, string RegionPath)
         {
-            WorkWithFtp ftp = ClientFtp44();
-            try
+            List<FtpListItem> archtemp = new List<FtpListItem>();
+            FtpClient ftp = ClientFtp44();
+            if (ftp.DirectoryExists(PathParse))
             {
-                ftp.ChangeWorkingDirectory(PathParse);
+                archtemp = ftp.GetListing(PathParse).ToList();
             }
-            catch (Exception e)
+            else
             {
-                Log.Logger("Не удалось найти путь ftp", PathParse, e);
-                return new List<string>();
+                Log.Logger("Не могу найти директорию", PathParse);
             }
-
-            List<String> archtemp = ftp.ListDirectory();
+            ftp.Disconnect();
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
-            return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
+            return archtemp.Where(a => years_search.Any(t => a.Name.IndexOf(t, StringComparison.Ordinal) != -1)).Select(a => a.Name).ToList();
         }
 
         public override List<String> GetListArchCurr(string PathParse, string RegionPath)
         {
             List<String> arch = new List<string>();
-            WorkWithFtp ftp = ClientFtp44();
-            try
+            List<FtpListItem> archtemp = new List<FtpListItem>();
+            FtpClient ftp = ClientFtp44();
+            if (ftp.DirectoryExists(PathParse))
             {
-                ftp.ChangeWorkingDirectory(PathParse);
+                archtemp = ftp.GetListing(PathParse).ToList();
             }
-            catch (Exception e)
+            else
             {
-                Log.Logger("Не удалось найти путь ftp", PathParse, e);
-                return arch;
+                Log.Logger("Не могу найти директорию", PathParse);
             }
-
-            List<String> archtemp = ftp.ListDirectory();
+            ftp.Disconnect();
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
-            foreach (var a in archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            foreach (var a in archtemp.Where(a => years_search.Any(t => a.Name.IndexOf(t, StringComparison.Ordinal) != -1)).Select(a => a.Name))
             {
                 using (MySqlConnection connect = ConnectToDb.GetDBConnection())
                 {
@@ -299,20 +298,19 @@ namespace ParserTenders
         public override List<String> GetListArchPrev(string PathParse, string RegionPath)
         {
             List<String> arch = new List<string>();
-            WorkWithFtp ftp = ClientFtp44();
-            try
+            List<FtpListItem> archtemp = new List<FtpListItem>();
+            FtpClient ftp = ClientFtp44();
+            if (ftp.DirectoryExists(PathParse))
             {
-                ftp.ChangeWorkingDirectory(PathParse);
+                archtemp = ftp.GetListing(PathParse).ToList();
             }
-            catch (Exception e)
+            else
             {
-                Log.Logger("Не удалось найти путь ftp", PathParse, e);
-                return arch;
+                Log.Logger("Не могу найти директорию", PathParse);
             }
-
-            List<String> archtemp = ftp.ListDirectory();
+            ftp.Disconnect();
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
-            foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
+            foreach (var a in archtemp.Where(a => a.Name.IndexOf(serachd, StringComparison.Ordinal) != -1).Select(a => a.Name))
             {
                 string prev_a = $"prev_{a}";
                 using (MySqlConnection connect = ConnectToDb.GetDBConnection())
