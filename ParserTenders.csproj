@@ -66,6 +66,7 @@
     <Compile Include="ParserTend44.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TenderType223.cs" />
     <Compile Include="TenderTypeCancel.cs" />
     <Compile Include="TenderTypeCancelFailure.cs" />
     <Compile Include="TenderTypeDateChange.cs" />

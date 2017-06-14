@@ -17,7 +17,7 @@ namespace ParserTenders
             AddTenderSign += delegate(int d)
             {
                 if (d > 0)
-                    Program.AddtenderSign++;
+                    Program.AddTenderSign++;
                 else
                     Log.Logger("Не удалось добавить TenderSign", file_path);
             };

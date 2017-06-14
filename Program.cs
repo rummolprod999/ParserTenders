@@ -61,14 +61,15 @@ namespace ParserTenders
             }
         }
 
-        public static int Addtender44 = 0;
-        public static int AddtenderSign = 0;
+        public static int AddTender44 = 0;
+        public static int AddTenderSign = 0;
         public static int AddDateChange = 0;
         public static int AddProlongation = 0;
         public static int AddOrgChange = 0;
         public static int AddLotCancel = 0;
         public static int AddCancel = 0;
         public static int AddCancelFailure = 0;
+        public static int AddTender223= 0;
 
         public static void Main(string[] args)
         {
@@ -172,8 +173,8 @@ namespace ParserTenders
             ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationCancelFailure_0328300028016000028_7111.xml");
             t44.ParsingXML(f, "br", 32, TypeFile44.TypeCancelFailure);*/
-            Log.Logger("Добавили tender44", Addtender44);
-            Log.Logger("Добавили tenderSign", AddtenderSign);
+            Log.Logger("Добавили tender44", AddTender44);
+            Log.Logger("Добавили tenderSign", AddTenderSign);
             Log.Logger("Добавили DateChange", AddDateChange);
             Log.Logger("Добавили Prolongation", AddProlongation);
             Log.Logger("Добавили OrgChange", AddOrgChange);
@@ -186,8 +187,13 @@ namespace ParserTenders
         private static void ParserTender223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders223");
+            /*ParserTend223 t223 = new ParserTend223(Periodparsing);
+            t223.Parsing();*/
             ParserTend223 t223 = new ParserTend223(Periodparsing);
-            t223.Parsing();
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Brianskaya_obl_20160101_000000_20160131_235959_001.xml");
+            t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);
+            Log.Logger("Время окончания парсинга Tenders223");
+            Log.Logger("Добавили tender223", AddTender223);
         }
     }
 }

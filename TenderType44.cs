@@ -21,7 +21,7 @@ namespace ParserTenders
             AddTender44 += delegate(int d)
             {
                 if (d > 0)
-                    Program.Addtender44++;
+                    Program.AddTender44++;
                 else
                     Log.Logger("Не удалось добавить Tender44", file_path);
             };

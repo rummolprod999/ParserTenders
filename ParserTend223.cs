@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using FluentFTP;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ParserTenders
 {
@@ -127,6 +131,7 @@ namespace ParserTenders
                 return;
             }
 
+            /*f.Refresh();*/
             if (f.Length == 0)
             {
                 return;
@@ -144,6 +149,17 @@ namespace ParserTenders
 
         public void ParsingXML(FileInfo f, string region, int region_id, TypeFile223 typefile)
         {
+            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            {
+                var ftext = sr.ReadToEnd();
+                ftext = ClearText.ClearString(ftext);
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(ftext);
+                string jsons = JsonConvert.SerializeXmlNode(doc);
+                JObject json = JObject.Parse(jsons);
+                TenderType223 a = new TenderType223(f, region, region_id, json, typefile);
+                a.Parsing();
+            }
         }
 
 
