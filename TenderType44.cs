@@ -83,7 +83,7 @@ namespace ParserTenders
                     Console.WriteLine(o["docPublishDate"]);*/
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != 1)
+                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                         printform = printform.Substring(9, printform.Length-12);
                     string notice_version = "";
                     int num_version = 0;
@@ -506,6 +506,7 @@ namespace ParserTenders
                             cmd18.Parameters.AddWithValue("@code", requirement_code);
                             cmd18.ExecuteNonQuery();
                         }
+                        
                         string restrict_info = ((string) lot.SelectToken("restrictInfo") ?? "").Trim();
                         string foreign_info = ((string) lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
                         string insert_restrict =

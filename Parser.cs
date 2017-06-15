@@ -233,6 +233,10 @@ namespace ParserTenders
                             cmd4.Parameters.AddWithValue("@inn", cus_inn);
                             cmd4.ExecuteNonQuery();
                         }
+                        else
+                        {
+                            reader2.Close();
+                        }
                     }
                 }
             }
