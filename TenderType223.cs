@@ -457,7 +457,8 @@ namespace ParserTenders
                     {
                         string lot_max_price = ((string) lot.SelectToken("lotData.initialSum") ?? "").Trim();
                         string lot_currency = ((string) lot.SelectToken("lotData.currency.name") ?? "").Trim();
-                        string insert_lot = $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                        string insert_lot =
+                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                         MySqlCommand cmd18 = new MySqlCommand(insert_lot, connect);
                         cmd18.Prepare();
                         cmd18.Parameters.AddWithValue("@id_tender", id_tender);
@@ -465,13 +466,14 @@ namespace ParserTenders
                         cmd18.Parameters.AddWithValue("@max_price", lot_max_price);
                         cmd18.Parameters.AddWithValue("@currency", lot_currency);
                         cmd18.ExecuteNonQuery();
-                        int id_lot = (int)cmd18.LastInsertedId;
+                        int id_lot = (int) cmd18.LastInsertedId;
                         lotNumber++;
                         List<JToken> lotitems = GetElements(lot, "lotData.lotItems.lotItem");
                         foreach (var lotitem in lotitems)
                         {
                             string okpd2_code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpd_name = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
+                            string name = okpd_name;
                             string quantity_value = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();
@@ -481,7 +483,8 @@ namespace ParserTenders
                             {
                                 GetOKPD(okpd2_code, out okpd2_group_code, out okpd2_group_level1_code);
                             }
-                            string insert_lotitem = $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value";
+                            string insert_lotitem =
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value";
                             MySqlCommand cmd19 = new MySqlCommand(insert_lotitem, connect);
                             cmd19.Prepare();
                             cmd19.Parameters.AddWithValue("@id_lot", id_lot);
@@ -496,8 +499,8 @@ namespace ParserTenders
                             cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity_value);
                             cmd19.ExecuteNonQuery();
                         }
-
                     }
+                    TenderKwords(connect, id_tender);
                 }
             }
             else
