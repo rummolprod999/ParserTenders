@@ -514,23 +514,23 @@ namespace ParserTenders
         private int GetConformity(string conf)
         {
             string sLower = conf.ToLower();
-            if (sLower.IndexOf("открыт", StringComparison.Ordinal) != 1)
+            if (sLower.IndexOf("открыт", StringComparison.Ordinal) != -1)
             {
                 return 5;
             }
-            else if (sLower.IndexOf("аукцион", StringComparison.Ordinal) != 1)
+            else if (sLower.IndexOf("аукцион", StringComparison.Ordinal) != -1)
             {
                 return 1;
             }
-            else if (sLower.IndexOf("котиров", StringComparison.Ordinal) != 1)
+            else if (sLower.IndexOf("котиров", StringComparison.Ordinal) != -1)
             {
                 return 2;
             }
-            else if (sLower.IndexOf("предложен", StringComparison.Ordinal) != 1)
+            else if (sLower.IndexOf("предложен", StringComparison.Ordinal) != -1)
             {
                 return 3;
             }
-            else if (sLower.IndexOf("единств", StringComparison.Ordinal) != 1)
+            else if (sLower.IndexOf("единств", StringComparison.Ordinal) != -1)
             {
                 return 4;
             }
