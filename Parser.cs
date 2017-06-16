@@ -117,7 +117,7 @@ namespace ParserTenders
         public string GetArch44(string Arch, string PathParse)
         {
             string file = "";
-            int count = 0;
+            int count = 1;
             while (true)
             {
                 try
@@ -129,7 +129,7 @@ namespace ParserTenders
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
                     ftp.Disconnect();
-                    if (count > 0)
+                    if (count > 1)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
                     }
@@ -152,7 +152,7 @@ namespace ParserTenders
         public string GetArch223(string Arch, string PathParse)
         {
             string file = "";
-            int count = 0;
+            int count = 1;
             while (true)
             {
                 try
@@ -164,7 +164,7 @@ namespace ParserTenders
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
                     ftp.Disconnect();
-                    if (count > 0)
+                    if (count > 1)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
                     }

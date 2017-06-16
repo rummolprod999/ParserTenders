@@ -650,8 +650,15 @@ namespace ParserTenders
             Match match = regex.Match(date);
             if (match.Success)
             {
-                DateTime i = DateTime.ParseExact(match.Value, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                d = i.ToString("yyyy-MM-dd HH:mm:ss");
+                try
+                {
+                    DateTime i = DateTime.ParseExact(match.Value, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    d = i.ToString("yyyy-MM-dd HH:mm:ss");
+                }
+                catch (Exception e)
+                {
+                    Log.Logger("Не получилось пропарсить дату", match.Value, file_path);
+                }
             }
             return d;
         }
