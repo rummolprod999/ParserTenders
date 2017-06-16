@@ -190,7 +190,7 @@ namespace ParserTenders
             ParserTend223 t223 = new ParserTend223(Periodparsing);
             t223.Parsing();
             /*ParserTend223 t223 = new ParserTend223(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Brianskaya_obl_20160101_000000_20160131_235959_001.xml");
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Belgorodskaya_obl_20170201_000000_20170228_235959_015.xml");
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
             Log.Logger("Время окончания парсинга Tenders223");
             Log.Logger("Добавили tender223", AddTender223);

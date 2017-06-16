@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -500,6 +501,7 @@ namespace ParserTenders
                             cmd19.ExecuteNonQuery();
                         }
                     }
+
                     TenderKwords(connect, id_tender);
                 }
             }
@@ -648,7 +650,7 @@ namespace ParserTenders
             Match match = regex.Match(date);
             if (match.Success)
             {
-                DateTime i = DateTime.Parse(match.Value);
+                DateTime i = DateTime.ParseExact(match.Value, "dd.MM.yyyy", CultureInfo.InvariantCulture);
                 d = i.ToString("yyyy-MM-dd HH:mm:ss");
             }
             return d;
