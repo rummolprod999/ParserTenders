@@ -8,3 +8,6 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CoreCompileInputs.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.exe
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.pdb
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/System.ValueTuple.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.xml

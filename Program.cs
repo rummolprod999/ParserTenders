@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ParserTenders
 {
@@ -107,7 +106,7 @@ namespace ParserTenders
                     ParserTender223(Periodparsing);
                     break;
                 case "daily223":
-                    Periodparsing = TypeArguments.Last223;
+                    Periodparsing = TypeArguments.Daily223;
                     Init(Periodparsing);
                     ParserTender223(Periodparsing);
                     break;
