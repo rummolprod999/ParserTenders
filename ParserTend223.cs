@@ -207,7 +207,7 @@ namespace ParserTenders
                     connect.Open();
 
                     string select_arch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND region =  @region";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders223 WHERE arhiv = @archive AND region =  @region";
 
                     MySqlCommand cmd = new MySqlCommand(select_arch, connect);
                     cmd.Prepare();
