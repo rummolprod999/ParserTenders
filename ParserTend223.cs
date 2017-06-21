@@ -165,42 +165,40 @@ namespace ParserTenders
 
         public override List<String> GetListArchLast(string PathParse, string RegionPath, string purchase)
         {
-            List<FtpListItem> archtemp = new List<FtpListItem>();
-
-            FtpClient ftp = ClientFtp223();
-            if (ftp.DirectoryExists(PathParse))
+            List<string> archtemp = new List<string>();
+            /*FtpClient ftp = ClientFtp44();*/
+            try
             {
-                archtemp = ftp.GetListing(PathParse).ToList();
+                WorkWithFtp ftp = ClientFtp44_old();
+                ftp.ChangeWorkingDirectory(PathParse);
+                archtemp = ftp.ListDirectory();
             }
-            else
+            catch (Exception e)
             {
                 Log.Logger("Не могу найти директорию", PathParse);
             }
-            ftp.Disconnect();
             List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
-            return archtemp.Where(a => years_search.Any(t => a.Name.IndexOf(t, StringComparison.Ordinal) != -1))
-                .Select(a => a.Name).ToList();
+            return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
         public override List<String> GetListArchDaily(string PathParse, string RegionPath, string purchase)
         {
             List<String> arch = new List<string>();
-            List<FtpListItem> archtemp = new List<FtpListItem>();
-
-            FtpClient ftp = ClientFtp223();
-            if (ftp.DirectoryExists(PathParse))
+            List<string> archtemp = new List<string>();
+            /*FtpClient ftp = ClientFtp44();*/
+            try
             {
-                archtemp = ftp.GetListing(PathParse).ToList();
+                WorkWithFtp ftp = ClientFtp44_old();
+                ftp.ChangeWorkingDirectory(PathParse);
+                archtemp = ftp.ListDirectory();
             }
-            else
+            catch (Exception e)
             {
                 Log.Logger("Не могу найти директорию", PathParse);
             }
-            ftp.Disconnect();
             List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
             foreach (var a in archtemp
-                .Where(a => years_search.Any(t => a.Name.IndexOf(t, StringComparison.Ordinal) != -1))
-                .Select(a => a.Name))
+                .Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 using (MySqlConnection connect = ConnectToDb.GetDBConnection())
                 {
