@@ -569,6 +569,11 @@ namespace ParserTenders
              "").Trim('"');
             if (String.IsNullOrEmpty(bidding_date))
             {
+                bidding_date = (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
+                                "").Trim('"');
+            }
+            if (String.IsNullOrEmpty(bidding_date))
+            {
                 bidding_date = ParsingBiddingDate(ten);
             }
             return bidding_date;
