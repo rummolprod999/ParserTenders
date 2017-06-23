@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using FluentFTP;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -205,23 +203,21 @@ namespace ParserTenders
                     connect.Open();
 
                     string select_arch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders223 WHERE arhiv = @archive AND region =  @region";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders223 WHERE arhiv = @archive";
 
                     MySqlCommand cmd = new MySqlCommand(select_arch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
-                    cmd.Parameters.AddWithValue("@region", RegionPath);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool res_read = reader.HasRows;
                     reader.Close();
                     if (!res_read)
                     {
                         string add_arch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, region =  @region";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
                         MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
-                        cmd1.Parameters.AddWithValue("@region", RegionPath);
                         cmd1.ExecuteNonQuery();
                         arch.Add(a);
                     }

@@ -37,7 +37,7 @@ namespace ParserTenders
                 {
                     if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
-                        Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);
+                        /*Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);*/
                         return;
                     }
                 }

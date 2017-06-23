@@ -41,7 +41,7 @@ namespace ParserTenders
                 {
                     if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
-                        Log.Logger("Тестовый тендер sign", purchaseNumber, file_path);
+                        /*Log.Logger("Тестовый тендер sign", purchaseNumber, file_path);*/
                         return;
                     }
                 }
@@ -194,7 +194,8 @@ namespace ParserTenders
                         Log.Logger("Нет supplier_inn в TenderSign", file_path);
                     }
 
-                    string insert_contract = $"INSERT INTO {Program.Prefix}contract_sign SET id_tender = @id_tender, id_sign = @id_sign, purchase_number = @purchase_number, sign_number = @sign_number, sign_date = @sign_date, id_customer = @id_customer, customer_reg_num = @customer_reg_num, id_supplier = @id_supplier, contract_sign_price = @contract_sign_price, sign_currency = @sign_currency, conclude_contract_right = @conclude_contract_right, protocole_date = @protocole_date, supplier_contact = @supplier_contact, supplier_email = @supplier_email, supplier_contact_phone = @supplier_contact_phone, supplier_contact_fax = @supplier_contact_fax, xml = @xml";
+                    string insert_contract =
+                        $"INSERT INTO {Program.Prefix}contract_sign SET id_tender = @id_tender, id_sign = @id_sign, purchase_number = @purchase_number, sign_number = @sign_number, sign_date = @sign_date, id_customer = @id_customer, customer_reg_num = @customer_reg_num, id_supplier = @id_supplier, contract_sign_price = @contract_sign_price, sign_currency = @sign_currency, conclude_contract_right = @conclude_contract_right, protocole_date = @protocole_date, supplier_contact = @supplier_contact, supplier_email = @supplier_email, supplier_contact_phone = @supplier_contact_phone, supplier_contact_fax = @supplier_contact_fax, xml = @xml";
                     MySqlCommand cmd5 = new MySqlCommand(insert_contract, connect);
                     cmd5.Prepare();
                     cmd5.Parameters.AddWithValue("@id_tender", id_tender);

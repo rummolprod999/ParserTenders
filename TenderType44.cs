@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
 
 namespace ParserTenders
 {
@@ -51,7 +50,7 @@ namespace ParserTenders
                 {
                     if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
-                        Log.Logger("Тестовый тендер", purchaseNumber, file_path);
+                        /*Log.Logger("Тестовый тендер", purchaseNumber, file_path);*/
                         return;
                     }
                 }
@@ -84,7 +83,7 @@ namespace ParserTenders
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
                     if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
-                        printform = printform.Substring(9, printform.Length-12);
+                        printform = printform.Substring(9, printform.Length - 12);
                     string notice_version = "";
                     int num_version = 0;
                     int cancel_status = 0;
@@ -506,7 +505,7 @@ namespace ParserTenders
                             cmd18.Parameters.AddWithValue("@code", requirement_code);
                             cmd18.ExecuteNonQuery();
                         }
-                        
+
                         string restrict_info = ((string) lot.SelectToken("restrictInfo") ?? "").Trim();
                         string foreign_info = ((string) lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
                         string insert_restrict =
@@ -526,7 +525,7 @@ namespace ParserTenders
                             if (String.IsNullOrEmpty(okpd_name))
                                 okpd_name = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
                             string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
-                            if(!String.IsNullOrEmpty(name))
+                            if (!String.IsNullOrEmpty(name))
                                 name = Regex.Replace(name, @"\s+", " ");
                             string quantity_value = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();

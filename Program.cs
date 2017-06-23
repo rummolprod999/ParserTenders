@@ -68,7 +68,7 @@ namespace ParserTenders
         public static int AddLotCancel = 0;
         public static int AddCancel = 0;
         public static int AddCancelFailure = 0;
-        public static int AddTender223= 0;
+        public static int AddTender223 = 0;
 
         public static void Main(string[] args)
         {

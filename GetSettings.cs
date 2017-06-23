@@ -57,7 +57,7 @@ namespace ParserTenders
                             Server = xnode.InnerText;
                             break;
                         case "port":
-                            Port = Int32.TryParse(xnode.InnerText, out Port)?Int32.Parse(xnode.InnerText): 3306;
+                            Port = Int32.TryParse(xnode.InnerText, out Port) ? Int32.Parse(xnode.InnerText) : 3306;
                             break;
                         case "years":
                             Years = xnode.InnerText;
@@ -66,7 +66,9 @@ namespace ParserTenders
                 }
             }
 
-            if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) || String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) || String.IsNullOrEmpty(Years))
+            if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) ||
+                String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) ||
+                String.IsNullOrEmpty(Years))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);
