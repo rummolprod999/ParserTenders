@@ -91,6 +91,12 @@ namespace ParserTenders
             client.Connect();
             return client;
         }
+        
+        public WorkWithFtp ClientFtp223_old()
+        {
+            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
+            return ftpCl;
+        }
 
         public virtual void GetListFileArch(string Arch, string PathParse, string region)
         {

@@ -38,11 +38,11 @@ namespace ParserTenders
                     switch (Program.Periodparsing)
                     {
                         case (TypeArguments.Last223):
-                            PathParse = $"/out/published/{RegionPath}/{purchase}";
+                            PathParse = $"/out/published/{RegionPath}/{purchase}/";
                             arch = GetListArchLast(PathParse, RegionPath, purchase);
                             break;
                         case (TypeArguments.Daily223):
-                            PathParse = $"/out/published/{RegionPath}/{purchase}/daily";
+                            PathParse = $"/out/published/{RegionPath}/{purchase}/daily/";
                             arch = GetListArchDaily(PathParse, RegionPath, purchase);
                             break;
                     }
@@ -167,7 +167,7 @@ namespace ParserTenders
             /*FtpClient ftp = ClientFtp44();*/
             try
             {
-                WorkWithFtp ftp = ClientFtp44_old();
+                WorkWithFtp ftp = ClientFtp223_old();
                 ftp.ChangeWorkingDirectory(PathParse);
                 archtemp = ftp.ListDirectory();
             }
@@ -186,7 +186,7 @@ namespace ParserTenders
             /*FtpClient ftp = ClientFtp44();*/
             try
             {
-                WorkWithFtp ftp = ClientFtp44_old();
+                WorkWithFtp ftp = ClientFtp223_old();
                 ftp.ChangeWorkingDirectory(PathParse);
                 archtemp = ftp.ListDirectory();
             }

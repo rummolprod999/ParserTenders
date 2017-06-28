@@ -2395,9 +2395,19 @@
             Creates a new instance of an FTP Client, with the given host and credentials.
             </summary>
         </member>
+        <member name="M:FluentFTP.FtpClient.#ctor(System.String,System.Int32,System.Net.NetworkCredential)">
+            <summary>
+            Creates a new instance of an FTP Client, with the given host, port and credentials.
+            </summary>
+        </member>
         <member name="M:FluentFTP.FtpClient.#ctor(System.String,System.String,System.String)">
             <summary>
             Creates a new instance of an FTP Client, with the given host, username and password.
+            </summary>
+        </member>
+        <member name="M:FluentFTP.FtpClient.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Creates a new instance of an FTP Client, with the given host, port, username and password.
             </summary>
         </member>
         <member name="M:FluentFTP.FtpClient.Create">
@@ -2603,6 +2613,16 @@
             to turn UTF8 off a FtpCommandException will be thrown.
             </summary>
         </member>
+        <member name="M:FluentFTP.FtpClient.ReadStaleData(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Data shouldn't be on the socket, if it is it probably
+            means we've been disconnected. Read and discard
+            whatever is there and close the connection (optional).
+            </summary>
+            <param name="closeStream">close the connection?</param>
+            <param name="evenEncrypted">even read encrypted data?</param>
+            <param name="traceData">trace data to logs?</param>
+        </member>
         <member name="M:FluentFTP.FtpClient.CalcChmod(FluentFTP.FtpPermission,FluentFTP.FtpPermission,FluentFTP.FtpPermission)">
             <summary>
             Calculate the CHMOD integer value given a set of permissions.
@@ -2769,6 +2789,16 @@
             <summary>
             Rate limit for downloads in kbytes/s. Set this to 0 for unlimited speed.
             Honored by high-level API such as Upload(), Download(), UploadFile(), DownloadFile()..
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.UploadDataType">
+            <summary>
+            Controls if the high-level API uploads files in Binary or ASCII mode.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.DownloadDataType">
+            <summary>
+            Controls if the high-level API downloads files in Binary or ASCII mode.
             </summary>
         </member>
         <member name="P:FluentFTP.FtpClient.Lock">
@@ -2982,6 +3012,12 @@
             <summary>
             Indicates if data channel transfers should be encrypted. Only valid if <see cref="P:FluentFTP.FtpClient.EncryptionMode"/>
             property is not equal to <see cref="F:FluentFTP.FtpEncryptionMode.None"/>.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.PlainTextEncryption">
+            <summary>
+            Indicates if the encryption should be disabled immediately after connecting using a CCC command.
+            This is useful when you have a FTP firewall that requires plaintext FTP, but your server mandates FTPS connections.
             </summary>
         </member>
         <member name="P:FluentFTP.FtpClient.SslProtocols">
@@ -3275,6 +3311,21 @@
             <param name="capabilities">The server capabilities</param>
             <returns>FtpListItem if the line can be parsed, null otherwise</returns>
         </member>
+        <member name="T:FluentFTP.FtpSslStream">
+            <summary>
+            .NET SslStream doesn't close TLS connection properly.
+            It does not send the close_notify alert before closing the connection.
+            FtpSslStream uses unsafe code to do that.
+            This is required when we want to downgrade the connection to plaintext using CCC command.
+            Thanks to Neco @ https://stackoverflow.com/questions/237807/net-sslstream-doesnt-close-tls-connection-properly/22626756#22626756
+            </summary>
+        </member>
+        <member name="M:FluentFTP.SslDirectCall.CloseNotify(System.Net.Security.SslStream)">
+            <summary>
+            Send an SSL close_notify alert.
+            </summary>
+            <param name="sslStream"></param>
+        </member>
         <member name="T:FluentFTP.FtpDataStream">
             <summary>
             Base class for data stream connections
@@ -3470,6 +3521,11 @@
             <param name="clientCerts">A collection of client certificates to use when authenticating the SSL stream</param>
             <param name="sslProtocols">A bitwise parameter for supported encryption protocols.</param>
             <exception cref="T:System.Security.Authentication.AuthenticationException">Thrown when authentication fails</exception>
+        </member>
+        <member name="M:FluentFTP.FtpSocketStream.DeactivateEncryption">
+            <summary>
+            Deactivates SSL on this stream using the specified protocols and reverts back to plain-text FTP.
+            </summary>
         </member>
         <member name="M:FluentFTP.FtpSocketStream.Listen(System.Net.IPAddress,System.Int32)">
             <summary>

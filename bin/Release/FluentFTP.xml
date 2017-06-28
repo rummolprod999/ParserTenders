@@ -2791,6 +2791,16 @@
             Honored by high-level API such as Upload(), Download(), UploadFile(), DownloadFile()..
             </summary>
         </member>
+        <member name="P:FluentFTP.FtpClient.UploadDataType">
+            <summary>
+            Controls if the high-level API uploads files in Binary or ASCII mode.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.DownloadDataType">
+            <summary>
+            Controls if the high-level API downloads files in Binary or ASCII mode.
+            </summary>
+        </member>
         <member name="P:FluentFTP.FtpClient.Lock">
             <summary>
             For usage by FTP proxies only
