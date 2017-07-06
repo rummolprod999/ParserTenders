@@ -203,7 +203,7 @@ namespace ParserTenders
                     connect.Open();
 
                     string select_arch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders223 WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
 
                     MySqlCommand cmd = new MySqlCommand(select_arch, connect);
                     cmd.Prepare();
