@@ -11,3 +11,5 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/System.ValueTuple.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Ftp.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Ftp.xml

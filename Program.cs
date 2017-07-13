@@ -75,7 +75,7 @@ namespace ParserTenders
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, prev223, daily223 в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223 в качестве аргумента");
                 return;
             }
 
