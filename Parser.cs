@@ -81,14 +81,14 @@ namespace ParserTenders
 
         public FtpClient ClientFtp44()
         {
-            FtpClient client = new FtpClient("ftp://ftp.zakupki.gov.ru", "free", "free");
+            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "free", "free");
             client.Connect();
             return client;
         }
 
         public FtpClient ClientFtp223()
         {
-            FtpClient client = new FtpClient("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
+            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "fz223free", "fz223free");
             client.Connect();
             return client;
         }
@@ -131,11 +131,11 @@ namespace ParserTenders
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
                     string FileOnServer = $"{Arch}";
                     file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
-                    /*FtpClient ftp = ClientFtp44();
+                    FtpClient ftp = ClientFtp44();
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
-                    ftp.Disconnect();*/
-                    using (Ftp client = new Ftp())
+                    ftp.Disconnect();
+                    /*using (Ftp client = new Ftp())
                     {
                         client.Connect("ftp.zakupki.gov.ru");    // or ConnectSSL for SSL
                         client.Login("free", "free");
@@ -143,7 +143,7 @@ namespace ParserTenders
                         client.Download(FileOnServer, file);
 
                         client.Close();
-                    }
+                    }*/
                     if (count > 1)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
@@ -175,11 +175,11 @@ namespace ParserTenders
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
                     string FileOnServer = $"{Arch}";
                     file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
-                    /*FtpClient ftp = ClientFtp223();
+                    FtpClient ftp = ClientFtp223();
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
-                    ftp.Disconnect();*/
-                    using (Ftp client = new Ftp())
+                    ftp.Disconnect();
+                    /*using (Ftp client = new Ftp())
                     {
                         client.Connect("ftp.zakupki.gov.ru");    // or ConnectSSL for SSL
                         client.Login("fz223free", "fz223free");
@@ -187,7 +187,7 @@ namespace ParserTenders
                         client.Download(FileOnServer, file);
 
                         client.Close();
-                    }
+                    }*/
                     if (count > 1)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
