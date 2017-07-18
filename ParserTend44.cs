@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -234,16 +235,7 @@ namespace ParserTenders
         {
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            try
-            {
-                WorkWithFtp ftp = ClientFtp44_old();
-                ftp.ChangeWorkingDirectory(PathParse);
-                archtemp = ftp.ListDirectory();
-            }
-            catch (Exception e)
-            {
-                Log.Logger("Не могу найти директорию", PathParse);
-            }
+            archtemp = GetListFtp44(PathParse);
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
             return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
@@ -253,16 +245,7 @@ namespace ParserTenders
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            try
-            {
-                WorkWithFtp ftp = ClientFtp44_old();
-                ftp.ChangeWorkingDirectory(PathParse);
-                archtemp = ftp.ListDirectory();
-            }
-            catch (Exception e)
-            {
-                Log.Logger("Не могу найти директорию", PathParse);
-            }
+            archtemp = GetListFtp44(PathParse);
             List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
             foreach (var a in archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
@@ -298,16 +281,7 @@ namespace ParserTenders
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            try
-            {
-                WorkWithFtp ftp = ClientFtp44_old();
-                ftp.ChangeWorkingDirectory(PathParse);
-                archtemp = ftp.ListDirectory();
-            }
-            catch (Exception e)
-            {
-                Log.Logger("Не могу найти директорию", PathParse);
-            }
+            archtemp = GetListFtp44(PathParse);
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
@@ -337,6 +311,37 @@ namespace ParserTenders
             }
 
             return arch;
+        }
+
+        private List<string> GetListFtp44(string PathParse)
+        {
+            List<string> archtemp = new List<string>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    WorkWithFtp ftp = ClientFtp44_old();
+                    ftp.ChangeWorkingDirectory(PathParse);
+                    archtemp = ftp.ListDirectory();
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse);
+                        break;
+                    }
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+            return archtemp;
         }
     }
 }

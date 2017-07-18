@@ -152,9 +152,10 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не удалось скачать файл", Arch, e);
+                    
                     if (count > 50)
                     {
+                        Log.Logger($"Не удалось скачать файл после попытки {count}", Arch, e);
                         return file;
                     }
 

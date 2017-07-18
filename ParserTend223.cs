@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -164,36 +166,47 @@ namespace ParserTenders
         public override List<String> GetListArchLast(string PathParse, string RegionPath, string purchase)
         {
             List<string> archtemp = new List<string>();
-            /*FtpClient ftp = ClientFtp44();*/
-            try
-            {
-                WorkWithFtp ftp = ClientFtp223_old();
-                ftp.ChangeWorkingDirectory(PathParse);
-                archtemp = ftp.ListDirectory();
-            }
-            catch (Exception e)
-            {
-                Log.Logger("Не могу найти директорию", PathParse);
-            }
+            archtemp = GetListFtp223(PathParse);
             List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
             return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
+        }
+
+        private List<string> GetListFtp223(string PathParse)
+        {
+            List<string> archtemp = new List<string>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    WorkWithFtp ftp = ClientFtp223_old();
+                    ftp.ChangeWorkingDirectory(PathParse);
+                    archtemp = ftp.ListDirectory();
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse);
+                        break;
+                    }
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+            return archtemp;
         }
 
         public override List<String> GetListArchDaily(string PathParse, string RegionPath, string purchase)
         {
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
-            /*FtpClient ftp = ClientFtp44();*/
-            try
-            {
-                WorkWithFtp ftp = ClientFtp223_old();
-                ftp.ChangeWorkingDirectory(PathParse);
-                archtemp = ftp.ListDirectory();
-            }
-            catch (Exception e)
-            {
-                Log.Logger("Не могу найти директорию", PathParse);
-            }
+            archtemp = GetListFtp223(PathParse);
             List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
             foreach (var a in archtemp
                 .Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
