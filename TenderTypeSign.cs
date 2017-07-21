@@ -89,6 +89,7 @@ namespace ParserTenders
                     string sign_date = ((string) tender.SelectToken("signDate") ?? "").Trim();
                     string customer_reg_num = ((string) tender.SelectToken("customer.regNum") ?? "").Trim();
                     string contract_sign_price = ((string) tender.SelectToken("price") ?? "").Trim();
+                    contract_sign_price = contract_sign_price.Replace(",", ".");
                     string sign_currency = ((string) tender.SelectToken("currency.name") ?? "").Trim();
                     string conclude_contract_right = ((string) tender.SelectToken("concludeContractRight") ?? "")
                         .Trim();

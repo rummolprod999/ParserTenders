@@ -2773,6 +2773,21 @@
             If you know for sure that this is unsupported, set it to false.
             </summary>
         </member>
+        <member name="P:FluentFTP.FtpClient.BulkListing">
+            <summary>
+            If true, increases performance of GetListing by reading multiple lines
+            of the file listing at once. If false then GetListing will read file
+            listings line-by-line. If GetListing is having issues with your server,
+            set it to false.
+            
+            The number of bytes read is based upon <see cref="P:FluentFTP.FtpClient.BulkListingLength"/>.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.BulkListingLength">
+            <summary>
+            Bytes to read during GetListing. Only honored if <see cref="P:FluentFTP.FtpClient.BulkListing"/> is true.
+            </summary>
+        </member>
         <member name="P:FluentFTP.FtpClient.TransferChunkSize">
             <summary>
             Gets or sets the number of bytes transferred in a single chunk (a single FTP command).
@@ -3420,6 +3435,14 @@
             </summary>
             <param name="encoding">The type of encoding used to convert from byte[] to string</param>
             <returns>A line from the stream, null if there is nothing to read</returns>
+        </member>
+        <member name="M:FluentFTP.FtpSocketStream.ReadAllLines(System.Text.Encoding,System.Int32)">
+            <summary>
+            Reads all line from the socket
+            </summary>
+            <param name="encoding">The type of encoding used to convert from byte[] to string</param>
+            <param name="bufferSize">The size of the buffer</param>
+            <returns>A list of lines from the stream</returns>
         </member>
         <member name="M:FluentFTP.FtpSocketStream.ReadLineAsync(System.Text.Encoding,System.Threading.CancellationToken)">
             <summary>

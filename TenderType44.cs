@@ -530,8 +530,10 @@ namespace ParserTenders
                             string quantity_value = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();
                             string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
+                            price = price.Replace(",", ".");
                             string okei = ((string) purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
                             string sum_p = ((string) purchaseobject.SelectToken("sum") ?? "").Trim();
+                            sum_p = sum_p.Replace(",", ".");
                             int okpd2_group_code = 0;
                             string okpd2_group_level1_code = "";
                             if (!String.IsNullOrEmpty(okpd2_code))
