@@ -29,6 +29,7 @@ namespace ParserTenders
         public static int Port => _port;
         public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
+        public static int DownCount = 30;
 
         public static string FileLog;
 

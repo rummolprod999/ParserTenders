@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
@@ -10,6 +11,8 @@ namespace ParserTenders
     {
         protected TypeArguments arg;
         protected List<AttachStruct> ListAttach;
+        protected List<string> proxyList;
+        protected List<string> useragentList;
 
         public ParserAttach(TypeArguments a)
         {
@@ -18,35 +21,63 @@ namespace ParserTenders
             List<int> ListAttachTmp = new List<int>();
             foreach (DataRow row in d.Rows)
             {
-                ListAttachTmp.Add((int)row["id_attachment"]);
+                ListAttachTmp.Add((int) row["id_attachment"]);
             }
             using (MySqlConnection connect = ConnectToDb.GetDBConnection())
             {
                 connect.Open();
-                string SelectAt = $"SELECT file_name, url FROM {Program.Prefix}attachment WHERE id_atachment = @id_atachment";
+                string SelectAt =
+                    $"SELECT file_name, url FROM {Program.Prefix}attachment WHERE id_atachment = @id_atachment";
                 MySqlCommand cmd = new MySqlCommand(SelectAt, connect);
+                cmd.Prepare();
                 foreach (var at in ListAttachTmp)
                 {
-                    
                     cmd.Parameters.AddWithValue("@id_atachment", at);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        string url = 
+                        reader.Read();
+                        string file_name = reader.GetString("file_name");
+                        string url = reader.GetString("url");
+                        if (file_name.EndsWith(".doc"))
+                        {
+                            AttachStruct attch = new AttachStruct(at, url, TypeFileAttach.doc);
+                            ListAttach.Add(attch);
+                        }
+                        else if (file_name.EndsWith(".docx"))
+                        {
+                            AttachStruct attch = new AttachStruct(at, url, TypeFileAttach.docx);
+                            ListAttach.Add(attch);
+                        }
                     }
-
+                    reader.Close();
                 }
             }
-            
-
         }
 
         public void Parsing()
         {
-            List<AttachStruct> LAtt; 
             try
             {
-                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions { MaxDegreeOfParallelism = 6 }, AddAttach);
+                proxyList = GetProxy();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Не получили список прокси", e);
+                return;
+            }
+            try
+            {
+                useragentList = GetUserAgent();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Не получили список user agent", e);
+                return;
+            }
+            try
+            {
+                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 6}, AddAttach);
             }
             catch (Exception e)
             {
@@ -56,7 +87,19 @@ namespace ParserTenders
 
         public void AddAttach(AttachStruct att)
         {
-            
+            DownloadFile d = new DownloadFile();
+            string f = d.DownL(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
+            FileInfo fileInf = new FileInfo(f);
+            if (fileInf.Exists)
+            {
+                fileInf.Delete();
+                Console.WriteLine($"Скачали файл {att.url_attach}" );
+            }
+            else
+            {
+                Console.WriteLine($"Не удалось скачать файл {att.url_attach}");
+            }
+
         }
 
         public DataTable GetAttachFromDb()
@@ -75,6 +118,36 @@ namespace ParserTenders
                 adapter.Fill(dt);
             }
             return dt;
+        }
+
+        public List<string> GetProxy()
+        {
+            string path = "./proxy.txt";
+            List<string> p = new List<string>();
+            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    p.Add(line.Trim());
+                }
+            }
+            return p;
+        }
+
+        public List<string> GetUserAgent()
+        {
+            string path = "./user_agents.txt";
+            List<string> p = new List<string>();
+            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    p.Add(line.Trim());
+                }
+            }
+            return p;
         }
     }
 }

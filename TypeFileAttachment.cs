@@ -1,6 +1,6 @@
 ﻿namespace ParserTenders
 {
-    public enum TypeFileAttachment
+    public enum TypeFileAttach
     {
         doc,
         docx

@@ -154,6 +154,7 @@
     <Compile Include="AttachStruct.cs" />
     <Compile Include="ClearText.cs" />
     <Compile Include="ConnectToDb.cs" />
+    <Compile Include="DownloadFile.cs" />
     <Compile Include="GetSettings.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="JsonExtensions.cs" />
@@ -177,7 +178,7 @@
     <Compile Include="TypeFile44.cs" />
     <Compile Include="Tender.cs" />
     <Compile Include="TenderTypeOrgChange.cs" />
-    <Compile Include="TypeFileAttach.cs" />
+    <Compile Include="TypeFileAttachment.cs" />
     <Compile Include="Unzipped.cs" />
     <Compile Include="WorkWithFtp.cs" />
   </ItemGroup>
