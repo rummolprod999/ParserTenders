@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <setting>
-	<database>tender</database>
+	<database>tenders_test</database>
 	<tempdir_tenders44>temp_tenders44</tempdir_tenders44>
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>

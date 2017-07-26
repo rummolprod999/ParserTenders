@@ -334,7 +334,7 @@ namespace ParserTenders
                 {
                     if (count > 3)
                     {
-                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse);
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
                         break;
                     }
                     count++;

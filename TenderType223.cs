@@ -662,7 +662,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не получилось пропарсить дату", match.Value, file_path);
+                    Log.Logger("Не получилось пропарсить дату", match.Value, file_path, e);
                 }
             }
             return d;

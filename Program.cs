@@ -13,6 +13,8 @@ namespace ParserTenders
         private static string _logPath44;
         private static string _tempPath223;
         private static string _logPath223;
+        private static string _tempAttach;
+        private static string _logAttach;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -28,9 +30,12 @@ namespace ParserTenders
         public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
         public static string FileLog;
+        //public static string FileLogAttach;
         public static string StrArg;
         public static TypeArguments Periodparsing;
         public static string PathProgram;
+        public static string LogAttach => _logAttach;
+        public static string TempAttach => _tempAttach;
 
         public static string TempPath
         {
@@ -75,7 +80,7 @@ namespace ParserTenders
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223 в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach в качестве аргумента");
                 return;
             }
 
@@ -110,9 +115,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTender223(Periodparsing);
                     break;
+                case "attach":
+                    Periodparsing = TypeArguments.Attach;
+                    Init(Periodparsing);
+                    ParserAtt(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, prev223, daily223 ");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach ");
                     break;
             }
         }
@@ -130,6 +140,8 @@ namespace ParserTenders
             _tempPath223 = set.TempPathTenders223;
             _server = set.Server;
             _port = set.Port;
+            _logAttach = set.LogPathAttach;
+            _tempAttach = set.TempPathAttach;
             string tmp = set.Years;
             string[] temp_years = tmp.Split(new char[] {','});
 
@@ -153,14 +165,30 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(TempPath);
             }
+            if (Directory.Exists(TempAttach))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(TempAttach);
+                dirInfo.Delete(true);
+                Directory.CreateDirectory(TempAttach);
+            }
+            else
+            {
+                Directory.CreateDirectory(TempAttach);
+            }
             if (!Directory.Exists(LogPath))
             {
                 Directory.CreateDirectory(LogPath);
+            }
+            if (!Directory.Exists(LogAttach))
+            {
+                Directory.CreateDirectory(LogAttach);
             }
             if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
             else if (arg == TypeArguments.Daily223 || arg == TypeArguments.Last223)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
+            else if(arg == TypeArguments.Attach)
+                FileLog = $"{LogAttach}{Path.DirectorySeparatorChar}Attach_{LocalDate:dd_MM_yyyy}.log";
         }
 
         private static void ParserTender44(TypeArguments arg)
@@ -193,6 +221,14 @@ namespace ParserTenders
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
             Log.Logger("Время окончания парсинга Tenders223");
             Log.Logger("Добавили tender223", AddTender223);
+        }
+
+        private static void ParserAtt(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Attach");
+            ParserAttach att = new ParserAttach(TypeArguments.Attach);
+            att.Parsing();
+            Log.Logger("Время окончания парсинга Attach");
         }
     }
 }

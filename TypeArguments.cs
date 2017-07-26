@@ -6,6 +6,7 @@ namespace ParserTenders
         Curr44,
         Last44,
         Last223,
-        Daily223
+        Daily223,
+        Attach
     }
 }

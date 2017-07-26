@@ -11,6 +11,8 @@ namespace ParserTenders
         public readonly string LogPathTenders44;
         public readonly string TempPathTenders223;
         public readonly string LogPathTenders223;
+        public readonly string LogPathAttach;
+        public readonly string TempPathAttach;
         public readonly string Prefix;
         public readonly string UserDB;
         public readonly string PassDB;
@@ -44,6 +46,12 @@ namespace ParserTenders
                         case "logdir_tenders223":
                             LogPathTenders223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "log_attach":
+                            LogPathAttach = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_attach":
+                            TempPathAttach = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -68,7 +76,9 @@ namespace ParserTenders
 
             if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) ||
                 String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) ||
-                String.IsNullOrEmpty(Years))
+                String.IsNullOrEmpty(Years) || String.IsNullOrEmpty(TempPathTenders223) ||
+                String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
+                String.IsNullOrEmpty(TempPathAttach))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);
