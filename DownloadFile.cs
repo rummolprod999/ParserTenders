@@ -8,6 +8,7 @@ namespace ParserTenders
     public class DownloadFile
     {
         private bool DownCount = true;
+
         public void DownloadF(string sSourceURL, string sDestinationPath, string proxy, int port, string useragent)
         {
             long iFileSize = 0;
@@ -33,8 +34,8 @@ namespace ParserTenders
             HttpWebRequest hwRq;
             HttpWebResponse hwRes;
             hwRq = (HttpWebRequest) HttpWebRequest.Create(sSourceURL);
-            hwRq.Proxy = new WebProxy(proxy, port);
-            hwRq.UserAgent = useragent;
+            //hwRq.Proxy = new WebProxy(proxy, port);
+            //hwRq.UserAgent = useragent;
             hwRq.AddRange((int) iExistLen);
             try
             {
@@ -60,27 +61,27 @@ namespace ParserTenders
                                       hwRes.StatusCode == HttpStatusCode.NotFound))
                 {
                     DownCount = false;
-                    Log.Logger("Ошибка скачивания", ex);
+                    Log.Logger("Ошибка скачивания", ex, sSourceURL);
                 }
                 saveFileStream.Dispose();
                 saveFileStream.Close();
                 saveFileStream = null;
             }
         }
-        
+
         public string DownL(string url, int id_att, TypeFileAttach tp, List<string> proxies, List<string> useragents)
         {
             string patharch = "";
             switch (tp)
             {
-                    case TypeFileAttach.doc:
-                        patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
-                        break;
+                case TypeFileAttach.doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                    break;
                 case TypeFileAttach.docx:
                     patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
                     break;
             }
-            
+
             int count = 0;
             while (DownCount)
             {
@@ -105,6 +106,44 @@ namespace ParserTenders
             }
 
             return patharch;
+        }
+
+        public string DownLOld(string url, int id_att, TypeFileAttach tp, List<string> proxies, List<string> useragents)
+        {
+            string patharch = "";
+            switch (tp)
+            {
+                case TypeFileAttach.doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                    break;
+                case TypeFileAttach.docx:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
+                    break;
+            }
+
+            int count = 0;
+            while (count >= Program.DownCount)
+            {
+                try
+                {
+                    WebClient wc = new WebClient();
+                    wc.DownloadFile(url, patharch);
+                    return patharch;
+                }
+                catch (Exception e)
+                {
+                    FileInfo FileD = new FileInfo(patharch);
+                    if (FileD.Exists)
+                    {
+                        FileD.Delete();
+                    }
+                    Log.Logger(e, url);
+                }
+
+                count++;
+            }
+            Log.Logger($"Не скачали файл за {count} попыток");
+            return "";
         }
     }
 }

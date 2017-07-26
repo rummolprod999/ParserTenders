@@ -1,11 +1,13 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace ParserTenders
 {
     public class Log
     {
+        private static object locker = new object();
         public static void Logger(params object[] parametrs)
         {
             string s = "";
@@ -15,9 +17,12 @@ namespace ParserTenders
                 s = $"{s} {parametrs[i]}";
             }
 
-            using (StreamWriter sw = new StreamWriter(Program.FileLog, true, System.Text.Encoding.Default))
+            lock (locker)
             {
-                sw.WriteLine(s);
+                using (StreamWriter sw = new StreamWriter(Program.FileLog, true, Encoding.Default))
+                {
+                    sw.WriteLine(s);
+                }
             }
         }
     }

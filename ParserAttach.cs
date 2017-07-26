@@ -10,7 +10,7 @@ namespace ParserTenders
     public class ParserAttach
     {
         protected TypeArguments arg;
-        protected List<AttachStruct> ListAttach;
+        protected List<AttachStruct> ListAttach = new List<AttachStruct>();
         protected List<string> proxyList;
         protected List<string> useragentList;
 
@@ -27,12 +27,13 @@ namespace ParserTenders
             {
                 connect.Open();
                 string SelectAt =
-                    $"SELECT file_name, url FROM {Program.Prefix}attachment WHERE id_atachment = @id_atachment";
-                MySqlCommand cmd = new MySqlCommand(SelectAt, connect);
-                cmd.Prepare();
+                    $"SELECT file_name, url FROM {Program.Prefix}attachment WHERE id_attachment = @id_attachment";
+                
                 foreach (var at in ListAttachTmp)
                 {
-                    cmd.Parameters.AddWithValue("@id_atachment", at);
+                    MySqlCommand cmd = new MySqlCommand(SelectAt, connect);
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@id_attachment", at);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -88,11 +89,11 @@ namespace ParserTenders
         public void AddAttach(AttachStruct att)
         {
             DownloadFile d = new DownloadFile();
-            string f = d.DownL(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
+            string f = d.DownLOld(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
             FileInfo fileInf = new FileInfo(f);
             if (fileInf.Exists)
             {
-                fileInf.Delete();
+                //fileInf.Delete();
                 Console.WriteLine($"Скачали файл {att.url_attach}" );
             }
             else

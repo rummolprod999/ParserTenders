@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <setting>
-	<database>tenders_test</database>
+	<database>tender2</database>
 	<tempdir_tenders44>temp_tenders44</tempdir_tenders44>
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
 	<logdir_tenders223>log_tenders223</logdir_tenders223>
+	<logdir_attach>log_attach</logdir_attach>
+	<tempdir_attach>temp_attach</tempdir_attach>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

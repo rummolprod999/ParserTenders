@@ -2343,6 +2343,13 @@
             </summary>
             <param name="type">ASCII/Binary</param>
         </member>
+        <member name="M:FluentFTP.FtpClient.SetDataTypeInternal(FluentFTP.FtpDataType)">
+            <summary>Internal method that handles actually setting the data type.</summary>
+            <exception cref="T:FluentFTP.FtpCommandException">Thrown when a FTP Command error condition occurs.</exception>
+            <exception cref="T:FluentFTP.FtpException">Thrown when a FTP error condition occurs.</exception>
+            <param name="type">ASCII/Binary.</param>
+            <remarks>This method doesn't do any locking to prevent recursive lock scenarios.  Callers must do their own locking.</remarks>
+        </member>
         <member name="M:FluentFTP.FtpClient.BeginSetDataType(FluentFTP.FtpDataType,System.AsyncCallback,System.Object)">
             <summary>
             Begins an asynchronous operation to set the data type of information sent over the data stream
@@ -2764,6 +2771,21 @@
             <summary>
             Check if your server supports a recursive LIST command (LIST -R).
             If you know for sure that this is unsupported, set it to false.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.BulkListing">
+            <summary>
+            If true, increases performance of GetListing by reading multiple lines
+            of the file listing at once. If false then GetListing will read file
+            listings line-by-line. If GetListing is having issues with your server,
+            set it to false.
+            
+            The number of bytes read is based upon <see cref="P:FluentFTP.FtpClient.BulkListingLength"/>.
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpClient.BulkListingLength">
+            <summary>
+            Bytes to read during GetListing. Only honored if <see cref="P:FluentFTP.FtpClient.BulkListing"/> is true.
             </summary>
         </member>
         <member name="P:FluentFTP.FtpClient.TransferChunkSize">
@@ -3413,6 +3435,14 @@
             </summary>
             <param name="encoding">The type of encoding used to convert from byte[] to string</param>
             <returns>A line from the stream, null if there is nothing to read</returns>
+        </member>
+        <member name="M:FluentFTP.FtpSocketStream.ReadAllLines(System.Text.Encoding,System.Int32)">
+            <summary>
+            Reads all line from the socket
+            </summary>
+            <param name="encoding">The type of encoding used to convert from byte[] to string</param>
+            <param name="bufferSize">The size of the buffer</param>
+            <returns>A list of lines from the stream</returns>
         </member>
         <member name="M:FluentFTP.FtpSocketStream.ReadLineAsync(System.Text.Encoding,System.Threading.CancellationToken)">
             <summary>
@@ -4577,6 +4607,21 @@
         <member name="M:FluentFTP.FtpExtensions.IsNullOrWhiteSpace(System.String)">
             <summary>
             Checks if every character in the string is whitespace, or the string is null.
+            </summary>
+        </member>
+        <member name="M:FluentFTP.FtpExtensions.IsBlank(System.String)">
+            <summary>
+            Checks if the string is null or 0 length.
+            </summary>
+        </member>
+        <member name="M:FluentFTP.FtpExtensions.IsBlank(System.Collections.IList)">
+            <summary>
+            Checks if the array is null or 0 length.
+            </summary>
+        </member>
+        <member name="M:FluentFTP.FtpExtensions.IsBlank(System.Collections.IEnumerable)">
+            <summary>
+            Checks if the array is null or 0 length.
             </summary>
         </member>
         <member name="M:FluentFTP.FtpExtensions.Join(System.String[],System.String)">
