@@ -151,6 +151,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachStruct.cs" />
     <Compile Include="ClearText.cs" />
     <Compile Include="ConnectToDb.cs" />
     <Compile Include="GetSettings.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="TypeFile44.cs" />
     <Compile Include="Tender.cs" />
     <Compile Include="TenderTypeOrgChange.cs" />
+    <Compile Include="TypeFileAttach.cs" />
     <Compile Include="Unzipped.cs" />
     <Compile Include="WorkWithFtp.cs" />
   </ItemGroup>

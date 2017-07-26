@@ -46,7 +46,7 @@ namespace ParserTenders
                         case "logdir_tenders223":
                             LogPathTenders223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
-                        case "log_attach":
+                        case "logdir_attach":
                             LogPathAttach = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "tempdir_attach":

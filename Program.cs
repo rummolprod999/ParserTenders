@@ -29,13 +29,16 @@ namespace ParserTenders
         public static int Port => _port;
         public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
+
         public static string FileLog;
+
         //public static string FileLogAttach;
         public static string StrArg;
+
         public static TypeArguments Periodparsing;
         public static string PathProgram;
-        public static string LogAttach => _logAttach;
-        public static string TempAttach => _tempAttach;
+        //public static string LogAttach => _logAttach;
+        //public static string TempAttach => _tempAttach;
 
         public static string TempPath
         {
@@ -46,6 +49,8 @@ namespace ParserTenders
                     return _tempPath44;
                 else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
                     return _tempPath223;
+                else if (Periodparsing == TypeArguments.Attach)
+                    return _tempAttach;
 
                 return "";
             }
@@ -60,6 +65,8 @@ namespace ParserTenders
                     return _logPath44;
                 else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
                     return _logPath223;
+                else if (Periodparsing == TypeArguments.Attach)
+                    return _logAttach;
 
                 return "";
             }
@@ -165,30 +172,16 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(TempPath);
             }
-            if (Directory.Exists(TempAttach))
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(TempAttach);
-                dirInfo.Delete(true);
-                Directory.CreateDirectory(TempAttach);
-            }
-            else
-            {
-                Directory.CreateDirectory(TempAttach);
-            }
             if (!Directory.Exists(LogPath))
             {
                 Directory.CreateDirectory(LogPath);
-            }
-            if (!Directory.Exists(LogAttach))
-            {
-                Directory.CreateDirectory(LogAttach);
             }
             if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
             else if (arg == TypeArguments.Daily223 || arg == TypeArguments.Last223)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
-            else if(arg == TypeArguments.Attach)
-                FileLog = $"{LogAttach}{Path.DirectorySeparatorChar}Attach_{LocalDate:dd_MM_yyyy}.log";
+            else if (arg == TypeArguments.Attach)
+                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Attach_{LocalDate:dd_MM_yyyy}.log";
         }
 
         private static void ParserTender44(TypeArguments arg)
