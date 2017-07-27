@@ -29,7 +29,7 @@ namespace ParserTenders
         public static int Port => _port;
         public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
-        public static int DownCount = 30;
+        public static int DownCount = 200;
 
         public static string FileLog;
 
@@ -222,6 +222,16 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Attach");
             ParserAttach att = new ParserAttach(TypeArguments.Attach);
             att.Parsing();
+            /*FileInfo fileInf = new FileInfo("");
+            if (fileInf.Exists)
+            {
+                //fileInf.Delete();
+                Console.WriteLine($"Скачали файл" );
+            }
+            else
+            {
+                Console.WriteLine($"Не удалось скачать файл ");
+            }*/
             Log.Logger("Время окончания парсинга Attach");
         }
     }

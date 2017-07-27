@@ -87,8 +87,10 @@ namespace ParserTenders
             {
                 string proxy = proxies[new Random().Next(proxies.Count)];
                 string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                //ip = "67.205.191.44";
                 string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
                 int port = Int32.Parse(port_s);
+                //port = 8083;
                 string useragent = useragents[new Random().Next(useragents.Count)];
                 try
                 {
@@ -120,30 +122,41 @@ namespace ParserTenders
                     patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
                     break;
             }
-
+            
             int count = 0;
-            while (count >= Program.DownCount)
+            while (count <= Program.DownCount)
             {
                 try
                 {
+                    string proxy = proxies[new Random().Next(proxies.Count)];
+                    string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                    //ip = "107.170.23.30";
+                    //Console.WriteLine(ip);
+                    string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
+                    int port = Int32.Parse(port_s);
+                    //port = 88;
+                    //Console.WriteLine(port);
+                    string useragent = useragents[new Random().Next(useragents.Count)];
                     WebClient wc = new WebClient();
+                    wc.Headers.Add ("user-agent", useragent);
+                    wc.Proxy = new WebProxy(ip, port);
                     wc.DownloadFile(url, patharch);
+                    FileInfo FileD = new FileInfo(patharch);
+                    if (FileD.Exists && FileD.Length == 0)
+                    {
+                        continue;
+                    }
                     return patharch;
                 }
                 catch (Exception e)
                 {
-                    FileInfo FileD = new FileInfo(patharch);
-                    if (FileD.Exists)
-                    {
-                        FileD.Delete();
-                    }
-                    Log.Logger(e, url);
+                    //Console.WriteLine(e);
                 }
 
                 count++;
             }
-            Log.Logger($"Не скачали файл за {count} попыток");
-            return "";
+            Log.Logger($"Не скачали файл за {count} попыток", url);
+            return patharch;
         }
     }
 }

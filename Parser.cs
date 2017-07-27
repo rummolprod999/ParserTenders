@@ -146,7 +146,7 @@ namespace ParserTenders
                     }*/
                     if (count > 1)
                     {
-                        Log.Logger("Удалось скачать архив после попытки", count);
+                        Log.Logger("Удалось скачать архив после попытки", count, PathParse);
                     }
                     return file;
                 }
@@ -191,7 +191,7 @@ namespace ParserTenders
                     }*/
                     if (count > 1)
                     {
-                        Log.Logger("Удалось скачать архив после попытки", count);
+                        Log.Logger("Удалось скачать архив после попытки", count, PathParse);
                     }
                     return file;
                 }

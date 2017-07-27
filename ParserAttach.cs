@@ -78,7 +78,11 @@ namespace ParserTenders
             }
             try
             {
-                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 6}, AddAttach);
+                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 10}, AddAttach);
+                /*foreach (var v in ListAttach)
+                {
+                    AddAttach(v);
+                }*/
             }
             catch (Exception e)
             {
@@ -88,8 +92,18 @@ namespace ParserTenders
 
         public void AddAttach(AttachStruct att)
         {
-            DownloadFile d = new DownloadFile();
-            string f = d.DownLOld(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
+            string f = "";
+            try
+            {
+                DownloadFile d = new DownloadFile();
+                f = d.DownLOld(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
+            }
+            
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при получении файла", e);
+                
+            }
             FileInfo fileInf = new FileInfo(f);
             if (fileInf.Exists)
             {
@@ -105,9 +119,10 @@ namespace ParserTenders
 
         public DataTable GetAttachFromDb()
         {
-            string DateNow = $"{Program.LocalDate:yyyy-MM-dd 00:00:00}";
+            DateTime D = Program.LocalDate.AddDays(-1);
+            string DateNow = $"{D:yyyy-MM-dd 00:00:00}";
             string selectA =
-                $"SELECT att.id_attachment FROM {Program.Prefix}attachment as att LEFT JOIN {Program.Prefix}tender as t ON att.id_tender = t.id_tender WHERE t.end_date >= DATE(@EndDate) AND att.attach_add = 0 AND t.cancel = 0";
+                $"SELECT att.id_attachment FROM {Program.Prefix}attachment as att LEFT JOIN {Program.Prefix}tender as t ON att.id_tender = t.id_tender WHERE t.doc_publish_date >= DATE(@EndDate) AND att.attach_add = 0 AND t.cancel = 0";
             DataTable dt = new DataTable();
             using (MySqlConnection connect = ConnectToDb.GetDBConnection())
             {
