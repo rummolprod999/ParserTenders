@@ -104,7 +104,7 @@ namespace ParserTenders
             }
             try
             {
-                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 10}, AddAttach);
+                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 15}, AddAttach);
                 /*foreach (var v in ListAttach)
                 {
                     AddAttach(v);
@@ -156,7 +156,7 @@ namespace ParserTenders
                     }
                     catch (Exception e)
                     {
-                        Log.Logger("Ошибка при парсинге документа", f, e);
+                        Log.Logger("Ошибка при парсинге документа", att.url_attach, e);
                     }
                     fileInf.Delete();
 
