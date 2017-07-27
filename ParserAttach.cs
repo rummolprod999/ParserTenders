@@ -114,6 +114,15 @@ namespace ParserTenders
             {
                 Log.Logger("Ошибка при распараллеливании attach", e);
             }
+            try
+            {
+                DeleteOldAttach();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при удалении старых attach", e);
+            }
+            
         }
 
         public void AddAttach(AttachStruct att)
@@ -236,6 +245,31 @@ namespace ParserTenders
                 }
             }
             return p;
+        }
+
+        public void DeleteOldAttach()
+        {
+            string DateNow = $"{Program.LocalDate:yyyy-MM-dd 00:00:00}";
+            DataTable dt = new DataTable();
+            using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+            {
+                connect.Open();
+                string SelectOldAttach = $"SELECT att.id_attachment FROM {Program.Prefix}attachment as att LEFT JOIN {Program.Prefix}tender as t ON att.id_tender = t.id_tender WHERE t.end_date < DATE(@EndDate) AND att.attach_add = 1 AND t.cancel = 0 AND LENGTH(attach_text) > 0";
+                MySqlCommand cmd = new MySqlCommand(SelectOldAttach, connect);
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue("@EndDate", DateNow);
+                MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                adapter.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_text = '' WHERE id_attachment = @id_attachment";
+                    MySqlCommand cmd1 = new MySqlCommand(SelectOldAttach, connect);
+                    cmd1.Prepare();
+                    cmd1.Parameters.AddWithValue("@id_attachment", (int)row["id_attachment"]);
+                    cmd1.ExecuteNonQuery();
+                }
+                
+            }
         }
     }
 }
