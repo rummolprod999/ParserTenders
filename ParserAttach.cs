@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using TikaOnDotNet.TextExtraction;
 
 namespace ParserTenders
 {
@@ -13,9 +15,33 @@ namespace ParserTenders
         protected List<AttachStruct> ListAttach = new List<AttachStruct>();
         protected List<string> proxyList;
         protected List<string> useragentList;
+        private object locker = new object();
+        private object locker2 = new object();
+        public event Action<int> AddAttachment;
+        public event Action<int> NotAddAttachment;
 
         public ParserAttach(TypeArguments a)
         {
+            AddAttachment += delegate(int dd)
+            {
+                if (dd > 0)
+                    lock (locker)
+                    {
+                        Program.AddAttach++;
+                    }
+                else
+                    Log.Logger("Не удалось добавить attach");
+            };
+            NotAddAttachment += delegate(int dd)
+            {
+                if (dd > 0)
+                    lock (locker2)
+                    {
+                        Program.NotAddAttach++;
+                    }
+                else
+                    Log.Logger("Не удалось добавить notattach");
+            };
             this.arg = a;
             DataTable d = GetAttachFromDb();
             List<int> ListAttachTmp = new List<int>();
@@ -101,18 +127,64 @@ namespace ParserTenders
             
             catch (Exception e)
             {
-                Log.Logger("Ошибка при получении файла", e);
+                Log.Logger("Ошибка при получении файла", e, att.url_attach);
+                return;
+
+            }
+            try
+            {
+                string attachtext = "";
+                FileInfo fileInf = new FileInfo(f);
+                if (fileInf.Exists)
+                {
+                    try
+                    {
+                        var textExtractor = new TextExtractor();
+                        var wordDocContents = textExtractor.Extract(f);
+                        attachtext = wordDocContents.Text;
+                        attachtext = Regex.Replace(attachtext, @"\s+", " ");
+                        attachtext = attachtext.Trim();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Logger("Ошибка при парсинге документа", f, e);
+                    }
+                    fileInf.Delete();
+
+                }
+                if (!String.IsNullOrEmpty(attachtext))
+                {
+                    using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                    {
+                        connect.Open();
+                        string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_text = @attach_text, attach_add = 1 WHERE id_attachment = @id_attachment";
+                        MySqlCommand cmd = new MySqlCommand(UpdateA, connect);
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("@attach_text", attachtext);
+                        cmd.Parameters.AddWithValue("@id_attachment", att.id_attach);
+                        int addAtt = cmd.ExecuteNonQuery();
+                        AddAttachment?.Invoke(addAtt);
+                        
+                    }
+                }
+                else
+                {
+                    using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                    {
+                        connect.Open();
+                        string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_add = 1 WHERE id_attachment = @id_attachment";
+                        MySqlCommand cmd = new MySqlCommand(UpdateA, connect);
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("@id_attachment", att.id_attach);
+                        int addAtt = cmd.ExecuteNonQuery();
+                        NotAddAttachment?.Invoke(addAtt);
+                    }
+                }
                 
             }
-            FileInfo fileInf = new FileInfo(f);
-            if (fileInf.Exists)
+            catch (Exception e)
             {
-                //fileInf.Delete();
-                Console.WriteLine($"Скачали файл {att.url_attach}" );
-            }
-            else
-            {
-                Console.WriteLine($"Не удалось скачать файл {att.url_attach}");
+                Log.Logger("Ошибка при парсинге и добавлении attach", e, att.url_attach);
             }
 
         }
