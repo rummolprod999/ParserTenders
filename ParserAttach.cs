@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -158,6 +159,30 @@ namespace ParserTenders
                     catch (Exception e)
                     {
                         Log.Logger("Ошибка при парсинге документа", att.url_attach, e);
+                        try
+                        {
+                            var MyProcess = new Process
+                            {
+                                StartInfo = new ProcessStartInfo("/opt/libreoffice5.4/program/soffice.bin",
+                                    $"--headless --convert-to txt:Text {f}")
+                            };
+                            MyProcess.Start();
+                            MyProcess.WaitForExit();
+                            string f_txt = $"{Program.TempPath}{Path.DirectorySeparatorChar}{att.id_attach}.txt";
+                            FileInfo fl = new FileInfo(f_txt);
+                            if (fl.Exists)
+                            {
+                                using (StreamReader sr = new StreamReader(f_txt, System.Text.Encoding.Default))
+                                {
+                                    attachtext = sr.ReadToEnd();
+                                }
+                                Log.Logger("Получили текст альтернативным методом", att.url_attach);
+                            }
+                        }
+                        catch (Exception b)
+                        {
+                            Log.Logger("Не Получили текст альтернативным методом", att.url_attach, b);
+                        }
                     }
                     fileInf.Delete();
                 }
