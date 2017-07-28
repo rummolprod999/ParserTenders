@@ -110,7 +110,8 @@ namespace ParserTenders
             return patharch;
         }
 
-        public string DownLOld(string url, int id_att, TypeFileAttach tp, List<string> proxies, List<string> useragents)
+        public string DownLOld(string url, int id_att, TypeFileAttach tp, List<string> proxies,
+            List<string> proxies_auth, List<string> useragents)
         {
             string patharch = "";
             switch (tp)
@@ -122,13 +123,18 @@ namespace ParserTenders
                     patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
                     break;
             }
-            
+
             int count = 0;
             while (count <= Program.DownCount)
             {
                 try
                 {
+                    int r = new Random().Next(2);
                     string proxy = proxies[new Random().Next(proxies.Count)];
+                    if (r == 1)
+                    {
+                        proxy = proxies_auth[new Random().Next(proxies_auth.Count)];
+                    }
                     string ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
@@ -138,8 +144,13 @@ namespace ParserTenders
                     //Console.WriteLine(port);
                     string useragent = useragents[new Random().Next(useragents.Count)];
                     WebClient wc = new WebClient();
-                    wc.Headers.Add ("user-agent", useragent);
-                    wc.Proxy = new WebProxy(ip, port);
+                    wc.Headers.Add("user-agent", useragent);
+                    WebProxy wp = new WebProxy(ip, port);
+                    if (r == 1)
+                    {
+                        wp.Credentials = new NetworkCredential("VIP182757", "lYBdR60jRZ");
+                    }
+                    wc.Proxy = wp;
                     wc.DownloadFile(url, patharch);
                     FileInfo FileD = new FileInfo(patharch);
                     if (FileD.Exists && FileD.Length == 0)

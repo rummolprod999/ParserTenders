@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
@@ -14,6 +15,7 @@ namespace ParserTenders
         protected TypeArguments arg;
         protected List<AttachStruct> ListAttach = new List<AttachStruct>();
         protected List<string> proxyList;
+        protected List<string> proxyListAuth;
         protected List<string> useragentList;
         private object locker = new object();
         private object locker2 = new object();
@@ -54,7 +56,7 @@ namespace ParserTenders
                 connect.Open();
                 string SelectAt =
                     $"SELECT file_name, url FROM {Program.Prefix}attachment WHERE id_attachment = @id_attachment";
-                
+
                 foreach (var at in ListAttachTmp)
                 {
                     MySqlCommand cmd = new MySqlCommand(SelectAt, connect);
@@ -86,7 +88,7 @@ namespace ParserTenders
         {
             try
             {
-                proxyList = GetProxy();
+                GetProxy();
             }
             catch (Exception e)
             {
@@ -104,7 +106,8 @@ namespace ParserTenders
             }
             try
             {
-                Parallel.ForEach<AttachStruct>(ListAttach, new ParallelOptions {MaxDegreeOfParallelism = 15}, AddAttach);
+                Parallel.ForEach<AttachStruct>(ListAttach,
+                    new ParallelOptions {MaxDegreeOfParallelism = Program.MaxThread}, AddAttach);
                 /*foreach (var v in ListAttach)
                 {
                     AddAttach(v);
@@ -122,7 +125,6 @@ namespace ParserTenders
             {
                 Log.Logger("Ошибка при удалении старых attach", e);
             }
-            
         }
 
         public void AddAttach(AttachStruct att)
@@ -131,14 +133,13 @@ namespace ParserTenders
             try
             {
                 DownloadFile d = new DownloadFile();
-                f = d.DownLOld(att.url_attach, att.id_attach, att.type_f, proxyList, useragentList);
+                f = d.DownLOld(att.url_attach, att.id_attach, att.type_f, proxyList, proxyListAuth, useragentList);
             }
-            
+
             catch (Exception e)
             {
                 Log.Logger("Ошибка при получении файла", e, att.url_attach);
                 return;
-
             }
             try
             {
@@ -159,21 +160,20 @@ namespace ParserTenders
                         Log.Logger("Ошибка при парсинге документа", att.url_attach, e);
                     }
                     fileInf.Delete();
-
                 }
                 if (!String.IsNullOrEmpty(attachtext))
                 {
                     using (MySqlConnection connect = ConnectToDb.GetDBConnection())
                     {
                         connect.Open();
-                        string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_text = @attach_text, attach_add = 1 WHERE id_attachment = @id_attachment";
+                        string UpdateA =
+                            $"UPDATE {Program.Prefix}attachment SET attach_text = @attach_text, attach_add = 1 WHERE id_attachment = @id_attachment";
                         MySqlCommand cmd = new MySqlCommand(UpdateA, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@attach_text", attachtext);
                         cmd.Parameters.AddWithValue("@id_attachment", att.id_attach);
                         int addAtt = cmd.ExecuteNonQuery();
                         AddAttachment?.Invoke(addAtt);
-                        
                     }
                 }
                 else
@@ -181,7 +181,8 @@ namespace ParserTenders
                     using (MySqlConnection connect = ConnectToDb.GetDBConnection())
                     {
                         connect.Open();
-                        string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_add = 1 WHERE id_attachment = @id_attachment";
+                        string UpdateA =
+                            $"UPDATE {Program.Prefix}attachment SET attach_add = 1 WHERE id_attachment = @id_attachment";
                         MySqlCommand cmd = new MySqlCommand(UpdateA, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_attachment", att.id_attach);
@@ -189,13 +190,11 @@ namespace ParserTenders
                         NotAddAttachment?.Invoke(addAtt);
                     }
                 }
-                
             }
             catch (Exception e)
             {
                 Log.Logger("Ошибка при парсинге и добавлении attach", e, att.url_attach);
             }
-
         }
 
         public DataTable GetAttachFromDb()
@@ -217,19 +216,87 @@ namespace ParserTenders
             return dt;
         }
 
-        public List<string> GetProxy()
+        public void GetProxy()
         {
-            string path = "./proxy.txt";
-            List<string> p = new List<string>();
-            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            string req =
+                "http://billing.proxybox.su/api/getproxy/?format=txt&type=httpip&login=VIP182757&password=lYBdR60jRZ";
+            string req_auth =
+                "http://billing.proxybox.su/api/getproxy/?format=txt&type=httpauth&login=VIP182757&password=lYBdR60jRZ";
+
+            try
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                List<string> p = new List<string>();
+                string proxy_path =
+                    $"{Program.TempPath}{Path.DirectorySeparatorChar}proxy_{Program.LocalDate:MM-dd-yyyy}.txt";
+                WebClient wc = new WebClient();
+                wc.DownloadFile(req, proxy_path);
+                FileInfo f = new FileInfo(proxy_path);
+                if (f.Exists)
                 {
-                    p.Add(line.Trim());
+                    using (StreamReader sr = new StreamReader(proxy_path, System.Text.Encoding.Default))
+                    {
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            p.Add(line.Trim());
+                        }
+                    }
+                    proxyList = p;
                 }
             }
-            return p;
+
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при попытке скачать список прокси без авторизации, берем старый", e);
+                string path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}proxy.txt";
+                List<string> p = new List<string>();
+                using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        p.Add(line.Trim());
+                    }
+                }
+                proxyList = p;
+            }
+            try
+            {
+                List<string> p = new List<string>();
+                string proxy_path =
+                    $"{Program.TempPath}{Path.DirectorySeparatorChar}proxy_auth_{Program.LocalDate:MM-dd-yyyy}.txt";
+                WebClient wc = new WebClient();
+                wc.DownloadFile(req_auth, proxy_path);
+                FileInfo f = new FileInfo(proxy_path);
+                if (f.Exists)
+                {
+                    using (StreamReader sr = new StreamReader(proxy_path, System.Text.Encoding.Default))
+                    {
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            p.Add(line.Trim());
+                        }
+                    }
+                    proxyListAuth = p;
+                }
+            }
+
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при попытке скачать список прокси с авторизацией, берем старый", e);
+                string path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}proxy_auth.txt";
+                List<string> p = new List<string>();
+                using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        p.Add(line.Trim());
+                    }
+                }
+                proxyListAuth = p;
+            }
         }
 
         public List<string> GetUserAgent()
@@ -254,7 +321,8 @@ namespace ParserTenders
             using (MySqlConnection connect = ConnectToDb.GetDBConnection())
             {
                 connect.Open();
-                string SelectOldAttach = $"SELECT att.id_attachment FROM {Program.Prefix}attachment as att LEFT JOIN {Program.Prefix}tender as t ON att.id_tender = t.id_tender WHERE t.end_date < DATE(@EndDate) AND att.attach_add = 1 AND t.cancel = 0 AND LENGTH(attach_text) > 0";
+                string SelectOldAttach =
+                    $"SELECT att.id_attachment FROM {Program.Prefix}attachment as att LEFT JOIN {Program.Prefix}tender as t ON att.id_tender = t.id_tender WHERE t.end_date < DATE(@EndDate) AND att.attach_add = 1 AND t.cancel = 0 AND LENGTH(attach_text) > 0";
                 MySqlCommand cmd = new MySqlCommand(SelectOldAttach, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@EndDate", DateNow);
@@ -262,13 +330,13 @@ namespace ParserTenders
                 adapter.Fill(dt);
                 foreach (DataRow row in dt.Rows)
                 {
-                    string UpdateA = $"UPDATE {Program.Prefix}attachment SET attach_text = '' WHERE id_attachment = @id_attachment";
-                    MySqlCommand cmd1 = new MySqlCommand(SelectOldAttach, connect);
+                    string UpdateA =
+                        $"UPDATE {Program.Prefix}attachment SET attach_text = '' WHERE id_attachment = @id_attachment";
+                    MySqlCommand cmd1 = new MySqlCommand(UpdateA, connect);
                     cmd1.Prepare();
-                    cmd1.Parameters.AddWithValue("@id_attachment", (int)row["id_attachment"]);
+                    cmd1.Parameters.AddWithValue("@id_attachment", (int) row["id_attachment"]);
                     cmd1.ExecuteNonQuery();
                 }
-                
             }
         }
     }

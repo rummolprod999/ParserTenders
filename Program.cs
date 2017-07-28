@@ -20,6 +20,8 @@ namespace ParserTenders
         private static string _pass;
         private static string _server;
         private static int _port;
+        private static int _maxthread;
+        private static int _maxtrydown;
         private static List<string> _years = new List<string>();
         public static string Database => _database;
         public static string Prefix => _prefix;
@@ -29,7 +31,8 @@ namespace ParserTenders
         public static int Port => _port;
         public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
-        public static int DownCount = 250;
+        public static int DownCount => _maxtrydown;
+        public static int MaxThread => _maxthread;
 
         public static string FileLog;
 
@@ -152,6 +155,8 @@ namespace ParserTenders
             _port = set.Port;
             _logAttach = set.LogPathAttach;
             _tempAttach = set.TempPathAttach;
+            _maxthread = set.MaxThread;
+            _maxtrydown = set.MaxTryDown;
             string tmp = set.Years;
             string[] temp_years = tmp.Split(new char[] {','});
 

@@ -19,6 +19,8 @@ namespace ParserTenders
         public readonly string Server;
         public readonly int Port;
         public readonly string Years;
+        public readonly int MaxThread;
+        public readonly int MaxTryDown;
 
         public GetSettings()
         {
@@ -66,6 +68,12 @@ namespace ParserTenders
                             break;
                         case "port":
                             Port = Int32.TryParse(xnode.InnerText, out Port) ? Int32.Parse(xnode.InnerText) : 3306;
+                            break;
+                        case "max_thread":
+                            MaxThread = Int32.TryParse(xnode.InnerText, out MaxThread) ? Int32.Parse(xnode.InnerText) : 20;
+                            break;
+                        case "max_try_down":
+                            MaxTryDown = Int32.TryParse(xnode.InnerText, out MaxTryDown) ? Int32.Parse(xnode.InnerText) : 250;
                             break;
                         case "years":
                             Years = xnode.InnerText;
