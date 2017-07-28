@@ -301,7 +301,7 @@ namespace ParserTenders
 
         public List<string> GetUserAgent()
         {
-            string path = "./user_agents.txt";
+            string path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}user_agents.txt";
             List<string> p = new List<string>();
             using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
             {
