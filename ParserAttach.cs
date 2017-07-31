@@ -168,7 +168,7 @@ namespace ParserTenders
                             };
                             MyProcess.Start();
                             MyProcess.WaitForExit();
-                            string f_txt = $"{Program.TempPath}{Path.DirectorySeparatorChar}{att.id_attach}.txt";
+                            string f_txt = $"{att.id_attach}.txt";
                             FileInfo fl = new FileInfo(f_txt);
                             if (fl.Exists)
                             {
@@ -177,6 +177,7 @@ namespace ParserTenders
                                     attachtext = sr.ReadToEnd();
                                 }
                                 Log.Logger("Получили текст альтернативным методом", att.url_attach);
+                                fl.Delete();
                             }
                         }
                         catch (Exception b)
@@ -214,6 +215,7 @@ namespace ParserTenders
                         int addAtt = cmd.ExecuteNonQuery();
                         NotAddAttachment?.Invoke(addAtt);
                     }
+                    Log.Logger("Пустой текст", att.url_attach);
                 }
             }
             catch (Exception e)

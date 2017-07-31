@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Threading;
 
 namespace ParserTenders
 {
@@ -113,6 +115,8 @@ namespace ParserTenders
         public string DownLOld(string url, int id_att, TypeFileAttach tp, List<string> proxies,
             List<string> proxies_auth, List<string> useragents)
         {
+            List<string> proxies_copy = proxies.ToList();
+            List<string> proxies_auth_copy = proxies_auth.ToList();
             string patharch = "";
             switch (tp)
             {
@@ -127,14 +131,16 @@ namespace ParserTenders
             int count = 0;
             while (count <= Program.DownCount)
             {
+                int r = new Random().Next(2);
+                int rnd = new Random().Next(proxies_copy.Count);
+                string proxy = proxies_copy[rnd];
+                if (r == 1)
+                {
+                    rnd = new Random().Next(proxies_auth_copy.Count);
+                    proxy = proxies_auth_copy[rnd];
+                }
                 try
                 {
-                    int r = new Random().Next(2);
-                    string proxy = proxies[new Random().Next(proxies.Count)];
-                    if (r == 1)
-                    {
-                        proxy = proxies_auth[new Random().Next(proxies_auth.Count)];
-                    }
                     string ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
@@ -161,12 +167,34 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
+                    switch (r)
+                    {
+                        case 0:
+                            proxies_copy.RemoveAt(rnd);
+                            break;
+                        case 1:
+                            proxies_auth_copy.RemoveAt(rnd);
+                            break;
+                    }
                     //Console.WriteLine(e);
                 }
 
                 count++;
             }
             Log.Logger($"Не скачали файл за {count} попыток", url);
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Add("user-agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
+                wc.DownloadFile(url, patharch);
+                Log.Logger("Скачали файл без прокси", url);
+                return patharch;
+            }
+            
+            catch (Exception e)
+            {
+                Log.Logger("Не удалось скачать файл без прокси", url, e);
+            }
             return patharch;
         }
     }
