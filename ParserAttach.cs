@@ -4,7 +4,9 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using TikaOnDotNet.TextExtraction;
@@ -167,17 +169,35 @@ namespace ParserTenders
                                     $"--headless --convert-to txt:Text {f}")
                             };
                             MyProcess.Start();
-                            MyProcess.WaitForExit();
+                            MyProcess.WaitForExit(10000);
+                            if (!MyProcess.HasExited)
+                            {
+                                MyProcess.Kill();
+                            }
                             string f_txt = $"{att.id_attach}.txt";
                             FileInfo fl = new FileInfo(f_txt);
                             if (fl.Exists)
                             {
-                                using (StreamReader sr = new StreamReader(f_txt, System.Text.Encoding.Default))
+                                try
                                 {
-                                    attachtext = sr.ReadToEnd();
+                                    using (StreamReader sr = new StreamReader(f_txt, Encoding.Default))
+                                    {
+                                        attachtext = sr.ReadToEnd();
+                                        attachtext = Regex.Replace(attachtext, @"\s+", " ");
+                                        attachtext = attachtext.Trim();
+                                    }
+                                    Log.Logger("Получили текст альтернативным методом", att.url_attach);
+                                    fl.Delete();
                                 }
-                                Log.Logger("Получили текст альтернативным методом", att.url_attach);
-                                fl.Delete();
+                                catch (Exception exception)
+                                {
+                                    Log.Logger("Ошибка при чтении текста из файла", att.url_attach, exception);
+                                    fl.Delete();
+                                }
+                            }
+                            else
+                            {
+                                Log.Logger("Не смогли найти файл txt", f_txt);
                             }
                         }
                         catch (Exception b)
