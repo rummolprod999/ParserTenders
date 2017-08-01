@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace ParserTenders
 {
@@ -75,7 +79,8 @@ namespace ParserTenders
                     reader.Close();
                     string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
                                              "").Trim('"');
-                    string utc_offset = "";
+                    Console.WriteLine(docPublishDate);
+                    /*string utc_offset = "";
                     try
                     {
                         utc_offset = docPublishDate.Substring(23);
@@ -83,12 +88,31 @@ namespace ParserTenders
                     catch (Exception e)
                     {
                         Log.Logger("Ошибка при получении часового пояса", e, docPublishDate);
-                    }
+                    }*/
                     string date_version = docPublishDate;
                     /*JsonReader readerj = new JsonTextReader(new StringReader(tender.ToString()));
                     readerj.DateParseHandling = DateParseHandling.None;
                     JObject o = JObject.Load(readerj);
                     Console.WriteLine(o["docPublishDate"]);*/
+                    /*XmlDocument doc = new XmlDocument();
+                    doc.Load("/home/alex/Рабочий стол/parser/fcsNotificationEP44_0838100001317000145_13185076.xml");
+                    XmlNode node = doc.DocumentElement;
+                    XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+                    nsmgr.AddNamespace("bk", "http://zakupki.gov.ru/oos/types/1");
+                    foreach (XmlNode xnode in node)
+                    {
+                        Console.WriteLine(xnode.SelectSingleNode("bk:docPublishDate", nsmgr).InnerText);
+                    }*/
+                    /*string tender_text = "";
+                    using (StreamReader sr = new StreamReader("/home/alex/Рабочий стол/parser/fcsNotificationEP44_0838100001317000145_13185076.xml", Encoding.Default))
+                    {
+                        tender_text = sr.ReadToEnd();
+                        tender_text = ClearText.ClearString(tender_text);
+                    }
+                    var xmlt = XElement.Parse(tender_text);
+                    xmlt = JsonExtensions.stripNS(xmlt);
+                    var ttt = xmlt.XPathSelectElement("//docPublishDate");
+                    Console.WriteLine(ttt.Value);*/
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
                     if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
@@ -276,7 +300,7 @@ namespace ParserTenders
                     (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.bidding.date") ?? "") ??
                      "").Trim('"');
                     string insert_tender =
-                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, utc_offset = @utc_offset";
+                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                     MySqlCommand cmd9 = new MySqlCommand(insert_tender, connect);
                     cmd9.Prepare();
                     cmd9.Parameters.AddWithValue("@id_region", region_id);
@@ -298,7 +322,6 @@ namespace ParserTenders
                     cmd9.Parameters.AddWithValue("@notice_version", notice_version);
                     cmd9.Parameters.AddWithValue("@xml", xml);
                     cmd9.Parameters.AddWithValue("@print_form", printform);
-                    cmd9.Parameters.AddWithValue("@utc_offset", utc_offset);
                     int res_insert_tender = cmd9.ExecuteNonQuery();
                     int id_tender = (int) cmd9.LastInsertedId;
                     AddTender44?.Invoke(res_insert_tender);

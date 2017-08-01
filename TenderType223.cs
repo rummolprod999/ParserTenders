@@ -83,7 +83,7 @@ namespace ParserTenders
                     string docPublishDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("publicationDateTime") ?? "") ??
                      "").Trim('"');
-                    string utc_offset = "";
+                    /*string utc_offset = "";
                     try
                     {
                         utc_offset = docPublishDate.Substring(23);
@@ -91,7 +91,7 @@ namespace ParserTenders
                     catch (Exception e)
                     {
                         Log.Logger("Ошибка при получении часового пояса", e, docPublishDate);
-                    }
+                    }*/
                     int cancel_status = 0;
                     if (!String.IsNullOrEmpty(docPublishDate))
                     {
@@ -276,7 +276,7 @@ namespace ParserTenders
                          "").Trim('"');
                     }
                     string insert_tender =
-                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, extend_scoring_date = @extend_scoring_date, extend_bidding_date = @extend_bidding_date, utc_offset = @utc_offset";
+                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, extend_scoring_date = @extend_scoring_date, extend_bidding_date = @extend_bidding_date";
                     MySqlCommand cmd8 = new MySqlCommand(insert_tender, connect);
                     cmd8.Prepare();
                     cmd8.Parameters.AddWithValue("@id_region", region_id);
@@ -300,7 +300,6 @@ namespace ParserTenders
                     cmd8.Parameters.AddWithValue("@print_form", printform);
                     cmd8.Parameters.AddWithValue("@extend_scoring_date", extend_scoring_date);
                     cmd8.Parameters.AddWithValue("@extend_bidding_date", extend_bidding_date);
-                    cmd8.Parameters.AddWithValue("@utc_offset", utc_offset);
                     int res_insert_tender = cmd8.ExecuteNonQuery();
                     int id_tender = (int) cmd8.LastInsertedId;
                     AddTender223?.Invoke(res_insert_tender);
