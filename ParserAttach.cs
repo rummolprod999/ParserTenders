@@ -160,7 +160,7 @@ namespace ParserTenders
                     }
                     catch (Exception e)
                     {
-                        Log.Logger("Ошибка при парсинге документа", att.url_attach, e);
+                        Log.Logger("Ошибка при парсинге документа", att.url_attach);
                         try
                         {
                             var MyProcess = new Process
@@ -169,7 +169,7 @@ namespace ParserTenders
                                     $"--headless --convert-to txt:Text {f}")
                             };
                             MyProcess.Start();
-                            MyProcess.WaitForExit(10000);
+                            MyProcess.WaitForExit(15000);
                             if (!MyProcess.HasExited)
                             {
                                 MyProcess.Kill();
@@ -267,8 +267,12 @@ namespace ParserTenders
         {
             string req =
                 "http://billing.proxybox.su/api/getproxy/?format=txt&type=httpip&login=VIP182757&password=lYBdR60jRZ";
+            /*string req =
+                "http://account.fineproxy.org/api/getproxy/?format=txt&type=httpip&login=VIP233572&password=YC2iFQFpOf";*/
             string req_auth =
                 "http://billing.proxybox.su/api/getproxy/?format=txt&type=httpauth&login=VIP182757&password=lYBdR60jRZ";
+            /*string req_auth =
+                "http://account.fineproxy.org/api/getproxy/?format=txt&type=httpauth&login=VIP233572&password=YC2iFQFpOf";*/
 
             try
             {

@@ -9,6 +9,8 @@ namespace ParserTenders
 {
     public class DownloadFile
     {
+        private static object locker = new object();
+        private static object locker2 = new object();
         private bool DownCount = true;
 
         public void DownloadF(string sSourceURL, string sDestinationPath, string proxy, int port, string useragent)
@@ -109,6 +111,106 @@ namespace ParserTenders
                 }
             }
 
+            return patharch;
+        }
+        
+        public string DownLOldTest(string url, int id_att, TypeFileAttach tp, List<string> proxies,
+            List<string> proxies_auth, List<string> useragents)
+        {
+            //List<string> proxies_copy = proxies.ToList();
+            //List<string> proxies_auth_copy = proxies_auth.ToList();
+            string patharch = "";
+            switch (tp)
+            {
+                case TypeFileAttach.doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                    break;
+                case TypeFileAttach.docx:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
+                    break;
+            }
+
+            int count = 0;
+            while (count <= Program.DownCount)
+            {
+                int rnd = 0;
+                string proxy = "";
+                int r = new Random().Next(2);
+                lock (locker)
+                {
+                    rnd = new Random().Next(proxies.Count);
+                    proxy = proxies[rnd];
+                }
+                if (r == 1)
+                {
+                    lock (locker2)
+                    {
+                        rnd = new Random().Next(proxies_auth.Count);
+                        proxy = proxies_auth[rnd];
+                    }
+                }
+                try
+                {
+                    string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                    //ip = "107.170.23.30";
+                    //Console.WriteLine(ip);
+                    string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
+                    int port = Int32.Parse(port_s);
+                    //port = 88;
+                    //Console.WriteLine(port);
+                    string useragent = useragents[new Random().Next(useragents.Count)];
+                    WebClient wc = new WebClient();
+                    wc.Headers.Add("user-agent", useragent);
+                    WebProxy wp = new WebProxy(ip, port);
+                    if (r == 1)
+                    {
+                        wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
+                    }
+                    wc.Proxy = wp;
+                    wc.DownloadFile(url, patharch);
+                    FileInfo FileD = new FileInfo(patharch);
+                    if (FileD.Exists && FileD.Length == 0)
+                    {
+                        continue;
+                    }
+                    return patharch;
+                }
+                catch (Exception e)
+                {
+                    switch (r)
+                    {
+                        case 0:
+                            lock (locker)
+                            {
+                                proxies.Remove(proxy);
+                            }
+                            break;
+                        case 1:
+                            lock (locker2)
+                            {
+                                proxies_auth.Remove(proxy);
+                            }
+                            break;
+                    }
+                    //Console.WriteLine(e);
+                }
+
+                count++;
+            }
+            Log.Logger($"Не скачали файл за {count} попыток", url);
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Add("user-agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
+                wc.DownloadFile(url, patharch);
+                Log.Logger("Скачали файл без прокси", url);
+                return patharch;
+            }
+            
+            catch (Exception e)
+            {
+                Log.Logger("Не удалось скачать файл без прокси", url, e);
+            }
             return patharch;
         }
 
