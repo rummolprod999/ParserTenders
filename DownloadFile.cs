@@ -281,15 +281,44 @@ namespace ParserTenders
                     //port = 88;
                     //Console.WriteLine(port);
                     string useragent = useragents[new Random().Next(useragents.Count)];
-                    WebClient wc = new WebClient();
-                    wc.Headers.Add("user-agent", useragent);
-                    WebProxy wp = new WebProxy(ip, port);
-                    if (r == 1)
+                    /*WebClient wc = new WebClient();
+                                        wc.Headers.Add("user-agent", useragent);
+                                        WebProxy wp = new WebProxy(ip, port);
+                                        if (r == 1)
+                                        {
+                                            wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
+                                        }
+                                        wc.Proxy = wp;
+                                        wc.DownloadFile(url, patharch);*/
+                    using (var client = new WebDownload())
                     {
-                        wp.Credentials = new NetworkCredential("VIP182757", "lYBdR60jRZ");
+                        client.Headers.Add("user-agent", useragent);
+                        WebProxy wp = new WebProxy(ip, port);
+                        if (r == 1)
+                        {
+                            wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
+                        }
+                        client.Proxy = wp;
+
+                        using (var stream = client.OpenRead(url))
+                        {
+                            Int64 bytes_total = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            if (bytes_total > 5000000)
+                            {
+                                Log.Logger("Too lagre file!!!!", url);
+                                return patharch;
+                            }
+                            using (var file = File.Create(patharch))
+                            {
+                                var buffer = new byte[4096];
+                                int bytesReceived;
+                                while ((bytesReceived = stream.Read(buffer, 0, buffer.Length)) != 0)
+                                {
+                                    file.Write(buffer, 0, bytesReceived);
+                                }
+                            }
+                        }
                     }
-                    wc.Proxy = wp;
-                    wc.DownloadFile(url, patharch);
                     FileInfo FileD = new FileInfo(patharch);
                     if (FileD.Exists && FileD.Length == 0)
                     {
