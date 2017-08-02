@@ -148,7 +148,8 @@ namespace ParserTenders
             {
                 string attachtext = "";
                 FileInfo fileInf = new FileInfo(f);
-                if (fileInf.Exists)
+                fileInf.Refresh();
+                if (fileInf.Exists && fileInf.Length < 5000000)
                 {
                     try
                     {
@@ -206,6 +207,14 @@ namespace ParserTenders
                         }
                     }
                     fileInf.Delete();
+                }
+                else
+                {
+                    if (fileInf.Exists)
+                    {
+                        fileInf.Delete();
+                        Log.Logger("Слишком большой файл", att.url_attach);
+                    }
                 }
                 if (!String.IsNullOrEmpty(attachtext))
                 {
