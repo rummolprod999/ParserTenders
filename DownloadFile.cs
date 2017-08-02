@@ -113,7 +113,7 @@ namespace ParserTenders
 
             return patharch;
         }
-        
+
         public string DownLOldTest(string url, int id_att, TypeFileAttach tp, List<string> proxies,
             List<string> proxies_auth, List<string> useragents)
         {
@@ -159,7 +159,7 @@ namespace ParserTenders
                     //port = 88;
                     //Console.WriteLine(port);
                     string useragent = useragents[new Random().Next(useragents.Count)];
-                    WebClient wc = new WebClient();
+                    /*WebClient wc = new WebClient();
                     wc.Headers.Add("user-agent", useragent);
                     WebProxy wp = new WebProxy(ip, port);
                     if (r == 1)
@@ -167,7 +167,36 @@ namespace ParserTenders
                         wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
                     }
                     wc.Proxy = wp;
-                    wc.DownloadFile(url, patharch);
+                    wc.DownloadFile(url, patharch);*/
+                    using (var client = new WebDownload())
+                    {
+                        client.Headers.Add("user-agent", useragent);
+                        WebProxy wp = new WebProxy(ip, port);
+                        if (r == 1)
+                        {
+                            wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
+                        }
+                        client.Proxy = wp;
+
+                        using (var stream = client.OpenRead(url))
+                        {
+                            Int64 bytes_total = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            if (bytes_total > 5000000)
+                            {
+                                Log.Logger("Too many file", url);
+                                return patharch;
+                            }
+                            using (var file = File.Create(patharch))
+                            {
+                                var buffer = new byte[4096];
+                                int bytesReceived;
+                                while ((bytesReceived = stream.Read(buffer, 0, buffer.Length)) != 0)
+                                {
+                                    file.Write(buffer, 0, bytesReceived);
+                                }
+                            }
+                        }
+                    }
                     FileInfo FileD = new FileInfo(patharch);
                     if (FileD.Exists && FileD.Length == 0)
                     {
@@ -201,12 +230,13 @@ namespace ParserTenders
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Add("user-agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
+                wc.Headers.Add("user-agent",
+                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
                 wc.DownloadFile(url, patharch);
                 Log.Logger("Скачали файл без прокси", url);
                 return patharch;
             }
-            
+
             catch (Exception e)
             {
                 Log.Logger("Не удалось скачать файл без прокси", url, e);
@@ -287,12 +317,13 @@ namespace ParserTenders
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Add("user-agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
+                wc.Headers.Add("user-agent",
+                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
                 wc.DownloadFile(url, patharch);
                 Log.Logger("Скачали файл без прокси", url);
                 return patharch;
             }
-            
+
             catch (Exception e)
             {
                 Log.Logger("Не удалось скачать файл без прокси", url, e);

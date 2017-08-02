@@ -180,6 +180,7 @@
     <Compile Include="TenderTypeOrgChange.cs" />
     <Compile Include="TypeFileAttachment.cs" />
     <Compile Include="Unzipped.cs" />
+    <Compile Include="WebDownload.cs" />
     <Compile Include="WorkWithFtp.cs" />
   </ItemGroup>
   <ItemGroup>
