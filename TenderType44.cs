@@ -79,7 +79,7 @@ namespace ParserTenders
                     reader.Close();
                     string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
                                              "").Trim('"');
-                    Console.WriteLine(docPublishDate);
+                    //Console.WriteLine(docPublishDate);
                     /*string utc_offset = "";
                     try
                     {
