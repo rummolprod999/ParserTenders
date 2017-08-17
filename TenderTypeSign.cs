@@ -35,7 +35,7 @@ namespace ParserTenders
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", file_path);
-                    return;
+                    //return;
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace ParserTenders
                     else
                     {
                         reader.Close();
-                        return;
+                        //return;
                     }
 
                     string id_sign = ((string) tender.SelectToken("id") ?? "").Trim();

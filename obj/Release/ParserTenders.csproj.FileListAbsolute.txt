@@ -44,3 +44,4 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.TextExtraction.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.TextExtraction.pdb
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/System.ValueTuple.xml
