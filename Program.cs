@@ -40,6 +40,7 @@ namespace ParserTenders
         public static string StrArg;
 
         public static TypeArguments Periodparsing;
+
         public static string PathProgram;
         //public static string LogAttach => _logAttach;
         //public static string TempAttach => _tempAttach;
@@ -197,7 +198,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders44");
             ParserTend44 t44 = new ParserTend44(Periodparsing);
             t44.Parsing();
-            Log.Logger("Время окончания парсинга Tenders44");
+            //Log.Logger("Время окончания парсинга Tenders44");
             /*ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationEP44_0838100001317000145_13185076.xml");
             t44.ParsingXML(f, "br", 32, TypeFile44.TypeTen44);*/
@@ -220,8 +221,8 @@ namespace ParserTenders
             /*ParserTend223 t223 = new ParserTend223(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Belgorodskaya_obl_20170201_000000_20170228_235959_015.xml");
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
-            Log.Logger("Время окончания парсинга Tenders223");
             Log.Logger("Добавили tender223", AddTender223);
+            Log.Logger("Время окончания парсинга Tenders223");
         }
 
         private static void ParserAtt(TypeArguments arg)
@@ -239,9 +240,9 @@ namespace ParserTenders
             {
                 Console.WriteLine($"Не удалось скачать файл ");
             }*/
-            Log.Logger("Время окончания парсинга Attach");
             Log.Logger("Добавили attach", AddAttach);
             Log.Logger("Не добавили attach", NotAddAttach);
+            Log.Logger("Время окончания парсинга Attach");
         }
     }
 }
