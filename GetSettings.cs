@@ -13,6 +13,8 @@ namespace ParserTenders
         public readonly string LogPathTenders223;
         public readonly string LogPathAttach;
         public readonly string TempPathAttach;
+        public readonly string LogPathSign223;
+        public readonly string TempPathSign223;
         public readonly string Prefix;
         public readonly string UserDB;
         public readonly string PassDB;
@@ -54,6 +56,12 @@ namespace ParserTenders
                         case "tempdir_attach":
                             TempPathAttach = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_sign223":
+                            LogPathSign223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_sign223":
+                            TempPathSign223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -70,10 +78,14 @@ namespace ParserTenders
                             Port = Int32.TryParse(xnode.InnerText, out Port) ? Int32.Parse(xnode.InnerText) : 3306;
                             break;
                         case "max_thread":
-                            MaxThread = Int32.TryParse(xnode.InnerText, out MaxThread) ? Int32.Parse(xnode.InnerText) : 20;
+                            MaxThread = Int32.TryParse(xnode.InnerText, out MaxThread)
+                                ? Int32.Parse(xnode.InnerText)
+                                : 20;
                             break;
                         case "max_try_down":
-                            MaxTryDown = Int32.TryParse(xnode.InnerText, out MaxTryDown) ? Int32.Parse(xnode.InnerText) : 250;
+                            MaxTryDown = Int32.TryParse(xnode.InnerText, out MaxTryDown)
+                                ? Int32.Parse(xnode.InnerText)
+                                : 250;
                             break;
                         case "years":
                             Years = xnode.InnerText;
@@ -86,7 +98,9 @@ namespace ParserTenders
                 String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) ||
                 String.IsNullOrEmpty(Years) || String.IsNullOrEmpty(TempPathTenders223) ||
                 String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
-                String.IsNullOrEmpty(TempPathAttach))
+                String.IsNullOrEmpty(TempPathAttach) ||
+                String.IsNullOrEmpty(TempPathSign223) ||
+                String.IsNullOrEmpty(LogPathSign223))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

@@ -15,6 +15,8 @@ namespace ParserTenders
         private static string _logPath223;
         private static string _tempAttach;
         private static string _logAttach;
+        private static string _tempSign223;
+        private static string _logSign223;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -49,15 +51,23 @@ namespace ParserTenders
         {
             get
             {
-                if (Periodparsing == TypeArguments.Curr44 || Periodparsing == TypeArguments.Prev44 ||
-                    Periodparsing == TypeArguments.Last44)
-                    return _tempPath44;
-                else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
-                    return _tempPath223;
-                else if (Periodparsing == TypeArguments.Attach)
-                    return _tempAttach;
-
-                return "";
+                switch (Periodparsing)
+                {
+                    case TypeArguments.Curr44:
+                    case TypeArguments.Prev44:
+                    case TypeArguments.Last44:
+                        return _tempPath44;
+                    case TypeArguments.Daily223:
+                    case TypeArguments.Last223:
+                        return _tempPath223;
+                    case TypeArguments.Attach:
+                        return _tempAttach;
+                    case TypeArguments.LastSign223:
+                    case TypeArguments.DailySign223:
+                        return _tempSign223;
+                    default:
+                        return "";
+                }
             }
         }
 
@@ -65,15 +75,23 @@ namespace ParserTenders
         {
             get
             {
-                if (Periodparsing == TypeArguments.Curr44 || Periodparsing == TypeArguments.Prev44 ||
-                    Periodparsing == TypeArguments.Last44)
-                    return _logPath44;
-                else if (Periodparsing == TypeArguments.Daily223 || Periodparsing == TypeArguments.Last223)
-                    return _logPath223;
-                else if (Periodparsing == TypeArguments.Attach)
-                    return _logAttach;
-
-                return "";
+                switch (Periodparsing)
+                {
+                    case TypeArguments.Curr44:
+                    case TypeArguments.Prev44:
+                    case TypeArguments.Last44:
+                        return _logPath44;
+                    case TypeArguments.Daily223:
+                    case TypeArguments.Last223:
+                        return _logPath223;
+                    case TypeArguments.Attach:
+                        return _logAttach;
+                    case TypeArguments.LastSign223:
+                    case TypeArguments.DailySign223:
+                        return _logSign223;
+                    default:
+                        return "";
+                }
             }
         }
 
@@ -88,13 +106,15 @@ namespace ParserTenders
         public static int AddTender223 = 0;
         public static int AddAttach = 0;
         public static int NotAddAttach = 0;
+        public static int AddSign223 = 0;
+        public static int UpdateSign223 = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223 в качестве аргумента");
                 return;
             }
 
@@ -134,9 +154,19 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserAtt(Periodparsing);
                     break;
+                case "lastsign223":
+                    Periodparsing = TypeArguments.LastSign223;
+                    Init(Periodparsing);
+                    ParserSign223(Periodparsing);
+                    break;
+                case "dailysign223":
+                    Periodparsing = TypeArguments.DailySign223;
+                    Init(Periodparsing);
+                    ParserSign223(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach ");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223 ");
                     break;
             }
         }
@@ -159,6 +189,8 @@ namespace ParserTenders
             _maxthread = set.MaxThread;
             _maxtrydown = set.MaxTryDown;
             string tmp = set.Years;
+            _tempSign223 = set.TempPathSign223;
+            _logSign223 = set.LogPathSign223;
             string[] temp_years = tmp.Split(new char[] {','});
 
             foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))
@@ -185,12 +217,25 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(LogPath);
             }
-            if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
-                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
-            else if (arg == TypeArguments.Daily223 || arg == TypeArguments.Last223)
-                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
-            else if (arg == TypeArguments.Attach)
-                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Attach_{LocalDate:dd_MM_yyyy}.log";
+            switch (arg)
+            {
+                case TypeArguments.Curr44:
+                case TypeArguments.Last44:
+                case TypeArguments.Prev44:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Daily223:
+                case TypeArguments.Last223:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Attach:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Attach_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.DailySign223:
+                case TypeArguments.LastSign223:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Sign223_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+            }
         }
 
         private static void ParserTender44(TypeArguments arg)
@@ -243,6 +288,15 @@ namespace ParserTenders
             Log.Logger("Добавили attach", AddAttach);
             Log.Logger("Не добавили attach", NotAddAttach);
             Log.Logger("Время окончания парсинга Attach");
+        }
+
+        private static void ParserSign223(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Sign223");
+            ParserSgn223 s = new ParserSgn223();
+            Log.Logger("Добавили Sign223", AddSign223);
+            Log.Logger("Обновили Sign223", UpdateSign223);
+            Log.Logger("Время окончания парсинга Sign223");
         }
     }
 }

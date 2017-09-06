@@ -161,6 +161,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
+    <Compile Include="ParserSgn223.cs" />
     <Compile Include="ParserTend223.cs" />
     <Compile Include="ParserTend44.cs" />
     <Compile Include="Program.cs" />
