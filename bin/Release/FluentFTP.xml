@@ -294,6 +294,11 @@
             <code source="..\Examples\GetListing.cs" lang="cs"/>
             </example>
         </member>
+        <member name="T:FluentFTP.IFtpClient">
+            <summary>
+            Interface for the FtpClient class. For detailed documentation of the methods, please see the FtpClient class.
+            </summary>
+        </member>
         <member name="M:FluentFTP.FtpClient.GetObjectInfo(System.String,System.Boolean)">
             <summary>
             Returns information about a file system object. Returns null if the server response can't
@@ -4533,11 +4538,7 @@
             The date is whatever the server returns, with no conversion performed.
             </summary>
         </member>
-        <member name="F:FluentFTP.FtpDate.Local">
-            <summary>
-            The date is converted to the local timezone, based on the TimeOffset property in FtpClient.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "F:FluentFTP.FtpDate.Local" -->
         <member name="F:FluentFTP.FtpDate.UTC">
             <summary>
             The date is converted to UTC, based on the TimeOffset property in FtpClient.
@@ -5066,6 +5067,11 @@
         <member name="P:FluentFTP.FtpTrace.LogPassword">
             <summary>
             Should the FTP passwords be included in the logs?
+            </summary>
+        </member>
+        <member name="P:FluentFTP.FtpTrace.EnableTracing">
+            <summary>
+            Should we trace at all?
             </summary>
         </member>
         <member name="T:FluentFTP.Proxy.FtpClientHttp11Proxy">

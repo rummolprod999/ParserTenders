@@ -33,8 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP, Version=18.0.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
-      <HintPath>..\packages\FluentFTP.18.0.0\lib\net45\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP, Version=18.0.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
+      <HintPath>..\packages\FluentFTP.18.0.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="Ftp, Version=2.0.17107.1333, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
       <HintPath>..\packages\Ftp.dll.2.0.17107.1333\lib\Net45\Ftp.dll</HintPath>
