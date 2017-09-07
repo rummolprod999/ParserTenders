@@ -71,7 +71,12 @@ namespace ParserTenders
 
             return arch;
         }
+        public virtual List<String> GetListArchDaily(string PathParse, string RegionPath)
+        {
+            List<String> arch = new List<string>();
 
+            return arch;
+        }
 
         public WorkWithFtp ClientFtp44_old()
         {
@@ -208,7 +213,68 @@ namespace ParserTenders
                 }
             }
         }
-
+        protected List<string> GetListFtp223(string PathParse)
+        {
+            List<string> archtemp = new List<string>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    WorkWithFtp ftp = ClientFtp223_old();
+                    ftp.ChangeWorkingDirectory(PathParse);
+                    archtemp = ftp.ListDirectory();
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
+                        break;
+                    }
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+            return archtemp;
+        }
+        
+        protected List<string> GetListFtp44(string PathParse)
+        {
+            List<string> archtemp = new List<string>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    WorkWithFtp ftp = ClientFtp44_old();
+                    ftp.ChangeWorkingDirectory(PathParse);
+                    archtemp = ftp.ListDirectory();
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
+                        break;
+                    }
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+            return archtemp;
+        }
+        
         public void CheckInn()
         {
             string cus_null = $"SELECT reg_num FROM {Program.Prefix}customer WHERE inn = ''";

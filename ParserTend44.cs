@@ -312,36 +312,5 @@ namespace ParserTenders
 
             return arch;
         }
-
-        private List<string> GetListFtp44(string PathParse)
-        {
-            List<string> archtemp = new List<string>();
-            int count = 1;
-            while (true)
-            {
-                try
-                {
-                    WorkWithFtp ftp = ClientFtp44_old();
-                    ftp.ChangeWorkingDirectory(PathParse);
-                    archtemp = ftp.ListDirectory();
-                    if (count > 1)
-                    {
-                        Log.Logger("Удалось получить список архивов после попытки", count);
-                    }
-                    break;
-                }
-                catch (Exception e)
-                {
-                    if (count > 3)
-                    {
-                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
-                        break;
-                    }
-                    count++;
-                    Thread.Sleep(2000);
-                }
-            }
-            return archtemp;
-        }
     }
 }

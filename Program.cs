@@ -293,7 +293,8 @@ namespace ParserTenders
         private static void ParserSign223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Sign223");
-            ParserSgn223 s = new ParserSgn223();
+            ParserSgn223 s = new ParserSgn223(Periodparsing);
+            s.Parsing();
             Log.Logger("Добавили Sign223", AddSign223);
             Log.Logger("Обновили Sign223", UpdateSign223);
             Log.Logger("Время окончания парсинга Sign223");
