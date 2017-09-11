@@ -16,19 +16,19 @@ namespace ParserTenders
     {
         protected DataTable DtRegion;
 
-        private string[] file_xml44 = new[]
+        private string[] _fileXml44 = new[]
         {
             "ea44_", "ep44_", "ok44_", "okd44_", "oku44_", "po44_", "za44_", "zk44_",
             "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_"
         };
 
-        private string[] file_cancel = new[] {"notificationcancel_"};
-        private string[] file_sign = new[] {"contractsign_"};
-        private string[] file_cancelFailure = new[] {"cancelfailure_"};
-        private string[] file_prolongation = new[] {"prolongation"};
-        private string[] file_datechange = new[] {"datechange_"};
-        private string[] file_orgchange = new[] {"orgchange_"};
-        private string[] file_lotcancel = new[] {"lotcancel_"};
+        private string[] _fileCancel = new[] {"notificationcancel_"};
+        private string[] _fileSign = new[] {"contractsign_"};
+        private string[] _fileCancelFailure = new[] {"cancelfailure_"};
+        private string[] _fileProlongation = new[] {"prolongation"};
+        private string[] _fileDatechange = new[] {"datechange_"};
+        private string[] _fileOrgchange = new[] {"orgchange_"};
+        private string[] _fileLotcancel = new[] {"lotcancel_"};
 
         public ParserTend44(TypeArguments arg) : base(arg)
         {
@@ -40,33 +40,33 @@ namespace ParserTenders
             foreach (DataRow row in DtRegion.Rows)
             {
                 List<String> arch = new List<string>();
-                string PathParse = "";
-                string RegionPath = (string) row["path"];
+                string pathParse = "";
+                string regionPath = (string) row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last44:
-                        PathParse = $"/fcs_regions/{RegionPath}/notifications/";
-                        arch = GetListArchLast(PathParse, RegionPath);
+                        pathParse = $"/fcs_regions/{regionPath}/notifications/";
+                        arch = GetListArchLast(pathParse, regionPath);
                         break;
                     case TypeArguments.Curr44:
-                        PathParse = $"/fcs_regions/{RegionPath}/notifications/currMonth/";
-                        arch = GetListArchCurr(PathParse, RegionPath);
+                        pathParse = $"/fcs_regions/{regionPath}/notifications/currMonth/";
+                        arch = GetListArchCurr(pathParse, regionPath);
                         break;
                     case TypeArguments.Prev44:
-                        PathParse = $"/fcs_regions/{RegionPath}/notifications/prevMonth/";
-                        arch = GetListArchPrev(PathParse, RegionPath);
+                        pathParse = $"/fcs_regions/{regionPath}/notifications/prevMonth/";
+                        arch = GetListArchPrev(pathParse, regionPath);
                         break;
                 }
 
                 if (arch.Count == 0)
                 {
-                    Log.Logger("Получен пустой список архивов", PathParse);
+                    Log.Logger("Получен пустой список архивов", pathParse);
                     continue;
                 }
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, PathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
                 }
             }
 
@@ -80,84 +80,84 @@ namespace ParserTenders
             }
         }
 
-        public override void GetListFileArch(string Arch, string PathParse, string region, int region_id)
+        public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             string filea = "";
-            string path_unzip = "";
-            filea = GetArch44(Arch, PathParse);
+            string pathUnzip = "";
+            filea = GetArch44(arch, pathParse);
             if (!String.IsNullOrEmpty(filea))
             {
-                path_unzip = Unzipped.Unzip(filea);
-                if (path_unzip != "")
+                pathUnzip = Unzipped.Unzip(filea);
+                if (pathUnzip != "")
                 {
-                    if (Directory.Exists(path_unzip))
+                    if (Directory.Exists(pathUnzip))
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(path_unzip);
+                        DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
                         FileInfo[] filelist = dirInfo.GetFiles();
-                        List<FileInfo> array_xml44 = filelist
-                            .Where(a => file_xml44.Any(
+                        List<FileInfo> arrayXml44 = filelist
+                            .Where(a => _fileXml44.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_prolongation = filelist
-                            .Where(a => file_prolongation.Any(
+                        List<FileInfo> arrayProlongation = filelist
+                            .Where(a => _fileProlongation.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_datechange = filelist
-                            .Where(a => file_datechange.Any(
+                        List<FileInfo> arrayDatechange = filelist
+                            .Where(a => _fileDatechange.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_orgchange = filelist
-                            .Where(a => file_orgchange.Any(
+                        List<FileInfo> arrayOrgchange = filelist
+                            .Where(a => _fileOrgchange.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_lotcancel = filelist
-                            .Where(a => file_lotcancel.Any(
+                        List<FileInfo> arrayLotcancel = filelist
+                            .Where(a => _fileLotcancel.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_cancel = filelist
-                            .Where(a => file_cancel.Any(
+                        List<FileInfo> arrayCancel = filelist
+                            .Where(a => _fileCancel.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_sign = filelist
-                            .Where(a => file_sign.Any(
+                        List<FileInfo> arraySign = filelist
+                            .Where(a => _fileSign.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> array_cancelFailure = filelist
-                            .Where(a => file_cancelFailure.Any(
+                        List<FileInfo> arrayCancelFailure = filelist
+                            .Where(a => _fileCancelFailure.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
 
-                        foreach (var f in array_xml44)
+                        foreach (var f in arrayXml44)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeTen44);
+                            Bolter(f, region, regionId, TypeFile44.TypeTen44);
                         }
-                        foreach (var f in array_prolongation)
+                        foreach (var f in arrayProlongation)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeProlongation);
+                            Bolter(f, region, regionId, TypeFile44.TypeProlongation);
                         }
-                        foreach (var f in array_datechange)
+                        foreach (var f in arrayDatechange)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeDateChange);
+                            Bolter(f, region, regionId, TypeFile44.TypeDateChange);
                         }
-                        foreach (var f in array_orgchange)
+                        foreach (var f in arrayOrgchange)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeOrgChange);
+                            Bolter(f, region, regionId, TypeFile44.TypeOrgChange);
                         }
-                        foreach (var f in array_lotcancel)
+                        foreach (var f in arrayLotcancel)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeLotCancel);
+                            Bolter(f, region, regionId, TypeFile44.TypeLotCancel);
                         }
-                        foreach (var f in array_cancel)
+                        foreach (var f in arrayCancel)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeCancel);
+                            Bolter(f, region, regionId, TypeFile44.TypeCancel);
                         }
-                        foreach (var f in array_sign)
+                        foreach (var f in arraySign)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeSign);
+                            Bolter(f, region, regionId, TypeFile44.TypeSign);
                         }
-                        foreach (var f in array_cancelFailure)
+                        foreach (var f in arrayCancelFailure)
                         {
-                            Bolter(f, region, region_id, TypeFile44.TypeCancelFailure);
+                            Bolter(f, region, regionId, TypeFile44.TypeCancelFailure);
                         }
 
                         dirInfo.Delete(true);
@@ -166,7 +166,7 @@ namespace ParserTenders
             }
         }
 
-        public override void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
+        public override void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
             if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))
             {
@@ -175,7 +175,7 @@ namespace ParserTenders
 
             try
             {
-                ParsingXML(f, region, region_id, typefile);
+                ParsingXml(f, region, regionId, typefile);
             }
             catch (Exception e)
             {
@@ -183,7 +183,7 @@ namespace ParserTenders
             }
         }
 
-        public void ParsingXML(FileInfo f, string region, int region_id, TypeFile44 typefile)
+        public void ParsingXml(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
             using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
             {
@@ -196,75 +196,75 @@ namespace ParserTenders
                 switch (typefile)
                 {
                     case TypeFile44.TypeTen44:
-                        TenderType44 a = new TenderType44(f, region, region_id, json);
+                        TenderType44 a = new TenderType44(f, region, regionId, json);
                         a.Parsing();
                         break;
                     case TypeFile44.TypeProlongation:
-                        TenderTypeProlongation b = new TenderTypeProlongation(f, region, region_id, json);
+                        TenderTypeProlongation b = new TenderTypeProlongation(f, region, regionId, json);
                         b.Parsing();
                         break;
                     case TypeFile44.TypeDateChange:
-                        TenderTypeDateChange c = new TenderTypeDateChange(f, region, region_id, json);
+                        TenderTypeDateChange c = new TenderTypeDateChange(f, region, regionId, json);
                         c.Parsing();
                         break;
                     case TypeFile44.TypeOrgChange:
-                        TenderTypeOrgChange d = new TenderTypeOrgChange(f, region, region_id, json);
+                        TenderTypeOrgChange d = new TenderTypeOrgChange(f, region, regionId, json);
                         d.Parsing();
                         break;
                     case TypeFile44.TypeLotCancel:
-                        TenderTypeLotCancel e = new TenderTypeLotCancel(f, region, region_id, json);
+                        TenderTypeLotCancel e = new TenderTypeLotCancel(f, region, regionId, json);
                         e.Parsing();
                         break;
                     case TypeFile44.TypeCancel:
-                        TenderTypeCancel g = new TenderTypeCancel(f, region, region_id, json);
+                        TenderTypeCancel g = new TenderTypeCancel(f, region, regionId, json);
                         g.Parsing();
                         break;
                     case TypeFile44.TypeCancelFailure:
-                        TenderTypeCancelFailure h = new TenderTypeCancelFailure(f, region, region_id, json);
+                        TenderTypeCancelFailure h = new TenderTypeCancelFailure(f, region, regionId, json);
                         h.Parsing();
                         break;
                     case TypeFile44.TypeSign:
-                        TenderTypeSign n = new TenderTypeSign(f, region, region_id, json);
+                        TenderTypeSign n = new TenderTypeSign(f, region, regionId, json);
                         n.Parsing();
                         break;
                 }
             }
         }
 
-        public override List<String> GetListArchLast(string PathParse, string RegionPath)
+        public override List<String> GetListArchLast(string pathParse, string regionPath)
         {
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(PathParse);
-            List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
-            return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
+            archtemp = GetListFtp44(pathParse);
+            List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<String> GetListArchCurr(string PathParse, string RegionPath)
+        public override List<String> GetListArchCurr(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(PathParse);
-            List<String> years_search = Program.Years.Select(y => $"notification_{RegionPath}{y}").ToList();
-            foreach (var a in archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            archtemp = GetListFtp44(pathParse);
+            List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            foreach (var a in archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string select_arch =
+                    string selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
-                    MySqlCommand cmd = new MySqlCommand(select_arch, connect);
+                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
                     MySqlDataReader reader = cmd.ExecuteReader();
-                    bool res_read = reader.HasRows;
+                    bool resRead = reader.HasRows;
                     reader.Close();
-                    if (!res_read)
+                    if (!resRead)
                     {
-                        string add_arch =
+                        string addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
+                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
                         cmd1.ExecuteNonQuery();
@@ -276,34 +276,34 @@ namespace ParserTenders
             return arch;
         }
 
-        public override List<String> GetListArchPrev(string PathParse, string RegionPath)
+        public override List<String> GetListArchPrev(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(PathParse);
+            archtemp = GetListFtp44(pathParse);
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
-                string prev_a = $"prev_{a}";
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                string prevA = $"prev_{a}";
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string select_arch =
+                    string selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
-                    MySqlCommand cmd = new MySqlCommand(select_arch, connect);
+                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", prev_a);
+                    cmd.Parameters.AddWithValue("@archive", prevA);
                     MySqlDataReader reader = cmd.ExecuteReader();
-                    bool res_read = reader.HasRows;
+                    bool resRead = reader.HasRows;
                     reader.Close();
-                    if (!res_read)
+                    if (!resRead)
                     {
-                        string add_arch =
+                        string addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
+                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", prev_a);
+                        cmd1.Parameters.AddWithValue("@archive", prevA);
                         cmd1.ExecuteNonQuery();
                         arch.Add(a);
                     }

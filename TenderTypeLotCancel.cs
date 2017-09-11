@@ -10,8 +10,8 @@ namespace ParserTenders
     {
         public event Action<int> AddLotCancel;
 
-        public TenderTypeLotCancel(FileInfo f, string region, int region_id, JObject json)
-            : base(f, region, region_id, json)
+        public TenderTypeLotCancel(FileInfo f, string region, int regionId, JObject json)
+            : base(f, region, regionId, json)
         {
             AddLotCancel += delegate(int d)
             {
@@ -22,7 +22,7 @@ namespace ParserTenders
 
         public override void Parsing()
         {
-            JObject root = (JObject) t.SelectToken("export");
+            JObject root = (JObject) T.SelectToken("export");
             JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
@@ -30,7 +30,7 @@ namespace ParserTenders
                 string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
-                    Log.Logger("Не могу найти purchaseNumber у TenderLotCancel", file_path);
+                    Log.Logger("Не могу найти purchaseNumber у TenderLotCancel", FilePath);
                     return;
                 }
                 else
@@ -45,46 +45,46 @@ namespace ParserTenders
                 string lotNumber = ((string) tender.SelectToken("lot.lotNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(lotNumber))
                 {
-                    Log.Logger("Не могу найти lotNumber у TenderLotCancel", file_path);
+                    Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);
                     return;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
-                    int id_tender = 0;
+                    int idTender = 0;
                     connect.Open();
-                    string select_tender =
+                    string selectTender =
                         $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number AND cancel=0";
-                    MySqlCommand cmd = new MySqlCommand(select_tender, connect);
+                    MySqlCommand cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@id_region", region_id);
+                    cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        id_tender = reader.GetInt32("id_tender");
+                        idTender = reader.GetInt32("id_tender");
                     }
                     reader.Close();
-                    if (id_tender == 0)
+                    if (idTender == 0)
                     {
-                        Log.Logger("Не могу найти id_tender у TenderLotCancel", file_path);
+                        Log.Logger("Не могу найти id_tender у TenderLotCancel", FilePath);
                         return;
                     }
 
-                    string update_tender =
+                    string updateTender =
                         $"UPDATE {Program.Prefix}lot SET cancel=1 WHERE id_tender = @id_tender AND lot_number = @lot_number";
-                    MySqlCommand cmd1 = new MySqlCommand(update_tender, connect);
+                    MySqlCommand cmd1 = new MySqlCommand(updateTender, connect);
                     cmd1.Prepare();
-                    cmd1.Parameters.AddWithValue("@id_tender", id_tender);
+                    cmd1.Parameters.AddWithValue("@id_tender", idTender);
                     cmd1.Parameters.AddWithValue("@lot_number", lotNumber);
-                    int res_upd = cmd1.ExecuteNonQuery();
-                    AddLotCancel?.Invoke(res_upd);
+                    int resUpd = cmd1.ExecuteNonQuery();
+                    AddLotCancel?.Invoke(resUpd);
                 }
             }
             else
             {
-                Log.Logger("Не могу найти тег TenderLotCancel", file_path);
+                Log.Logger("Не могу найти тег TenderLotCancel", FilePath);
             }
         }
     }

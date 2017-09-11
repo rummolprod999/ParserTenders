@@ -9,11 +9,11 @@ namespace ParserTenders
 {
     public class DownloadFile
     {
-        private static object locker = new object();
-        private static object locker2 = new object();
-        private bool DownCount = true;
+        private static object _locker = new object();
+        private static object _locker2 = new object();
+        private bool _downCount = true;
 
-        public void DownloadF(string sSourceURL, string sDestinationPath, string proxy, int port, string useragent)
+        public void DownloadF(string sSourceUrl, string sDestinationPath, string proxy, int port, string useragent)
         {
             long iFileSize = 0;
             int iBufferSize = 1024;
@@ -37,7 +37,7 @@ namespace ParserTenders
 
             HttpWebRequest hwRq;
             HttpWebResponse hwRes;
-            hwRq = (HttpWebRequest) HttpWebRequest.Create(sSourceURL);
+            hwRq = (HttpWebRequest) HttpWebRequest.Create(sSourceUrl);
             //hwRq.Proxy = new WebProxy(proxy, port);
             //hwRq.UserAgent = useragent;
             hwRq.AddRange((int) iExistLen);
@@ -64,8 +64,8 @@ namespace ParserTenders
                 if (hwRes != null && (hwRes.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable ||
                                       hwRes.StatusCode == HttpStatusCode.NotFound))
                 {
-                    DownCount = false;
-                    Log.Logger("Ошибка скачивания", ex, sSourceURL);
+                    _downCount = false;
+                    Log.Logger("Ошибка скачивания", ex, sSourceUrl);
                 }
                 saveFileStream.Dispose();
                 saveFileStream.Close();
@@ -73,27 +73,27 @@ namespace ParserTenders
             }
         }
 
-        public string DownL(string url, int id_att, TypeFileAttach tp, List<string> proxies, List<string> useragents)
+        public string DownL(string url, int idAtt, TypeFileAttach tp, List<string> proxies, List<string> useragents)
         {
             string patharch = "";
             switch (tp)
             {
-                case TypeFileAttach.doc:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                case TypeFileAttach.Doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.doc";
                     break;
-                case TypeFileAttach.docx:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
+                case TypeFileAttach.Docx:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.docx";
                     break;
             }
 
             int count = 0;
-            while (DownCount)
+            while (_downCount)
             {
                 string proxy = proxies[new Random().Next(proxies.Count)];
                 string ip = proxy.Substring(0, proxy.IndexOf(":"));
                 //ip = "67.205.191.44";
-                string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
-                int port = Int32.Parse(port_s);
+                string portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                int port = Int32.Parse(portS);
                 //port = 8083;
                 string useragent = useragents[new Random().Next(useragents.Count)];
                 try
@@ -114,19 +114,19 @@ namespace ParserTenders
             return patharch;
         }
 
-        public string DownLOldTest(string url, int id_att, TypeFileAttach tp, List<string> proxies,
-            List<string> proxies_auth, List<string> useragents)
+        public string DownLOldTest(string url, int idAtt, TypeFileAttach tp, List<string> proxies,
+            List<string> proxiesAuth, List<string> useragents)
         {
             //List<string> proxies_copy = proxies.ToList();
             //List<string> proxies_auth_copy = proxies_auth.ToList();
             string patharch = "";
             switch (tp)
             {
-                case TypeFileAttach.doc:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                case TypeFileAttach.Doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.doc";
                     break;
-                case TypeFileAttach.docx:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
+                case TypeFileAttach.Docx:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.docx";
                     break;
             }
 
@@ -136,17 +136,17 @@ namespace ParserTenders
                 int rnd = 0;
                 string proxy = "";
                 int r = new Random().Next(2);
-                lock (locker)
+                lock (_locker)
                 {
                     rnd = new Random().Next(proxies.Count);
                     proxy = proxies[rnd];
                 }
                 if (r == 1)
                 {
-                    lock (locker2)
+                    lock (_locker2)
                     {
-                        rnd = new Random().Next(proxies_auth.Count);
-                        proxy = proxies_auth[rnd];
+                        rnd = new Random().Next(proxiesAuth.Count);
+                        proxy = proxiesAuth[rnd];
                     }
                 }
                 try
@@ -154,8 +154,8 @@ namespace ParserTenders
                     string ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
-                    string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
-                    int port = Int32.Parse(port_s);
+                    string portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                    int port = Int32.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
                     string useragent = useragents[new Random().Next(useragents.Count)];
@@ -180,8 +180,8 @@ namespace ParserTenders
 
                         using (var stream = client.OpenRead(url))
                         {
-                            Int64 bytes_total = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
-                            if (bytes_total > 5000000)
+                            Int64 bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            if (bytesTotal > 5000000)
                             {
                                 Log.Logger("Too many file", url);
                                 return patharch;
@@ -197,8 +197,8 @@ namespace ParserTenders
                             }
                         }
                     }
-                    FileInfo FileD = new FileInfo(patharch);
-                    if (FileD.Exists && FileD.Length == 0)
+                    FileInfo fileD = new FileInfo(patharch);
+                    if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
                     }
@@ -209,15 +209,15 @@ namespace ParserTenders
                     switch (r)
                     {
                         case 0:
-                            lock (locker)
+                            lock (_locker)
                             {
                                 proxies.Remove(proxy);
                             }
                             break;
                         case 1:
-                            lock (locker2)
+                            lock (_locker2)
                             {
-                                proxies_auth.Remove(proxy);
+                                proxiesAuth.Remove(proxy);
                             }
                             break;
                     }
@@ -244,19 +244,19 @@ namespace ParserTenders
             return patharch;
         }
 
-        public string DownLOld(string url, int id_att, TypeFileAttach tp, List<string> proxies,
-            List<string> proxies_auth, List<string> useragents)
+        public string DownLOld(string url, int idAtt, TypeFileAttach tp, List<string> proxies,
+            List<string> proxiesAuth, List<string> useragents)
         {
-            List<string> proxies_copy = proxies.ToList();
-            List<string> proxies_auth_copy = proxies_auth.ToList();
+            List<string> proxiesCopy = proxies.ToList();
+            List<string> proxiesAuthCopy = proxiesAuth.ToList();
             string patharch = "";
             switch (tp)
             {
-                case TypeFileAttach.doc:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.doc";
+                case TypeFileAttach.Doc:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.doc";
                     break;
-                case TypeFileAttach.docx:
-                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{id_att}.docx";
+                case TypeFileAttach.Docx:
+                    patharch = $"{Program.TempPath}{Path.DirectorySeparatorChar}{idAtt}.docx";
                     break;
             }
 
@@ -264,20 +264,20 @@ namespace ParserTenders
             while (count <= Program.DownCount)
             {
                 int r = new Random().Next(2);
-                int rnd = new Random().Next(proxies_copy.Count);
-                string proxy = proxies_copy[rnd];
+                int rnd = new Random().Next(proxiesCopy.Count);
+                string proxy = proxiesCopy[rnd];
                 if (r == 1)
                 {
-                    rnd = new Random().Next(proxies_auth_copy.Count);
-                    proxy = proxies_auth_copy[rnd];
+                    rnd = new Random().Next(proxiesAuthCopy.Count);
+                    proxy = proxiesAuthCopy[rnd];
                 }
                 try
                 {
                     string ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
-                    string port_s = proxy.Substring(proxy.IndexOf(":") + 1);
-                    int port = Int32.Parse(port_s);
+                    string portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                    int port = Int32.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
                     string useragent = useragents[new Random().Next(useragents.Count)];
@@ -302,8 +302,8 @@ namespace ParserTenders
 
                         using (var stream = client.OpenRead(url))
                         {
-                            Int64 bytes_total = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
-                            if (bytes_total > 5000000)
+                            Int64 bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            if (bytesTotal > 5000000)
                             {
                                 Log.Logger("Too lagre file!!!!", url);
                                 return patharch;
@@ -319,8 +319,8 @@ namespace ParserTenders
                             }
                         }
                     }
-                    FileInfo FileD = new FileInfo(patharch);
-                    if (FileD.Exists && FileD.Length == 0)
+                    FileInfo fileD = new FileInfo(patharch);
+                    if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
                     }
@@ -331,10 +331,10 @@ namespace ParserTenders
                     switch (r)
                     {
                         case 0:
-                            proxies_copy.RemoveAt(rnd);
+                            proxiesCopy.RemoveAt(rnd);
                             break;
                         case 1:
-                            proxies_auth_copy.RemoveAt(rnd);
+                            proxiesAuthCopy.RemoveAt(rnd);
                             break;
                     }
                     //Console.WriteLine(e);

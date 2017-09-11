@@ -7,10 +7,10 @@ namespace ParserTenders
 {
     public class WorkWithFtp
     {
-        private string password;
-        private string userName;
-        private string uri;
-        private int bufferSize = 1024;
+        private string _password;
+        private string _userName;
+        private string _uri;
+        private int _bufferSize = 1024;
         public bool Passive = true;
         public bool Binary = true;
         public bool EnableSsl = false;
@@ -18,30 +18,30 @@ namespace ParserTenders
 
         public WorkWithFtp(string uri, string userName, string password)
         {
-            this.uri = uri;
-            this.userName = userName;
-            this.password = password;
+            this._uri = uri;
+            this._userName = userName;
+            this._password = password;
         }
 
         public string ChangeWorkingDirectory(string path)
         {
-            uri = combine(uri, path);
+            _uri = Combine(_uri, path);
 
             return PrintWorkingDirectory();
         }
 
         public string DeleteFile(string fileName)
         {
-            var request = createRequest(combine(uri, fileName), WebRequestMethods.Ftp.DeleteFile);
+            var request = CreateRequest(Combine(_uri, fileName), WebRequestMethods.Ftp.DeleteFile);
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string DownloadFile(string source, string dest)
         {
-            var request = createRequest(combine(uri, source), WebRequestMethods.Ftp.DownloadFile);
+            var request = CreateRequest(Combine(_uri, source), WebRequestMethods.Ftp.DownloadFile);
 
-            byte[] buffer = new byte[bufferSize];
+            byte[] buffer = new byte[_bufferSize];
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -49,7 +49,7 @@ namespace ParserTenders
                 {
                     using (var fs = new FileStream(dest, FileMode.OpenOrCreate))
                     {
-                        int readCount = stream.Read(buffer, 0, bufferSize);
+                        int readCount = stream.Read(buffer, 0, _bufferSize);
 
                         while (readCount > 0)
                         {
@@ -57,7 +57,7 @@ namespace ParserTenders
                                 Console.Write("#");
 
                             fs.Write(buffer, 0, readCount);
-                            readCount = stream.Read(buffer, 0, bufferSize);
+                            readCount = stream.Read(buffer, 0, _bufferSize);
                         }
                     }
                 }
@@ -68,7 +68,7 @@ namespace ParserTenders
 
         public DateTime GetDateTimestamp(string fileName)
         {
-            var request = createRequest(combine(uri, fileName), WebRequestMethods.Ftp.GetDateTimestamp);
+            var request = CreateRequest(Combine(_uri, fileName), WebRequestMethods.Ftp.GetDateTimestamp);
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -78,7 +78,7 @@ namespace ParserTenders
 
         public long GetFileSize(string fileName)
         {
-            var request = createRequest(combine(uri, fileName), WebRequestMethods.Ftp.GetFileSize);
+            var request = CreateRequest(Combine(_uri, fileName), WebRequestMethods.Ftp.GetFileSize);
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -90,7 +90,7 @@ namespace ParserTenders
         {
             var list = new List<string>();
 
-            var request = createRequest(WebRequestMethods.Ftp.ListDirectory);
+            var request = CreateRequest(WebRequestMethods.Ftp.ListDirectory);
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -113,7 +113,7 @@ namespace ParserTenders
         {
             var list = new List<string>();
 
-            var request = createRequest(WebRequestMethods.Ftp.ListDirectoryDetails);
+            var request = CreateRequest(WebRequestMethods.Ftp.ListDirectoryDetails);
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -134,37 +134,37 @@ namespace ParserTenders
 
         public string MakeDirectory(string directoryName)
         {
-            var request = createRequest(combine(uri, directoryName), WebRequestMethods.Ftp.MakeDirectory);
+            var request = CreateRequest(Combine(_uri, directoryName), WebRequestMethods.Ftp.MakeDirectory);
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string PrintWorkingDirectory()
         {
-            var request = createRequest(WebRequestMethods.Ftp.PrintWorkingDirectory);
+            var request = CreateRequest(WebRequestMethods.Ftp.PrintWorkingDirectory);
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string RemoveDirectory(string directoryName)
         {
-            var request = createRequest(combine(uri, directoryName), WebRequestMethods.Ftp.RemoveDirectory);
+            var request = CreateRequest(Combine(_uri, directoryName), WebRequestMethods.Ftp.RemoveDirectory);
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string Rename(string currentName, string newName)
         {
-            var request = createRequest(combine(uri, currentName), WebRequestMethods.Ftp.Rename);
+            var request = CreateRequest(Combine(_uri, currentName), WebRequestMethods.Ftp.Rename);
 
             request.RenameTo = newName;
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string UploadFile(string source, string destination)
         {
-            var request = createRequest(combine(uri, destination), WebRequestMethods.Ftp.UploadFile);
+            var request = CreateRequest(Combine(_uri, destination), WebRequestMethods.Ftp.UploadFile);
 
             using (var stream = request.GetRequestStream())
             {
@@ -172,7 +172,7 @@ namespace ParserTenders
                 {
                     int num;
 
-                    byte[] buffer = new byte[bufferSize];
+                    byte[] buffer = new byte[_bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
@@ -184,12 +184,12 @@ namespace ParserTenders
                 }
             }
 
-            return getStatusDescription(request);
+            return GetStatusDescription(request);
         }
 
         public string UploadFileWithUniqueName(string source)
         {
-            var request = createRequest(WebRequestMethods.Ftp.UploadFileWithUniqueName);
+            var request = CreateRequest(WebRequestMethods.Ftp.UploadFileWithUniqueName);
 
             using (var stream = request.GetRequestStream())
             {
@@ -197,7 +197,7 @@ namespace ParserTenders
                 {
                     int num;
 
-                    byte[] buffer = new byte[bufferSize];
+                    byte[] buffer = new byte[_bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
@@ -215,16 +215,16 @@ namespace ParserTenders
             }
         }
 
-        private FtpWebRequest createRequest(string method)
+        private FtpWebRequest CreateRequest(string method)
         {
-            return createRequest(uri, method);
+            return CreateRequest(_uri, method);
         }
 
-        private FtpWebRequest createRequest(string uri, string method)
+        private FtpWebRequest CreateRequest(string uri, string method)
         {
             var r = (FtpWebRequest) WebRequest.Create(uri);
 
-            r.Credentials = new NetworkCredential(userName, password);
+            r.Credentials = new NetworkCredential(_userName, _password);
             r.Method = method;
             r.UseBinary = Binary;
             r.EnableSsl = EnableSsl;
@@ -233,7 +233,7 @@ namespace ParserTenders
             return r;
         }
 
-        private string getStatusDescription(FtpWebRequest request)
+        private string GetStatusDescription(FtpWebRequest request)
         {
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -241,7 +241,7 @@ namespace ParserTenders
             }
         }
 
-        public string combine(string path1, string path2)
+        public string Combine(string path1, string path2)
         {
             return path1 + path2;
         }

@@ -12,30 +12,30 @@ namespace ParserTenders
             FileInfo fileInf = new FileInfo(filea);
             if (fileInf.Exists)
             {
-                int r_point = filea.LastIndexOf('.');
-                string l_dir = filea.Substring(0, r_point);
-                Directory.CreateDirectory(l_dir);
+                int rPoint = filea.LastIndexOf('.');
+                string lDir = filea.Substring(0, rPoint);
+                Directory.CreateDirectory(lDir);
                 try
                 {
-                    ZipFile.ExtractToDirectory(filea, l_dir);
+                    ZipFile.ExtractToDirectory(filea, lDir);
                     fileInf.Delete();
-                    return l_dir;
+                    return lDir;
                 }
                 catch (Exception e)
                 {
                     Log.Logger("Не удалось извлечь файл", e, filea);
                     try
                     {
-                        var MyProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {l_dir}")};
-                        MyProcess.Start();
-                        MyProcess.WaitForExit();
+                        var myProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {lDir}")};
+                        myProcess.Start();
+                        myProcess.WaitForExit();
                         Log.Logger("Извлекли файл альтернативным методом", filea);
-                        return l_dir;
+                        return lDir;
                     }
                     catch (Exception exception)
                     {
                         Log.Logger("Не удалось извлечь файл альтернативным методом", exception, filea);
-                        return l_dir;
+                        return lDir;
                     }
                 }
             }

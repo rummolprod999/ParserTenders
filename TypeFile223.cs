@@ -2,13 +2,13 @@ namespace ParserTenders
 {
     public enum TypeFile223
     {
-        purchaseNotice,
-        purchaseNoticeAE,
-        purchaseNoticeAE94,
-        purchaseNoticeEP,
-        purchaseNoticeIS,
-        purchaseNoticeOA,
-        purchaseNoticeOK,
-        purchaseNoticeZK
+        PurchaseNotice,
+        PurchaseNoticeAe,
+        PurchaseNoticeAe94,
+        PurchaseNoticeEp,
+        PurchaseNoticeIs,
+        PurchaseNoticeOa,
+        PurchaseNoticeOk,
+        PurchaseNoticeZk
     }
 }

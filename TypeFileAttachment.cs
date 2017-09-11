@@ -2,7 +2,7 @@
 {
     public enum TypeFileAttach
     {
-        doc,
-        docx
+        Doc,
+        Docx
     }
 }

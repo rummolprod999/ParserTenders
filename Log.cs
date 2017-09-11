@@ -7,7 +7,7 @@ namespace ParserTenders
 {
     public class Log
     {
-        private static object locker = new object();
+        private static object _locker = new object();
         public static void Logger(params object[] parametrs)
         {
             string s = "";
@@ -17,7 +17,7 @@ namespace ParserTenders
                 s = $"{s} {parametrs[i]}";
             }
 
-            lock (locker)
+            lock (_locker)
             {
                 using (StreamWriter sw = new StreamWriter(Program.FileLog, true, Encoding.Default))
                 {

@@ -11,11 +11,11 @@ namespace ParserTenders
 {
     public class Parser : IParser
     {
-        protected TypeArguments arg;
+        protected TypeArguments Arg;
 
         public Parser(TypeArguments a)
         {
-            this.arg = a;
+            this.Arg = a;
         }
 
         public virtual void Parsing()
@@ -26,7 +26,7 @@ namespace ParserTenders
         {
             string reg = "SELECT * FROM region";
             DataTable dt;
-            using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+            using (MySqlConnection connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
                 MySqlDataAdapter adapter = new MySqlDataAdapter(reg, connect);
@@ -37,41 +37,41 @@ namespace ParserTenders
             return dt;
         }
 
-        public virtual List<String> GetListArchLast(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchCurr(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchPrev(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchLast(string PathParse, string RegionPath, string purchase)
+        public virtual List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
         {
             List<String> arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchDaily(string PathParse, string RegionPath, string purchase)
+        public virtual List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
             List<String> arch = new List<string>();
 
             return arch;
         }
-        public virtual List<String> GetListArchDaily(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchDaily(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
 
@@ -104,32 +104,32 @@ namespace ParserTenders
             return ftpCl;
         }
 
-        public virtual void GetListFileArch(string Arch, string PathParse, string region)
+        public virtual void GetListFileArch(string arch, string pathParse, string region)
         {
         }
 
-        public virtual void GetListFileArch(string Arch, string PathParse, string region, int region_id)
+        public virtual void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
         }
 
-        public virtual void GetListFileArch(string Arch, string PathParse, string region, int region_id,
+        public virtual void GetListFileArch(string arch, string pathParse, string region, int regionId,
             string purchase)
         {
         }
 
-        public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
         }
 
-        public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile223 typefile)
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile223 typefile)
         {
         }
         
-        public virtual void Bolter(FileInfo f, string region, int region_id)
+        public virtual void Bolter(FileInfo f, string region, int regionId)
         {
         }
 
-        public string GetArch44(string Arch, string PathParse)
+        public string GetArch44(string arch, string pathParse)
         {
             string file = "";
             int count = 1;
@@ -138,11 +138,11 @@ namespace ParserTenders
                 try
                 {
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
-                    string FileOnServer = $"{Arch}";
-                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
+                    string fileOnServer = $"{arch}";
+                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{arch}";
                     FtpClient ftp = ClientFtp44();
-                    ftp.SetWorkingDirectory(PathParse);
-                    ftp.DownloadFile(file, FileOnServer);
+                    ftp.SetWorkingDirectory(pathParse);
+                    ftp.DownloadFile(file, fileOnServer);
                     ftp.Disconnect();
                     /*using (Ftp client = new Ftp())
                     {
@@ -155,7 +155,7 @@ namespace ParserTenders
                     }*/
                     if (count > 1)
                     {
-                        Log.Logger("Удалось скачать архив после попытки", count, PathParse);
+                        Log.Logger("Удалось скачать архив после попытки", count, pathParse);
                     }
                     return file;
                 }
@@ -164,7 +164,7 @@ namespace ParserTenders
                     
                     if (count > 50)
                     {
-                        Log.Logger($"Не удалось скачать файл после попытки {count}", Arch, e);
+                        Log.Logger($"Не удалось скачать файл после попытки {count}", arch, e);
                         return file;
                     }
 
@@ -174,7 +174,7 @@ namespace ParserTenders
             }
         }
 
-        public string GetArch223(string Arch, string PathParse)
+        public string GetArch223(string arch, string pathParse)
         {
             string file = "";
             int count = 1;
@@ -183,11 +183,11 @@ namespace ParserTenders
                 try
                 {
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
-                    string FileOnServer = $"{Arch}";
-                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
+                    string fileOnServer = $"{arch}";
+                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{arch}";
                     FtpClient ftp = ClientFtp223();
-                    ftp.SetWorkingDirectory(PathParse);
-                    ftp.DownloadFile(file, FileOnServer);
+                    ftp.SetWorkingDirectory(pathParse);
+                    ftp.DownloadFile(file, fileOnServer);
                     ftp.Disconnect();
                     /*using (Ftp client = new Ftp())
                     {
@@ -200,13 +200,13 @@ namespace ParserTenders
                     }*/
                     if (count > 1)
                     {
-                        Log.Logger("Удалось скачать архив после попытки", count, PathParse);
+                        Log.Logger("Удалось скачать архив после попытки", count, pathParse);
                     }
                     return file;
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не удалось скачать файл", Arch, e);
+                    Log.Logger("Не удалось скачать файл", arch, e);
                     if (count > 50)
                     {
                         return file;
@@ -217,7 +217,7 @@ namespace ParserTenders
                 }
             }
         }
-        protected List<string> GetListFtp223(string PathParse)
+        protected List<string> GetListFtp223(string pathParse)
         {
             List<string> archtemp = new List<string>();
             int count = 1;
@@ -226,7 +226,7 @@ namespace ParserTenders
                 try
                 {
                     WorkWithFtp ftp = ClientFtp223_old();
-                    ftp.ChangeWorkingDirectory(PathParse);
+                    ftp.ChangeWorkingDirectory(pathParse);
                     archtemp = ftp.ListDirectory();
                     if (count > 1)
                     {
@@ -238,7 +238,7 @@ namespace ParserTenders
                 {
                     if (count > 3)
                     {
-                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
                     count++;
@@ -248,7 +248,7 @@ namespace ParserTenders
             return archtemp;
         }
         
-        protected List<string> GetListFtp44(string PathParse)
+        protected List<string> GetListFtp44(string pathParse)
         {
             List<string> archtemp = new List<string>();
             int count = 1;
@@ -257,7 +257,7 @@ namespace ParserTenders
                 try
                 {
                     WorkWithFtp ftp = ClientFtp44_old();
-                    ftp.ChangeWorkingDirectory(PathParse);
+                    ftp.ChangeWorkingDirectory(pathParse);
                     archtemp = ftp.ListDirectory();
                     if (count > 1)
                     {
@@ -269,7 +269,7 @@ namespace ParserTenders
                 {
                     if (count > 3)
                     {
-                        Log.Logger($"Не смогли найти директорию после попытки {count}", PathParse, e);
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
                     count++;
@@ -281,51 +281,51 @@ namespace ParserTenders
         
         public void CheckInn()
         {
-            string cus_null = $"SELECT reg_num FROM {Program.Prefix}customer WHERE inn = ''";
-            string get_org = $"SELECT inn FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
-            string get_od_cus = "SELECT inn FROM od_customer WHERE regNumber = @reg_num";
-            string update_cus = $"UPDATE {Program.Prefix}customer SET inn = @inn WHERE reg_num = @reg_num";
-            using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+            string cusNull = $"SELECT reg_num FROM {Program.Prefix}customer WHERE inn = ''";
+            string getOrg = $"SELECT inn FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
+            string getOdCus = "SELECT inn FROM od_customer WHERE regNumber = @reg_num";
+            string updateCus = $"UPDATE {Program.Prefix}customer SET inn = @inn WHERE reg_num = @reg_num";
+            using (MySqlConnection connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cus_null, connect);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cusNull, connect);
                 DataSet ds = new DataSet();
                 adapter.Fill(ds);
                 var dt = ds.Tables[0];
                 foreach (DataRow row in dt.Rows)
                 {
-                    string reg_num = (string) row["reg_num"];
-                    MySqlCommand cmd = new MySqlCommand(get_org, connect);
+                    string regNum = (string) row["reg_num"];
+                    MySqlCommand cmd = new MySqlCommand(getOrg, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@reg_num", reg_num);
+                    cmd.Parameters.AddWithValue("@reg_num", regNum);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        string org_inn = reader.GetString("inn");
+                        string orgInn = reader.GetString("inn");
                         reader.Close();
-                        MySqlCommand cmd2 = new MySqlCommand(update_cus, connect);
+                        MySqlCommand cmd2 = new MySqlCommand(updateCus, connect);
                         cmd2.Prepare();
-                        cmd2.Parameters.AddWithValue("@reg_num", reg_num);
-                        cmd2.Parameters.AddWithValue("@inn", org_inn);
+                        cmd2.Parameters.AddWithValue("@reg_num", regNum);
+                        cmd2.Parameters.AddWithValue("@inn", orgInn);
                         cmd2.ExecuteNonQuery();
                     }
                     else
                     {
                         reader.Close();
-                        MySqlCommand cmd3 = new MySqlCommand(get_od_cus, connect);
+                        MySqlCommand cmd3 = new MySqlCommand(getOdCus, connect);
                         cmd3.Prepare();
-                        cmd3.Parameters.AddWithValue("@reg_num", reg_num);
+                        cmd3.Parameters.AddWithValue("@reg_num", regNum);
                         MySqlDataReader reader2 = cmd3.ExecuteReader();
                         if (reader2.HasRows)
                         {
                             reader2.Read();
-                            string cus_inn = reader2.GetString("inn");
+                            string cusInn = reader2.GetString("inn");
                             reader2.Close();
-                            MySqlCommand cmd4 = new MySqlCommand(update_cus, connect);
+                            MySqlCommand cmd4 = new MySqlCommand(updateCus, connect);
                             cmd4.Prepare();
-                            cmd4.Parameters.AddWithValue("@reg_num", reg_num);
-                            cmd4.Parameters.AddWithValue("@inn", cus_inn);
+                            cmd4.Parameters.AddWithValue("@reg_num", regNum);
+                            cmd4.Parameters.AddWithValue("@inn", cusInn);
                             cmd4.ExecuteNonQuery();
                         }
                         else

@@ -7,10 +7,10 @@ namespace ParserTenders
     {
         void Parsing();
         DataTable GetRegions();
-        void GetListFileArch(string Arch, string PathParse, string region);
-        void GetListFileArch(string Arch, string PathParse, string region, int region_id);
-        void GetListFileArch(string Arch, string PathParse, string region, int region_id, string purchase);
-        string GetArch44(string Arch, string PathParse);
-        string GetArch223(string Arch, string PathParse);
+        void GetListFileArch(string arch, string pathParse, string region);
+        void GetListFileArch(string arch, string pathParse, string region, int regionId);
+        void GetListFileArch(string arch, string pathParse, string region, int regionId, string purchase);
+        string GetArch44(string arch, string pathParse);
+        string GetArch223(string arch, string pathParse);
     }
 }

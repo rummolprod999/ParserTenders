@@ -16,8 +16,8 @@ namespace ParserTenders
         public readonly string LogPathSign223;
         public readonly string TempPathSign223;
         public readonly string Prefix;
-        public readonly string UserDB;
-        public readonly string PassDB;
+        public readonly string UserDb;
+        public readonly string PassDb;
         public readonly string Server;
         public readonly int Port;
         public readonly string Years;
@@ -66,10 +66,10 @@ namespace ParserTenders
                             Prefix = xnode.InnerText;
                             break;
                         case "userdb":
-                            UserDB = xnode.InnerText;
+                            UserDb = xnode.InnerText;
                             break;
                         case "passdb":
-                            PassDB = xnode.InnerText;
+                            PassDb = xnode.InnerText;
                             break;
                         case "server":
                             Server = xnode.InnerText;
@@ -95,7 +95,7 @@ namespace ParserTenders
             }
 
             if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) ||
-                String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDB) || String.IsNullOrEmpty(Server) ||
+                String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDb) || String.IsNullOrEmpty(Server) ||
                 String.IsNullOrEmpty(Years) || String.IsNullOrEmpty(TempPathTenders223) ||
                 String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
                 String.IsNullOrEmpty(TempPathAttach) ||

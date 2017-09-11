@@ -17,7 +17,7 @@ namespace ParserTenders
     {
         protected DataTable DtRegion;
 
-        private string[] purchase_dir = new[]
+        private string[] _purchaseDir = new[]
         {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
             "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK"
@@ -32,32 +32,32 @@ namespace ParserTenders
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                foreach (string purchase in purchase_dir)
+                foreach (string purchase in _purchaseDir)
                 {
                     List<String> arch = new List<string>();
-                    string PathParse = "";
-                    string RegionPath = (string) row["path223"];
+                    string pathParse = "";
+                    string regionPath = (string) row["path223"];
                     switch (Program.Periodparsing)
                     {
                         case (TypeArguments.Last223):
-                            PathParse = $"/out/published/{RegionPath}/{purchase}/";
-                            arch = GetListArchLast(PathParse, RegionPath, purchase);
+                            pathParse = $"/out/published/{regionPath}/{purchase}/";
+                            arch = GetListArchLast(pathParse, regionPath, purchase);
                             break;
                         case (TypeArguments.Daily223):
-                            PathParse = $"/out/published/{RegionPath}/{purchase}/daily/";
-                            arch = GetListArchDaily(PathParse, RegionPath, purchase);
+                            pathParse = $"/out/published/{regionPath}/{purchase}/daily/";
+                            arch = GetListArchDaily(pathParse, regionPath, purchase);
                             break;
                     }
 
                     if (arch.Count == 0)
                     {
-                        Log.Logger("Получен пустой список архивов", PathParse);
+                        Log.Logger("Получен пустой список архивов", pathParse);
                         continue;
                     }
 
                     foreach (var v in arch)
                     {
-                        GetListFileArch(v, PathParse, (string) row["conf"], (int) row["id"], purchase);
+                        GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"], purchase);
                     }
                 }
             }
@@ -72,48 +72,48 @@ namespace ParserTenders
             }
         }
 
-        public override void GetListFileArch(string Arch, string PathParse, string region, int region_id,
+        public override void GetListFileArch(string arch, string pathParse, string region, int regionId,
             string purchase)
         {
             string filea = "";
-            string path_unzip = "";
-            filea = GetArch223(Arch, PathParse);
+            string pathUnzip = "";
+            filea = GetArch223(arch, pathParse);
             if (!String.IsNullOrEmpty(filea))
             {
-                path_unzip = Unzipped.Unzip(filea);
-                if (path_unzip != "")
+                pathUnzip = Unzipped.Unzip(filea);
+                if (pathUnzip != "")
                 {
-                    if (Directory.Exists(path_unzip))
+                    if (Directory.Exists(pathUnzip))
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(path_unzip);
+                        DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
                         FileInfo[] filelist = dirInfo.GetFiles();
                         foreach (var f in filelist)
                         {
                             switch (purchase)
                             {
                                 case "purchaseNotice":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNotice);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNotice);
                                     break;
                                 case "purchaseNoticeAE":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeAE);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe);
                                     break;
                                 case "purchaseNoticeAE94":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeAE94);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe94);
                                     break;
                                 case "purchaseNoticeEP":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeEP);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeEp);
                                     break;
                                 case "purchaseNoticeIS":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeIS);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeIs);
                                     break;
                                 case "purchaseNoticeOA":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeOA);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOa);
                                     break;
                                 case "purchaseNoticeOK":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeOK);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOk);
                                     break;
                                 case "purchaseNoticeZK":
-                                    Bolter(f, region, region_id, TypeFile223.purchaseNoticeZK);
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZk);
                                     break;
                             }
                         }
@@ -124,7 +124,7 @@ namespace ParserTenders
             }
         }
 
-        public override void Bolter(FileInfo f, string region, int region_id, TypeFile223 typefile)
+        public override void Bolter(FileInfo f, string region, int regionId, TypeFile223 typefile)
         {
             if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))
             {
@@ -139,7 +139,7 @@ namespace ParserTenders
 
             try
             {
-                ParsingXML(f, region, region_id, typefile);
+                ParsingXml(f, region, regionId, typefile);
             }
             catch (Exception e)
             {
@@ -147,7 +147,7 @@ namespace ParserTenders
             }
         }
 
-        public void ParsingXML(FileInfo f, string region, int region_id, TypeFile223 typefile)
+        public void ParsingXml(FileInfo f, string region, int regionId, TypeFile223 typefile)
         {
             using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
             {
@@ -157,46 +157,46 @@ namespace ParserTenders
                 doc.LoadXml(ftext);
                 string jsons = JsonConvert.SerializeXmlNode(doc);
                 JObject json = JObject.Parse(jsons);
-                TenderType223 a = new TenderType223(f, region, region_id, json, typefile);
+                TenderType223 a = new TenderType223(f, region, regionId, json, typefile);
                 a.Parsing();
             }
         }
 
-        public override List<String> GetListArchLast(string PathParse, string RegionPath, string purchase)
+        public override List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
         {
             List<string> archtemp = new List<string>();
-            archtemp = GetListFtp223(PathParse);
-            List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
-            return archtemp.Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
+            archtemp = GetListFtp223(pathParse);
+            List<String> yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
+            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<String> GetListArchDaily(string PathParse, string RegionPath, string purchase)
+        public override List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
             List<String> arch = new List<string>();
             List<string> archtemp = new List<string>();
-            archtemp = GetListFtp223(PathParse);
-            List<String> years_search = Program.Years.Select(y => $"{purchase}_{RegionPath}{y}").ToList();
+            archtemp = GetListFtp223(pathParse);
+            List<String> yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
             foreach (var a in archtemp
-                .Where(a => years_search.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+                .Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
 
-                    string select_arch =
+                    string selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
 
-                    MySqlCommand cmd = new MySqlCommand(select_arch, connect);
+                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
                     MySqlDataReader reader = cmd.ExecuteReader();
-                    bool res_read = reader.HasRows;
+                    bool resRead = reader.HasRows;
                     reader.Close();
-                    if (!res_read)
+                    if (!resRead)
                     {
-                        string add_arch =
+                        string addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
+                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
                         cmd1.ExecuteNonQuery();

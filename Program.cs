@@ -94,6 +94,8 @@ namespace ParserTenders
                 }
             }
         }
+        public static string TableContractsSign;
+        public static string TableSuppliers;
         public static string TableArchiveSign223;
         public static int AddTender44 = 0;
         public static int AddTenderSign = 0;
@@ -179,8 +181,8 @@ namespace ParserTenders
             _logPath44 = set.LogPathTenders44;
             _logPath223 = set.LogPathTenders223;
             _prefix = set.Prefix;
-            _user = set.UserDB;
-            _pass = set.PassDB;
+            _user = set.UserDb;
+            _pass = set.PassDb;
             _tempPath44 = set.TempPathTenders44;
             _tempPath223 = set.TempPathTenders223;
             _server = set.Server;
@@ -193,9 +195,11 @@ namespace ParserTenders
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
-            string[] temp_years = tmp.Split(new char[] {','});
+            TableContractsSign = $"{Prefix}contract_sign";
+            TableSuppliers = $"{Prefix}supplier";
+            string[] tempYears = tmp.Split(new char[] {','});
 
-            foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))
+            foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
             {
                 _years.Add(s);
             }
@@ -295,8 +299,11 @@ namespace ParserTenders
         private static void ParserSign223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Sign223");
-            ParserSgn223 s = new ParserSgn223(Periodparsing);
-            s.Parsing();
+            /*ParserSgn223 s = new ParserSgn223(Periodparsing);
+            s.Parsing();*/
+            ParserSgn223 t223 = new ParserSgn223(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/contract_Belgorodskaya_obl_20170905_000000_20170905_235959_daily_001.xml");
+            t223.ParsingXml(f, "br", 32);
             Log.Logger("Добавили Sign223", AddSign223);
             Log.Logger("Обновили Sign223", UpdateSign223);
             Log.Logger("Время окончания парсинга Sign223");
