@@ -94,7 +94,7 @@ namespace ParserTenders
                 }
             }
         }
-
+        public static string TableArchiveSign223;
         public static int AddTender44 = 0;
         public static int AddTenderSign = 0;
         public static int AddDateChange = 0;
@@ -108,6 +108,7 @@ namespace ParserTenders
         public static int NotAddAttach = 0;
         public static int AddSign223 = 0;
         public static int UpdateSign223 = 0;
+        
 
         public static void Main(string[] args)
         {
@@ -191,6 +192,7 @@ namespace ParserTenders
             string tmp = set.Years;
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
+            TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             string[] temp_years = tmp.Split(new char[] {','});
 
             foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))

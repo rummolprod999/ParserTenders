@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FluentFTP, Version=18.0.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
       <HintPath>..\packages\FluentFTP.18.0.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
@@ -126,10 +132,15 @@
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -151,6 +162,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveSign223.cs" />
+    <Compile Include="ArchiveSign223Context.cs" />
     <Compile Include="AttachStruct.cs" />
     <Compile Include="ClearText.cs" />
     <Compile Include="ConnectToDb.cs" />
@@ -174,6 +187,7 @@
     <Compile Include="TenderTypeLotCancel.cs" />
     <Compile Include="TenderTypeProlongation.cs" />
     <Compile Include="TenderTypeSign.cs" />
+    <Compile Include="TenderTypeSign223.cs" />
     <Compile Include="TypeArguments.cs" />
     <Compile Include="TypeFile223.cs" />
     <Compile Include="TypeFile44.cs" />

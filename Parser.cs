@@ -124,6 +124,10 @@ namespace ParserTenders
         public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile223 typefile)
         {
         }
+        
+        public virtual void Bolter(FileInfo f, string region, int region_id)
+        {
+        }
 
         public string GetArch44(string Arch, string PathParse)
         {
