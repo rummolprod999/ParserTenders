@@ -194,9 +194,9 @@ namespace ParserTenders
             string tmp = set.Years;
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
-            TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
-            TableContractsSign = $"{Prefix}contract_sign";
-            TableSuppliers = $"{Prefix}supplier";
+            TableArchiveSign223 = $"_new_arhiv_tender223_sign";
+            TableContractsSign = $"_new_contract_sign";
+            TableSuppliers = $"_new_supplier";
             string[] tempYears = tmp.Split(new char[] {','});
 
             foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
@@ -299,11 +299,11 @@ namespace ParserTenders
         private static void ParserSign223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Sign223");
-            /*ParserSgn223 s = new ParserSgn223(Periodparsing);
-            s.Parsing();*/
-            ParserSgn223 t223 = new ParserSgn223(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/contract_Belgorodskaya_obl_20170905_000000_20170905_235959_daily_001.xml");
-            t223.ParsingXml(f, "br", 32);
+            ParserSgn223 s = new ParserSgn223(Periodparsing);
+            s.Parsing();
+            /*ParserSgn223 t223 = new ParserSgn223(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/contract_Belgorodskaya_obl_20160202_000000_20160202_235959_daily_027.xml");
+            t223.ParsingXml(f, "br", 32);*/
             Log.Logger("Добавили Sign223", AddSign223);
             Log.Logger("Обновили Sign223", UpdateSign223);
             Log.Logger("Время окончания парсинга Sign223");

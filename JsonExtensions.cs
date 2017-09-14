@@ -23,5 +23,22 @@ namespace ParserTenders
                     (object)root.Value
             );
         }
+
+        public static string CheckIsObjOrString(this JToken token)
+        {
+            if (token.IsNullOrEmpty())
+            {
+                return null;
+            }
+            switch (token.Type)
+            {
+              case JTokenType.String:
+                  return (string)token;
+              case JTokenType.Object:
+                  return null;
+              default:
+                  return null;
+            }
+        }
     }
 }

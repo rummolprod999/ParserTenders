@@ -34,11 +34,11 @@ namespace ParserTenders
                 string regionPath = (string) row["path223"];
                 switch (Program.Periodparsing)
                 {
-                    case (TypeArguments.Last223):
+                    case (TypeArguments.LastSign223):
                         pathParse = $"/out/published/{regionPath}/contract/";
                         arch = GetListArchLast(pathParse, regionPath);
                         break;
-                    case (TypeArguments.Daily223):
+                    case (TypeArguments.DailySign223):
                         pathParse = $"/out/published/{regionPath}/contract/daily/";
                         arch = GetListArchDaily(pathParse, regionPath);
                         break;

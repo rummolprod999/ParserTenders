@@ -44,3 +44,9 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/TikaOnDotNet.TextExtraction.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/Ftp.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/TikaOnDotNet.TextExtraction.pdb
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/EntityFramework.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/EntityFramework.SqlServer.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/MySql.Data.Entity.EF6.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/EntityFramework.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/EntityFramework.SqlServer.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/System.ValueTuple.xml

@@ -40,7 +40,7 @@ namespace ParserTenders
         public override void Parsing()
         {
             string xml = GetXml(File.ToString());
-            int Upd = 0;
+            int upd = 0;
             JObject c = (JObject) T.SelectToken("contract.body.item.contractData");
             if (!c.IsNullOrEmpty())
             {
@@ -49,7 +49,7 @@ namespace ParserTenders
                 //Console.WriteLine(purchaseNumber);
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
-                    Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
+                    //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
                     //return;
                 }
 
@@ -68,18 +68,22 @@ namespace ParserTenders
                     MySqlParameter paramidTender = new MySqlParameter("@id_tender", idTender);
                     int idcSign = db.Database
                         .SqlQuery<int>(
-                            $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE id_tender = @id_tender AND id_sign = @id_sign",
+                            $"SELECT id_contract_sign FROM {Program.TableContractsSign} WHERE id_tender = @id_tender AND id_sign = @id_sign",
                             paramidTender, paramGuid).FirstOrDefault();
                     if (idcSign != 0)
+                    {
                         return;
+                    }
+                        
+                    //Console.WriteLine(idcSign);
                     string signNumber = ((string) c.SelectToken("contractRegNumber") ?? "").Trim();
                     MySqlParameter paramSignNumber = new MySqlParameter("@sign_number", signNumber);
                     int idcSignNumber = db.Database
                         .SqlQuery<int>(
-                            $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE purchase_number = @purchase_number AND sign_number = @sign_number",
+                            $"SELECT id_contract_sign FROM {Program.TableContractsSign} WHERE purchase_number = @purchase_number AND sign_number = @sign_number",
                             paramPurchaseNumber, paramSignNumber).FirstOrDefault();
                     if (idcSignNumber != 0)
-                        Upd = 1;
+                        upd = 1;
                     DateTime signDate = (DateTime?) c.SelectToken("contractDate") ?? DateTime.MinValue;
                     //Console.WriteLine(signDate);
                     string customerInn = ((string) c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
@@ -90,19 +94,41 @@ namespace ParserTenders
                                              DateTime.MinValue;
                     var (supplierContact, supplierEmail, supplierContactPhone, supplierContactFax, supplierInn,
                         supplierKpp, participantType, organizationName, countryFullName, factualAddress,
-                        postAddress) = ("", "", "", "", "", "", "", "", "", "", "");
-                    supplierEmail = ((string) c.SelectToken("supplierInfo.address.email") ?? "").Trim();
-                    supplierContactPhone = ((string) c.SelectToken("supplierInfo.address.phone") ?? "").Trim();
-                    supplierContactFax = ((string) c.SelectToken("supplierInfo.address.fax") ?? "").Trim();
-                    supplierInn = ((string) c.SelectToken("supplierInfo.inn") ?? "").Trim();
-                    supplierKpp = ((string) c.SelectToken("supplierInfo.kpp") ?? "").Trim();
-                    participantType = ((string) c.SelectToken("supplierInfo.type") ?? "").Trim();
-                    organizationName = ((string) c.SelectToken("supplierInfo.name") ?? "").Trim();
-                    countryFullName = ((string) c.SelectToken("supplierInfo.address.country.name") ?? "").Trim();
-                    string regSup = ((string) c.SelectToken("supplierInfo.address.region.name") ?? "").Trim();
-                    string citySup = ((string) c.SelectToken("supplierInfo.address.city") ?? "").Trim();
-                    string streetSup = ((string) c.SelectToken("supplierInfo.address.street") ?? "").Trim();
-                    factualAddress = $"{regSup} {citySup} {streetSup}".Trim();
+                        postAddress, regSup, citySup, streetSup) = ("", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    var suppl = GetElements(c, "supplierInfo");
+                    if (suppl.Count > 0)
+                    {
+                        var sp = suppl[0];
+                        supplierEmail = ((string) sp.SelectToken("address.email") ?? "").Trim();
+                        supplierContactPhone = ((string) sp.SelectToken("address.phone") ?? "").Trim();
+                        supplierContactFax = ((string) sp.SelectToken("address.fax") ?? "").Trim();
+                        supplierInn = ((string) sp.SelectToken("inn") ?? "").Trim();
+                        if (String.IsNullOrEmpty(supplierInn))
+                        {
+                            supplierInn = ((string) sp.SelectToken("code") ?? "").Trim();
+                        }
+                        supplierKpp = ((string) sp.SelectToken("kpp") ?? "").Trim();
+                        participantType = ((string) sp.SelectToken("type") ?? "").Trim();
+                        organizationName = ((string) sp.SelectToken("name") ?? "").Trim();
+                        countryFullName = ((string) sp.SelectToken("address.country.name") ?? "").Trim();
+                        regSup = ((string) sp.SelectToken("address.region.name") ?? "").Trim();
+                        if (String.IsNullOrEmpty(regSup))
+                        {
+                            regSup = ((string) sp.SelectToken("address.region.fullName") ?? "").Trim();
+                        }
+                        citySup = ((string) sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
+                        if (String.IsNullOrEmpty(citySup))
+                        {
+                            citySup = ((string) sp.SelectToken("address.city.fullName") ?? "").Trim();
+                        }
+                        streetSup = ((string) sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
+                        if (String.IsNullOrEmpty(streetSup))
+                        {
+                            streetSup = ((string) sp.SelectToken("address.street.fullName") ?? "").Trim();
+                        }
+                        factualAddress = $"{regSup} {citySup} {streetSup}".Trim();
+                    }
+                    
                     int idCustomer = 0;
                     if (!String.IsNullOrEmpty(customerInn))
                     {
@@ -145,44 +171,44 @@ namespace ParserTenders
                     {
                         Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
                     }
-                    ContractSign Ts = null;
-                    if (Upd == 1)
+                    ContractSign ts = null;
+                    if (upd == 1)
                     {
-                        Ts = db.ContractsSign.FirstOrDefault(p => p.Id == idcSignNumber);
-                        if (Ts != null)
+                        ts = db.ContractsSign.FirstOrDefault(p => p.Id == idcSignNumber);
+                        if (ts != null)
                         {
-                            Ts.IdTender = idTender;
-                            Ts.IdSign = idSign;
-                            Ts.PurchaseNumber = purchaseNumber;
-                            Ts.SignNumber = signNumber;
-                            Ts.SignDate = signDate;
-                            Ts.IdCustomer = idCustomer;
-                            Ts.CustomerRegNum = "";
+                            ts.IdTender = idTender;
+                            ts.IdSign = idSign;
+                            ts.PurchaseNumber = purchaseNumber;
+                            ts.SignNumber = signNumber;
+                            ts.SignDate = signDate;
+                            ts.IdCustomer = idCustomer;
+                            ts.CustomerRegNum = "";
                             if (sup == null)
                             {
-                                Ts.IdSupplier = idSupplier;
+                                ts.SupplierId = idSupplier;
                             }
                             else
                             {
-                                Ts.Supplier = sup;
+                                ts.Supplier = sup;
                             }
-                            Ts.ContractSignPrice = contractSignPrice;
-                            Ts.SignCurrency = signCurrency;
-                            Ts.ConcludeContractRight = concludeContractRight;
-                            Ts.ProtocolDate = protocoleDate;
-                            Ts.SupplierContact = supplierContact;
-                            Ts.SupplierEmail = supplierEmail;
-                            Ts.SupplierContactPhone = supplierContactPhone;
-                            Ts.SupplierContactFax = supplierContactFax;
-                            Ts.Xml = xml;
-                            db.Entry(Ts).State = EntityState.Modified;
+                            ts.ContractSignPrice = contractSignPrice;
+                            ts.SignCurrency = signCurrency;
+                            ts.ConcludeContractRight = concludeContractRight;
+                            ts.ProtocolDate = protocoleDate;
+                            ts.SupplierContact = supplierContact;
+                            ts.SupplierEmail = supplierEmail;
+                            ts.SupplierContactPhone = supplierContactPhone;
+                            ts.SupplierContactFax = supplierContactFax;
+                            ts.Xml = xml;
+                            db.Entry(ts).State = EntityState.Modified;
                             db.SaveChanges();
                             UpdateTenderSign223?.Invoke(1);
                         }
                     }
                     else
                     {
-                        Ts = new ContractSign
+                        ts = new ContractSign
                         {
                             IdTender = idTender,
                             IdSign = idSign,
@@ -203,13 +229,13 @@ namespace ParserTenders
                         };
                         if (sup == null)
                         {
-                            Ts.IdSupplier = idSupplier;
+                            ts.SupplierId = idSupplier;
                         }
                         else
                         {
-                            Ts.Supplier = sup;
+                            ts.Supplier = sup;
                         }
-                        db.ContractsSign.Add(Ts);
+                        db.ContractsSign.Add(ts);
                         db.SaveChanges();
                         AddTenderSign223?.Invoke(1);
                     }

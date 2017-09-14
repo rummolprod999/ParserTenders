@@ -33,7 +33,7 @@ namespace ParserTenders
         public string CustomerRegNum { get; set; }
         
         [Column("id_supplier")]
-        public int? IdSupplier { get; set; }
+        public int? SupplierId { get; set; }
         
         public Supplier Supplier { get; set; }
         
