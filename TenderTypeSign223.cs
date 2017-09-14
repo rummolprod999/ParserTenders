@@ -107,7 +107,7 @@ namespace ParserTenders
                     if (!String.IsNullOrEmpty(customerInn))
                     {
                         MySqlParameter paramcustomerInn = new MySqlParameter("@inn", customerInn);
-                        idTender = db.Database
+                        idCustomer = db.Database
                             .SqlQuery<int>($"SELECT id_customer FROM {Program.Prefix}customer WHERE inn = @inn",
                                 paramcustomerInn).FirstOrDefault();
                     }
@@ -123,10 +123,95 @@ namespace ParserTenders
                             p.InnSupplier == supplierInn && p.KppSupplier == supplierKpp);
                         if (sup == null)
                         {
-                            sup = new Supplier{ParticipiantType = participantType, InnSupplier = supplierInn, KppSupplier = supplierKpp, OrganizationName =  organizationName, CountryFullName = countryFullName, FactualAddress = factualAddress, PostAddress = postAddress, Contact = supplierContact, Email = supplierEmail, Phone = supplierContactPhone, Fax = supplierContactFax};
+                            sup = new Supplier
+                            {
+                                ParticipiantType = participantType,
+                                InnSupplier = supplierInn,
+                                KppSupplier = supplierKpp,
+                                OrganizationName = organizationName,
+                                CountryFullName = countryFullName,
+                                FactualAddress = factualAddress,
+                                PostAddress = postAddress,
+                                Contact = supplierContact,
+                                Email = supplierEmail,
+                                Phone = supplierContactPhone,
+                                Fax = supplierContactFax
+                            };
                             db.Suppliers.Add(sup);
                             db.SaveChanges();
                         }
+                    }
+                    else
+                    {
+                        Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
+                    }
+                    ContractSign Ts = null;
+                    if (Upd == 1)
+                    {
+                        Ts = db.ContractsSign.FirstOrDefault(p => p.Id == idcSignNumber);
+                        if (Ts != null)
+                        {
+                            Ts.IdTender = idTender;
+                            Ts.IdSign = idSign;
+                            Ts.PurchaseNumber = purchaseNumber;
+                            Ts.SignNumber = signNumber;
+                            Ts.SignDate = signDate;
+                            Ts.IdCustomer = idCustomer;
+                            Ts.CustomerRegNum = "";
+                            if (sup == null)
+                            {
+                                Ts.IdSupplier = idSupplier;
+                            }
+                            else
+                            {
+                                Ts.Supplier = sup;
+                            }
+                            Ts.ContractSignPrice = contractSignPrice;
+                            Ts.SignCurrency = signCurrency;
+                            Ts.ConcludeContractRight = concludeContractRight;
+                            Ts.ProtocolDate = protocoleDate;
+                            Ts.SupplierContact = supplierContact;
+                            Ts.SupplierEmail = supplierEmail;
+                            Ts.SupplierContactPhone = supplierContactPhone;
+                            Ts.SupplierContactFax = supplierContactFax;
+                            Ts.Xml = xml;
+                            db.Entry(Ts).State = EntityState.Modified;
+                            db.SaveChanges();
+                            UpdateTenderSign223?.Invoke(1);
+                        }
+                    }
+                    else
+                    {
+                        Ts = new ContractSign
+                        {
+                            IdTender = idTender,
+                            IdSign = idSign,
+                            PurchaseNumber = purchaseNumber,
+                            SignNumber = signNumber,
+                            SignDate = signDate,
+                            IdCustomer = idCustomer,
+                            CustomerRegNum = "",
+                            ContractSignPrice = contractSignPrice,
+                            SignCurrency = signCurrency,
+                            ConcludeContractRight = concludeContractRight,
+                            ProtocolDate = protocoleDate,
+                            SupplierContact = supplierContact,
+                            SupplierEmail = supplierEmail,
+                            SupplierContactPhone = supplierContactPhone,
+                            SupplierContactFax = supplierContactFax,
+                            Xml = xml,
+                        };
+                        if (sup == null)
+                        {
+                            Ts.IdSupplier = idSupplier;
+                        }
+                        else
+                        {
+                            Ts.Supplier = sup;
+                        }
+                        db.ContractsSign.Add(Ts);
+                        db.SaveChanges();
+                        AddTenderSign223?.Invoke(1);
                     }
                 }
             }
