@@ -100,6 +100,7 @@ namespace ParserTenders
                 }
             }
         }
+
         public static string TableContractsSign;
         public static string TableSuppliers;
         public static string TableArchiveSign223;
@@ -328,7 +329,8 @@ namespace ParserTenders
         private static void ParserGpb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Gpb");
-            
+            ParserGpb p = new ParserGpb(Periodparsing);
+            p.Parsing();
             Log.Logger("Добавили Gpb", AddGazprom);
             Log.Logger("Время окончания парсинга Gpb");
         }

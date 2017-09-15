@@ -2,6 +2,6 @@
 {
     public interface IParserWeb
     {
-        
+        void Parsing();
     }
 }
