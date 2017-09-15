@@ -9,6 +9,7 @@ namespace ParserTenders
         Daily223,
         Attach,
         LastSign223,
-        DailySign223
+        DailySign223,
+        GpB
     }
 }

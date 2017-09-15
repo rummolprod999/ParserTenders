@@ -17,6 +17,8 @@ namespace ParserTenders
         private static string _logAttach;
         private static string _tempSign223;
         private static string _logSign223;
+        private static string _logGazProm;
+        private static string _tempGazProm;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -65,6 +67,8 @@ namespace ParserTenders
                     case TypeArguments.LastSign223:
                     case TypeArguments.DailySign223:
                         return _tempSign223;
+                    case TypeArguments.GpB:
+                        return _tempGazProm;
                     default:
                         return "";
                 }
@@ -89,6 +93,8 @@ namespace ParserTenders
                     case TypeArguments.LastSign223:
                     case TypeArguments.DailySign223:
                         return _logSign223;
+                    case TypeArguments.GpB:
+                        return _logGazProm;
                     default:
                         return "";
                 }
@@ -110,14 +116,14 @@ namespace ParserTenders
         public static int NotAddAttach = 0;
         public static int AddSign223 = 0;
         public static int UpdateSign223 = 0;
-        
+        public static int AddGazprom = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223 в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb в качестве аргумента");
                 return;
             }
 
@@ -167,9 +173,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserSign223(Periodparsing);
                     break;
+                case "gpb":
+                    Periodparsing = TypeArguments.GpB;
+                    Init(Periodparsing);
+                    ParserGpb(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223 ");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb");
                     break;
             }
         }
@@ -194,6 +205,8 @@ namespace ParserTenders
             string tmp = set.Years;
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
+            _logGazProm = set.LogPathGazProm;
+            _tempGazProm = set.TempPathGazProm;
             TableArchiveSign223 = $"_new_arhiv_tender223_sign";
             TableContractsSign = $"_new_contract_sign";
             TableSuppliers = $"_new_supplier";
@@ -240,6 +253,9 @@ namespace ParserTenders
                 case TypeArguments.DailySign223:
                 case TypeArguments.LastSign223:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Sign223_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.GpB:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Gpb_{LocalDate:dd_MM_yyyy}.log";
                     break;
             }
         }
@@ -307,6 +323,14 @@ namespace ParserTenders
             Log.Logger("Добавили Sign223", AddSign223);
             Log.Logger("Обновили Sign223", UpdateSign223);
             Log.Logger("Время окончания парсинга Sign223");
+        }
+
+        private static void ParserGpb(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Gpb");
+            
+            Log.Logger("Добавили Gpb", AddGazprom);
+            Log.Logger("Время окончания парсинга Gpb");
         }
     }
 }

@@ -15,6 +15,8 @@ namespace ParserTenders
         public readonly string TempPathAttach;
         public readonly string LogPathSign223;
         public readonly string TempPathSign223;
+        public readonly string LogPathGazProm;
+        public readonly string TempPathGazProm;
         public readonly string Prefix;
         public readonly string UserDb;
         public readonly string PassDb;
@@ -62,6 +64,12 @@ namespace ParserTenders
                         case "tempdir_sign223":
                             TempPathSign223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_gazprom":
+                            LogPathGazProm = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_gazprom":
+                            TempPathGazProm = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -100,7 +108,7 @@ namespace ParserTenders
                 String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
                 String.IsNullOrEmpty(TempPathAttach) ||
                 String.IsNullOrEmpty(TempPathSign223) ||
-                String.IsNullOrEmpty(LogPathSign223))
+                String.IsNullOrEmpty(LogPathSign223) || String.IsNullOrEmpty(LogPathGazProm) || String.IsNullOrEmpty(TempPathGazProm))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);
