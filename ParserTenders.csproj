@@ -170,6 +170,7 @@
     <Compile Include="ContractSign.cs" />
     <Compile Include="ContractsSignContext.cs" />
     <Compile Include="DownloadFile.cs" />
+    <Compile Include="DownloadString.cs" />
     <Compile Include="GetSettings.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserWeb.cs" />
