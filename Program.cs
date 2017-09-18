@@ -208,9 +208,9 @@ namespace ParserTenders
             _logSign223 = set.LogPathSign223;
             _logGazProm = set.LogPathGazProm;
             _tempGazProm = set.TempPathGazProm;
-            TableArchiveSign223 = $"_new_arhiv_tender223_sign";
-            TableContractsSign = $"_new_contract_sign";
-            TableSuppliers = $"_new_supplier";
+            TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
+            TableContractsSign = $"{Prefix}contract_sign";
+            TableSuppliers = $"{Prefix}supplier";
             string[] tempYears = tmp.Split(new char[] {','});
 
             foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
