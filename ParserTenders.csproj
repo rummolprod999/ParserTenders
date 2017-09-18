@@ -176,7 +176,6 @@
     <Compile Include="IParserWeb.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="LotGpB.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
     <Compile Include="ParserGpb.cs" />

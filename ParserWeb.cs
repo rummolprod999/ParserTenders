@@ -22,7 +22,7 @@ namespace ParserTenders
         {
         }
         
-        public virtual void ParsingProc()
+        public virtual void ParsingProc(ProcedureGpB pr)
         {
         }
         
