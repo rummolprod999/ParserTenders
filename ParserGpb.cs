@@ -158,8 +158,8 @@ namespace ParserTenders
                                 cancelStatus = 1;
                             }
                         }
-                        MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(adapter2);
-                        commandBuilder.ConflictOption = ConflictOption.OverwriteChanges;
+                        MySqlCommandBuilder commandBuilder =
+                            new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
                         Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                         adapter2.Update(dt2);
                         
