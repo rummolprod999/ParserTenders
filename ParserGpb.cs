@@ -164,6 +164,10 @@ namespace ParserTenders
                         adapter2.Update(dt2);
                         
                     }
+                    pr.Href = ((string) proc.SelectToken("procedure_url") ?? "").Trim();
+                    pr.purchaseObjectInfo = ((string) proc.SelectToken("title") ?? "").Trim();
+                    pr.dateVersion = pr.DatePublished;
+
                 }
             }
 

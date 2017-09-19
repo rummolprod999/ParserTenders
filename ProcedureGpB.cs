@@ -10,5 +10,9 @@ namespace ParserTenders
         public string IdXml { get; set;}
         public string Version { get; set;}
         public string DatePublished { get; set;}
+        public string Href { get; set;}
+        public string purchaseObjectInfo { get; set;}
+        public string dateVersion { get; set;}
+
     }
 }
