@@ -7,10 +7,16 @@
 	<logdir_tenders223>log_tenders223</logdir_tenders223>
 	<logdir_attach>log_attach</logdir_attach>
 	<tempdir_attach>temp_attach</tempdir_attach>
+	<logdir_sign223>log_sign223</logdir_sign223>
+	<tempdir_sign223>temp_sign223</tempdir_sign223>
+	<logdir_gazprom>log_gazprom</logdir_gazprom>
+	<tempdir_gazprom>temp_gazprom</tempdir_gazprom>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
 	<server>localhost</server>
 	<port>3306</port>
 	<years>2016, 2017</years>
+	<max_thread>20</max_thread>
+	<max_try_down>250</max_try_down>
 </setting>

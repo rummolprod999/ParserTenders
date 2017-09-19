@@ -333,7 +333,14 @@ namespace ParserTenders
             p.Parsing();*/
             ParserGpb p = new ParserGpb(Periodparsing);
             var l = new Dictionary<int, int> {[1] = 6};
-            p.ParsingProc(new ProcedureGpB{RegistryNumber = "ГП609177", Lots = l});
+            p.ParsingProc(new ProcedureGpB
+            {
+                RegistryNumber = "ГП609177",
+                Lots = l,
+                ScoringDate = DateTime.MinValue,
+                BiddingDate = DateTime.MinValue,
+                EndDate = DateTime.MinValue
+            });
             Log.Logger("Добавили Gpb", AddGazprom);
             Log.Logger("Время окончания парсинга Gpb");
         }
