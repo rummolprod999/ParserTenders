@@ -63,7 +63,7 @@ namespace ParserTenders
             return els;
         }
 
-        public void GetOkpd(string okpd2Code, out int okpd2GroupCode, out string okpd2GroupLevel1Code)
+        public static void GetOkpd(string okpd2Code, out int okpd2GroupCode, out string okpd2GroupLevel1Code)
         {
             if (okpd2Code.Length > 1)
             {
@@ -106,7 +106,7 @@ namespace ParserTenders
             }
         }
 
-        public void TenderKwords(MySqlConnection connect, int idTender)
+        public static void TenderKwords(MySqlConnection connect, int idTender)
         {
             string resString = "";
             string selectPurObj =
@@ -218,7 +218,7 @@ namespace ParserTenders
             int resT = cmd5.ExecuteNonQuery();
             if (resT != 1)
             {
-                Log.Logger("Не удалось обновить tender_kwords", FilePath);
+                Log.Logger("Не удалось обновить tender_kwords", idTender);
             }
         }
 

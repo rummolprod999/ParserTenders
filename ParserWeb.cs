@@ -11,11 +11,11 @@ namespace ParserTenders
 {
     public class ParserWeb : IParserWeb
     {
-        protected TypeArguments ar;
+        protected TypeArguments Ar;
 
         public ParserWeb(TypeArguments ar)
         {
-            this.ar = ar;
+            this.Ar = ar;
         }
 
         public virtual void Parsing()

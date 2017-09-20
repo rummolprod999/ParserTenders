@@ -170,6 +170,7 @@
     <Compile Include="ConnectToDb.cs" />
     <Compile Include="ContractSign.cs" />
     <Compile Include="ContractsSignContext.cs" />
+    <Compile Include="CustomerGpB.cs" />
     <Compile Include="DownloadFile.cs" />
     <Compile Include="DownloadString.cs" />
     <Compile Include="GetSettings.cs" />

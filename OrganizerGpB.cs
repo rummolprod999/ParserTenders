@@ -6,21 +6,21 @@
         {
         }
 
-        private OrganizerGpB(string OrganiserCustomerId, string Inn, string Kpp, string FullName, string PostAddress,
-            string FactAddress, string ResponsibleRole, string ContactPerson, string ContactEmail, string ContactPhone,
-            string ContactFax)
+        private OrganizerGpB(string organiserCustomerId, string inn, string kpp, string fullName, string postAddress,
+            string factAddress, string responsibleRole, string contactPerson, string contactEmail, string contactPhone,
+            string contactFax)
         {
-            this.OrganiserCustomerId = OrganiserCustomerId;
-            this.Inn = Inn;
-            this.Kpp = Kpp;
-            this.FullName = FullName;
-            this.PostAddress = PostAddress;
-            this.FactAddress = FactAddress;
-            this.ResponsibleRole = ResponsibleRole;
-            this.ContactPerson = ContactPerson;
-            this.ContactEmail = ContactEmail;
-            this.ContactPhone = ContactPhone;
-            this.ContactFax = ContactFax;
+            this.OrganiserCustomerId = organiserCustomerId;
+            this.Inn = inn;
+            this.Kpp = kpp;
+            this.FullName = fullName;
+            this.PostAddress = postAddress;
+            this.FactAddress = factAddress;
+            this.ResponsibleRole = responsibleRole;
+            this.ContactPerson = contactPerson;
+            this.ContactEmail = contactEmail;
+            this.ContactPhone = contactPhone;
+            this.ContactFax = contactFax;
         }
 
         public string OrganiserCustomerId { get; set; }

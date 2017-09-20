@@ -329,9 +329,9 @@ namespace ParserTenders
         private static void ParserGpb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Gpb");
-            /*ParserGpb p = new ParserGpb(Periodparsing);
-            p.Parsing();*/
             ParserGpb p = new ParserGpb(Periodparsing);
+            p.Parsing();
+            /*ParserGpb p = new ParserGpb(Periodparsing);
             var l = new Dictionary<int, int> {[1] = 6};
             p.ParsingProc(new ProcedureGpB
             {
@@ -340,7 +340,7 @@ namespace ParserTenders
                 ScoringDate = DateTime.MinValue,
                 BiddingDate = DateTime.MinValue,
                 EndDate = DateTime.MinValue
-            });
+            });*/
             Log.Logger("Добавили Gpb", AddGazprom);
             Log.Logger("Время окончания парсинга Gpb");
         }
