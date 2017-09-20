@@ -556,7 +556,8 @@ namespace ParserTenders
                         }
                         string deliveryPlace = ((string) lot.SelectToken("delivery_places.place") ?? "").Trim();
                         string deliveryTerm = ((string) lot.SelectToken("delivery_places.term") ?? "").Trim();
-                        string applicationGuaranteeAmount = ((string) lot.SelectToken("guarantee_application") ?? "").Trim();
+                        string applicationGuaranteeAmount =
+                            ((string) lot.SelectToken("guarantee_application") ?? "").Trim();
                         string contractGuaranteeAmount = ((string) lot.SelectToken("guarantee_contract") ?? "").Trim();
                         string insertCustomerRequirement =
                             $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
@@ -611,9 +612,8 @@ namespace ParserTenders
                             cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                             cmd19.ExecuteNonQuery();
                         }
-
                     }
-                    
+
                     Tender.TenderKwords(connect, idTender);
                 }
             }
