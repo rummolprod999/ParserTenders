@@ -1,13 +1,8 @@
 ﻿using System;
-using MySql.Data;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text.RegularExpressions;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 using System.IO;
 
 namespace ParserTenders

@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace ParserTenders
 {
-    public class DownloadString
+    public static class DownloadString
     {
         public static string DownL(string url)
         {
@@ -19,13 +19,14 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    if (count >= 20)
+                    if (count >= 100)
                     {
-                        Log.Logger($"Не удалось скачать xml за {count} попыток");
+                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
                     Log.Logger("Не удалось получить строку xml", e , url);
                     count++;
+                    Thread.Sleep(5000);
                 }
             }
             return tmp;

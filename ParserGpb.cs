@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -157,7 +150,7 @@ namespace ParserTenders
                     if (!String.IsNullOrEmpty(pr.RegistryNumber))
                     {
                         string selectDateT =
-                            $"SELECT id_tender, doc_publish_date, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
+                            $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
                         MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@purchase_number", pr.RegistryNumber);
@@ -169,7 +162,7 @@ namespace ParserTenders
                         {
                             //DateTime dateNew = DateTime.Parse(pr.DatePublished);
 
-                            if (pr.DatePublished > (DateTime) row["doc_publish_date"])
+                            if (pr.DateVersion >= (DateTime) row["date_version"])
                             {
                                 row["cancel"] = 1;
                                 //row.AcceptChanges();
@@ -317,6 +310,7 @@ namespace ParserTenders
                     }
                     pr.BiddingDate = DateTime.MinValue;
                     pr.EndDate = DateTime.MinValue;
+                    pr.ScoringDate = DateTime.MinValue;
                     List<JToken> lots = GetElements(proc, "lots.lot");
                     if (lots.Count > 0)
                     {
@@ -327,6 +321,7 @@ namespace ParserTenders
                             pr.BiddingDate =
                                 (DateTime?) lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
                         }
+                        pr.ScoringDate = (DateTime?) lots[0].SelectToken("date_end_first_parts_review") ?? DateTime.MinValue;
                     }
                     int typeFz = (int?) proc.SelectToken("FZ223") ?? 0;
                     typeFz = typeFz == 0 ? 1 : 223;

@@ -1,5 +1,4 @@
 using System.Data;
-using FluentFTP;
 
 namespace ParserTenders
 {

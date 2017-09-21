@@ -83,6 +83,12 @@ namespace ParserTenders
                     string docPublishDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("publicationDateTime") ?? "") ??
                      "").Trim('"');
+                    string dateVersion = (JsonConvert.SerializeObject(tender.SelectToken("modificationDate") ?? "") ??
+                                          "").Trim('"');
+                    if (String.IsNullOrEmpty(dateVersion))
+                    {
+                        dateVersion = docPublishDate;
+                    }
                     /*string utc_offset = "";
                     try
                     {
@@ -93,10 +99,10 @@ namespace ParserTenders
                         Log.Logger("Ошибка при получении часового пояса", e, docPublishDate);
                     }*/
                     int cancelStatus = 0;
-                    if (!String.IsNullOrEmpty(docPublishDate))
+                    if (!String.IsNullOrEmpty(dateVersion))
                     {
                         string selectDateT =
-                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                            $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
                         MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", RegionId);
@@ -108,9 +114,9 @@ namespace ParserTenders
                         {
                             foreach (DataRow row in dt.Rows)
                             {
-                                DateTime dateNew = DateTime.Parse(docPublishDate);
-                                DateTime dateOld = (DateTime) row["doc_publish_date"];
-                                if (dateNew > dateOld)
+                                DateTime dateNew = DateTime.Parse(dateVersion);
+                                DateTime dateOld = (DateTime) row["date_version"];
+                                if (dateNew >= dateOld)
                                 {
                                     string updateTenderCancel =
                                         $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_tender = @id_tender";
@@ -129,8 +135,7 @@ namespace ParserTenders
 
                     string href = ((string) tender.SelectToken("urlVSRZ") ?? "").Trim();
                     string purchaseObjectInfo = ((string) tender.SelectToken("name") ?? "").Trim();
-                    string dateVersion = (JsonConvert.SerializeObject(tender.SelectToken("modificationDate") ?? "") ??
-                                           "").Trim('"');
+
                     string numVersion = ((string) tender.SelectToken("version") ?? "").Trim();
                     string noticeVersion = ((string) tender.SelectToken("modificationDescription") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("urlOOS") ?? "").Trim();
@@ -265,9 +270,9 @@ namespace ParserTenders
                     else if (_purchase == TypeFile223.PurchaseNoticeOk)
                     {
                         scoringDate = (JsonConvert.SerializeObject(tender.SelectToken("envelopeOpeningTime") ?? "") ??
-                                        "").Trim('"');
+                                       "").Trim('"');
                         biddingDate = (JsonConvert.SerializeObject(tender.SelectToken("examinationDateTime") ?? "") ??
-                                        "").Trim('"');
+                                       "").Trim('"');
                     }
                     else if (_purchase == TypeFile223.PurchaseNoticeZk)
                     {
@@ -556,12 +561,12 @@ namespace ParserTenders
             if (String.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("applExamPeriodTime") ?? "") ??
-                                "").Trim('"');
+                               "").Trim('"');
             }
             if (String.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("examinationDateTime") ?? "") ??
-                                "").Trim('"');
+                               "").Trim('"');
             }
             if (String.IsNullOrEmpty(scoringDate))
             {
@@ -578,8 +583,9 @@ namespace ParserTenders
              "").Trim('"');
             if (String.IsNullOrEmpty(biddingDate))
             {
-                biddingDate = (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
-                                "").Trim('"');
+                biddingDate =
+                (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
+                 "").Trim('"');
             }
             if (String.IsNullOrEmpty(biddingDate))
             {

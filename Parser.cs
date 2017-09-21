@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Threading;
 using FluentFTP;
-using Limilabs.FTP.Client;
 using MySql.Data.MySqlClient;
 
 namespace ParserTenders
