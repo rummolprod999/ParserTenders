@@ -133,7 +133,7 @@ namespace ParserTenders
                             {
                                 DateTime dateNew = DateTime.Parse(docPublishDate);
                                 DateTime dateOld = (DateTime) row["doc_publish_date"];
-                                if (dateNew > dateOld)
+                                if (dateNew >= dateOld)
                                 {
                                     string updateTenderCancel =
                                         $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_tender = @id_tender";
