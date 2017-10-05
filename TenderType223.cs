@@ -488,7 +488,8 @@ namespace ParserTenders
                         {
                             string okpd2Code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
-                            string name = okpdName;
+                            string additionalInfo = ((string) lotitem.SelectToken("additionalInfo") ?? "").Trim();
+                            string name = $"{additionalInfo} {okpdName}".Trim();
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();

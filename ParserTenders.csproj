@@ -183,6 +183,7 @@
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
     <Compile Include="ParserGpb.cs" />
+    <Compile Include="ParserGpbGaz.cs" />
     <Compile Include="ParserSgn223.cs" />
     <Compile Include="ParserTend223.cs" />
     <Compile Include="ParserTend44.cs" />

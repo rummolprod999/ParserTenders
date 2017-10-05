@@ -14,6 +14,7 @@ namespace ParserTenders
         private string _urlTender;
         private string _urlCustomerId;
         private string _urlCustomerInnKpp;
+        private string _etpUrl;
 
         public ParserGpb(TypeArguments a) : base(a)
         {
@@ -21,6 +22,7 @@ namespace ParserTenders
             _urlTender = "https://etp.gpb.ru/api/procedures.php?regid=";
             _urlCustomerId = "https://etp.gpb.ru/api/company.php?id=";
             _urlCustomerInnKpp = "https://etp.gpb.ru/api/company.php?inn={inn}&kpp={kpp}";
+            _etpUrl = "https://etp.gpb.ru/";
         }
 
         public override void Parsing()
@@ -284,7 +286,7 @@ namespace ParserTenders
                     //Console.WriteLine(pr.IdPlacingWay);
                     pr.IdEtp = 0;
                     string etpName = "ЭТП ГПБ";
-                    string etpUrl = "https://etp.gpb.ru/";
+                    string etpUrl = _etpUrl;
                     string selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE name = @name AND url = @url";
                     MySqlCommand cmd6 = new MySqlCommand(selectEtp, connect);
                     cmd6.Prepare();
@@ -375,6 +377,7 @@ namespace ParserTenders
                         lt.LotNumber = (int?) lot.SelectToken("number") ?? 0;
                         lt.IdTender = idTender;
                         lt.MaxPrice = (decimal?) lot.SelectToken("start_price") ?? 0.0m;
+                        lt.Subject = ((string) lot.SelectToken("subject") ?? "").Trim();
                         lt.Currency = ((string) proc.SelectToken("currency_name") ?? "").Trim();
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
@@ -582,6 +585,7 @@ namespace ParserTenders
                             string okpd2Code = ((string) lotitem.SelectToken("okdp_code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okdp_name") ?? "").Trim();
                             string name = ((string) lotitem.SelectToken("name") ?? "").Trim();
+                            name = $"{name} {lt.Subject}".Trim();
                             string quantityValue = ((string) lotitem.SelectToken("quantity") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei_name") ?? "").Trim();
