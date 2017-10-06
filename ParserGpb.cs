@@ -10,11 +10,11 @@ namespace ParserTenders
 {
     public class ParserGpb : ParserWeb
     {
-        private string _urlListTenders;
-        private string _urlTender;
-        private string _urlCustomerId;
-        private string _urlCustomerInnKpp;
-        private string _etpUrl;
+        protected string _urlListTenders;
+        protected string _urlTender;
+        protected string _urlCustomerId;
+        protected string _urlCustomerInnKpp;
+        protected string _etpUrl;
 
         public ParserGpb(TypeArguments a) : base(a)
         {

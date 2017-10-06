@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 
 namespace ParserTenders
@@ -14,7 +13,7 @@ namespace ParserTenders
             {
                 try
                 {
-                    tmp = new WebClient().DownloadString(url);
+                    tmp = new TimedWebClient().DownloadString(url);
                     break;
                 }
                 catch (Exception e)

@@ -202,6 +202,7 @@
     <Compile Include="TenderTypeProlongation.cs" />
     <Compile Include="TenderTypeSign.cs" />
     <Compile Include="TenderTypeSign223.cs" />
+    <Compile Include="TimedWebClient.cs" />
     <Compile Include="TypeArguments.cs" />
     <Compile Include="TypeFile223.cs" />
     <Compile Include="TypeFile44.cs" />
