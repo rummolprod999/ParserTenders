@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ParserTenders
 {
@@ -13,8 +14,14 @@ namespace ParserTenders
             {
                 try
                 {
-                    tmp = new TimedWebClient().DownloadString(url);
-                    break;
+                    var task = Task.Run(() => (new TimedWebClient()).DownloadString(url));
+                    if (task.Wait(TimeSpan.FromSeconds(650)))
+                    {
+                        tmp = task.Result;
+                        break;
+                    }
+                    throw new TimeoutException();
+                    //tmp = new TimedWebClient().DownloadString(url);
                 }
                 catch (Exception e)
                 {
@@ -23,7 +30,7 @@ namespace ParserTenders
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
-                    Log.Logger("Не удалось получить строку xml", e , url);
+                    Log.Logger("Не удалось получить строку xml", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
