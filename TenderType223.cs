@@ -102,10 +102,9 @@ namespace ParserTenders
                     if (!String.IsNullOrEmpty(dateVersion))
                     {
                         string selectDateT =
-                            $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                            $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
                         MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
-                        cmd2.Parameters.AddWithValue("@id_region", RegionId);
                         cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                         DataTable dt = new DataTable();
                         MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd2};
