@@ -222,7 +222,7 @@ namespace ParserTenders
             }
         }
 
-        public void AddVerNumber(MySqlConnection connect, string purchaseNumber)
+        public static void AddVerNumber(MySqlConnection connect, string purchaseNumber)
         {
             int verNum = 1;
             string selectTenders =

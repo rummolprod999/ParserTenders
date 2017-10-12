@@ -389,6 +389,22 @@ namespace ParserTenders
                         cmd18.Parameters.AddWithValue("@currency", lt.Currency);
                         cmd18.ExecuteNonQuery();
                         int idLot = (int) cmd18.LastInsertedId;
+                        List<JToken> attachmentsL = GetElements(lot, "docs.doc");
+                        foreach (var att in attachmentsL)
+                        {
+                            string attachName = ((string) att.SelectToken("@file_name") ?? "").Trim();
+                            string attachDescription = ((string) att.SelectToken("@title") ?? "").Trim();
+                            string attachUrl = ((string) att.SelectToken("@url") ?? "").Trim();
+                            string insertAttach =
+                                $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
+                            MySqlCommand cmd9 = new MySqlCommand(insertAttach, connect);
+                            cmd9.Prepare();
+                            cmd9.Parameters.AddWithValue("@id_tender", idTender);
+                            cmd9.Parameters.AddWithValue("@file_name", attachName);
+                            cmd9.Parameters.AddWithValue("@url", attachUrl);
+                            cmd9.Parameters.AddWithValue("@description", attachDescription);
+                            cmd9.ExecuteNonQuery();
+                        }
                         int idCustomer = 0;
                         //string customerRegNumber = "";
                         var cust = new CustomerGpB();
@@ -612,7 +628,7 @@ namespace ParserTenders
                             cmd19.ExecuteNonQuery();
                         }
                     }
-
+                    Tender.AddVerNumber(connect, pr.RegistryNumber);
                     Tender.TenderKwords(connect, idTender);
                 }
             }
