@@ -226,7 +226,7 @@ namespace ParserTenders
         {
             int verNum = 1;
             string selectTenders =
-                $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchaseNumber ORDER BY UNIX_TIMESTAMP(doc_publish_date) ASC";
+                $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchaseNumber ORDER BY UNIX_TIMESTAMP(date_version) ASC";
             MySqlCommand cmd1 = new MySqlCommand(selectTenders, connect);
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);

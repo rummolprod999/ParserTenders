@@ -673,8 +673,8 @@ namespace ParserTenders
                         }
                     }
 
-                    AddVerNumber(connect, purchaseNumber);
                     TenderKwords(connect, idTender);
+                    AddVerNumber(connect, purchaseNumber);
                 }
             }
             else

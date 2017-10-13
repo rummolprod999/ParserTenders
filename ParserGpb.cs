@@ -628,8 +628,9 @@ namespace ParserTenders
                             cmd19.ExecuteNonQuery();
                         }
                     }
-                    Tender.AddVerNumber(connect, pr.RegistryNumber);
+                    
                     Tender.TenderKwords(connect, idTender);
+                    Tender.AddVerNumber(connect, pr.RegistryNumber);
                 }
             }
         }
