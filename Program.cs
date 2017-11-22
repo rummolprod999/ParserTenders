@@ -118,6 +118,7 @@ namespace ParserTenders
         public static int AddSign223 = 0;
         public static int UpdateSign223 = 0;
         public static int AddGazprom = 0;
+        public static int AddClarification = 0;
 
         public static void Main(string[] args)
         {
@@ -278,6 +279,7 @@ namespace ParserTenders
             Log.Logger("Добавили LotCancel", AddLotCancel);
             Log.Logger("Добавили Cancel", AddCancel);
             Log.Logger("Добавили CancelFailure", AddCancelFailure);
+            Log.Logger("Добавили Clarification", AddClarification);
             Log.Logger("Время окончания парсинга Tenders44");
         }
 

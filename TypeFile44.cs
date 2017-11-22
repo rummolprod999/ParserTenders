@@ -9,6 +9,7 @@ namespace ParserTenders
         TypeProlongation,
         TypeDateChange,
         TypeOrgChange,
-        TypeLotCancel
+        TypeLotCancel,
+        TypeClarification
     }
 }

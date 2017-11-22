@@ -196,6 +196,7 @@
     <Compile Include="TenderType223.cs" />
     <Compile Include="TenderTypeCancel.cs" />
     <Compile Include="TenderTypeCancelFailure.cs" />
+    <Compile Include="TenderTypeClarification.cs" />
     <Compile Include="TenderTypeDateChange.cs" />
     <Compile Include="TenderType44.cs" />
     <Compile Include="TenderTypeLotCancel.cs" />
