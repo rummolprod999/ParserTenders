@@ -51,7 +51,7 @@ namespace ParserTenders
                 {
                     connect.Open();
                     string selectCl =
-                        $"SELECT id_clarification FROM {Program.Prefix}clarification WHERE id_xml = @id_xml AND doc_number = @doc_number AND purchase_number = @purchase_number";
+                        $"SELECT id_clarification FROM {Program.Prefix}clarifications WHERE id_xml = @id_xml AND doc_number = @doc_number AND purchase_number = @purchase_number";
                     MySqlCommand cmd = new MySqlCommand(selectCl, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
@@ -71,7 +71,7 @@ namespace ParserTenders
                     string question = ((string) tender.SelectToken("question") ?? "").Trim();
                     string topic = ((string) tender.SelectToken("topic") ?? "").Trim();
                     string insertClarification =
-                        $"INSERT INTO {Program.Prefix}clarification SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
+                        $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
                     MySqlCommand cmd2 = new MySqlCommand(insertClarification, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_xml", idT);
