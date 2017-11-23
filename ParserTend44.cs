@@ -131,7 +131,7 @@ namespace ParserTenders
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
 
-                        /*foreach (var f in arrayXml44)
+                        foreach (var f in arrayXml44)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeTen44);
                         }
@@ -162,7 +162,7 @@ namespace ParserTenders
                         foreach (var f in arrayCancelFailure)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeCancelFailure);
-                        }*/
+                        }
 
                         foreach (var f in arrayClarification)
                         {
@@ -266,7 +266,7 @@ namespace ParserTenders
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}_new_arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
@@ -276,7 +276,7 @@ namespace ParserTenders
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}_new_arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
@@ -303,7 +303,7 @@ namespace ParserTenders
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}_new_arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", prevA);
@@ -313,7 +313,7 @@ namespace ParserTenders
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}_new_arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", prevA);

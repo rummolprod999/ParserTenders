@@ -19,6 +19,8 @@ namespace ParserTenders
         private static string _logSign223;
         private static string _logGazProm;
         private static string _tempGazProm;
+        private static string _logExp223;
+        private static string _tempExp223;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -69,6 +71,9 @@ namespace ParserTenders
                         return _tempSign223;
                     case TypeArguments.GpB:
                         return _tempGazProm;
+                    case TypeArguments.LastExp223:
+                    case TypeArguments.DailyExp223:
+                        return _tempExp223;
                     default:
                         return "";
                 }
@@ -95,6 +100,9 @@ namespace ParserTenders
                         return _logSign223;
                     case TypeArguments.GpB:
                         return _logGazProm;
+                    case TypeArguments.LastExp223:
+                    case TypeArguments.DailyExp223:
+                        return _logExp223;
                     default:
                         return "";
                 }
@@ -104,6 +112,7 @@ namespace ParserTenders
         public static string TableContractsSign;
         public static string TableSuppliers;
         public static string TableArchiveSign223;
+        public static string TableArchiveExp223;
         public static int AddTender44 = 0;
         public static int AddTenderSign = 0;
         public static int AddDateChange = 0;
@@ -119,13 +128,14 @@ namespace ParserTenders
         public static int UpdateSign223 = 0;
         public static int AddGazprom = 0;
         public static int AddClarification = 0;
+        public static int AddClarification223 = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223 в качестве аргумента");
                 return;
             }
 
@@ -180,9 +190,19 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserGpb(Periodparsing);
                     break;
+                case "lastexp223":
+                    Periodparsing = TypeArguments.LastExp223;
+                    Init(Periodparsing);
+                    ParserExp(Periodparsing);
+                    break;
+                case "dailyexp223":
+                    Periodparsing = TypeArguments.DailyExp223;
+                    Init(Periodparsing);
+                    ParserExp(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223");
                     break;
             }
         }
@@ -209,7 +229,10 @@ namespace ParserTenders
             _logSign223 = set.LogPathSign223;
             _logGazProm = set.LogPathGazProm;
             _tempGazProm = set.TempPathGazProm;
+            _logExp223 = set.LogPathExp223;
+            _tempExp223 = set.TempPathExp223;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
+            TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
             TableSuppliers = $"{Prefix}supplier";
             string[] tempYears = tmp.Split(new char[] {','});
@@ -259,6 +282,12 @@ namespace ParserTenders
                 case TypeArguments.GpB:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Gpb_{LocalDate:dd_MM_yyyy}.log";
                     break;
+                case TypeArguments.DailyExp223:
+                case TypeArguments.LastExp223:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Explanation223_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }
         }
 
@@ -349,6 +378,14 @@ namespace ParserTenders
             });*/
             Log.Logger("Добавили GpbGaz", AddGazprom);
             Log.Logger("Время окончания парсинга Gpb");
+        }
+
+        private static void ParserExp(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Explanation");
+            
+            Log.Logger("Добавили Explanation", AddClarification223);
+            Log.Logger("Время окончания парсинга Explanation");
         }
     }
 }

@@ -163,6 +163,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveExp223.cs" />
+    <Compile Include="ArchiveExp223Context.cs" />
     <Compile Include="ArchiveSign223.cs" />
     <Compile Include="ArchiveSign223Context.cs" />
     <Compile Include="AttachStruct.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="OrganizerGpB.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
+    <Compile Include="ParserExp.cs" />
     <Compile Include="ParserGpb.cs" />
     <Compile Include="ParserGpbGaz.cs" />
     <Compile Include="ParserSgn223.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="TenderTypeClarification.cs" />
     <Compile Include="TenderTypeDateChange.cs" />
     <Compile Include="TenderType44.cs" />
+    <Compile Include="TenderTypeExp223.cs" />
     <Compile Include="TenderTypeLotCancel.cs" />
     <Compile Include="TenderTypeProlongation.cs" />
     <Compile Include="TenderTypeSign.cs" />
