@@ -154,7 +154,7 @@ namespace ParserTenders
                 doc.LoadXml(ftext);
                 string jsons = JsonConvert.SerializeXmlNode(doc);
                 JObject json = JObject.Parse(jsons);
-                TenderTypeSign223 a = new TenderTypeSign223(f, region, regionId, json);
+                TenderTypeExp223 a = new TenderTypeExp223(f, region, regionId, json);
                 a.Parsing();
             }
         }

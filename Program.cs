@@ -383,7 +383,8 @@ namespace ParserTenders
         private static void ParserExp(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Explanation");
-            
+            ParserExp p = new ParserExp(arg);
+            p.Parsing();
             Log.Logger("Добавили Explanation", AddClarification223);
             Log.Logger("Время окончания парсинга Explanation");
         }
