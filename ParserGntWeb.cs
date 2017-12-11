@@ -75,7 +75,10 @@ namespace ParserTenders
             if (!string.IsNullOrEmpty(str))
             {
                 var htmlDoc = new HtmlDocument();
+                
+                //var encoding = htmlDoc.DetectEncoding(str);
                 htmlDoc.LoadHtml(str);
+                WriteLine(htmlDoc.Encoding);
                 var ten = htmlDoc.DocumentNode.SelectNodes("//tr[@class = \"c1\"]");
                 foreach (var v in ten)
                 {
@@ -93,8 +96,9 @@ namespace ParserTenders
 
         private void ParserTend(HtmlNode node)
         {
-            string urlT = (node.SelectSingleNode("td/a/@href")?.InnerText ?? "").Trim();
-            WriteLine(urlT);
+            string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();            
+            string title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
+            WriteLine(title1);
         }
     }
 }
