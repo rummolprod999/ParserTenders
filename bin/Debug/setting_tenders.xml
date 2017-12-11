@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <setting>
-	<database>tender2</database>
+	<database>tender</database>
 	<tempdir_tenders44>temp_tenders44</tempdir_tenders44>
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
@@ -11,6 +11,10 @@
 	<tempdir_sign223>temp_sign223</tempdir_sign223>
 	<logdir_gazprom>log_gazprom</logdir_gazprom>
 	<tempdir_gazprom>temp_gazprom</tempdir_gazprom>
+	<logdir_exp223>log_exp223</logdir_exp223>
+	<tempdir_exp223>temp_exp223</tempdir_exp223>
+	<logdir_gntweb>log_gnt_web</logdir_gntweb>
+	<tempdir_gntweb>temp_gnt_web</tempdir_gntweb>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

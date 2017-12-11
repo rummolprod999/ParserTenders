@@ -50,3 +50,5 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.Entity.EF6.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.SqlServer.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/HtmlAgilityPack.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/HtmlAgilityPack.pdb

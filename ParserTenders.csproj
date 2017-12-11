@@ -40,11 +40,14 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="FluentFTP, Version=18.0.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
-      <HintPath>..\packages\FluentFTP.18.0.2\lib\net45\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP, Version=19.1.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
+      <HintPath>..\packages\FluentFTP.19.1.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
-    <Reference Include="Ftp, Version=2.0.17107.1333, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
-      <HintPath>..\packages\Ftp.dll.2.0.17107.1333\lib\Net45\Ftp.dll</HintPath>
+    <Reference Include="Ftp, Version=2.0.17331.1521, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
+      <HintPath>..\packages\Ftp.dll.2.0.17331.1521\lib\net45\Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.6.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+      <HintPath>..\packages\HtmlAgilityPack.1.6.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -176,6 +179,7 @@
     <Compile Include="DownloadFile.cs" />
     <Compile Include="DownloadString.cs" />
     <Compile Include="GetSettings.cs" />
+    <Compile Include="GntWebTender.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserWeb.cs" />
     <Compile Include="JsonExtensions.cs" />
@@ -185,6 +189,7 @@
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
     <Compile Include="ParserExp.cs" />
+    <Compile Include="ParserGntWeb.cs" />
     <Compile Include="ParserGpb.cs" />
     <Compile Include="ParserGpbGaz.cs" />
     <Compile Include="ParserSgn223.cs" />

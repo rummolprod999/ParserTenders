@@ -19,6 +19,8 @@ namespace ParserTenders
         public readonly string TempPathGazProm;
         public readonly string LogPathExp223;
         public readonly string TempPathExp223;
+        public readonly string LogGntWeb;
+        public readonly string TempGntWeb;
         public readonly string Prefix;
         public readonly string UserDb;
         public readonly string PassDb;
@@ -78,6 +80,12 @@ namespace ParserTenders
                         case "tempdir_exp223":
                             TempPathExp223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_gntweb":
+                            LogGntWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_gntweb":
+                            TempGntWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -116,7 +124,10 @@ namespace ParserTenders
                 String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
                 String.IsNullOrEmpty(TempPathAttach) ||
                 String.IsNullOrEmpty(TempPathSign223) ||
-                String.IsNullOrEmpty(LogPathSign223) || String.IsNullOrEmpty(LogPathGazProm) || String.IsNullOrEmpty(TempPathGazProm) || String.IsNullOrEmpty(LogPathExp223) || String.IsNullOrEmpty(TempPathExp223))
+                String.IsNullOrEmpty(LogPathSign223) || String.IsNullOrEmpty(LogPathGazProm) ||
+                String.IsNullOrEmpty(TempPathGazProm) || String.IsNullOrEmpty(LogPathExp223) ||
+                String.IsNullOrEmpty(TempPathExp223) || String.IsNullOrEmpty(LogGntWeb) ||
+                String.IsNullOrEmpty(TempGntWeb))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

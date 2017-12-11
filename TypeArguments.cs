@@ -12,6 +12,7 @@ namespace ParserTenders
         DailySign223,
         GpB,
         LastExp223,
-        DailyExp223
+        DailyExp223,
+        GntWeb
     }
 }

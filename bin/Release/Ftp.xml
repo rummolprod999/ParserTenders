@@ -87,14 +87,42 @@
             Represents FTP protocol configuration.
             </summary>
         </member>
-        <member name="P:Limilabs.FTP.Client.FtpConfiguration.ListFolderUseChangeFolder">
+        <member name="P:Limilabs.FTP.Client.FtpConfiguration.ListSupportsParameter">
             <summary>
-            Gets or sets the value indicating if when using LIST, <see cref="M:Limilabs.FTP.Client.Ftp.GetList(System.String)"/> changes folder, instead of issuing 'LIST folder' command.
+            Gets or sets the value indicating if LIST command supports folder parameter.
+            If set to false <see cref="M:Limilabs.FTP.Client.Ftp.GetList(System.String)"/> changes folder, instead of issuing 'LIST folder' command.
+            Default is true.
             </summary>
         </member>
         <member name="P:Limilabs.FTP.Client.FtpConfiguration.ListTrimStart">
             <summary>
             Gets or sets the value indicating if file names are timmed.
+            Default is false.
+            </summary>
+        </member>
+        <member name="P:Limilabs.FTP.Client.FtpConfiguration.DontGetFileSizeBeforeDownload">
+            <summary>
+            Gets or sets the value indicating if <see cref="M:Limilabs.FTP.Client.Ftp.GetFileSize(System.String)"/> should be used to retrive file size before download. 
+            Default is false (file size is obtained).
+            </summary>
+        </member>
+        <member name="P:Limilabs.FTP.Client.FtpConfiguration.DontSendPROTP">
+            <summary>
+            Gets or sets the value indicating if PROT P command should be sent on secure data transfers. 
+            Default is false (command is sent).
+            </summary>
+        </member>
+        <member name="P:Limilabs.FTP.Client.FtpConfiguration.DontSendPBSZ">
+            <summary>
+            Gets or sets the value indicating if PBSZ command (SetProtectionBufferSize) should be sent on secure data transfers. 
+            Default is false (command is sent).
+            </summary>
+        </member>
+        <member name="P:Limilabs.FTP.Client.FtpConfiguration.StatSupportsParameter">
+            <summary>
+            Gets or sets the value indicating if STAT command supports parameter.
+            If set to false <see cref="M:Limilabs.FTP.Client.Ftp.FileExists(System.String)"/> uses LIST instead of STAT.
+            Default is true.
             </summary>
         </member>
         <member name="T:Limilabs.FTP.Client.FtpExtension">
@@ -712,26 +740,6 @@
             Represents options for remote server search.
             </summary>
         </member>
-        <member name="P:Limilabs.FTP.Client.RemoteSearchOptions.FolderPattern">
-            <summary>
-            The search string to match against the names of folder in path. Default is "*".
-            </summary>
-        </member>
-        <member name="P:Limilabs.FTP.Client.RemoteSearchOptions.FilePattern">
-            <summary>
-            The search string to match against the names of files in path. Default is "*".
-            </summary>
-        </member>
-        <member name="P:Limilabs.FTP.Client.RemoteSearchOptions.IgnoreCase">
-            <summary>
-            Specifies if <see cref="P:Limilabs.FTP.Client.RemoteSearchOptions.FilePattern"/> and <see cref="P:Limilabs.FTP.Client.RemoteSearchOptions.FolderPattern"/> is case sensitive or not.
-            </summary>
-        </member>
-        <member name="P:Limilabs.FTP.Client.RemoteSearchOptions.UseRegex">
-            <summary>
-            Specifies if <see cref="P:Limilabs.FTP.Client.RemoteSearchOptions.FilePattern"/> and <see cref="P:Limilabs.FTP.Client.RemoteSearchOptions.FolderPattern"/> use regex matching (e.g. @"^.*\.txt$) or file matching (e.g. "*.txt").
-            </summary>
-        </member>
         <member name="P:Limilabs.FTP.Client.RemoteSearchOptions.Recursive">
             <summary>
             Specifies if search should include sub folders. Default is <see langword="true"/>.
@@ -782,7 +790,7 @@
             <param name="filePattern">Regex file pattern.</param>
             <param name="ignoreCase">True if case should be ignored, false otherwise.</param>
         </member>
-        <member name="M:Limilabs.FTP.Client.RemoteSearchOptions.UseLambdaMatch(Limilabs.Infrastructure.Func{Limilabs.FTP.Client.FtpItem,System.Boolean})">
+        <member name="M:Limilabs.FTP.Client.RemoteSearchOptions.UseLambdaMatch(System.Func{Limilabs.FTP.Client.FtpItem,System.Boolean})">
             <summary>
             Specifies lambda search function.
             </summary>
@@ -970,9 +978,19 @@
             500
             </summary>
         </member>
+        <member name="F:Limilabs.FTP.Client.KnownResponseCodes.SyntaxErrorInParameters">
+            <summary>
+            501 Syntax error in parameters or arguments.
+            </summary>
+        </member>
         <member name="F:Limilabs.FTP.Client.KnownResponseCodes.NotImplemented">
             <summary>
             502
+            </summary>
+        </member>
+        <member name="F:Limilabs.FTP.Client.KnownResponseCodes.NotImplementedForThatParameter">
+            <summary>
+            504 Command not implemented for that parameter.
             </summary>
         </member>
         <member name="F:Limilabs.FTP.Client.KnownResponseCodes.RequestedActionNotTaken">
@@ -1210,6 +1228,11 @@
         <member name="P:Limilabs.FTP.Client.FtpItem.Extensions">
             <summary>
             Provides access to additional elements parsed from the server response.
+            </summary>
+        </member>
+        <member name="P:Limilabs.FTP.Client.FtpItem.Raw">
+            <summary>
+            Gets raw listing line.
             </summary>
         </member>
         <member name="M:Limilabs.FTP.Client.FtpItem.ToString">
@@ -1671,6 +1694,14 @@
             <remarks>
             Some servers support this command incorrectly (MS FTP).
             </remarks>
+        </member>
+        <member name="M:Limilabs.FTP.Client.Ftp.SendDownloadCommand(System.String,System.Object[])">
+            <summary>
+            Executes command on the FTP server and expects response using data channel.
+            </summary>
+            <param name="command">Command (e.g. "LIST {0}").</param>
+            <param name="args">Command arguments.</param>
+            <returns>Raw data downloaded from the FTP server.</returns>
         </member>
         <member name="M:Limilabs.FTP.Client.Ftp.GetList">
             <summary>
@@ -2476,15 +2507,6 @@
             </summary>
             <param name="argument">Argument that must not be blank.</param>
             <param name="message">Message.</param>
-        </member>
-        <member name="T:Limilabs.Infrastructure.Func`2">
-            <summary>
-            Encapsulates a method that has one parameter and returns a value of the type specified by the TResult parameter.
-            </summary>
-            <typeparam name="T">The type of the parameter of the method that this delegate encapsulates.</typeparam>
-            <typeparam name="TResult">The type of the return value of the method that this delegate encapsulates.</typeparam>
-            <param name="arg0">The parameter of the method that this delegate encapsulates.</param>
-            <returns>The return value of the method that this delegate encapsulates.</returns>
         </member>
         <member name="M:Limilabs.InternalLicensing.ILicenseLoader.IsLicensePresent">
             <summary>

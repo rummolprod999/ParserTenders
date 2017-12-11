@@ -21,6 +21,8 @@ namespace ParserTenders
         private static string _tempGazProm;
         private static string _logExp223;
         private static string _tempExp223;
+        private static string _logGntWeb;
+        private static string _tempGntWeb;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -74,6 +76,8 @@ namespace ParserTenders
                     case TypeArguments.LastExp223:
                     case TypeArguments.DailyExp223:
                         return _tempExp223;
+                    case TypeArguments.GntWeb:
+                        return _tempGntWeb;
                     default:
                         return "";
                 }
@@ -103,6 +107,8 @@ namespace ParserTenders
                     case TypeArguments.LastExp223:
                     case TypeArguments.DailyExp223:
                         return _logExp223;
+                    case TypeArguments.GntWeb:
+                        return _logGntWeb;
                     default:
                         return "";
                 }
@@ -129,13 +135,14 @@ namespace ParserTenders
         public static int AddGazprom = 0;
         public static int AddClarification = 0;
         public static int AddClarification223 = 0;
+        public static int AddGntWeb = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223 в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb в качестве аргумента");
                 return;
             }
 
@@ -200,9 +207,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserExp(Periodparsing);
                     break;
+                case "gntweb":
+                    Periodparsing = TypeArguments.GntWeb;
+                    Init(Periodparsing);
+                    ParserGntWeb(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb");
                     break;
             }
         }
@@ -231,6 +243,8 @@ namespace ParserTenders
             _tempGazProm = set.TempPathGazProm;
             _logExp223 = set.LogPathExp223;
             _tempExp223 = set.TempPathExp223;
+            _tempGntWeb = set.TempGntWeb;
+            _logGntWeb = set.LogGntWeb;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -285,6 +299,9 @@ namespace ParserTenders
                 case TypeArguments.DailyExp223:
                 case TypeArguments.LastExp223:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Explanation223_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.GntWeb:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}GntWeb_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -387,6 +404,15 @@ namespace ParserTenders
             p.Parsing();
             Log.Logger("Добавили Explanation", AddClarification223);
             Log.Logger("Время окончания парсинга Explanation");
+        }
+        
+        private static void ParserGntWeb(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга GntWeb");
+            ParserGntWeb p = new ParserGntWeb(arg);
+            p.Parsing();
+            Log.Logger("Добавили GntWeb", AddGntWeb);
+            Log.Logger("Время окончания парсинга GntWeb");
         }
     }
 }
