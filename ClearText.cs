@@ -10,5 +10,12 @@ namespace ParserTenders
             st = st.Replace("", "");
             return st;
         }
+        public static string ClearStringGpb(string s)
+        {
+            string st = s;
+            st = st.Replace("", "");
+            return st;
+        }
+        
     }
 }

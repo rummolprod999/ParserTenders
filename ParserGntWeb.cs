@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using static System.Console;
+
 namespace ParserTenders
 {
     public class ParserGntWeb : ParserWeb
@@ -71,14 +74,15 @@ namespace ParserTenders
 
         private void ParserListTend(string url)
         {
-            string str = DownloadString.DownL(url);
+            string str = DownloadString.DownL1251(url);
             if (!string.IsNullOrEmpty(str))
             {
+                //str = str.Win1251ToUtf8();
                 var htmlDoc = new HtmlDocument();
-                
+
                 //var encoding = htmlDoc.DetectEncoding(str);
                 htmlDoc.LoadHtml(str);
-                WriteLine(htmlDoc.Encoding);
+                //WriteLine(htmlDoc.Encoding);
                 var ten = htmlDoc.DocumentNode.SelectNodes("//tr[@class = \"c1\"]");
                 foreach (var v in ten)
                 {
@@ -96,9 +100,36 @@ namespace ParserTenders
 
         private void ParserTend(HtmlNode node)
         {
-            string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();            
+            string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             string title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
-            WriteLine(title1);
+            string title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
+            string entity = $"{title2} {title1}".Trim();
+            string _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            string urlOrg = $"{_site}{_urlOrg}";
+            string _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
+            decimal maxPrice = UtilsFromParsing.ParsePrice(_price);
+            string _datePub =
+                (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]/span").InnerText ?? "").Trim();
+            string _dateOpen =
+                (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/span").InnerText ?? "").Trim();
+            string _dateRes =
+                (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/span").InnerText ?? "")
+                .Trim();
+            string _dateEnd =
+                (node.SelectSingleNode("td/span[@title = \"Дата завершения процедуры\"]/span").InnerText ?? "").Trim();
+            DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
+            DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            DateTime dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
+            DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
+            GntWebTender t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes};
+            try
+            {
+                t.Parse();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e, urlT);
+            }
         }
     }
 }

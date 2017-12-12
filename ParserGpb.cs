@@ -103,9 +103,11 @@ namespace ParserTenders
             }*/
             if (xml.Length < 100)
             {
-                Log.Logger("Получили пустую строку со списком торгов", pr.Xml);
+                Log.Logger("Получили пустую строку tender", pr.Xml);
                 return;
             }
+
+            xml = ClearText.ClearStringGpb(xml);
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
             string jsons = JsonConvert.SerializeXmlNode(doc);
@@ -192,6 +194,7 @@ namespace ParserTenders
                     {
                         Log.Logger("Получили пустую строку с заказчиком", urlCus);
                     }
+                    xmlCus = ClearText.ClearStringGpb(xmlCus);
                     XmlDocument docCus = new XmlDocument();
                     docCus.LoadXml(xmlCus);
                     string jsonsCus = JsonConvert.SerializeXmlNode(docCus);
