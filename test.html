@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <meta name="description" content="Межотраслевая Торговая Система ГазНефтеторг.ру">
+    <meta name="keywords" content="b2b,электронные торги,конкурсы,закупки,аукционы">
+    <link rel="shortcut icon" href="/css/redesign/images/favicon.ico" type="image/x-icon">
+    <title>Извещение о проведении торговой процедуры "Запрос предложений № 142323"</title>
+
+    <link rel="stylesheet" type="text/css" href="/stc/cache_proposal_request_view_3151544413.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/jquery-ui/gazneftetorg/jquery.ui.all.css">
+    <link rel="stylesheet" type="text/css" href="/stc/gazneftetorg/css/forms.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/main_style.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/options.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/jquery.webui-popover.min.css">
+    <link rel="stylesheet" type="text/css" href="/stc/cache_core_2646435536.css">
+    <script type="text/javascript" src="/stc/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/stc/js/no-conflict.js"></script>
+    <script type="text/javascript" src="/stc/js/jquery.webui-popover.min.js"></script>
+    <script type="text/javascript" src="/stc/js/init.popovers.js"></script>
+    <script type="text/javascript" src="/stc/js/long-polling.js"></script>
+    <script type="text/javascript" src="/stc/js/forms/disable_button.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/CapicomConstants.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/WinCryptoApi.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/Capicom.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/Plugin.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Certificate/Simple.js"></script>
+    <script type="text/javascript" src="/stc/js/Engine/Crypto/Certificate/GovEtp.js"></script>
+    <script type="text/javascript" src="/stc/js/forms/sign.js"></script>
+    <script type="text/javascript" src="/stc/js/oos/confirm_send_on_oos.js"></script>
+    <script type="text/javascript" src="/stc/js/payment/view_organizer_requisites.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/output_authoriz_form.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.checkbox.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/easing.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/slider.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/search.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.ulslide.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/slide.js"></script>
+    <script type="text/javascript" src="/stc/js/sign/Code.js"></script>
+    <script type="text/javascript" src="/stc/js/sign/Signature.js"></script>
+    <script type="text/javascript" src="/stc/js/handleLoginType.js"></script>
+    <script type="text/javascript" src="/stc/cache_proposal_request_view_1709000362.js"></script>
+    <script type="text/javascript" src="/stc/cache_energo_proposal_request_view_3159912292.js"></script>
+    <script type="text/javascript" src="/stc/cache_core_1131632684.js"></script>
+    <script type="text/javascript" src="/stc/cache_callback_4264598038.js"></script>
+    <!--[if IE 8]><link rel="stylesheet" type="text/css" href="/stc/css/redesign/ie8_in.css"><![endif]-->
+    <!--[if IE 8]><script type="text/javascript" src="/stc/js/redesign/button_IE8.js"></script><![endif]-->
+    <link rel="stylesheet" type="text/css" media="print" href="/css/print.css" />
+</head>
+
+<body id="other_page"  bgcolor=#FFFFFF LEFTMARGIN=10 TOPMARGIN=10 MARGINWIDTH=10 MARGINHEIGHT=10 onload="">
+
+<div class="oi_head_holder">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 io_xs logo">
+                <a href="/"><img src="/css/redesign/images/gnt-logo.png" alt="GNT"></a>
+            </div>
+            <div class="full_date">
+                <span id="rus_date"></span><span id="clock"></span>(время московское)
+            </div>
+            <div class="col-md-6 col-sm-6 io_xs">
+                <div class="phone">+7 (495) 231-46-71</div>
+            </div>
+
+            <div class="col-md-3 col-sm-3 io_xs">
+                <div class="login">
+                    <input type="hidden" name="cookies_time" id="cookies_time" value="1" class=cbox>
+                    <img src="/css/redesign/images/lock.png" alt="GNT">
+                    <a href="#login_form" id="login_pop">Вход в систему</a>
+                    <!-- Вход -->
+                    <a href="#x" class="overlay" id="login_form"></a>
+                    <div class="popup">
+                        <img src="/css/redesign/images/lock.png" alt="GNT">
+                        <input type="radio" name="login_type" value="ecp"> По ЭП
+                        <input type="radio" name="login_type" value="standard" checked="checked"> По логину
+                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
+                              name="login_form" id="access-login-form" style="margin:0px">
+                            <div>
+                                <input name="f_login" onblur="if (this.value == '') this.value = 'Логин';" onfocus="if (this.value == 'Логин') this.value = '';" value="Логин" type="text" maxlength="255">
+                            </div>
+                            <div>
+                                <input name="f_password" type="password">
+                            </div>
+                            <div>
+                                <button class="button_green">
+                                    <span class="button-content">Войти</span>
+                                </button>
+                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
+                            </div>
+                        </form>
+
+                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
+                              name="login_form" id="access-ecp-form" style="display:none; margin:0px; width: 205px">
+                            <div>
+                                <select class="form-control" id="certificates" name="f_certificate"></select>
+                            </div>
+                            <div>
+                                <button class="button_green">
+                                    <span class="button-content" id="submitEcp">Войти</span>
+                                </button>
+                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="reg"><a href="/request/registration.html">Регистрация</a></div>
+            </div>
+        </div>
+        <div class="row menu">
+            <div class="col-md-12 col-sm-12 io_xs">
+                <nav class="menu-general-menu-container">
+                    <ul id="menu-general-menu" class="oi_header_menu">
+                        <li class="current-menu-item"><a href="/request/about.html">О компании</a></li>
+                        <li><a href="/personal/">Личный кабинет</a></li>
+                        <li><a href="/trades/">Торговая площадка</a></li>
+                        <li><a href="/news/">Новости</a></li>
+                        <li><a href="/request/contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row row-fluid vbg_fff full_row">
+    <div class="navigation">
+        <div class="container">
+            <div id="control">
+                <a alt="Show/Close" class="open" id="controlbtn_1"></a>
+            </div>
+            <div class="navbar-header">
+                <ol class="breadcrumb">
+                    <li><a href="/">ГазНефтеторг.ру</a></li>
+                    &nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li><a href='/trades/'>Торговая площадка</a></li>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li><a href='/trades/index.php?action=energo_trades_list'>Торги предприятий энергетической отрасли</a></li>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li>Извещение о проведении торговой процедуры "Запрос предложений № 142323"</li>                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="this_page">
+    <div class="container">
+        <div class="row row-fluid vbg_fff full_row">
+            <div class="col-sm-2 block_menu">
+                <div id="wrap_menu_in" style="background: rgb(255, 255, 255) none repeat scroll 0% 0%;">
+                    <div id="maincontent" style="margin-left: 144px;">
+                        <div id="linkblock"><ul id="yourlist"><li><a href="/rules/">Правила работы</a></li><li><a href="/qafaq/">Часто задаваемые вопросы</a></li><li><a href="/signature/">ЭП</a></li><li><a href="/prices/">Прайс-листы</a></li><li><a href="/summaries/summaries.html">Планируемые закупки</a></li><li><a href="/regulations/">Регламентирующие документы</a></li><li><a href="/tariffs/">Тарифные планы</a></li><li><strong><a href="#" data-toggle="popover" data-placement="right" data-trigger="hover" data-html="true" data-content='<li><a href="/about/development.html">Разработка ПО</a></li><li><a href="/about/seldon.html">Проверь контрагента</a></li>'>Сервисы</a></strong></li><li><a href="/about/requirements.html">Требования к компьютеру</a></li><li><a href="http://demo.gazneftetorg.ru">Вход в DEMO-версию</a></li></ul></div>                        <div class="banner_block">
+                        <a href="/about/seldon.html"><img src="/images/banners/seldon_185х240.png" width="200px" height="240px"></a>
+                    </div>                        <div class="link_block">
+                        <a href="http://corpmsp.ru" target=_blank>АО «Корпорация «МСП»</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-10 vc_custom_block block_layout">
+                <div class="layout body_text">
+                    <div class="form">
+                        <div class="no_print">
+                            <table width="100%" height="30" border="0" cellspacing="1" cellpadding="0" class="round_blocks"><tr>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_left.gif"></td>
+                                            <td width="100%" nowrap class="active">Общая информация</td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=file_documentations_view&procedure_id=35554">Документация по торгам</a></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_participants&id=35554">Предложения</a> <b> - 0</b></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_protocols&id=35554"> Протоколы</a></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=file_documents_view&procedure_id=35554">Документы</a> <b> - 0</b></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_changes&id=35554">Изменения</a> <b> - 0</b></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td nowrap>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_clarification&procedure_id=35554">Разъяснения</a></td>
+                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                        </tr>
+                                    </table>
+                                </td><td width="100%">&nbsp;</td></tr></table></div>
+                        <p class="no_print">
+                        </p>
+                        <p class="no_print">
+                        </p>
+                        <!--
+                            <input class="button" type="button" onclick="window.open('', '_blank')" value="Торговая процедура на ООС" style="width:270px; height: 25px; margin-bottom: 17px;">
+                        -->
+                        <table class="blank" style="width: 100%;">
+                            <tbody>
+                            <tr class="thead">
+                                <td colspan="2">
+                                    Извещение о проведении торговой процедуры "Запрос предложений № 142323"
+                                    &nbsp;			</td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname" width="30%">Организатор размещения заказа:</td>
+                                <td><a href='/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311' title="Просмотреть информационную карту участника" target="_blank">Общество с ограниченной ответственностью  "Петербургтеплоэнерго"</a>, Россия, 190098, г. Санкт-Петербург, Галерная ул., д. 20-22, лит. А </td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Контактное лицо:</td>
+                                <td><a href="/popups/send_message.html?action=send&to=148440" target="" onclick="popup(event, '/popups/send_message.html?action=send&to=148440', '', 400, 480);return false;" title="Отправить сообщение по внутрисистемной почте">Матвеев Кирилл Андреевич</a><br>Начальник группы закрытых закупок</td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname">Общее наименование закупки:</td>
+                                <td>
+                                    Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых			</td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Обязательность применения ЭП для участников </td>
+                                <td>Нет</td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname">Дата публикации:</td>
+                                <td>
+                                    11.12.2017 18:30			</td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Место рассмотрения заявок:</td>
+                                <td>
+                                    По адресу в сети интернет www.gazneftetorg.ru                </td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname">Требование к отсутствию участников закупки в реестре недобросовестных поставщиков</td>
+                                <td>Нет</td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Лоты:</td>
+                                <td>
+                                    <table class="form-fieldset form-fieldset-fields" cellspacing="0" cellpadding="0" style="width:100%;">
+                                        <tbody>
+                                        <tr class="c2 row">
+                                            <td class="label">
+                                                <a class="lots_list" href="#lot_1">Лот №1</a>
+                                            </td>
+                                            <td class="element">Поставка компенсаторов резиновых фланцевых</td>
+                                            <td class="element">
+                                                <strong>Изделия готовые, не включенные в другие группировки</strong>
+                                            </td>
+                                            <td class="element">
+                                                119 шт.                                    </td>
+                                            <td class="element">
+                                                654&nbsp;372,88&nbsp;руб.									</td>
+                                        </tr>
+                                        </tbody></table>
+                                </td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname">Общая цена:</td>
+                                <td>
+                                    654&nbsp;372,88&nbsp;руб.			</td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Порядок регистрации на сайте:</td>
+                                <td>
+                                    Порядок регистрации претендентов на участие в торговой процедуре по вышеуказанному предмету договора
+                                    указан в разделе <a href="http://www.gazneftetorg.ru/request/">"Подключение"</a> на сайте в сети Интернет по адресу: gazneftetorg.ru.
+                                </td>
+                            </tr>
+                            <tr class="c1">
+                                <td class="fname">Порядок подачи предложений:</td>
+                                <td>Настоящая Документация о запросе предложений размещена на официальном сайте в сети Интернет для размещения информации о размещении заказов на поставки товаров, выполнение работ, оказание услуг,
+                                    на электронной торговой площадке системы &laquo;ГазНефтеторг.ру&raquo;, одновременно с размещением Извещения и доступна для ознакомления без взимания платы.</td>
+                            </tr>
+                            <tr class="c2">
+                                <td class="fname">Действия:</td>
+                                <td>
+                                    <a href="/rules">Ознакомиться с правилами проведения торгов</a>			</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            <img src="/images/attention.gif"> Заказчик имеет право вносить изменения в Извещение о проведении запроса предложений и Документацию о запросе предложений в любое время до истечения срока подачи заявок на участие в Запросе предложений, а также отказаться от проведения Запроса предложений в любое время до подведения его итогов.<br>
+                            Заказчик имеет право не заключать Договор по результатам проведения Запроса предложений.<br>
+                            Запрос предложений не является торгами (конкурсом, аукционом) или публичным конкурсом в соответствии со статьями 447 – 449 части первой и статьями 1057 – 1061 части второй Гражданского кодекса Российской Федерации, и не накладывает на Организатора и Заказчика обязательств, установленных указанными статьями Гражданского кодекса Российской Федерации.
+                        </p>
+
+                        <table cellspacing="0" cellpadding="0" style="width:100%;">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h2>
+                                        Лот №1<span class="lower_in_h2">, Поставка компенсаторов резиновых фланцевых</span>
+                                    </h2>
+                                    <a class="border_dashed toogle_lot" name="lot_1" href=""><span>Скрыть</span> лот №1</a>
+                                    <div class="lot_info">
+                                        <table class="blank" style="width:100%;">
+                                            <tbody>
+                                            <tr class="thead">
+                                                <td class="lot_title">
+                                                    Извещение о проведении торговой процедуры "Запрос предложений № 142323-1"
+                                                </td>
+                                                <td class="countdown">
+                                                    <table cellspacing="0" cellpadding="0" style="border: 0; float: right;">
+                                                        <tr>
+                                                            <td style="border: 0; padding: 0 5px; margin: 0; vertical-align: middle;">
+                                                                <img src="/images/icons/clock.png" />
+                                                            </td>
+                                                            <td style="border: 0; padding: 0; margin: 0; vertical-align: middle; font-weight: normal;">
+                                                                Принять участие: <span id="timer-38194"></span>&nbsp;<span class="gray">(*время Московское)</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function(){
+                                                            $("#timer-38194").countdown({now: 1513084588, end: 1513666800});
+                                                            $("#timer-38194").bind("countdown_expired", function(){
+                                                                $(this).closest(".countdown").html("&nbsp;");
+                                                            });
+                                                            $("#timer-38194").closest(".countdown").show();
+                                                        });
+                                                    </script>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="blank">
+                                            <tbody>
+                                            <tr class="c1">
+                                                <td class="fname" width="30%">Организатор размещения заказа:</td>
+                                                <td><a href='/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311' title="Просмотреть информационную карту участника" target="_blank">Общество с ограниченной ответственностью  "Петербургтеплоэнерго"</a>, Россия, 190098, г. Санкт-Петербург, Галерная ул., д. 20-22, лит. А </td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Контактное лицо:</td>
+                                                <td><a href="/popups/send_message.html?action=send&to=148440" target="" onclick="popup(event, '/popups/send_message.html?action=send&to=148440', '', 400, 480);return false;" title="Отправить сообщение по внутрисистемной почте">Матвеев Кирилл Андреевич</a><br>Начальник группы закрытых закупок</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Общее наименование закупки:</td>
+                                                <td>
+                                                    Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых										</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Дата публикации:</td>
+                                                <td>
+                                                    11.12.2017 18:30										</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Закупка не включена в план закупки в соответствии с частью 15 статьи 4 Закона № 223-ФЗ</td>
+                                                <td>Нет</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Предмет договора<br/>(наименование товаров, работ, услуг):</td>
+                                                <td>
+                                                    Поставка компенсаторов резиновых фланцевых										</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Позиции</td>
+                                                <td>
+                                                    <p><a href="/trades/energo/ProposalRequest/?action=view_positions&lot_id=38194">Просмотр позиций по лоту</a></p>
+                                                </td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Категория продукции (ОКПД2):</td>
+                                                <td>
+                                                    Изделия готовые, не включенные в другие группировки										</td>
+                                            </tr>
+
+                                            <tr class="c1">
+                                                <td class="fname">Вид экономической деятельности (ОКВЭД2):</td>
+                                                <td>Производство прочих готовых изделий</td>
+                                            </tr>
+
+
+                                            <tr class="c2">
+                                                <td class="fname">Количество поставляемого товара, объем выполняемых работ, оказываемых услуг:</td>
+                                                <td>
+                                                    119 шт.                                            </td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Начальная (максимальная) цена договора:</td>
+                                                <td>
+                                                    654&nbsp;372,88&nbsp;руб. (без НДС)										</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Условия оплаты:</td>
+                                                <td>
+                                                    В соответствии с проектом договора (Приложение №1 к настоящей Документации).										</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Условия поставки (в том числе место поставки товара, выполнения работ, оказания услуг):</td>
+                                                <td>
+                                                    В соответствии с проектом договора (Приложение №1 к настоящей Документации).										</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Дата вскрытия конвертов:</td>
+                                                <td>
+                                                    <strong>19.12.2017 10:00</strong>										</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Дата рассмотрения предложений:</td>
+                                                <td>
+                                                    Не позднее 27.12.2017 12:30 на сайте в сети Интернет по адресу: gazneftetorg.ru.
+                                                </td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Дата завершения процедуры (дата рассмотрения предложений участников и подведения итогов):</td>
+                                                <td>
+                                                    Не позднее 10.01.2018 15:00										</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Требования к участникам:</td>
+                                                <td>В соответствии с условиями и требованиями документации по проведению запроса предложений</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Критерии оценки:</td>
+                                                <td>В соответствии с условиями и требованиями документации по проведению запроса предложений</td>
+                                            </tr>
+                                            <tr class="c1">
+                                                <td class="fname">Сведения о предоставлении преференций:</td>
+                                                <td>В соответствии с Постановлением Правительства №925 от 16.09.2016 г. «О приоритете товаров российского происхождения, работ, услуг, выполняемых, оказываемых российскими лицами, по отношению к товарам, происходящим из иностранного государства, работам, услугам, выполняемым, оказываемым иностранными лицами» устанавливается приоритет товаров российского происхождения по отношению к товарам, происходящим из иностранного государства.</td>
+                                            </tr>
+                                            <tr class="c2">
+                                                <td class="fname">Действия:</td>
+                                                <td>
+                                                    <a href="/rules">Ознакомиться с правилами проведения торгов</a>										</td>
+                                            </tr>
+                                            <tr class="thead">
+                                                <td colspan="2" align="center">
+                                                    <form action="/trades/energo/ProposalRequest/" method="get" style="display: inline;">
+                                                        <input type="hidden" name="action" value="ask_question_lot" />
+                                                        <input type="hidden" name="id" value="38194" />
+                                                        <input type="submit" class="button" value="Задать вопрос организатору">
+                                                    </form>
+                                                    <form action="/trades/energo/ProposalRequest/" method="get" style="display: inline;">
+                                                        <input type="hidden" name="action" value="proposal" />
+                                                        <input type="hidden" name="id" value="38194" />
+                                                        <input type="submit" class="button" value="Ваше предложение">
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br/>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="oi_footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <b>2013-2017</b><br>
+                Оператор Системы &mdash;
+                &quot;ГазНефтеторг.ру&quot;<br>
+                Все права защищены &copy; <br>
+                <span>+7 (495) 231-46-71</span>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li><a href="/request/about.html">О компании</a></li>
+                    <li><a href="/personal/">Личный кабинет</a></li>
+                    <li><a href="/trades/">Торговая площадка</a></li>
+                    <li><a href="/news/">Новости</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>                <a href="/tariffs/">Тарифные планы</a>
+                    </li>
+                    <li><a href="/presentations/">Презентации</a></li>
+                    <li><a href="/rules/">Правила работы</a></li>
+                    <li>                <a href="/prices/">Прайс-листы</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div><script type="text/javascript">
+
+    (function() {
+        $.ajax({
+            url      : '/blocks/local_time.php',
+            cache    : false,
+            dataType : 'json',
+            success  : function(data)
+            {
+                $('#rus_date').text(data.rus_date);
+
+                window.CurrentDate = new Date(data.time);
+
+                Doo();
+            }
+        });
+    })();
+
+</script>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28385057-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script></BODY>
+</HTML>

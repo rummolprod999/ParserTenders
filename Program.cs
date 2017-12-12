@@ -409,8 +409,10 @@ namespace ParserTenders
         private static void ParserGntWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга GntWeb");
-            ParserGntWeb p = new ParserGntWeb(arg);
-            p.Parsing();
+            /*ParserGntWeb p = new ParserGntWeb(arg);
+            p.Parsing();*/
+            GntWebTender t = new GntWebTender{UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=35554#lot_1", UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311", Entity = "Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых ", MaxPrice = 654372.88m, DateEnd = DateTime.Parse("10.01.2018 15:00"), DateOpen = DateTime.Parse("19.12.2017 10:00"), DatePub = DateTime.Parse("11.12.2017 18:30"), DateRes = DateTime.Parse("27.12.2017 12:30")};
+            t.Parse();
             Log.Logger("Добавили GntWeb", AddGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");
         }

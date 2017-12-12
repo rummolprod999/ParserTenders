@@ -101,6 +101,7 @@ namespace ParserTenders
         private void ParserTend(HtmlNode node)
         {
             string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            urlT = $"{_site}{urlT}";
             string title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
             string title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
             string entity = $"{title2} {title1}".Trim();
