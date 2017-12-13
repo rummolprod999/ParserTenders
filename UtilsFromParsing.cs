@@ -17,7 +17,7 @@ namespace ParserTenders
             s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
             s = Regex.Replace(s, @"\(|\)", "");
             s = s.Replace(".", "");
-            Console.WriteLine(s);
+            //Console.WriteLine(s);
             decimal d = 0.0m;
             try
             {

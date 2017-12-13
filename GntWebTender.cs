@@ -319,10 +319,9 @@ namespace ParserTenders
                         string currency = "";
                         if (!string.IsNullOrEmpty(prc))
                         {
-                            string[] arrCur = prc.Split(new string[]{"&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
-                            if (arrCur.Length > 0)
+                            if (prc.Contains("руб"))
                             {
-                                currency = arrCur[arrCur.Length - 2];
+                                currency = "руб.";
                             }
                         }
                         string insertLot =
@@ -337,6 +336,46 @@ namespace ParserTenders
                         cmd18.ExecuteNonQuery();
                         int idLot = (int) cmd18.LastInsertedId;
                         lotNum++;
+                        string _urlPurObj = (navL?.SelectSingleNode("//a[. = \"Просмотр позиций по лоту\"]/@href")?.Value ??"").Trim();
+                        if (!string.IsNullOrEmpty(_urlPurObj))
+                        {
+                            string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
+                            string strObj = DownloadString.DownL1251(urlObj);
+                            if (!string.IsNullOrEmpty(strObj))
+                            {
+                                var htmlObj = new HtmlDocument();
+                                htmlObj.LoadHtml(strObj);
+                                var obj = htmlObj.DocumentNode.SelectNodes("//tr[@class = \"c1\" or @class = \"c2\"]") ??
+                                             new HtmlNodeCollection(null);
+                                if (obj.Count > 0)
+                                {
+                                    foreach (var o in obj)
+                                    {
+                                        string pName = (o.SelectSingleNode("td[2]").InnerText ?? "").Trim();
+                                        string okpd2Name = (o.SelectSingleNode("td[3]").InnerText ?? "").Trim();
+                                        string _prPo = (o.SelectSingleNode("td[5]").InnerText ?? "").Trim();
+                                        _prPo = System.Net.WebUtility.HtmlDecode(_prPo);
+                                        decimal price = UtilsFromParsing.ParsePrice(prc);
+                                        string quantity = (o.SelectSingleNode("td[6]").InnerText ?? "").Trim();
+                                        quantity = System.Net.WebUtility.HtmlDecode(quantity);
+                                        string insertLotitem =
+                                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, customer_quantity_value = @customer_quantity_value";
+                                        MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                                        cmd19.Prepare();
+                                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                                        cmd19.Parameters.AddWithValue("@okpd_name", okpd2Name);
+                                        cmd19.Parameters.AddWithValue("@name", pName);
+                                        cmd19.Parameters.AddWithValue("@quantity_value", quantity);
+                                        cmd19.Parameters.AddWithValue("@price", price);
+                                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
+                                        cmd19.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+
+                        }
+                        
                     }
                     
                 }
