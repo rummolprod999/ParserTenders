@@ -14,7 +14,10 @@ namespace ParserTenders
         {
             s = System.Net.WebUtility.HtmlDecode(s);
             s = Regex.Replace(s, @"\s+", "");
-            s = s.Replace("руб.", "");
+            s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
+            s = Regex.Replace(s, @"\(|\)", "");
+            s = s.Replace(".", "");
+            Console.WriteLine(s);
             decimal d = 0.0m;
             try
             {

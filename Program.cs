@@ -255,6 +255,7 @@ namespace ParserTenders
             {
                 _years.Add(s);
             }
+
             if (String.IsNullOrEmpty(TempPath) || String.IsNullOrEmpty(LogPath))
             {
                 Console.WriteLine("Не получится создать папки для парсинга");
@@ -271,10 +272,12 @@ namespace ParserTenders
             {
                 Directory.CreateDirectory(TempPath);
             }
+
             if (!Directory.Exists(LogPath))
             {
                 Directory.CreateDirectory(LogPath);
             }
+
             switch (arg)
             {
                 case TypeArguments.Curr44:
@@ -405,13 +408,31 @@ namespace ParserTenders
             Log.Logger("Добавили Explanation", AddClarification223);
             Log.Logger("Время окончания парсинга Explanation");
         }
-        
+
         private static void ParserGntWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга GntWeb");
             /*ParserGntWeb p = new ParserGntWeb(arg);
             p.Parsing();*/
-            GntWebTender t = new GntWebTender{UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=35554#lot_1", UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311", Entity = "Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых ", MaxPrice = 654372.88m, DateEnd = DateTime.Parse("10.01.2018 15:00"), DateOpen = DateTime.Parse("19.12.2017 10:00"), DatePub = DateTime.Parse("11.12.2017 18:30"), DateRes = DateTime.Parse("27.12.2017 12:30")};
+            GntWebTender t = new GntWebTender
+            {
+                UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=35554#lot_1",
+                UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311",
+                Entity =
+                    "Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых ",
+                MaxPrice = 654372.88m,
+                DateEnd = DateTime.Parse("10.01.2018 15:00"),
+                DateOpen = DateTime.Parse("19.12.2017 10:00"),
+                DatePub = DateTime.Parse("11.12.2017 18:30"),
+                DateRes = DateTime.Parse("27.12.2017 12:30"),
+                TypeGnT = new TypeGnt()
+                {
+                    Type = GntType.ProposalRequest,
+                    UrlType = "/trades/energo/ProposalRequest/?action=list_published&from=",
+                    UrlTypeList =
+                        "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"
+                }
+            };
             t.Parse();
             Log.Logger("Добавили GntWeb", AddGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");

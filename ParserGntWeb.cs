@@ -9,11 +9,18 @@ namespace ParserTenders
 {
     public class ParserGntWeb : ParserWeb
     {
-        private string _site = "https://www.gazneftetorg.ru";
-        private string _url_list = "/trades/energo/ProposalRequest/?action=list_published&from=";
+        public static string _site = "https://www.gazneftetorg.ru";
+        //private string _url_list = "/trades/energo/ProposalRequest/?action=list_published&from=";
 
-        private string[] _listUrls =
-            {"https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"};
+        private TypeGnt[] _listUrls = new[]
+        {
+            new TypeGnt()
+            {
+                Type = GntType.ProposalRequest,
+                UrlType = "/trades/energo/ProposalRequest/?action=list_published&from=",
+                UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"
+            }
+        };
 
         public ParserGntWeb(TypeArguments a) : base(a)
         {
@@ -34,9 +41,9 @@ namespace ParserTenders
             }
         }
 
-        private void ParserListUrl(string url)
+        private void ParserListUrl(TypeGnt t)
         {
-            string str = DownloadString.DownL(url);
+            string str = DownloadString.DownL(t.UrlTypeList);
             if (!string.IsNullOrEmpty(str))
             {
                 var htmlDoc = new HtmlDocument();
@@ -52,7 +59,7 @@ namespace ParserTenders
                         int i = 0;
                         while (i < page)
                         {
-                            lPage.Add($"{_site}{_url_list}{i * 20}");
+                            lPage.Add($"{_site}{t.UrlType}{i * 20}");
                             i++;
                         }
 
@@ -60,11 +67,11 @@ namespace ParserTenders
                         {
                             try
                             {
-                                ParserListTend(url);
+                                ParserListTend(t, st);
                             }
                             catch (Exception e)
                             {
-                                Log.Logger(e, url);
+                                Log.Logger(e, st);
                             }
                         }
                     }
@@ -72,7 +79,7 @@ namespace ParserTenders
             }
         }
 
-        private void ParserListTend(string url)
+        private void ParserListTend(TypeGnt t, string url)
         {
             string str = DownloadString.DownL1251(url);
             if (!string.IsNullOrEmpty(str))
@@ -88,7 +95,7 @@ namespace ParserTenders
                 {
                     try
                     {
-                        ParserTend(v);
+                        ParserTend(t, v);
                     }
                     catch (Exception e)
                     {
@@ -98,7 +105,7 @@ namespace ParserTenders
             }
         }
 
-        private void ParserTend(HtmlNode node)
+        private void ParserTend(TypeGnt tp, HtmlNode node)
         {
             string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             urlT = $"{_site}{urlT}";
@@ -122,7 +129,7 @@ namespace ParserTenders
             DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             DateTime dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            GntWebTender t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes};
+            GntWebTender t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeGnT = tp};
             try
             {
                 t.Parse();

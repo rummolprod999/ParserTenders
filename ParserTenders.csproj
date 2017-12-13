@@ -179,6 +179,7 @@
     <Compile Include="DownloadFile.cs" />
     <Compile Include="DownloadString.cs" />
     <Compile Include="GetSettings.cs" />
+    <Compile Include="GntType.cs" />
     <Compile Include="GntWebTender.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IParserWeb.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Tender.cs" />
     <Compile Include="TenderTypeOrgChange.cs" />
     <Compile Include="TypeFileAttachment.cs" />
+    <Compile Include="TypeGnt.cs" />
     <Compile Include="Unzipped.cs" />
     <Compile Include="UtilsFromParsing.cs" />
     <Compile Include="WebDownload.cs" />
@@ -231,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="test.html" />
+    <Content Include="testorg.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

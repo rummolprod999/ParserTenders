@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <meta name="description" content="Межотраслевая Торговая Система ГазНефтеторг.ру">
+    <meta name="keywords" content="b2b,электронные торги,конкурсы,закупки,аукционы">
+    <link rel="shortcut icon" href="/css/redesign/images/favicon.ico" type="image/x-icon">
+    <title>Информационная карта ООО "Петербургтеплоэнерго"</title>
+
+    <link rel="alternate" title="RSS" type="application/rss+xml" href="/trades/?action=rss&firm_id=94311"/>
+    <link rel="stylesheet" type="text/css" href="/stc/css/jquery-ui/gazneftetorg/jquery.ui.all.css">
+    <link rel="stylesheet" type="text/css" href="/stc/gazneftetorg/css/forms.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/main_style.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/options.css">
+    <link rel="stylesheet" type="text/css" href="/stc/css/jquery.webui-popover.min.css">
+    <link rel="stylesheet" type="text/css" href="/stc/cache_core_2646435536.css">
+    <script type="text/javascript" src="/stc/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/stc/js/no-conflict.js"></script>
+    <script type="text/javascript" src="/stc/js/jquery.webui-popover.min.js"></script>
+    <script type="text/javascript" src="/stc/js/init.popovers.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/output_authoriz_form.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.checkbox.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/easing.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/slider.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/search.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/jquery.ulslide.js"></script>
+    <script type="text/javascript" src="/stc/js/redesign/slide.js"></script>
+    <script type="text/javascript" src="/stc/js/sign/Code.js"></script>
+    <script type="text/javascript" src="/stc/js/sign/Signature.js"></script>
+    <script type="text/javascript" src="/stc/js/handleLoginType.js"></script>
+    <script type="text/javascript" src="/stc/cache_core_1131632684.js"></script>
+    <script type="text/javascript" src="/stc/cache_callback_4264598038.js"></script>
+    <!--[if IE 8]><link rel="stylesheet" type="text/css" href="/stc/css/redesign/ie8_in.css"><![endif]-->
+    <!--[if IE 8]><script type="text/javascript" src="/stc/js/redesign/button_IE8.js"></script><![endif]-->
+    <link rel="stylesheet" type="text/css" media="print" href="/css/print.css" />
+</head>
+
+<body id="other_page"  bgcolor=#FFFFFF LEFTMARGIN=10 TOPMARGIN=10 MARGINWIDTH=10 MARGINHEIGHT=10 onload="">
+
+<div class="oi_head_holder">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 io_xs logo">
+                <a href="/"><img src="/css/redesign/images/gnt-logo.png" alt="GNT"></a>
+            </div>
+            <div class="full_date">
+                <span id="rus_date"></span><span id="clock"></span>(время московское)
+            </div>
+            <div class="col-md-6 col-sm-6 io_xs">
+                <div class="phone">+7 (495) 231-46-71</div>
+            </div>
+
+            <div class="col-md-3 col-sm-3 io_xs">
+                <div class="login">
+                    <input type="hidden" name="cookies_time" id="cookies_time" value="1" class=cbox>
+                    <img src="/css/redesign/images/lock.png" alt="GNT">
+                    <a href="#login_form" id="login_pop">Вход в систему</a>
+                    <!-- Вход -->
+                    <a href="#x" class="overlay" id="login_form"></a>
+                    <div class="popup">
+                        <img src="/css/redesign/images/lock.png" alt="GNT">
+                        <input type="radio" name="login_type" value="ecp"> По ЭП
+                        <input type="radio" name="login_type" value="standard" checked="checked"> По логину
+                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
+                              name="login_form" id="access-login-form" style="margin:0px">
+                            <div>
+                                <input name="f_login" onblur="if (this.value == '') this.value = 'Логин';" onfocus="if (this.value == 'Логин') this.value = '';" value="Логин" type="text" maxlength="255">
+                            </div>
+                            <div>
+                                <input name="f_password" type="password">
+                            </div>
+                            <div>
+                                <button class="button_green">
+                                    <span class="button-content">Войти</span>
+                                </button>
+                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
+                            </div>
+                        </form>
+
+                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
+                              name="login_form" id="access-ecp-form" style="display:none; margin:0px; width: 205px">
+                            <div>
+                                <select class="form-control" id="certificates" name="f_certificate"></select>
+                            </div>
+                            <div>
+                                <button class="button_green">
+                                    <span class="button-content" id="submitEcp">Войти</span>
+                                </button>
+                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="reg"><a href="/request/registration.html">Регистрация</a></div>
+            </div>
+        </div>
+        <div class="row menu">
+            <div class="col-md-12 col-sm-12 io_xs">
+                <nav class="menu-general-menu-container">
+                    <ul id="menu-general-menu" class="oi_header_menu">
+                        <li class="current-menu-item"><a href="/request/about.html">О компании</a></li>
+                        <li><a href="/personal/">Личный кабинет</a></li>
+                        <li><a href="/trades/">Торговая площадка</a></li>
+                        <li><a href="/news/">Новости</a></li>
+                        <li><a href="/request/contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row row-fluid vbg_fff full_row">
+    <div class="navigation">
+        <div class="container">
+            <div id="control">
+                <a alt="Show/Close" class="open" id="controlbtn_1"></a>
+            </div>
+            <div class="navbar-header">
+                <ol class="breadcrumb">
+                    <li><a href="/">ГазНефтеторг.ру</a></li>
+                    &nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li><a href='/firms/'>Участники</a></li>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li>Информационная карта ООО "Петербургтеплоэнерго"</li>                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="this_page">
+    <div class="container">
+        <div class="row row-fluid vbg_fff full_row">
+            <div class="col-sm-2 block_menu">
+                <div id="wrap_menu_in" style="background: rgb(255, 255, 255) none repeat scroll 0% 0%;">
+                    <div id="maincontent" style="margin-left: 144px;">
+                        <div id="linkblock"><ul id="yourlist"><li><a href="/rules/">Правила работы</a></li><li><a href="/qafaq/">Часто задаваемые вопросы</a></li><li><a href="/signature/">ЭП</a></li><li><a href="/prices/">Прайс-листы</a></li><li><a href="/summaries/summaries.html">Планируемые закупки</a></li><li><a href="/regulations/">Регламентирующие документы</a></li><li><a href="/tariffs/">Тарифные планы</a></li><li><strong><a href="#" data-toggle="popover" data-placement="right" data-trigger="hover" data-html="true" data-content='<li><a href="/about/development.html">Разработка ПО</a></li><li><a href="/about/seldon.html">Проверь контрагента</a></li>'>Сервисы</a></strong></li><li><a href="/about/requirements.html">Требования к компьютеру</a></li><li><a href="http://demo.gazneftetorg.ru">Вход в DEMO-версию</a></li></ul></div>                        <div class="banner_block">
+                        <a href="/about/seldon.html"><img src="/images/banners/seldon_185х240.png" width="200px" height="240px"></a>
+                    </div>                        <div class="link_block">
+                        <a href="http://corpmsp.ru" target=_blank>АО «Корпорация «МСП»</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-10 vc_custom_block block_layout">
+                <div class="layout body_text">
+                    <div class="form">
+                        <H1 class="page_header">Информационная карта ООО "Петербургтеплоэнерго"</H1><br>                                                                        <p id="menu_firm_info"><table width="100%" height="30" border="0" cellspacing="1" cellpadding="0" class="round_blocks"><tr>
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_left.gif"></td>
+                                    <td width="100%" nowrap class="active">Общая информация</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td>
+
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                    <td width="100%" nowrap>&nbsp;<a href="/firms/view_firm.html?id=8ShNkFDPsLLi5NvlA8AVTw%3D%3D&fi=94311&page=1">Продукция/услуги</a>&nbsp;</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                    <td width="100%" nowrap>&nbsp;<a href="/firms/view_firm.html?id=8ShNkFDPsLLi5NvlA8AVTw%3D%3D&fi=94311&page=2">Продукция/услуги (ОКПД2)</a>&nbsp;</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                    <td width="100%" nowrap>&nbsp;<a href="/firms/view_firm.html?id=8ShNkFDPsLLi5NvlA8AVTw%3D%3D&fi=94311&page=3">Торги</a><b> - 0/0</b>&nbsp;</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                    <td width="100%" nowrap>&nbsp;<a href="/firms/view_firm.html?id=8ShNkFDPsLLi5NvlA8AVTw%3D%3D&fi=94311&page=4">Файлы</a><b> - 0</b>&nbsp;</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td nowrap>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
+                                    <td width="100%" nowrap>&nbsp;<a href="/firms/view_firm.html?id=8ShNkFDPsLLi5NvlA8AVTw%3D%3D&fi=94311&page=5">Дополнительно</a>&nbsp;</td>
+                                    <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
+                                </tr>
+                            </table>
+                        </td><td width="100%">&nbsp;</td></tr></table></p><br><table border="0" cellpadding="5" cellspacing="1" width="100%" class="blank"><tr><td class=thead colspan=2>Информация об участнике Системы</td></tr><tr  class="thead_local"><td colspan=2>Наименование организации</td></tr><tr class=c2><td width=30% class=fname>Полное наименование организации:</td><td>Общество с ограниченной ответственностью  "Петербургтеплоэнерго"</td></tr>
+                        <tr class=c2><td width=30% class=fname>Краткое наименование организации:</td><td>ООО "Петербургтеплоэнерго"</td></tr>
+                        <tr  class="thead_local"><td colspan=2>Адреса организации</td></tr><tr class=c2><td width=30% class=fname>Почтовый адрес:</td><td>Россия, 190103, Санкт-Петербург, ул. Дровяная, д. 6-8</td></tr>
+                        <tr class=c2><td width=30% class=fname>Часовой пояс:</td><td>(UTC+3) Москва</td></tr>
+                        <tr class=c2><td width=30% class=fname>Юридический адрес:</td><td>Россия, 190098, г. Санкт-Петербург, Галерная ул., д. 20-22, лит. А</td></tr>
+                        <tr class=c2><td width=30% class=fname>Адрес web-сайта:</td><td><a href="http://ptenergo.ru/" target="_blank">ptenergo.ru</a></td></tr>
+                        <tr  class="thead_local"><td colspan=2>Коды</td></tr><tr class=c2><td width=30% class=fname>ОГРН:</td><td>1047833020058</td></tr>
+                        <tr class=c2><td width=30% class=fname>ИНН:</td><td>7838024362</td></tr>
+                        <tr class=c2><td width=30% class=fname>КПП:</td><td>783450001</td></tr>
+                        <tr class=c2><td width=30% class=fname>ОКПО:</td><td>72472319</td></tr>
+                        <tr class=c2><td width=30% class=fname>ОКАТО:</td><td>40262563000</td></tr>
+                        <tr class=c2><td width=30% class=fname>ОКОГУ:</td><td>49013</td></tr>
+                        <tr class=c2><td width=30% class=fname>ОКФС:</td><td>16</td></tr>
+                        <tr class=c2><td width=30% class=fname>ОКОПФ:</td><td>65</td></tr>
+                        <tr  class="thead_local"><td colspan=2>Банковские реквизиты</td></tr><tr class=c2><td width=30% class=fname>Расчетный счет:</td><td>40702810651000004313</td></tr>
+                        <tr class=c2><td width=30% class=fname>Название банка:</td><td>Филиал ОПЕРУ ОАО Банк ВТБ в Санкт-Петербурге</td></tr>
+                        <tr class=c2><td width=30% class=fname>Местонахождение банка:</td><td>г.Санкт-Петербург</td></tr>
+                        <tr class=c2><td width=30% class=fname>БИК:</td><td>044030704</td></tr>
+                        <tr class=c2><td width=30% class=fname>Корреспондентский счет:</td><td>30101810200000000704</td></tr>
+                        <tr class=c2><td width=30% class=fname>Лицевой счет:</td><td><span class=imp>Информация отсутствует</span></td></tr>
+                        <tr  class="thead_local"><td colspan=2>Руководящий состав</td></tr><tr class=c2><td width=30% class=fname>Генеральный директор:</td><td>Сухарев Андрей Николаевич</td></tr>
+                        <tr  class="thead_local"><td colspan=2>Телефоны и факсы организации</td></tr><tr class=c2><td width=30% class=fname>Отдел организации закупок ООО "Петербургтеплоэнерго":</td><td>тел./факс +7(812)&nbsp;334-50-60&nbsp;(Доб.&nbsp;181)&nbsp;</td></tr>
+                        <tr  class="thead_local"><td colspan=2>Пользователи</td></tr><tr  class="c2"><td colspan=2>Информация о контактных данных организации доступна только для зарегистрированных Участников Системы!<BR>
+                            <BR>
+                            Если Вы являетесь Участником Системы, то Вам необходимо ввести логин и пароль в верхней части страницы.<BR>
+                            <BR>
+                            Если Вы не являетесь Участником Системы, то Вам необходимо:<BR>
+                            <BR>
+                            Зарегистрироваться в Системе<BR>
+                            <BR>
+                            Есть вопросы? Звоните нам!<BR>
+                            Наши менеджеры с удовольствием на них ответят.<BR>
+                            Многоканальные телефоны в Москве: +7 (495) 231-46-71</td></tr><tr  class="thead_local"><td colspan=2>Основная номенклатура</td></tr><tr class=c2><td width=30% class=fname>Предлагаемая продукция и услуги:</td><td>тепловая энергия</td></tr>
+                        <tr class=c2><td width=30% class=fname>Приобретаемая продукция и услуги:</td><td>Продукция и услуги, обеспечивающие ведение производственно-хозяйственной деятельности теплоснабжающей организации</td></tr>
+                        <tr class=c2><td width=30% class=fname>Дополнительная информация:</td><td><span class=imp>Информация отсутствует</span></td></tr>
+                    </table>                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="oi_footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <b>2013-2017</b><br>
+                Оператор Системы &mdash;
+                &quot;ГазНефтеторг.ру&quot;<br>
+                Все права защищены &copy; <br>
+                <span>+7 (495) 231-46-71</span>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li><a href="/request/about.html">О компании</a></li>
+                    <li><a href="/personal/">Личный кабинет</a></li>
+                    <li><a href="/trades/">Торговая площадка</a></li>
+                    <li><a href="/news/">Новости</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>                <a href="/tariffs/">Тарифные планы</a>
+                    </li>
+                    <li><a href="/presentations/">Презентации</a></li>
+                    <li><a href="/rules/">Правила работы</a></li>
+                    <li>                <a href="/prices/">Прайс-листы</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div><script type="text/javascript">
+
+    (function() {
+        $.ajax({
+            url      : '/blocks/local_time.php',
+            cache    : false,
+            dataType : 'json',
+            success  : function(data)
+            {
+                $('#rus_date').text(data.rus_date);
+
+                window.CurrentDate = new Date(data.time);
+
+                Doo();
+            }
+        });
+    })();
+
+</script>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28385057-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script></BODY>
+</HTML>
