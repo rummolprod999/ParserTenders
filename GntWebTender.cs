@@ -75,8 +75,8 @@ namespace ParserTenders
                     if (dt.Rows.Count > 0)
                     {
                         Log.Logger("This tender is exist in base", pNum);
-                        //return;
-                        //TODO clear this comments
+                        return;
+                        
                     }
 
                     int cancelStatus = 0;
@@ -303,19 +303,24 @@ namespace ParserTenders
                             }
                         }
                     }
-                    string finSource = (navT?.SelectSingleNode("//tr[td [position()=1]= \"Источник финансирования:\"]/td[last()]")?.Value ?? "").Trim();
+
+                    string finSource =
+                    (navT?.SelectSingleNode("//tr[td [position()=1]= \"Источник финансирования:\"]/td[last()]")
+                         ?.Value ?? "").Trim();
                     int lotNum = 1;
                     var lots = htmlDoc.DocumentNode.SelectNodes("//div[@class = \"lot_info\"]") ??
-                                 new HtmlNodeCollection(null);
-                    foreach (var l in lots)
+                               new HtmlNodeCollection(null);
+                    foreach (var lt in lots)
                     {
-                        var navL = (HtmlNodeNavigator) l.CreateNavigator();
+                        var navL = (HtmlNodeNavigator) lt.CreateNavigator();
                         string prc =
                         (navL?.SelectSingleNode(
-                             "//tr[td [position()=1]= \"Начальная (максимальная) цена договора:\"]/td[last()]")?.Value ??
+                                 "table/tbody/tr[td [position()=1]= \"Начальная (максимальная) цена договора:\"]/td[last()]")
+                             ?.Value ??
                          "").Trim();
                         prc = System.Net.WebUtility.HtmlDecode(prc);
                         decimal maxP = UtilsFromParsing.ParsePrice(prc);
+                        //WriteLine(maxP);
                         string currency = "";
                         if (!string.IsNullOrEmpty(prc))
                         {
@@ -324,6 +329,7 @@ namespace ParserTenders
                                 currency = "руб.";
                             }
                         }
+
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
@@ -335,8 +341,18 @@ namespace ParserTenders
                         cmd18.Parameters.AddWithValue("@finance_source", finSource);
                         cmd18.ExecuteNonQuery();
                         int idLot = (int) cmd18.LastInsertedId;
+                        string prefName =
+                            (navL?.SelectSingleNode("table/tbody/tr[td [position()=1]= \"Сведения о предоставлении преференций:\"]/td[last()]")?.Value ?? "").Trim();
+                        string insertPreference =
+                            $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
+                        MySqlCommand cmd17 = new MySqlCommand(insertPreference, connect);
+                        cmd17.Prepare();
+                        cmd17.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd17.Parameters.AddWithValue("@name", prefName);
+                        cmd17.ExecuteNonQuery();
                         lotNum++;
-                        string _urlPurObj = (navL?.SelectSingleNode("//a[. = \"Просмотр позиций по лоту\"]/@href")?.Value ??"").Trim();
+                        string _urlPurObj =
+                            (navL?.SelectSingleNode("table/tbody/tr/td/p/a[. = \"Просмотр позиций по лоту\"]/@href")?.Value ?? "").Trim();
                         if (!string.IsNullOrEmpty(_urlPurObj))
                         {
                             string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
@@ -345,8 +361,9 @@ namespace ParserTenders
                             {
                                 var htmlObj = new HtmlDocument();
                                 htmlObj.LoadHtml(strObj);
-                                var obj = htmlObj.DocumentNode.SelectNodes("//tr[@class = \"c1\" or @class = \"c2\"]") ??
-                                             new HtmlNodeCollection(null);
+                                var obj =
+                                    htmlObj.DocumentNode.SelectNodes("//tr[@class = \"c1\" or @class = \"c2\"]") ??
+                                    new HtmlNodeCollection(null);
                                 if (obj.Count > 0)
                                 {
                                     foreach (var o in obj)
@@ -355,11 +372,11 @@ namespace ParserTenders
                                         string okpd2Name = (o.SelectSingleNode("td[3]").InnerText ?? "").Trim();
                                         string _prPo = (o.SelectSingleNode("td[5]").InnerText ?? "").Trim();
                                         _prPo = System.Net.WebUtility.HtmlDecode(_prPo);
-                                        decimal price = UtilsFromParsing.ParsePrice(prc);
+                                        decimal price = UtilsFromParsing.ParsePrice(_prPo);
                                         string quantity = (o.SelectSingleNode("td[6]").InnerText ?? "").Trim();
                                         quantity = System.Net.WebUtility.HtmlDecode(quantity);
                                         string insertLotitem =
-                                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, customer_quantity_value = @customer_quantity_value";
+                                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, sum = @sum, customer_quantity_value = @customer_quantity_value";
                                         MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
                                         cmd19.Prepare();
                                         cmd19.Parameters.AddWithValue("@id_lot", idLot);
@@ -367,17 +384,42 @@ namespace ParserTenders
                                         cmd19.Parameters.AddWithValue("@okpd_name", okpd2Name);
                                         cmd19.Parameters.AddWithValue("@name", pName);
                                         cmd19.Parameters.AddWithValue("@quantity_value", quantity);
-                                        cmd19.Parameters.AddWithValue("@price", price);
+                                        cmd19.Parameters.AddWithValue("@sum", price);
                                         cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
                                         cmd19.ExecuteNonQuery();
                                     }
                                 }
+                                else
+                                {
+                                    string pName =
+                                    (navL?.SelectSingleNode(
+                                             "table/tbody/tr[td [position()=1]/text()[1]  = \"Предмет договора\"]/td[last()]")
+                                         ?.Value ?? "").Trim();
+                                    string okpd2Name =
+                                    (navL?.SelectSingleNode(
+                                             "table/tbody/tr[td [position()=1]= \"Категория продукции (ОКПД2):\"]/td[last()]")
+                                         ?.Value ?? "").Trim();
+                                    string quantity =
+                                    (navL?.SelectSingleNode(
+                                             "table/tbody/tr[td [position()=1]= \"Количество поставляемого товара, объем выполняемых работ, оказываемых услуг:\"]/td[last()]")
+                                         ?.Value ?? "").Trim();
+                                    quantity = System.Net.WebUtility.HtmlDecode(quantity);
+                                    string insertLotitem =
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                                    cmd19.Prepare();
+                                    cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                                    cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                                    cmd19.Parameters.AddWithValue("@okpd_name", okpd2Name);
+                                    cmd19.Parameters.AddWithValue("@name", pName);
+                                    cmd19.Parameters.AddWithValue("@quantity_value", quantity);
+                                    cmd19.Parameters.AddWithValue("@sum", maxP);
+                                    cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
+                                    cmd19.ExecuteNonQuery();
+                                }
                             }
-
                         }
-                        
                     }
-                    
                 }
             }
         }

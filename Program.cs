@@ -412,14 +412,14 @@ namespace ParserTenders
         private static void ParserGntWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга GntWeb");
-            /*ParserGntWeb p = new ParserGntWeb(arg);
-            p.Parsing();*/
-            GntWebTender t = new GntWebTender
+            ParserGntWeb p = new ParserGntWeb(arg);
+            p.Parsing();
+            /*GntWebTender t = new GntWebTender
             {
-                UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=35554#lot_1",
-                UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311",
+                UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=34366#lot_4",
+                UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=7kGR7S9qSRoUHpJCr6Z5GQ%3D%3D&fi=87721",
                 Entity =
-                    "Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых ",
+                    "Запрос предложений № 139447",
                 MaxPrice = 654372.88m,
                 DateEnd = DateTime.Parse("10.01.2018 15:00"),
                 DateOpen = DateTime.Parse("19.12.2017 10:00"),
@@ -433,7 +433,7 @@ namespace ParserTenders
                         "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"
                 }
             };
-            t.Parse();
+            t.Parse();*/
             Log.Logger("Добавили GntWeb", AddGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");
         }
