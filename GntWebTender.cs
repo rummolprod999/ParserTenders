@@ -420,6 +420,8 @@ namespace ParserTenders
                             }
                         }
                     }
+                    Tender.TenderKwords(connect, idTender);
+                    Tender.AddVerNumber(connect, pNum);
                 }
             }
         }
