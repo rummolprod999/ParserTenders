@@ -412,7 +412,7 @@ namespace ParserTenders
                                         string quantity = (o.SelectSingleNode("td[6]")?.InnerText ?? "").Trim();
                                         quantity = System.Net.WebUtility.HtmlDecode(quantity);
                                         string insertLotitem =
-                                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, customer_quantity_value = @customer_quantity_value";
                                         MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
                                         cmd19.Prepare();
                                         cmd19.Parameters.AddWithValue("@id_lot", idLot);
@@ -420,7 +420,7 @@ namespace ParserTenders
                                         cmd19.Parameters.AddWithValue("@okpd_name", okpd2Name);
                                         cmd19.Parameters.AddWithValue("@name", pName);
                                         cmd19.Parameters.AddWithValue("@quantity_value", quantity);
-                                        cmd19.Parameters.AddWithValue("@sum", price);
+                                        cmd19.Parameters.AddWithValue("@price", price);
                                         cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
                                         cmd19.ExecuteNonQuery();
                                     }
