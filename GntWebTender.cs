@@ -293,6 +293,10 @@ namespace ParserTenders
                                 string fName = (att.SelectSingleNode("td[2]/a")?.InnerText ?? "").Trim();
                                 string urlF = (att.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"]?.Value ?? "")
                                     .Trim();
+                                if (urlF.StartsWith("/files"))
+                                {
+                                    urlF = $"{ParserGntWeb._site}{urlF}";
+                                }
                                 string Desc = (att.SelectSingleNode("td[3]")?.InnerText ?? "").Trim();
                                 Desc = System.Net.WebUtility.HtmlDecode(Desc);
                                 if (!string.IsNullOrEmpty(fName))
