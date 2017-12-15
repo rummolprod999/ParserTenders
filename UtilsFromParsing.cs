@@ -34,6 +34,7 @@ namespace ParserTenders
 
         public static DateTime ParseDateTend(string s)
         {
+            
             DateTime d = DateTime.MinValue;
             if (!String.IsNullOrEmpty(s))
             {
@@ -43,7 +44,16 @@ namespace ParserTenders
                 }
                 catch
                 {
-                    // ignored
+                    try
+                    {
+                        d = DateTime.ParseExact(s, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception e)
+                    {
+                        //Console.WriteLine(s);
+                        //ignore
+                    }
+                    //Console.WriteLine(s);
                 }
             }
             return d;

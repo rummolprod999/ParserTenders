@@ -19,6 +19,12 @@ namespace ParserTenders
                 Type = GntType.ProposalRequest,
                 UrlType = "/trades/energo/ProposalRequest/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"
+            },
+            new TypeGnt()
+            {
+                Type = GntType.Tender,
+                UrlType = "/trades/energo/Tender/?action=list_published&from=",
+                UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/Tender/?action=list_published&from=0"
             }
         };
 
@@ -48,8 +54,7 @@ namespace ParserTenders
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                string maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"page_nav\"]/a)[last()-1]")
-                    .InnerText;
+                string maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"page_nav\"]/a)[last()-1]")?.InnerText;
                 //Console.WriteLine(maxNumPage);
                 if (!string.IsNullOrEmpty(maxNumPage))
                 {
@@ -74,6 +79,17 @@ namespace ParserTenders
                                 Log.Logger(e, st);
                             }
                         }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        ParserListTend(t, t.UrlTypeList);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Logger(e, t.UrlTypeList);
                     }
                 }
             }
@@ -117,17 +133,30 @@ namespace ParserTenders
             string _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
             decimal maxPrice = UtilsFromParsing.ParsePrice(_price);
             string _datePub =
-                (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]/span").InnerText ?? "").Trim();
+                (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]/span")?.InnerText ?? "").Trim();
             string _dateOpen =
-                (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/span").InnerText ?? "").Trim();
+                (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/span")?.InnerText ?? "").Trim();
+            
             string _dateRes =
-                (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/span").InnerText ?? "")
+                (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/span")?.InnerText ?? "")
                 .Trim();
             string _dateEnd =
-                (node.SelectSingleNode("td/span[@title = \"Дата завершения процедуры\"]/span").InnerText ?? "").Trim();
+                (node.SelectSingleNode("td/span[@title = \"Дата завершения процедуры\"]/span")?.InnerText ?? "").Trim();
             DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
             DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            if (dateOpen == DateTime.MinValue)
+            {
+                _dateOpen =
+                    (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/strong/span")?.InnerText ?? "").Trim();
+                dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            }
             DateTime dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
+            if (dateRes == DateTime.MinValue)
+            {
+                _dateRes =
+                    (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/strong/span")?.InnerText ?? "").Trim();
+                dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
+            }
             DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
             GntWebTender t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeGnT = tp};
             try

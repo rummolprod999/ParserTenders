@@ -416,7 +416,7 @@ namespace ParserTenders
             p.Parsing();
             /*GntWebTender t = new GntWebTender
             {
-                UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=34366#lot_4",
+                UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=30493#lot_1",
                 UrlOrg = "https://www.gazneftetorg.ru/firms/view_firm.html?id=7kGR7S9qSRoUHpJCr6Z5GQ%3D%3D&fi=87721",
                 Entity =
                     "Запрос предложений № 139447",

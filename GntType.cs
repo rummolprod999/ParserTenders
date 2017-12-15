@@ -3,5 +3,6 @@
     public enum GntType
     {
         ProposalRequest,
+        Tender
     }
 }

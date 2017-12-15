@@ -37,7 +37,7 @@ namespace ParserTenders
                     string num =
                         (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"c1\"]/td/a[@href]").InnerText ?? "")
                         .Trim();
-                    Log.Logger("Tender exist on zakupki.gov", num);
+                    //Log.Logger("Tender exist on zakupki.gov", num);
                     return;
                 }
 
@@ -64,11 +64,12 @@ namespace ParserTenders
                 {
                     connect.Open();
                     string selectTend =
-                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND date_version = @date_version AND type_fz = 6";
+                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND date_version = @date_version AND end_date = @end_date AND type_fz = 6";
                     MySqlCommand cmd = new MySqlCommand(selectTend, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@purchase_number", pNum);
                     cmd.Parameters.AddWithValue("@date_version", DatePub);
+                    cmd.Parameters.AddWithValue("@end_date", DateOpen);
                     DataTable dt = new DataTable();
                     MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd};
                     adapter.Fill(dt);
@@ -190,6 +191,9 @@ namespace ParserTenders
                         case GntType.ProposalRequest:
                             pwName = "Запрос предложений";
                             break;
+                        case GntType.Tender:
+                            pwName = "Конкурс";
+                            break;
                         default:
                             pwName = "";
                             break;
@@ -286,20 +290,24 @@ namespace ParserTenders
                                          new HtmlNodeCollection(null);
                             foreach (var att in attach)
                             {
-                                string fName = (att.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
-                                string urlF = (att.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "")
+                                string fName = (att.SelectSingleNode("td[2]/a")?.InnerText ?? "").Trim();
+                                string urlF = (att.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"]?.Value ?? "")
                                     .Trim();
-                                string Desc = (att.SelectSingleNode("td[3]").InnerText ?? "").Trim();
+                                string Desc = (att.SelectSingleNode("td[3]")?.InnerText ?? "").Trim();
                                 Desc = System.Net.WebUtility.HtmlDecode(Desc);
-                                string insertAttach =
-                                    $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
-                                MySqlCommand cmd10 = new MySqlCommand(insertAttach, connect);
-                                cmd10.Prepare();
-                                cmd10.Parameters.AddWithValue("@id_tender", idTender);
-                                cmd10.Parameters.AddWithValue("@file_name", fName);
-                                cmd10.Parameters.AddWithValue("@url", urlF);
-                                cmd10.Parameters.AddWithValue("@description", Desc);
-                                cmd10.ExecuteNonQuery();
+                                if (!string.IsNullOrEmpty(fName))
+                                {
+                                    string insertAttach =
+                                        $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
+                                    MySqlCommand cmd10 = new MySqlCommand(insertAttach, connect);
+                                    cmd10.Prepare();
+                                    cmd10.Parameters.AddWithValue("@id_tender", idTender);
+                                    cmd10.Parameters.AddWithValue("@file_name", fName);
+                                    cmd10.Parameters.AddWithValue("@url", urlF);
+                                    cmd10.Parameters.AddWithValue("@description", Desc);
+                                    cmd10.ExecuteNonQuery();
+                                }
+                                
                             }
                         }
                     }
@@ -343,13 +351,41 @@ namespace ParserTenders
                         int idLot = (int) cmd18.LastInsertedId;
                         string prefName =
                             (navL?.SelectSingleNode("table/tbody/tr[td [position()=1]= \"Сведения о предоставлении преференций:\"]/td[last()]")?.Value ?? "").Trim();
-                        string insertPreference =
-                            $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
-                        MySqlCommand cmd17 = new MySqlCommand(insertPreference, connect);
-                        cmd17.Prepare();
-                        cmd17.Parameters.AddWithValue("@id_lot", idLot);
-                        cmd17.Parameters.AddWithValue("@name", prefName);
-                        cmd17.ExecuteNonQuery();
+                        if (!string.IsNullOrEmpty(prefName))
+                        {
+                            string insertPreference =
+                                $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
+                            MySqlCommand cmd17 = new MySqlCommand(insertPreference, connect);
+                            cmd17.Prepare();
+                            cmd17.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd17.Parameters.AddWithValue("@name", prefName);
+                            cmd17.ExecuteNonQuery();
+                        }
+                        string recName =
+                            (navL?.SelectSingleNode("table/tbody/tr[starts-with(td[position()=1], \"Требования\")]/td[last()]")?.Value ?? "").Trim();
+                        if (!string.IsNullOrEmpty(recName))
+                        {
+                            string insertRequirement =
+                                $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, content = @content";
+                            MySqlCommand cmd30 = new MySqlCommand(insertRequirement, connect);
+                            cmd30.Prepare();
+                            cmd30.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd30.Parameters.AddWithValue("@content", recName);
+                            cmd30.ExecuteNonQuery();
+                        }
+                        string restName =
+                            (navL?.SelectSingleNode("table/tbody/tr[starts-with(td[position()=1], \"Участниками закупки могут\")]/td[last()]")?.Value ?? "").Trim();
+                        if (restName == "Да")
+                        {
+                            string restrictInfo = "Участниками закупки могут быть только субъекты малого и среднего предпринимательства";
+                            string insertRestrict =
+                                $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, info = @info";
+                            MySqlCommand cmd19 = new MySqlCommand(insertRestrict, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@info", restrictInfo);
+                            cmd19.ExecuteNonQuery();
+                        }
                         lotNum++;
                         string _urlPurObj =
                             (navL?.SelectSingleNode("table/tbody/tr/td/p/a[. = \"Просмотр позиций по лоту\"]/@href")?.Value ?? "").Trim();
@@ -368,12 +404,12 @@ namespace ParserTenders
                                 {
                                     foreach (var o in obj)
                                     {
-                                        string pName = (o.SelectSingleNode("td[2]").InnerText ?? "").Trim();
-                                        string okpd2Name = (o.SelectSingleNode("td[3]").InnerText ?? "").Trim();
-                                        string _prPo = (o.SelectSingleNode("td[5]").InnerText ?? "").Trim();
+                                        string pName = (o.SelectSingleNode("td[2]")?.InnerText ?? "").Trim();
+                                        string okpd2Name = (o.SelectSingleNode("td[3]")?.InnerText ?? "").Trim();
+                                        string _prPo = (o.SelectSingleNode("td[5]")?.InnerText ?? "").Trim();
                                         _prPo = System.Net.WebUtility.HtmlDecode(_prPo);
                                         decimal price = UtilsFromParsing.ParsePrice(_prPo);
-                                        string quantity = (o.SelectSingleNode("td[6]").InnerText ?? "").Trim();
+                                        string quantity = (o.SelectSingleNode("td[6]")?.InnerText ?? "").Trim();
                                         quantity = System.Net.WebUtility.HtmlDecode(quantity);
                                         string insertLotitem =
                                             $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, sum = @sum, customer_quantity_value = @customer_quantity_value";
@@ -421,7 +457,35 @@ namespace ParserTenders
                         }
                     }
                     Tender.TenderKwords(connect, idTender);
-                    Tender.AddVerNumber(connect, pNum);
+                    AddVerNumber(connect, pNum);
+                }
+            }
+        }
+        
+        private void AddVerNumber(MySqlConnection connect, string purchaseNumber)
+        {
+            int verNum = 1;
+            string selectTenders =
+                $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchaseNumber AND type_fz = 6 ORDER BY id_tender ASC";
+            MySqlCommand cmd1 = new MySqlCommand(selectTenders, connect);
+            cmd1.Prepare();
+            cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
+            DataTable dt1 = new DataTable();
+            MySqlDataAdapter adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            adapter1.Fill(dt1);
+            if (dt1.Rows.Count > 0)
+            {
+                string updateTender =
+                    $"UPDATE {Program.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
+                foreach (DataRow ten in dt1.Rows)
+                {
+                    int idTender = (int) ten["id_tender"];
+                    MySqlCommand cmd2 = new MySqlCommand(updateTender, connect);
+                    cmd2.Prepare();
+                    cmd2.Parameters.AddWithValue("@id_tender", idTender);
+                    cmd2.Parameters.AddWithValue("@num_version", verNum);
+                    cmd2.ExecuteNonQuery();
+                    verNum++;
                 }
             }
         }
