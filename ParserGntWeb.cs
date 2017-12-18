@@ -128,6 +128,7 @@ namespace ParserTenders
             string title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
             string title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
             string entity = $"{title2} {title1}".Trim();
+            entity = Regex.Replace(entity, @"\s+", " ");
             entity = System.Net.WebUtility.HtmlDecode(entity);
             string _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             string urlOrg = $"{_site}{_urlOrg}";

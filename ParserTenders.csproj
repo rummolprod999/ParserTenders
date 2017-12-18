@@ -186,6 +186,8 @@
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LotGpB.cs" />
+    <Compile Include="ObTorgType.cs" />
+    <Compile Include="ObTorgWebTender.cs" />
     <Compile Include="OrganizerGpB.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserAttach.cs" />
@@ -193,6 +195,7 @@
     <Compile Include="ParserGntWeb.cs" />
     <Compile Include="ParserGpb.cs" />
     <Compile Include="ParserGpbGaz.cs" />
+    <Compile Include="ParserObTorgWeb.cs" />
     <Compile Include="ParserSgn223.cs" />
     <Compile Include="ParserTend223.cs" />
     <Compile Include="ParserTend44.cs" />
@@ -222,6 +225,7 @@
     <Compile Include="TenderTypeOrgChange.cs" />
     <Compile Include="TypeFileAttachment.cs" />
     <Compile Include="TypeGnt.cs" />
+    <Compile Include="TypeObTorg.cs" />
     <Compile Include="Unzipped.cs" />
     <Compile Include="UtilsFromParsing.cs" />
     <Compile Include="WebDownload.cs" />

@@ -23,6 +23,8 @@ namespace ParserTenders
         private static string _tempExp223;
         private static string _logGntWeb;
         private static string _tempGntWeb;
+        private static string _logObTorgWeb;
+        private static string _tempObTorgWeb;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -78,6 +80,8 @@ namespace ParserTenders
                         return _tempExp223;
                     case TypeArguments.GntWeb:
                         return _tempGntWeb;
+                    case TypeArguments.ObTorgWeb:
+                        return _tempObTorgWeb;
                     default:
                         return "";
                 }
@@ -109,6 +113,8 @@ namespace ParserTenders
                         return _logExp223;
                     case TypeArguments.GntWeb:
                         return _logGntWeb;
+                    case TypeArguments.ObTorgWeb:
+                        return _logObTorgWeb;
                     default:
                         return "";
                 }
@@ -136,13 +142,14 @@ namespace ParserTenders
         public static int AddClarification = 0;
         public static int AddClarification223 = 0;
         public static int AddGntWeb = 0;
+        public static int AddObTorgWeb = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb в качестве аргумента");
                 return;
             }
 
@@ -212,9 +219,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserGntWeb(Periodparsing);
                     break;
+                case "obtorgweb":
+                    Periodparsing = TypeArguments.ObTorgWeb;
+                    Init(Periodparsing);
+                    ParserObTorgWeb(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb");
                     break;
             }
         }
@@ -245,6 +257,8 @@ namespace ParserTenders
             _tempExp223 = set.TempPathExp223;
             _tempGntWeb = set.TempGntWeb;
             _logGntWeb = set.LogGntWeb;
+            _tempObTorgWeb = set.TempObTorgWeb;
+            _logObTorgWeb = set.LogObTorgWeb;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -305,6 +319,9 @@ namespace ParserTenders
                     break;
                 case TypeArguments.GntWeb:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}GntWeb_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.ObTorgWeb:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}ObTorgWeb_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -436,6 +453,35 @@ namespace ParserTenders
             t.Parse();*/
             Log.Logger("Добавили GntWeb", AddGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");
+        }
+        
+        private static void ParserObTorgWeb(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга ObTorgWeb");
+            ParserObTorgWeb p = new ParserObTorgWeb(arg);
+            p.Parsing();
+            /*ObTorgWebTender t = new ObTorgWebTender
+            {
+                UrlTender = "https://www.oborontorg.ru/market/view.html?action=view_public_offer&type=1560&id=127906",
+                UrlOrg = "https://www.oborontorg.ru/firms/view_firm.html?id=lPuLZUP1Ije8U3PQDTcVnFeL_Sg0Y69rp_XwAiD4K5bCsM3hEpoucjTOy_whnFrvzk9ZAB0DPi6JltQm6cf31g",
+                Entity =
+                    "Запрос предложений № 139447",
+                MaxPrice = 654372.88m,
+                DateEnd = DateTime.Parse("10.01.2018 15:00"),
+                DateOpen = DateTime.Parse("19.12.2017 10:00"),
+                DatePub = DateTime.Parse("11.12.2017 18:30"),
+                DateRes = DateTime.Parse("27.12.2017 12:30"),
+                TypeObTorgT = new TypeObTorg()
+                {
+                    Type = ObTorgType.Auction,
+                    UrlType = "/market/?action=list_public_auctions&type=1560&status_group=sg_published&from=",
+                    UrlTypeList =
+                        "https://www.oborontorg.ru/market/?action=list_public_auctions&type=1560&status_group=sg_published&from=0"
+                }
+            };
+            t.ParseAuction();*/
+            Log.Logger("Добавили ObTorgWeb", AddObTorgWeb);
+            Log.Logger("Время окончания парсинга ObTorgWeb");
         }
     }
 }

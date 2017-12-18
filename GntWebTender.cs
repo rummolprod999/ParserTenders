@@ -30,18 +30,18 @@ namespace ParserTenders
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                string eis = (htmlDoc.DocumentNode.SelectSingleNode("//td[@class = \"fname\"]").InnerText ?? "").Trim();
+                string eis = (htmlDoc.DocumentNode.SelectSingleNode("//td[@class = \"fname\"]")?.InnerText ?? "").Trim();
                 //WriteLine(eis);
                 if (eis == "Номер извещения в ЕИС:")
                 {
                     string num =
-                        (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"c1\"]/td/a[@href]").InnerText ?? "")
+                        (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"c1\"]/td/a[@href]")?.InnerText ?? "")
                         .Trim();
                     //Log.Logger("Tender exist on zakupki.gov", num);
                     return;
                 }
 
-                string _pNum = (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"thead\"]/td[@colspan = \"2\"]")
+                string _pNum = (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"thead\"]/td[@colspan = \"2\"]")?
                                     .InnerText ?? "").Trim();
                 string pNum = "";
                 try
