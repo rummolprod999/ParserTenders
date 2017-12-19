@@ -7,17 +7,18 @@ using System.Text;
 using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ParserTenders.TenderDir;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
-    public class ParserExp : Parser
+    public class ParserSgn223 : Parser
     {
         protected DataTable DtRegion;
 
-        private string[] _fileExp223 = new[]
-            {"explanation_"};
+        private string[] _fileSign223 = new[]
+            {"contract_"};
 
-        public ParserExp(TypeArguments arg) : base(arg)
+        public ParserSgn223(TypeArguments arg) : base(arg)
         {
         }
 
@@ -31,12 +32,12 @@ namespace ParserTenders
                 string regionPath = (string) row["path223"];
                 switch (Program.Periodparsing)
                 {
-                    case (TypeArguments.LastExp223):
-                        pathParse = $"/out/published/{regionPath}/explanation/";
+                    case (TypeArguments.LastSign223):
+                        pathParse = $"/out/published/{regionPath}/contract/";
                         arch = GetListArchLast(pathParse, regionPath);
                         break;
-                    case (TypeArguments.DailyExp223):
-                        pathParse = $"/out/published/{regionPath}/explanation/daily/";
+                    case (TypeArguments.DailySign223):
+                        pathParse = $"/out/published/{regionPath}/contract/daily/";
                         arch = GetListArchDaily(pathParse, regionPath);
                         break;
                 }
@@ -54,37 +55,22 @@ namespace ParserTenders
             }
         }
         
-        public override List<String> GetListArchLast(string pathParse, string regionPath)
+        public void ParsingXml(FileInfo f, string region, int regionId)
         {
-            /*FtpClient ftp = ClientFtp44();*/
-            var archtemp = GetListFtp223(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"explanation_{regionPath}{y}").ToList();
-            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
-        }
-        
-        public override List<String> GetListArchDaily(string pathParse, string regionPath)
-        {
-            List<String> arch = new List<string>();
-            List<string> archtemp = GetListFtp223(pathParse);
-            foreach (var a in archtemp
-                .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
             {
-                using (ArchiveExp223Context db = new ArchiveExp223Context())
-                {
-                    var archives = db.ArchiveExp223Results.Where(p => p.Archive == a).ToList();
-
-                    if (archives.Count == 0)
-                    {
-                        ArchiveExp223 ar = new ArchiveExp223 {Archive = a, Region = regionPath};
-                        db.ArchiveExp223Results.Add(ar);
-                        arch.Add(a);
-                        db.SaveChanges();
-                    }
-                }
+                var ftext = sr.ReadToEnd();
+                ftext = ClearText.ClearString(ftext);
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(ftext);
+                string jsons = JsonConvert.SerializeXmlNode(doc);
+                JObject json = JObject.Parse(jsons);
+                TenderTypeSign223 a = new TenderTypeSign223(f, region, regionId, json);
+                a.Parsing();
             }
-            return arch;
         }
-        
+
+
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             string filea = "";
@@ -100,7 +86,7 @@ namespace ParserTenders
                         DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
                         FileInfo[] filelist = dirInfo.GetFiles();
                         List<FileInfo> arraySign223 = filelist
-                            .Where(a => _fileExp223.Any(
+                            .Where(a => _fileSign223.Any(
                                             t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1) &&
                                         a.Length != 0).ToList();
                         foreach (var f in arraySign223)
@@ -143,20 +129,37 @@ namespace ParserTenders
                 Log.Logger("Ошибка при парсинге xml", e, f);
             }
         }
-        
-        public void ParsingXml(FileInfo f, string region, int regionId)
+
+        public override List<String> GetListArchLast(string pathParse, string regionPath)
         {
-            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            List<string> archtemp = new List<string>();
+            /*FtpClient ftp = ClientFtp44();*/
+            archtemp = GetListFtp223(pathParse);
+            List<String> yearsSearch = Program.Years.Select(y => $"contract_{regionPath}{y}").ToList();
+            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
+        }
+
+        public override List<String> GetListArchDaily(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+            List<string> archtemp = GetListFtp223(pathParse);
+            foreach (var a in archtemp
+                .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
-                var ftext = sr.ReadToEnd();
-                ftext = ClearText.ClearString(ftext);
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(ftext);
-                string jsons = JsonConvert.SerializeXmlNode(doc);
-                JObject json = JObject.Parse(jsons);
-                TenderTypeExp223 a = new TenderTypeExp223(f, region, regionId, json);
-                a.Parsing();
+                using (ArchiveSign223Context db = new ArchiveSign223Context())
+                {
+                    var archives = db.ArchiveSign223Results.Where(p => p.Archive == a).ToList();
+
+                    if (archives.Count == 0)
+                    {
+                        ArchiveSign223 ar = new ArchiveSign223 {Archive = a, Region = regionPath};
+                        db.ArchiveSign223Results.Add(ar);
+                        arch.Add(a);
+                        db.SaveChanges();
+                    }
+                }
             }
+            return arch;
         }
     }
 }

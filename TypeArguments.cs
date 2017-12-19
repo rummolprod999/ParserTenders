@@ -14,6 +14,7 @@ namespace ParserTenders
         LastExp223,
         DailyExp223,
         GntWeb,
-        ObTorgWeb
+        ObTorgWeb,
+        SpecTorgWeb
     }
 }

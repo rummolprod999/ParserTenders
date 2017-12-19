@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using static System.Console;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
     public class ParserObTorgWeb: ParserWeb
     {

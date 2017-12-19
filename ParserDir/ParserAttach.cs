@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using TikaOnDotNet.TextExtraction;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
     public class ParserAttach
     {

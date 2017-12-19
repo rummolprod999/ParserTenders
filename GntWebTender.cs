@@ -3,6 +3,8 @@ using System.Data;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
+using ParserTenders.ParserDir;
+using ParserTenders.TenderDir;
 using static System.Console;
 
 namespace ParserTenders

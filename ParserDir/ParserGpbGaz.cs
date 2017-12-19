@@ -1,4 +1,4 @@
-﻿namespace ParserTenders
+﻿namespace ParserTenders.ParserDir
 {
     public class ParserGpbGaz : ParserGpb
     {

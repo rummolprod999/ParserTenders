@@ -23,6 +23,8 @@ namespace ParserTenders
         public readonly string TempGntWeb;
         public readonly string LogObTorgWeb;
         public readonly string TempObTorgWeb;
+        public readonly string LogSpecTorgWeb;
+        public readonly string TempSpecTorgWeb;
         public readonly string Prefix;
         public readonly string UserDb;
         public readonly string PassDb;
@@ -94,6 +96,12 @@ namespace ParserTenders
                         case "tempdir_obtorgweb":
                             TempObTorgWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_spectorgweb":
+                            LogSpecTorgWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_spectorgweb":
+                            TempSpecTorgWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -136,7 +144,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempPathGazProm) || String.IsNullOrEmpty(LogPathExp223) ||
                 String.IsNullOrEmpty(TempPathExp223) || String.IsNullOrEmpty(LogGntWeb) ||
                 String.IsNullOrEmpty(TempGntWeb) || String.IsNullOrEmpty(LogObTorgWeb) ||
-                String.IsNullOrEmpty(TempObTorgWeb))
+                String.IsNullOrEmpty(TempObTorgWeb) || String.IsNullOrEmpty(LogSpecTorgWeb) ||
+                String.IsNullOrEmpty(TempSpecTorgWeb))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

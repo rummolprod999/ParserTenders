@@ -1,11 +1,11 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
 using System.Data.Entity;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Linq;
+using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
 
-namespace ParserTenders
+namespace ParserTenders.TenderDir
 {
     public class TenderTypeSign223 : Tender
     {

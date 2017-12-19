@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
     public interface IParser
     {

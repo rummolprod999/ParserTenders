@@ -1,59 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-using System.Data.Entity;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Linq;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace ParserTenders
+namespace ParserTenders.TenderDir
 {
-    public class TenderTypeExp223 : Tender
+    public class TenderTypeClarification : Tender
     {
-        public event Action<int> AddExp223;
+        public event Action<int> AddClarification44;
 
-        public TenderTypeExp223(FileInfo f, string region, int regionId, JObject json)
+        public TenderTypeClarification(FileInfo f, string region, int regionId, JObject json)
             : base(f, region, regionId, json)
         {
-            AddExp223 += delegate(int d)
+            AddClarification44 += delegate(int d)
             {
                 if (d > 0)
-                    Program.AddClarification223++;
+                    Program.AddClarification++;
                 else
-                    Log.Logger("Не удалось добавить Explanation223", FilePath);
+                    Log.Logger("Не удалось добавить Clarification44", FilePath);
             };
         }
 
         public override void Parsing()
         {
             string xml = GetXml(File.ToString());
-            JObject c = (JObject) T.SelectToken("explanation.body.item.explanationData");
-            if (!c.IsNullOrEmpty())
+            JObject root = (JObject) T.SelectToken("export");
+            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            if (firstOrDefault != null)
             {
-                string purchaseNumber =
-                    ((string) c.SelectToken("purchaseRegNum") ?? "").Trim();
-                //Console.WriteLine(purchaseNumber);
-                if (String.IsNullOrEmpty(purchaseNumber))
-                {
-                    //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
-                    return;
-                }
-                string idT = ((string) c.SelectToken("guid") ?? "").Trim();
+                JToken tender = firstOrDefault.Value;
+                string idT = ((string) tender.SelectToken("id") ?? "").Trim();
                 if (String.IsNullOrEmpty(idT))
                 {
-                    Log.Logger("У clarification нет guid", FilePath);
+                    Log.Logger("У clarification нет id", FilePath);
                     return;
                 }
-                string docNumber = "";
+                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                string docNumber = ((string) tender.SelectToken("docNumber") ?? "").Trim();
+                if (String.IsNullOrEmpty(purchaseNumber))
+                {
+                    Log.Logger("У clarification нет purchaseNumber", FilePath);
+                    return;
+                }
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     string selectCl =
-                        $"SELECT id_clarification FROM {Program.Prefix}clarifications WHERE id_xml = @id_xml AND purchase_number = @purchase_number";
+                        $"SELECT id_clarification FROM {Program.Prefix}clarifications WHERE id_xml = @id_xml AND doc_number = @doc_number AND purchase_number = @purchase_number";
                     MySqlCommand cmd = new MySqlCommand(selectCl, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
+                    cmd.Parameters.AddWithValue("@doc_number", docNumber);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
@@ -63,16 +63,11 @@ namespace ParserTenders
                     }
 
                     reader.Close();
-                    string docPublishDate = (JsonConvert.SerializeObject(c.SelectToken("publishDate") ?? "") ??
+                    string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
                                              "").Trim('"');
-                    if (String.IsNullOrEmpty(docPublishDate))
-                    {
-                        docPublishDate = (JsonConvert.SerializeObject(c.SelectToken("modificationDate") ?? "") ??
-                                          "").Trim('"');
-                    }
-                    string href = ((string) c.SelectToken("urlOOS") ?? "").Trim();
-                    string question = ((string) c.SelectToken("description") ?? "").Trim();
-                    string topic = ((string) c.SelectToken("requestSubjectInfo") ?? "").Trim();
+                    string href = ((string) tender.SelectToken("href") ?? "").Trim();
+                    string question = ((string) tender.SelectToken("question") ?? "").Trim();
+                    string topic = ((string) tender.SelectToken("topic") ?? "").Trim();
                     string insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
                     MySqlCommand cmd2 = new MySqlCommand(insertClarification, connect);
@@ -87,12 +82,12 @@ namespace ParserTenders
                     cmd2.Parameters.AddWithValue("@xml", xml);
                     int resInsertC = cmd2.ExecuteNonQuery();
                     int idClar = (int) cmd2.LastInsertedId;
-                    AddExp223?.Invoke(resInsertC);
-                    List<JToken> attachments = GetElements(c, "attachments.document");
+                    AddClarification44?.Invoke(resInsertC);
+                    List<JToken> attachments = GetElements(tender, "attachments.attachment");
                     foreach (var att in attachments)
                     {
                         string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        string attachDescription = ((string) att.SelectToken("description") ?? "").Trim();
+                        string attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
                         string attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
                         if (!String.IsNullOrEmpty(attachName))
                         {
@@ -111,7 +106,7 @@ namespace ParserTenders
             }
             else
             {
-                Log.Logger("Не могу найти тег explanationData", FilePath);
+                Log.Logger("Не могу найти тег Clarification", FilePath);
             }
         }
     }

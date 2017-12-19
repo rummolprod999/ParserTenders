@@ -6,7 +6,7 @@ using System.Threading;
 using FluentFTP;
 using MySql.Data.MySqlClient;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
     public class Parser : IParser
     {

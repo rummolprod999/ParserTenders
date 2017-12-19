@@ -8,8 +8,9 @@ using System.Xml;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ParserTenders.TenderDir;
 
-namespace ParserTenders
+namespace ParserTenders.ParserDir
 {
     public class ParserTend44 : Parser
     {

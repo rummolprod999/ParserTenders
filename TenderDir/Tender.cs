@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
-namespace ParserTenders
+namespace ParserTenders.TenderDir
 {
     public class Tender
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
-namespace ParserTenders
+namespace ParserTenders.TenderDir
 {
     public class TenderTypeOrgChange : Tender
     {
