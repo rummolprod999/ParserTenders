@@ -405,7 +405,7 @@ namespace ParserTenders
                          "").Trim();
                         if (!string.IsNullOrEmpty(_urlPurObj))
                         {
-                            string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
+                            /*string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
                             string strObj = DownloadString.DownL1251(urlObj);
                             if (!string.IsNullOrEmpty(strObj))
                             {
@@ -470,18 +470,18 @@ namespace ParserTenders
                                     cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
                                     cmd19.ExecuteNonQuery();
                                 }
-                            }
+                            }*/
                         }
                         else
                         {
                             string pName =
                             (navL?.SelectSingleNode(
-                                     "table/tbody/tr[td [position()=1]/text()[1]  = \"Предмет договора (наименование товаров, работ, услуг):\"]/td[last()]")
+                                     ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/div/text()[2]")
                                  ?.Value ?? "").Trim();
                             pName = System.Net.WebUtility.HtmlDecode(pName);
                             string okpd2Name =
                             (navL?.SelectSingleNode(
-                                     "table/tbody/tr[td [position()=1]= \"Категория продукции (ОКПД2):\"]/td[last()]")
+                                     ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/div/text()[1]")
                                  ?.Value ?? "").Trim();
                             string quantity =
                             (navL?.SelectSingleNode(
@@ -896,7 +896,7 @@ namespace ParserTenders
                      "").Trim();
                     if (!string.IsNullOrEmpty(_urlPurObj))
                     {
-                        string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
+                        /*string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
                         string strObj = DownloadString.DownL1251(urlObj);
                         if (!string.IsNullOrEmpty(strObj))
                         {
@@ -960,17 +960,17 @@ namespace ParserTenders
                                 cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
                                 cmd19.ExecuteNonQuery();
                             }
-                        }
+                        }*/
                     }
                     else
                     {
                         string pName =
                         (navL?.SelectSingleNode(
-                                 ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/text()[2]")
+                                 ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/b/text()")
                              ?.Value ?? "").Trim();
                         pName = System.Net.WebUtility.HtmlDecode(pName);
                         string okpd2Name = (navL?.SelectSingleNode(
-                                                    ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/text()[1]")
+                                                    ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/text()")
                                                 ?.Value ?? "").Trim();
                         okpd2Name = System.Net.WebUtility.HtmlDecode(okpd2Name);
                         string quantity =
