@@ -2,6 +2,9 @@
 {
     public enum SpecTorgType
     {
-        Advert
+        Advert,
+        RequestCustomer,
+        Request,
+        Auction
     }
 }
