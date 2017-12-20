@@ -24,7 +24,7 @@
 	<passdb>1234</passdb>
 	<server>localhost</server>
 	<port>3306</port>
-	<years>2016, 2017</years>
+	<years>2016, 2017, 2018</years>
 	<max_thread>20</max_thread>
 	<max_try_down>250</max_try_down>
 </setting>
