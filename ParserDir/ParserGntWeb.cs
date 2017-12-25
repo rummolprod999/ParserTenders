@@ -20,6 +20,12 @@ namespace ParserTenders.ParserDir
             },
             new TypeGnt()
             {
+                Type = GntType.ProposalRequest,
+                UrlType = "/trades/energo/ProposalRequest2/?action=list_published&from=",
+                UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest2/?action=list_published&from=0"
+            },
+            new TypeGnt()
+            {
                 Type = GntType.Tender,
                 UrlType = "/trades/energo/Tender/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/Tender/?action=list_published&from=0"

@@ -10,17 +10,17 @@
             string factAddress, string responsibleRole, string contactPerson, string contactEmail, string contactPhone,
             string contactFax)
         {
-            this.OrganiserCustomerId = organiserCustomerId;
-            this.Inn = inn;
-            this.Kpp = kpp;
-            this.FullName = fullName;
-            this.PostAddress = postAddress;
-            this.FactAddress = factAddress;
-            this.ResponsibleRole = responsibleRole;
-            this.ContactPerson = contactPerson;
-            this.ContactEmail = contactEmail;
-            this.ContactPhone = contactPhone;
-            this.ContactFax = contactFax;
+            OrganiserCustomerId = organiserCustomerId;
+            Inn = inn;
+            Kpp = kpp;
+            FullName = fullName;
+            PostAddress = postAddress;
+            FactAddress = factAddress;
+            ResponsibleRole = responsibleRole;
+            ContactPerson = contactPerson;
+            ContactEmail = contactEmail;
+            ContactPhone = contactPhone;
+            ContactFax = contactFax;
         }
 
         public string OrganiserCustomerId { get; set; }
