@@ -110,7 +110,7 @@ namespace ParserTenders.ParserDir
                 //var encoding = htmlDoc.DetectEncoding(str);
                 htmlDoc.LoadHtml(str);
                 //WriteLine(htmlDoc.Encoding);
-                var ten = htmlDoc.DocumentNode.SelectNodes("//tr[@class = \"c1\"]");
+                var ten = htmlDoc.DocumentNode.SelectNodes("//tr[@class = \"c1\"]") ?? new HtmlNodeCollection(null);
                 foreach (var v in ten)
                 {
                     try
