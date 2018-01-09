@@ -96,7 +96,7 @@ namespace ParserTenders
                     {
                         //DateTime dateNew = DateTime.Parse(pr.DatePublished);
 
-                        if (DateOpen >= (DateTime) row["date_version"])
+                        if (DatePub >= (DateTime) row["date_version"])
                         {
                             row["cancel"] = 1;
                             //row.AcceptChanges();
@@ -590,7 +590,7 @@ namespace ParserTenders
                     {
                         //DateTime dateNew = DateTime.Parse(pr.DatePublished);
 
-                        if (DateOpen >= (DateTime) row["date_version"])
+                        if (DatePub >= (DateTime) row["date_version"])
                         {
                             row["cancel"] = 1;
                             //row.AcceptChanges();

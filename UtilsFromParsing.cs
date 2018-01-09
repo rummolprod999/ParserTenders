@@ -40,7 +40,7 @@ namespace ParserTenders
             {
                 try
                 {
-                    d = DateTime.Parse(s);
+                    d = DateTime.ParseExact(s, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
                 }
                 catch
                 {

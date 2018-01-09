@@ -200,6 +200,7 @@
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTend223.cs" />
     <Compile Include="ParserDir\ParserTend44.cs" />
+    <Compile Include="ParserDir\ParserTendersWeb.cs" />
     <Compile Include="ParserDir\ParserWeb.cs" />
     <Compile Include="PlacingWayGpB.cs" />
     <Compile Include="ProcedureGpB.cs" />

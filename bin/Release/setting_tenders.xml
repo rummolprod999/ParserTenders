@@ -19,6 +19,8 @@
 	<tempdir_obtorgweb>temp_obtorg_web</tempdir_obtorgweb>
 	<logdir_spectorgweb>log_spectorg_web</logdir_spectorgweb>
 	<tempdir_spectorgweb>temp_spectorg_web</tempdir_spectorgweb>
+	<tempdir_tenders_web>temp_tenders_web</tempdir_tenders_web>
+	<logdir_tenders_web>log_tenders_web</logdir_tenders_web>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

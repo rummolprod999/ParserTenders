@@ -29,6 +29,18 @@ namespace ParserTenders.ParserDir
                 Type = GntType.Tender,
                 UrlType = "/trades/energo/Tender/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/Tender/?action=list_published&from=0"
+            },
+            new TypeGnt()
+            {
+            Type = GntType.ProposalRequest,
+            UrlType = "/trades/gaz/ProposalRequest/?action=list_published&from=",
+            UrlTypeList = "https://www.gazneftetorg.ru/trades/gaz/ProposalRequest/?action=list_published&from=0"
+            },
+            new TypeGnt()
+            {
+                Type = GntType.ProposalRequest,
+                UrlType = "/trades/corp/ProposalRequest/?action=list_published&from=",
+                UrlTypeList = "https://www.gazneftetorg.ru/trades/corp/ProposalRequest/?action=list_published&from=0"
             }
         };
 
@@ -164,6 +176,13 @@ namespace ParserTenders.ParserDir
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }
             DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
+            string _dateOpenEnd =
+                (node.SelectSingleNode("td/span[@title = \"Дата окончания приема предложений\"]/span")?.InnerText ?? "").Trim();
+            DateTime dateOpenEnd = UtilsFromParsing.ParseDateTend(_dateOpenEnd);
+            if (dateOpenEnd != DateTime.MinValue)
+            {
+                dateOpen = dateOpenEnd;
+            }
             GntWebTender t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeGnT = tp};
             try
             {
