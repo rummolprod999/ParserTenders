@@ -14,6 +14,7 @@ namespace ParserTenders
         {
             string st = s;
             st = st.Replace("", "");
+            st = st.Replace("", "");
             return st;
         }
         

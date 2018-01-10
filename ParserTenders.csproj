@@ -46,8 +46,8 @@
     <Reference Include="Ftp, Version=2.0.17331.1521, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
       <HintPath>..\packages\Ftp.dll.2.0.17331.1521\lib\net45\Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.6.11.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-      <HintPath>..\packages\HtmlAgilityPack.1.6.11\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.6.13.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+      <HintPath>..\packages\HtmlAgilityPack.1.6.13\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -212,6 +212,7 @@
     <Compile Include="Supplier.cs" />
     <Compile Include="TenderDir\Tender.cs" />
     <Compile Include="TenderDir\TenderType223.cs" />
+    <Compile Include="TenderDir\TenderType223Web.cs" />
     <Compile Include="TenderDir\TenderType44.cs" />
     <Compile Include="TenderDir\TenderTypeCancel.cs" />
     <Compile Include="TenderDir\TenderTypeCancelFailure.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="TenderDir\TenderTypeProlongation.cs" />
     <Compile Include="TenderDir\TenderTypeSign.cs" />
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
+    <Compile Include="TenderDir\TenderWeb.cs" />
     <Compile Include="TimedWebClient.cs" />
     <Compile Include="TypeArguments.cs" />
     <Compile Include="TypeFile223.cs" />
