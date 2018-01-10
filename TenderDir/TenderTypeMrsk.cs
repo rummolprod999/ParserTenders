@@ -26,6 +26,7 @@ namespace ParserTenders.TenderDir
                 {
                     dateUpd = datePub;
                 }
+
                 string selectTend =
                     $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND date_version = @date_version AND type_fz = @type_fz";
                 MySqlCommand cmd = new MySqlCommand(selectTend, connect);
@@ -40,14 +41,15 @@ namespace ParserTenders.TenderDir
                 {
                     Log.Logger("This tender is exist in base", _tend.IdTender);
                     return;
-                        
                 }
+
                 string s = DownloadString.DownL(_tend.Href);
                 if (String.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in Parsing()", _tend.Href);
                     return;
                 }
+
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
                 int cancelStatus = 0;
@@ -86,8 +88,6 @@ namespace ParserTenders.TenderDir
                 int customerId = 0;
                 int organiserId = 0;
                 var navT = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
-                
-                
             }
         }
     }
