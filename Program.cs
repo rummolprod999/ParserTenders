@@ -30,6 +30,8 @@ namespace ParserTenders
         private static string _tempSpecTorgWeb;
         private static string _tempPathWeb;
         private static string _logPathWeb;
+        private static string _tempMrsk;
+        private static string _logMrsk;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -91,6 +93,8 @@ namespace ParserTenders
                         return _tempSpecTorgWeb;
                     case TypeArguments.Web:
                         return _tempPathWeb;
+                    case TypeArguments.Mrsk:
+                        return _tempMrsk;
                     default:
                         return "";
                 }
@@ -128,6 +132,8 @@ namespace ParserTenders
                         return _logSpecTorgWeb;
                     case TypeArguments.Web:
                         return _logPathWeb;
+                    case TypeArguments.Mrsk:
+                        return _logMrsk;
                     default:
                         return "";
                 }
@@ -157,13 +163,14 @@ namespace ParserTenders
         public static int AddGntWeb = 0;
         public static int AddObTorgWeb = 0;
         public static int AddSpecTorgWeb = 0;
+        public static int AddMrsk = 0;
 
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web в качестве аргумента");
+                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk в качестве аргумента");
                 return;
             }
 
@@ -248,9 +255,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserWeb(Periodparsing);
                     break;
+                case "mrsk":
+                    Periodparsing = TypeArguments.Mrsk;
+                    Init(Periodparsing);
+                    ParserMrsk(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk");
                     break;
             }
         }
@@ -287,6 +299,8 @@ namespace ParserTenders
             _logSpecTorgWeb = set.LogSpecTorgWeb;
             _tempPathWeb = set.TempPathTendersWeb;
             _logPathWeb = set.LogPathTendersWeb;
+            _tempMrsk = set.TempMrsk;
+            _logMrsk = set.LogMrsk;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -356,6 +370,9 @@ namespace ParserTenders
                     break;
                 case TypeArguments.Web:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}TendersWeb_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Mrsk:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}TendersMrsk_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -535,6 +552,14 @@ namespace ParserTenders
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Добавили tender223", AddTender223);
             Log.Logger("Время окончания парсинга Web");
+        }
+
+        private static void ParserMrsk(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Mrsk");
+            ParserMrsk p = new ParserMrsk(arg);
+            p.Parsing();
+            Log.Logger("Добавили Mrsk", AddMrsk);
         }
     }
 }

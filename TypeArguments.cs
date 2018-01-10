@@ -16,6 +16,7 @@ namespace ParserTenders
         GntWeb,
         ObTorgWeb,
         SpecTorgWeb,
-        Web
+        Web,
+        Mrsk
     }
 }

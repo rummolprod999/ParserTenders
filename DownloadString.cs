@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,8 +54,26 @@ namespace ParserTenders
                         tmp = task.Result;
                         break;
                     }
+
                     throw new TimeoutException();
                     //tmp = new TimedWebClient().DownloadString(url);
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Response is HttpWebResponse errorResponse && errorResponse.StatusCode == HttpStatusCode.Forbidden)
+                    {
+                        Log.Logger("Error 403");
+                        return tmp;
+                    }
+                    if (count >= 5)
+                    {
+                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
+                        break;
+                    }
+                    Log.Logger("Не удалось получить строку xml", ex, url);
+                    count++;
+                    Thread.Sleep(5000);
+
                 }
                 catch (Exception e)
                 {

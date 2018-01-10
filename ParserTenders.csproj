@@ -195,6 +195,7 @@
     <Compile Include="ParserDir\ParserGntWeb.cs" />
     <Compile Include="ParserDir\ParserGpb.cs" />
     <Compile Include="ParserDir\ParserGpbGaz.cs" />
+    <Compile Include="ParserDir\ParserMrsk.cs" />
     <Compile Include="ParserDir\ParserObTorgWeb.cs" />
     <Compile Include="ParserDir\ParserSgn223.cs" />
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="TenderDir\TenderTypeDateChange.cs" />
     <Compile Include="TenderDir\TenderTypeExp223.cs" />
     <Compile Include="TenderDir\TenderTypeLotCancel.cs" />
+    <Compile Include="TenderDir\TenderTypeMrsk.cs" />
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
     <Compile Include="TenderDir\TenderTypeProlongation.cs" />
     <Compile Include="TenderDir\TenderTypeSign.cs" />
@@ -231,6 +233,7 @@
     <Compile Include="TypeFile44.cs" />
     <Compile Include="TypeFileAttachment.cs" />
     <Compile Include="TypeGnt.cs" />
+    <Compile Include="TypeMrsk.cs" />
     <Compile Include="TypeObTorg.cs" />
     <Compile Include="TypeSpecTorg.cs" />
     <Compile Include="Unzipped.cs" />

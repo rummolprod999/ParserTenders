@@ -44,16 +44,25 @@ namespace ParserTenders
                 }
                 catch
                 {
-                    try
-                    {
-                        d = DateTime.ParseExact(s, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
-                    }
-                    catch (Exception e)
-                    {
-                        //Console.WriteLine(s);
-                        //ignore
-                    }
-                    //Console.WriteLine(s);
+                    // ignored
+                }
+            }
+            return d;
+        }
+        
+        public static DateTime ParseDateMrsk(string s)
+        {
+            
+            DateTime d = DateTime.MinValue;
+            if (!String.IsNullOrEmpty(s))
+            {
+                try
+                {
+                    d = DateTime.ParseExact(s, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    // ignored
                 }
             }
             return d;

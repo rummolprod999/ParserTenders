@@ -1,553 +1,3449 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=10"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-    <meta name="description" content="Межотраслевая Торговая Система ГазНефтеторг.ру">
-    <meta name="keywords" content="b2b,электронные торги,конкурсы,закупки,аукционы">
-    <link rel="shortcut icon" href="/css/redesign/images/favicon.ico" type="image/x-icon">
-    <title>Извещение о проведении торговой процедуры "Запрос предложений № 142323"</title>
 
-    <link rel="stylesheet" type="text/css" href="/stc/cache_proposal_request_view_3151544413.css">
-    <link rel="stylesheet" type="text/css" href="/stc/css/jquery-ui/gazneftetorg/jquery.ui.all.css">
-    <link rel="stylesheet" type="text/css" href="/stc/gazneftetorg/css/forms.css">
-    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/main_style.css">
-    <link rel="stylesheet" type="text/css" href="/stc/css/redesign/options.css">
-    <link rel="stylesheet" type="text/css" href="/stc/css/jquery.webui-popover.min.css">
-    <link rel="stylesheet" type="text/css" href="/stc/cache_core_2646435536.css">
-    <script type="text/javascript" src="/stc/js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="/stc/js/no-conflict.js"></script>
-    <script type="text/javascript" src="/stc/js/jquery.webui-popover.min.js"></script>
-    <script type="text/javascript" src="/stc/js/init.popovers.js"></script>
-    <script type="text/javascript" src="/stc/js/long-polling.js"></script>
-    <script type="text/javascript" src="/stc/js/forms/disable_button.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/CapicomConstants.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/WinCryptoApi.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/Capicom.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Adapter/Plugin.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Certificate/Simple.js"></script>
-    <script type="text/javascript" src="/stc/js/Engine/Crypto/Certificate/GovEtp.js"></script>
-    <script type="text/javascript" src="/stc/js/forms/sign.js"></script>
-    <script type="text/javascript" src="/stc/js/oos/confirm_send_on_oos.js"></script>
-    <script type="text/javascript" src="/stc/js/payment/view_organizer_requisites.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/output_authoriz_form.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/jquery.checkbox.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/easing.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/slider.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/search.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/jquery.mousewheel.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/jquery.ulslide.js"></script>
-    <script type="text/javascript" src="/stc/js/redesign/slide.js"></script>
-    <script type="text/javascript" src="/stc/js/sign/Code.js"></script>
-    <script type="text/javascript" src="/stc/js/sign/Signature.js"></script>
-    <script type="text/javascript" src="/stc/js/handleLoginType.js"></script>
-    <script type="text/javascript" src="/stc/cache_proposal_request_view_1709000362.js"></script>
-    <script type="text/javascript" src="/stc/cache_energo_proposal_request_view_3159912292.js"></script>
-    <script type="text/javascript" src="/stc/cache_core_1131632684.js"></script>
-    <script type="text/javascript" src="/stc/cache_callback_4264598038.js"></script>
-    <!--[if IE 8]><link rel="stylesheet" type="text/css" href="/stc/css/redesign/ie8_in.css"><![endif]-->
-    <!--[if IE 8]><script type="text/javascript" src="/stc/js/redesign/button_IE8.js"></script><![endif]-->
-    <link rel="stylesheet" type="text/css" media="print" href="/css/print.css" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+
+<html lang="ru" id="nojs">
+<head>
+
+
+
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <![endif]-->
+
+    <title>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РµРєСѓС‰РёС… РїСЂРѕС†РµРґСѓСЂР°С… -- РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїaРґР° </title>
+
+    <script type="text/javascript">document.documentElement.id = "js";
+    var currentDomain = location.hostname.match(/.mrsksevzap.slweb.ru/) || location.hostname.match(/.mrsksevzap.ru/);</script>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/jquery.fancybox.css" />
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/jquery.fancybox-buttons.css" />
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/anythingslider.css" />
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/template_styles_main.css" />
+
+
+
+
+    <!--[if IE]>
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/template_styles_ie_main.css" />
+    <![endif]-->
+    <!--[if IE 9 ]>
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/ie9.css" />
+    <![endif]-->
+    <!--[if IE 8 ]>
+    <link rel="stylesheet" media="screen" href="/cs/MRSKsevzap/css/ie8.css" />
+    <![endif]-->
+    <!--[if lt IE 8 ]>
+
+    <![endif]-->
+
+
 </head>
 
-<body id="other_page"  bgcolor=#FFFFFF LEFTMARGIN=10 TOPMARGIN=10 MARGINWIDTH=10 MARGINHEIGHT=10 onload="">
+<body>
 
-<div class="oi_head_holder">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-3 io_xs logo">
-                <a href="/"><img src="/css/redesign/images/gnt-logo.png" alt="GNT"></a>
-            </div>
-            <div class="full_date">
-                <span id="rus_date"></span><span id="clock"></span>(время московское)
-            </div>
-            <div class="col-md-6 col-sm-6 io_xs">
-                <div class="phone">+7 (495) 231-46-71</div>
-            </div>
 
-            <div class="col-md-3 col-sm-3 io_xs">
-                <div class="login">
-                    <input type="hidden" name="cookies_time" id="cookies_time" value="1" class=cbox>
-                    <img src="/css/redesign/images/lock.png" alt="GNT">
-                    <a href="#login_form" id="login_pop">Вход в систему</a>
-                    <!-- Вход -->
-                    <a href="#x" class="overlay" id="login_form"></a>
-                    <div class="popup">
-                        <img src="/css/redesign/images/lock.png" alt="GNT">
-                        <input type="radio" name="login_type" value="ecp"> По ЭП
-                        <input type="radio" name="login_type" value="standard" checked="checked"> По логину
-                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
-                              name="login_form" id="access-login-form" style="margin:0px">
-                            <div>
-                                <input name="f_login" onblur="if (this.value == '') this.value = 'Логин';" onfocus="if (this.value == 'Логин') this.value = '';" value="Логин" type="text" maxlength="255">
-                            </div>
-                            <div>
-                                <input name="f_password" type="password">
-                            </div>
-                            <div>
-                                <button class="button_green">
-                                    <span class="button-content">Войти</span>
-                                </button>
-                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
-                            </div>
-                        </form>
 
-                        <form action="https://www.gazneftetorg.ru/login.html" method="POST"
-                              name="login_form" id="access-ecp-form" style="display:none; margin:0px; width: 205px">
-                            <div>
-                                <select class="form-control" id="certificates" name="f_certificate"></select>
-                            </div>
-                            <div>
-                                <button class="button_green">
-                                    <span class="button-content" id="submitEcp">Войти</span>
-                                </button>
-                                <a href="/?action=lost_password" target="get_password" onclick="popup(event, '/?action=lost_password', 'get_password', 550, 300);return false;" class="reg-content">Забыли пароль</a>
-                            </div>
-                        </form>
 
-                    </div>
+
+
+
+
+
+<div class="b-stripe b-stripe_content_top-panel">
+    <div class='b-top-panel '>
+
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_home b-content-column_icon_home">
+            <a class="b-link b-link_content_goto-index-page"
+               href="http://www.mrsksevzap.ru/home" title="">
+                <span class="b-link__text">Р“Р»Р°РІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°</span>
+            </a>
+        </div>
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_language">
+            <a class="b-link b-link_lang-selection_eng"
+               href="http://www.mrsksevzap.ru/en/home" title="">
+                <span class="b-link__text">English version</span>
+            </a>
+        </div>
+
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_sitemap b-content-column_icon_sitemap">
+            <a class="b-link"
+               href="http://www.mrsksevzap.ru/sitemap" title="">
+                <span class="b-link__text">РљР°СЂС‚Р° СЃР°Р№С‚Р°</span>
+            </a>
+        </div>
+
+
+        <ul class="b-content-column b-content-column_content_font-size-selection b-list">
+            <li class="b-list__item">
+                <div class="b-font-selector b-font-selector_viewtype_c-font b-font-selector_state_current" data-font-size="standart">
+                    <span class="b-link b-link_type_pseudo b-js-font-resize">A</span>
                 </div>
-                <div class="reg"><a href="/request/registration.html">Регистрация</a></div>
+            </li>
+            <li class="b-list__item">
+                <div class="b-font-selector b-font-selector_viewtype_l-font" data-font-size="medium">
+                    <span class="b-link b-link_type_pseudo b-js-font-resize">A</span>
+                </div>
+            </li>
+            <li class="b-list__item">
+                <div class="b-font-selector b-font-selector_viewtype_x-font" data-font-size="large">
+                    <span class="b-link b-link_type_pseudo b-js-font-resize">A</span>
+                </div>
+            </li>
+        </ul>
+        <div class="b-content-column b-content-column_content_sitemap" style="margin-left: 20px; margin-right: 40px;">
+            <a class="b-link" href="https://www.youtube.com/channel/UCNp5qwLMmzYxoJc9ofen3jQ" target="_blank" title="РЎР»РµРґРёС‚Рµ Р·Р° РЅР°РјРё РІ youtube">
+                <img src="/cs/MRSKsevzap/images/content/youtube.png " alt="Youtube" style="margin-top: 10px;" /></a>
+        </div>
+        <div class="b-content-column b-content-column_content_sitemap" style="margin-left: 20px; margin-right: -15px;">
+            <a class="b-link" href="https://vk.com/mrsksevzap" target="_blank" title="РЎР»РµРґРёС‚Рµ Р·Р° РЅР°РјРё РІ vk">
+                <img src="/cs/MRSKsevzap/images/content/vk.png " alt="VK" style="margin-top: 10px;" /></a>
+        </div>
+        <div class="b-content-column b-content-column_content_sitemap" style="margin-left: 20px; margin-right: -15px;">
+            <a class="b-link" href="https://www.instagram.com/mrsksevzap/" target="_blank" title="РЎР»РµРґРёС‚Рµ Р·Р° РЅР°РјРё РІ instagram">
+                <img src="/cs/MRSKsevzap/images/content/instagram.png " alt="Instagram" style="margin-top: 10px;" /></a>
+        </div>
+        <div class="b-content-column b-content-column_content_sitemap" style="margin-left: 20px; margin-right: -15px;">
+            <a class="b-link" href="https://twitter.com/mrsksevzap" target="_blank" title="РЎР»РµРґРёС‚Рµ Р·Р° РЅР°РјРё РІ twitter">
+                <img src="/cs/MRSKsevzap/images/content/twitter.png " alt="Twitter" style="margin-top: 10px;" /></a>
+        </div>
+        <div class="b-content-column b-content-column_content_sitemap" style="margin-left: 20px; margin-right: -15px;">
+            <a class="b-link" href="https://ru-ru.facebook.com/mrsksevzap" target="_blank" title="РЎР»РµРґРёС‚Рµ Р·Р° РЅР°РјРё РІ facebook">
+                <img src="/cs/MRSKsevzap/images/content/facebook.png " alt="Facebook" style="margin-top: 10px;" /></a>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="b-stripe b-stripe_content_logo-line">
+    <div class='b-logo-line b-clearfix'>
+
+
+
+        <div class="b-logo b-logo_content_rosseti">
+            <a href="http://www.rosseti.ru" target="_blank" title="">
+                <img class="b-link__image" src="/cs/MRSKsevzap/images/content/logo-rosseti.png" alt="Р РѕСЃСЃРµС‚Рё" />
+            </a>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="b-logo b-logo_content_mrsk-sz">
+            <a href="http://www.mrsksevzap.ru/home">
+                <img class="b-link__image" src="/cs/MRSKsevzap/images/content/logo-mrsk.png" alt="РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°"
+                />
+            </a>
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="b-stripe b-stripe_content_main-menu">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div
+            class="b-main-menu b-main-menu_viewtype_index-page">
+        <ul class="b-list">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/aboutrootpage" >
+                    <span class="b-link__text">Рћ РєРѕРјРїР°РЅРёРё</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/pressrootpage" >
+                    <span class="b-link__text">РџСЂРµСЃСЃ-С†РµРЅС‚СЂ</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/investorsrootpage" >
+                    <span class="b-link__text">РђРєС†РёРѕРЅРµСЂР°Рј Рё РёРЅРІРµСЃС‚РѕСЂР°Рј</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="https://clients.mrsksevzap.ru/home" >
+                    <span class="b-link__text">РџРѕС‚СЂРµР±РёС‚РµР»СЏРј</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item b-list__item_state_current'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/purchaserootpage" >
+                    <span class="b-link__text">Р—Р°РєСѓРїРєРё</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/infodisclosurerootpage" >
+                    <span class="b-link__text">Р Р°СЃРєСЂС‹С‚РёРµ РёРЅС„РѕСЂРјР°С†РёРё</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class='b-list__item'>
+                <a class="b-link b-first-child"
+                   href="http://www.mrsksevzap.ru/affiliatesrootpage" >
+                    <span class="b-link__text">Р¤РёР»РёР°Р»С‹</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </ul>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class='b-stripe b-stripe_content_top-slider b-stripe_viewtype_regular-slider'>
+    <div class="b-top-slider">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <ul class="b-any-slider" id="slider">
+
+            <li class="b-any-slider__slide">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://www.mrsksevzap.ru/pur_announcing"
+
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3DGKPZ_0.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=341208&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384338966108&amp;ssbinary=true'
+                         class="b-image b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+            <li class="b-any-slider__slide">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://www.mrsksevzap.ru/noncoreproperty"
+
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3Dtemplate_min_prodaja.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=336095&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384344178893&amp;ssbinary=true'
+                         class="b-image b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+            <li class="b-any-slider__slide">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://www.mrsksevzap.ru/cooperation"
+
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3Dtemplate_min_smallbiz_0.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=306523&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384344178860&amp;ssbinary=true'
+                         class="b-image b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+        </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="b-search">
+
+
+
+
+
+
+            <a class="b-link b-link_content_extended-search"
+               href="/search">Р Р°СЃС€РёСЂРµРЅРЅС‹Р№ РїРѕРёСЃРє</a>
+            <div class="b-form">
+                <form method="get"
+                      action="/search">
+                    <input name="q" class="b-form__input b-form__input_viewtype_search" type="text" placeholder="РџРѕРёСЃРє РїРѕ СЃР°Р№С‚Сѓ" />
+                    <label class="b-form__for-button" for="button_fast-search">
+                        <span class="b-form__icon-search"></span>
+                        <input class="b-form__button b-form__button_viewtype_search" type="submit" value="" id="button_fast-search" />
+                    </label>
+                </form>
             </div>
         </div>
-        <div class="row menu">
-            <div class="col-md-12 col-sm-12 io_xs">
-                <nav class="menu-general-menu-container">
-                    <ul id="menu-general-menu" class="oi_header_menu">
-                        <li class="current-menu-item"><a href="/request/about.html">О компании</a></li>
-                        <li><a href="/personal/">Личный кабинет</a></li>
-                        <li><a href="/trades/">Торговая площадка</a></li>
-                        <li><a href="/news/">Новости</a></li>
-                        <li><a href="/request/contacts.html">Контакты</a></li>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="b-stripe b-stripe_content_main-content b-stripe_sidebar_left">
+
+
+
+
+    <div class="b-main-content b-clearfix">
+        <div class="b-stripe b-stripe_content_breadcrumbs">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <ul class="b-menu b-menu_type_inline">
+
+
+
+
+
+
+
+
+                <li class="b-menu__item b-menu__item_link_index-page">
+                    <a class="b-link" href='http://www.mrsksevzap.ru/home' title="">Р“Р»Р°РІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°</a><span class="b-separator"> В»</span>
+                </li>
+
+
+
+
+
+
+
+
+
+
+                <li class="b-menu__item">
+                    <a class="b-link" href='http://www.mrsksevzap.ru/purchaserootpage' title="">Р—Р°РєСѓРїРєРё</a><span class="b-separator"> В»</span>
+                </li>
+
+
+
+
+
+
+                <li class='b-menu__item'>
+                    <span class="b-link-current">РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РµРєСѓС‰РёС… РїСЂРѕС†РµРґСѓСЂР°С…</span>
+                </li>
+
+
+
+            </ul>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="b-sidebar b-sidebar_pos_left b-sidebar_viewtype_large">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="b-sidebar-block b-sidebar-block_content_menu">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-title">
+                    Р—Р°РєСѓРїРєРё
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <ul class="b-menu">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/purchasemanage"> РЈРїСЂР°РІР»РµРЅРёРµ Р·Р°РєСѓРїРѕС‡РЅРѕР№ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚СЊСЋ</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/pur_announcing"> РђРЅРѕРЅСЃРёСЂРѕРІР°РЅРёРµ Р·Р°РєСѓРїРѕРє</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item b-menu__item_status_current'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/purchaseactive"> РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РµРєСѓС‰РёС… РїСЂРѕС†РµРґСѓСЂР°С…</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/noncoreproperty"> РџСЂРѕРґР°Р¶Рё</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/purchasearchive"> РђСЂС…РёРІ Р·Р°РєСѓРїРѕРє</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/amountandpriceinfo"> РЎРІРµРґРµРЅРёСЏ Рѕ РєРѕР»РёС‡РµСЃС‚РІРµ Рё СЃС‚РѕРёРјРѕСЃС‚Рё РґРѕРіРѕРІРѕСЂРѕРІ</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/cooperation"> РЎРѕС‚СЂСѓРґРЅРёС‡РµСЃС‚РІРѕ СЃ РјР°Р»С‹Рј Рё СЃСЂРµРґРЅРёРј РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊСЃС‚РІРѕРј (РњРЎРџ)</a>
+
+
+
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <li	class='b-menu__item'>
+
+
+
+
+
+
+
+
+                        <a class="b-link" href="http://www.mrsksevzap.ru/smepurchase"> Р—Р°РєСѓРїРєРё РґР»СЏ РњРЎРџ</a>
+
+
+
+
+                    </li>
+
+
+
+                </ul>
+
+
+
+
+
+
+
+            </div>
+
+
+
+            <div class="b-sidebar-block b-sidebar-block_content_filter">
+
+                <h2 class="b-title b-title_size_h2">РїРѕРёСЃРє РїРѕ Р·Р°РєСѓРїРєР°Рј</h2>
+                <div class="b-filters b-form" id="purchaseFilter">
+
+
+
+
+
+
+                    <form method="get" action="/purchaseactive">
+                        <input type="hidden" name="search" value="true" />
+
+
+                        <input name="active" type="hidden" value="on" />
+
+
+
+
+
+
+                        <div class="b-filters__filter">
+                            <label class="b-label b-label_type_bold" for="txt_purchaseFilter_searchstring">
+                                <span class="b-label__text">Р’РІРµРґРёС‚Рµ С‚РµРєСЃС‚ РґР»СЏ РїРѕРёСЃРєР°:</span>
+                                <input name="name" class="b-label__input" id="txt_purchaseFilter_searchstring" placeholder="РІРІРµРґРёС‚Рµ С‚РµРєСЃС‚"
+                                />
+                            </label>
+                        </div>
+
+                        <div class="b-filters__filter">
+                            <label class="b-label b-label_type_bold b-type-checkbox">
+                                <input name="startDate" class="b-label__check" hidden="hidden" type="checkbox" id="date_start"
+                                />
+                                <span class="b-label__text">Р”Р°С‚Р° РѕР±СЉСЏРІР»РµРЅРёСЏ:</span>
+                            </label>
+                            <label class="b-label b-label_context_calendar">
+                                <ins class="b-icon"></ins>
+                                <span class="b-label__text">РЎ</span>
+                                <input name="startFrom" class="b-label__input b-label__input_size_short b-js-calendar" id="date_start_from"
+                                />
+                            </label>
+                            <label class="b-label b-label_context_calendar">
+                                <ins class="b-icon"></ins>
+                                <span class="b-label__text">РџРѕ</span>
+                                <input name="startTo" class="b-label__input b-label__input_size_short b-js-calendar" id="date_start_to"
+                                />
+                            </label>
+                        </div>
+
+                        <div class="b-filters__filter">
+                            <label class="b-label b-label_type_bold b-type-checkbox">
+                                <input name="endDate" class="b-label__check" hidden="hidden" type="checkbox" id="date_finish"
+                                />
+                                <span class="b-label__text">Р”Р°С‚Р° Р·Р°РІРµСЂС€РµРЅРёСЏ:</span>
+                            </label>
+                            <label class="b-label b-label_context_calendar">
+                                <ins class="b-icon"></ins>
+                                <span class="b-label__text">РЎ</span>
+                                <input name="endFrom" class="b-label__input b-label__input_size_short b-js-calendar" id="date_finish_from"
+                                />
+                            </label>
+                            <label class="b-label b-label_context_calendar">
+                                <ins class="b-icon"></ins>
+                                <span class="b-label__text">РџРѕ</span>
+                                <input name="endTo" class="b-label__input b-label__input_size_short b-js-calendar" id="date_finish_to"
+                                />
+                            </label>
+                        </div>
+
+                        <div class="b-filters__filter b-filters__filter_content_opened">
+                            <div class="b-name-outer">РЎРѕСЃС‚РѕСЏРЅРёРµ Р·Р°РєСѓРїРєРё:</div>
+                            <ul class="b-list">
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="active" class="b-label__check" hidden="hidden" type="checkbox"
+                                               checked="checked"
+                                               disabled="disabled" />
+                                        <span class="b-label__text">РђРєС‚РёРІРЅРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="completed" class="b-label__check" hidden="hidden" type="checkbox"
+
+                                               disabled="disabled" />
+                                        <span class="b-label__text">Р—Р°РІРµСЂС€РµРЅРѕ</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="b-filters__filter b-filters__filter_content_opened">
+                            <div class="b-name-outer">Р’С‹Р±СЂР°С‚СЊ Р·Р°РєСѓРїС‰РёРєР° РњР РЎРљ РЎ-Р—:</div>
+                            <ul class="b-list">
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="main" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РСЃРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ Р°РїРїР°СЂР°С‚</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="arh" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РђСЂС…СЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="vologda" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р’РѕР»РѕРіРґР°СЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="karel" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РљР°СЂРµР»СЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="kol" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РљРѕР»СЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="komi" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РљРѕРјРёСЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="novgorod" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РќРѕРІРіРѕСЂРѕРґСЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="pskov" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РџСЃРєРѕРІСЌРЅРµСЂРіРѕ</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="b-filters__filter b-filters__filter_content_opened">
+                            <div class="b-name-outer">Р’РёРґ Р·Р°РєСѓРїРѕС‡РЅРѕР№ РїСЂРѕС†РµРґСѓСЂС‹:</div>
+                            <ul class="b-list">
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="ae" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РђСѓРєС†РёРѕРЅ РІ СЌР»РµРєС‚СЂРѕРЅРЅРѕР№ С„РѕСЂРјРµ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="tsc" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р”РІСѓС…СЌС‚Р°РїРЅС‹Р№ РєРѕРЅРєСѓСЂСЃ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="ca" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РєСЂС‹С‚С‹Р№ Р°СѓРєС†РёРѕРЅ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="ctsc" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РєСЂС‹С‚С‹Р№ РґРІСѓС…СЌС‚Р°РїРЅС‹Р№ РєРѕРЅРєСѓСЂСЃ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="cc" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РєСЂС‹С‚С‹Р№ РєРѕРЅРєСѓСЂСЃ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="cclp" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РєСЂС‹С‚С‹Р№ РєРѕРЅРєСѓСЂСЃ СЃ РѕРіСЂР°РЅРёС‡РµРЅРЅС‹Рј СѓС‡Р°СЃС‚РёРµРј</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="sp" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РєСѓРїРєР° Сѓ РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ РїРѕСЃС‚Р°РІС‰РёРєР°</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="zk" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РїСЂРѕСЃ РєРѕС‚РёСЂРѕРІРѕРє</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="zkn" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РїСЂРѕСЃ РєРѕС‚РёСЂРѕРІРѕРє Р±РµР· СЂР°Р·РјРµС‰РµРЅРёСЏ РёР·РІРµС‰РµРЅРёСЏ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="or" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р—Р°РїСЂРѕСЃ РїСЂРµРґР»РѕР¶РµРЅРёР№</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="oa" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РћС‚РєСЂС‹С‚С‹Р№ Р°СѓРєС†РёРѕРЅ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="oc" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РћС‚РєСЂС‹С‚С‹Р№ РєРѕРЅРєСѓСЂСЃ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="oclp" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РћС‚РєСЂС‹С‚С‹Р№ РєРѕРЅРєСѓСЂСЃ c РѕРіСЂР°РЅРёС‡РµРЅРЅС‹Рј СѓС‡Р°СЃС‚РёРµРј</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="pre" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Р№ РѕС‚Р±РѕСЂ</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="rr" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">Р РµР·СѓР»СЊС‚Р°С‚С‹ СЂР°СЃСЃРјРѕС‚СЂРµРЅРёСЏ Рё РѕС†РµРЅРєРё РєРѕС‚РёСЂРѕРІРѕС‡РЅС‹С… Р·Р°СЏРІРѕРє</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="mint" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РЎРѕРѕР±С‰РµРЅРёРµ Рѕ Р·Р°РёРЅС‚РµСЂРµСЃРѕРІР°РЅРЅРѕСЃС‚Рё РІ РїСЂРѕРІРµРґРµРЅРёРё РѕС‚РєСЂС‹С‚РѕРіРѕ РєРѕРЅРєСѓСЂСЃР°</span>
+                                    </label>
+                                </li>
+                                <li class="b-list__item">
+                                    <label class="b-label b-type-checkbox">
+                                        <input name="other" class="b-label__check" hidden="hidden" type="checkbox"
+                                        />
+                                        <span class="b-label__text">РРЅРѕР№ СЃРїРѕСЃРѕР±</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="b-buttons">
+                            <button class="b-btn b-btn_type_sbmt" type="submit">РџРѕРєР°Р·Р°С‚СЊ</button>
+                            <button class="b-btn b-btn_type_rst" type="reset">
+                                <i class="b-btn__icon"></i>РЎР±СЂРѕСЃРёС‚СЊ С„РёР»СЊС‚СЂ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="b-pure-content-wrap">
+
+            <h2 class="b-title b-title_size_h2">РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РµРєСѓС‰РёС… РїСЂРѕС†РµРґСѓСЂР°С…</h2>
+            <div class="b-purchases">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345973240">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345973240">
+                                РћРєР°Р·Р°РЅРёРµ СѓСЃР»СѓРі РїРѕ Р°СЂРµРЅРґРµ С‚РµС…РЅРёРєРё РґР»СЏ РЎРµРІРµСЂРѕРґРІРёРЅСЃРєРѕРіРѕ Р Р­РЎ РџРћ "РђР­РЎ" С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            27.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            27.12.2017
+
+
+                        </li>
                     </ul>
-                </nav>
-            </div>
-        </div>    </div>
-</div>
-<div class="clearfix"></div>
-<div class="row row-fluid vbg_fff full_row">
-    <div class="navigation">
-        <div class="container">
-            <div id="control">
-                <a alt="Show/Close" class="open" id="controlbtn_1"></a>
-            </div>
-            <div class="navbar-header">
-                <ol class="breadcrumb">
-                    <li><a href="/">ГазНефтеторг.ру</a></li>
-                    &nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li><a href='/trades/'>Торговая площадка</a></li>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li><a href='/trades/index.php?action=energo_trades_list'>Торги предприятий энергетической отрасли</a></li>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<li>Извещение о проведении торговой процедуры "Запрос предложений № 142323"</li>                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="this_page">
-    <div class="container">
-        <div class="row row-fluid vbg_fff full_row">
-            <div class="col-sm-2 block_menu">
-                <div id="wrap_menu_in" style="background: rgb(255, 255, 255) none repeat scroll 0% 0%;">
-                    <div id="maincontent" style="margin-left: 144px;">
-                        <div id="linkblock"><ul id="yourlist"><li><a href="/rules/">Правила работы</a></li><li><a href="/qafaq/">Часто задаваемые вопросы</a></li><li><a href="/signature/">ЭП</a></li><li><a href="/prices/">Прайс-листы</a></li><li><a href="/summaries/summaries.html">Планируемые закупки</a></li><li><a href="/regulations/">Регламентирующие документы</a></li><li><a href="/tariffs/">Тарифные планы</a></li><li><strong><a href="#" data-toggle="popover" data-placement="right" data-trigger="hover" data-html="true" data-content='<li><a href="/about/development.html">Разработка ПО</a></li><li><a href="/about/seldon.html">Проверь контрагента</a></li>'>Сервисы</a></strong></li><li><a href="/about/requirements.html">Требования к компьютеру</a></li><li><a href="http://demo.gazneftetorg.ru">Вход в DEMO-версию</a></li></ul></div>                        <div class="banner_block">
-                        <a href="/about/seldon.html"><img src="/images/banners/seldon_185х240.png" width="200px" height="240px"></a>
-                    </div>                        <div class="link_block">
-                        <a href="http://corpmsp.ru" target=_blank>АО «Корпорация «МСП»</a>
-                    </div>
-                    </div>
                 </div>
-            </div>
-            <div class="col-sm-10 vc_custom_block block_layout">
-                <div class="layout body_text">
-                    <div class="form">
-                        <div class="no_print">
-                            <table width="100%" height="30" border="0" cellspacing="1" cellpadding="0" class="round_blocks"><tr>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_left.gif"></td>
-                                            <td width="100%" nowrap class="active">Общая информация</td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_active_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=file_documentations_view&procedure_id=35554">Документация по торгам</a></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_participants&id=35554">Предложения</a> <b> - 0</b></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_protocols&id=35554"> Протоколы</a></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=file_documents_view&procedure_id=35554">Документы</a> <b> - 0</b></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_changes&id=35554">Изменения</a> <b> - 0</b></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td nowrap>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_left.gif"></td>
-                                            <td width="100%" nowrap>&nbsp;<a href="/trades/energo/ProposalRequest/?action=view_clarification&procedure_id=35554">Разъяснения</a></td>
-                                            <td width="8"><img src="/gazneftetorg/images/corners/bg_round_block_right.gif"></td>
-                                        </tr>
-                                    </table>
-                                </td><td width="100%">&nbsp;</td></tr></table></div>
-                        <p class="no_print">
-                        </p>
-                        <p class="no_print">
-                        </p>
-                        <!--
-                            <input class="button" type="button" onclick="window.open('', '_blank')" value="Торговая процедура на ООС" style="width:270px; height: 25px; margin-bottom: 17px;">
-                        -->
-                        <table class="blank" style="width: 100%;">
-                            <tbody>
-                            <tr class="thead">
-                                <td colspan="2">
-                                    Извещение о проведении торговой процедуры "Запрос предложений № 142323"
-                                    &nbsp;			</td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname" width="30%">Организатор размещения заказа:</td>
-                                <td><a href='/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311' title="Просмотреть информационную карту участника" target="_blank">Общество с ограниченной ответственностью  "Петербургтеплоэнерго"</a>, Россия, 190098, г. Санкт-Петербург, Галерная ул., д. 20-22, лит. А </td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Контактное лицо:</td>
-                                <td><a href="/popups/send_message.html?action=send&to=148440" target="" onclick="popup(event, '/popups/send_message.html?action=send&to=148440', '', 400, 480);return false;" title="Отправить сообщение по внутрисистемной почте">Матвеев Кирилл Андреевич</a><br>Начальник группы закрытых закупок</td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname">Общее наименование закупки:</td>
-                                <td>
-                                    Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых			</td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Обязательность применения ЭП для участников </td>
-                                <td>Нет</td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname">Дата публикации:</td>
-                                <td>
-                                    11.12.2017 18:30			</td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Место рассмотрения заявок:</td>
-                                <td>
-                                    По адресу в сети интернет www.gazneftetorg.ru                </td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname">Требование к отсутствию участников закупки в реестре недобросовестных поставщиков</td>
-                                <td>Нет</td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Лоты:</td>
-                                <td>
-                                    <table class="form-fieldset form-fieldset-fields" cellspacing="0" cellpadding="0" style="width:100%;">
-                                        <tbody>
-                                        <tr class="c2 row">
-                                            <td class="label">
-                                                <a class="lots_list" href="#lot_1">Лот №1</a>
-                                            </td>
-                                            <td class="element">Поставка компенсаторов резиновых фланцевых</td>
-                                            <td class="element">
-                                                <strong>Изделия готовые, не включенные в другие группировки</strong>
-                                            </td>
-                                            <td class="element">
-                                                119 шт.                                    </td>
-                                            <td class="element">
-                                                654&nbsp;372,88&nbsp;руб.									</td>
-                                        </tr>
-                                        </tbody></table>
-                                </td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname">Общая цена:</td>
-                                <td>
-                                    654&nbsp;372,88&nbsp;руб.			</td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Порядок регистрации на сайте:</td>
-                                <td>
-                                    Порядок регистрации претендентов на участие в торговой процедуре по вышеуказанному предмету договора
-                                    указан в разделе <a href="http://www.gazneftetorg.ru/request/">"Подключение"</a> на сайте в сети Интернет по адресу: gazneftetorg.ru.
-                                </td>
-                            </tr>
-                            <tr class="c1">
-                                <td class="fname">Порядок подачи предложений:</td>
-                                <td>Настоящая Документация о запросе предложений размещена на официальном сайте в сети Интернет для размещения информации о размещении заказов на поставки товаров, выполнение работ, оказание услуг,
-                                    на электронной торговой площадке системы &laquo;ГазНефтеторг.ру&raquo;, одновременно с размещением Извещения и доступна для ознакомления без взимания платы.</td>
-                            </tr>
-                            <tr class="c2">
-                                <td class="fname">Действия:</td>
-                                <td>
-                                    <a href="/rules">Ознакомиться с правилами проведения торгов</a>			</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <p>
-                            <img src="/images/attention.gif"> Заказчик имеет право вносить изменения в Извещение о проведении запроса предложений и Документацию о запросе предложений в любое время до истечения срока подачи заявок на участие в Запросе предложений, а также отказаться от проведения Запроса предложений в любое время до подведения его итогов.<br>
-                            Заказчик имеет право не заключать Договор по результатам проведения Запроса предложений.<br>
-                            Запрос предложений не является торгами (конкурсом, аукционом) или публичным конкурсом в соответствии со статьями 447 – 449 части первой и статьями 1057 – 1061 части второй Гражданского кодекса Российской Федерации, и не накладывает на Организатора и Заказчика обязательств, установленных указанными статьями Гражданского кодекса Российской Федерации.
-                        </p>
-
-                        <table cellspacing="0" cellpadding="0" style="width:100%;">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <h2>
-                                        Лот №1<span class="lower_in_h2">, Поставка компенсаторов резиновых фланцевых</span>
-                                    </h2>
-                                    <a class="border_dashed toogle_lot" name="lot_1" href=""><span>Скрыть</span> лот №1</a>
-                                    <div class="lot_info">
-                                        <table class="blank" style="width:100%;">
-                                            <tbody>
-                                            <tr class="thead">
-                                                <td class="lot_title">
-                                                    Извещение о проведении торговой процедуры "Запрос предложений № 142323-1"
-                                                </td>
-                                                <td class="countdown">
-                                                    <table cellspacing="0" cellpadding="0" style="border: 0; float: right;">
-                                                        <tr>
-                                                            <td style="border: 0; padding: 0 5px; margin: 0; vertical-align: middle;">
-                                                                <img src="/images/icons/clock.png" />
-                                                            </td>
-                                                            <td style="border: 0; padding: 0; margin: 0; vertical-align: middle; font-weight: normal;">
-                                                                Принять участие: <span id="timer-38194"></span>&nbsp;<span class="gray">(*время Московское)</span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <script type="text/javascript">
-                                                        $(document).ready(function(){
-                                                            $("#timer-38194").countdown({now: 1513084588, end: 1513666800});
-                                                            $("#timer-38194").bind("countdown_expired", function(){
-                                                                $(this).closest(".countdown").html("&nbsp;");
-                                                            });
-                                                            $("#timer-38194").closest(".countdown").show();
-                                                        });
-                                                    </script>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="blank">
-                                            <tbody>
-                                            <tr class="c1">
-                                                <td class="fname" width="30%">Организатор размещения заказа:</td>
-                                                <td><a href='/firms/view_firm.html?id=kcRX5ilJ0tCehARdhVfhjQ%3D%3D&fi=94311' title="Просмотреть информационную карту участника" target="_blank">Общество с ограниченной ответственностью  "Петербургтеплоэнерго"</a>, Россия, 190098, г. Санкт-Петербург, Галерная ул., д. 20-22, лит. А </td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Контактное лицо:</td>
-                                                <td><a href="/popups/send_message.html?action=send&to=148440" target="" onclick="popup(event, '/popups/send_message.html?action=send&to=148440', '', 400, 480);return false;" title="Отправить сообщение по внутрисистемной почте">Матвеев Кирилл Андреевич</a><br>Начальник группы закрытых закупок</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Общее наименование закупки:</td>
-                                                <td>
-                                                    Открытый запрос предложений в электронной форме №346/78/П на поставку компенсаторов резиновых фланцевых										</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Дата публикации:</td>
-                                                <td>
-                                                    11.12.2017 18:30										</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Закупка не включена в план закупки в соответствии с частью 15 статьи 4 Закона № 223-ФЗ</td>
-                                                <td>Нет</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Предмет договора<br/>(наименование товаров, работ, услуг):</td>
-                                                <td>
-                                                    Поставка компенсаторов резиновых фланцевых										</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Позиции</td>
-                                                <td>
-                                                    <p><a href="/trades/energo/ProposalRequest/?action=view_positions&lot_id=38194">Просмотр позиций по лоту</a></p>
-                                                </td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Категория продукции (ОКПД2):</td>
-                                                <td>
-                                                    Изделия готовые, не включенные в другие группировки										</td>
-                                            </tr>
-
-                                            <tr class="c1">
-                                                <td class="fname">Вид экономической деятельности (ОКВЭД2):</td>
-                                                <td>Производство прочих готовых изделий</td>
-                                            </tr>
 
 
-                                            <tr class="c2">
-                                                <td class="fname">Количество поставляемого товара, объем выполняемых работ, оказываемых услуг:</td>
-                                                <td>
-                                                    119 шт.                                            </td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Начальная (максимальная) цена договора:</td>
-                                                <td>
-                                                    654&nbsp;372,88&nbsp;руб. (без НДС)										</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Условия оплаты:</td>
-                                                <td>
-                                                    В соответствии с проектом договора (Приложение №1 к настоящей Документации).										</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Условия поставки (в том числе место поставки товара, выполнения работ, оказания услуг):</td>
-                                                <td>
-                                                    В соответствии с проектом договора (Приложение №1 к настоящей Документации).										</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Дата вскрытия конвертов:</td>
-                                                <td>
-                                                    <strong>19.12.2017 10:00</strong>										</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Дата рассмотрения предложений:</td>
-                                                <td>
-                                                    Не позднее 27.12.2017 12:30 на сайте в сети Интернет по адресу: gazneftetorg.ru.
-                                                </td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Дата завершения процедуры (дата рассмотрения предложений участников и подведения итогов):</td>
-                                                <td>
-                                                    Не позднее 10.01.2018 15:00										</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Требования к участникам:</td>
-                                                <td>В соответствии с условиями и требованиями документации по проведению запроса предложений</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Критерии оценки:</td>
-                                                <td>В соответствии с условиями и требованиями документации по проведению запроса предложений</td>
-                                            </tr>
-                                            <tr class="c1">
-                                                <td class="fname">Сведения о предоставлении преференций:</td>
-                                                <td>В соответствии с Постановлением Правительства №925 от 16.09.2016 г. «О приоритете товаров российского происхождения, работ, услуг, выполняемых, оказываемых российскими лицами, по отношению к товарам, происходящим из иностранного государства, работам, услугам, выполняемым, оказываемым иностранными лицами» устанавливается приоритет товаров российского происхождения по отношению к товарам, происходящим из иностранного государства.</td>
-                                            </tr>
-                                            <tr class="c2">
-                                                <td class="fname">Действия:</td>
-                                                <td>
-                                                    <a href="/rules">Ознакомиться с правилами проведения торгов</a>										</td>
-                                            </tr>
-                                            <tr class="thead">
-                                                <td colspan="2" align="center">
-                                                    <form action="/trades/energo/ProposalRequest/" method="get" style="display: inline;">
-                                                        <input type="hidden" name="action" value="ask_question_lot" />
-                                                        <input type="hidden" name="id" value="38194" />
-                                                        <input type="submit" class="button" value="Задать вопрос организатору">
-                                                    </form>
-                                                    <form action="/trades/energo/ProposalRequest/" method="get" style="display: inline;">
-                                                        <input type="hidden" name="action" value="proposal" />
-                                                        <input type="hidden" name="id" value="38194" />
-                                                        <input type="submit" class="button" value="Ваше предложение">
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
 
-                                        <br/>
 
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345950072">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345950072">
+                                РћРєР°Р·Р°РЅРёРµ СѓСЃР»СѓРі РїРѕ РѕР±СЃР»СѓР¶РёРІР°РЅРёСЋ СЃРёСЃС‚РµРјС‹ РІРёРґРµРѕРЅР°Р±Р»СЋРґРµРЅРёСЏ Рё РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РґРѕСЃС‚СѓРїР° РІ Р·РґР°РЅРёРё Р°РїРїР°СЂР°С‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ Рё РѕС…СЂР°РЅРЅРѕР№ СЃРёРіРЅР°Р»РёР·Р°С†РёРё РІ РіР°СЂР°Р¶Рµ Р°РїРїР°СЂР°С‚Р° СѓРїСЂР°РІР»РµРЅРёСЏ С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
                     </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            21.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            21.12.2017
+
+
+                        </li>
+                    </ul>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345946908">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345946908">
+                                РџРѕСЃС‚Р°РІРєР° Р°СЂРјР°С‚СѓСЂС‹ РЎРРџ РЅР° РЅР°РїСЂСЏР¶РµРЅРёРµ 6-35 РєР’  РґР»СЏ РЅСѓР¶Рґ РїСЂРѕРёР·РІРѕРґСЃС‚РІРµРЅРЅС‹С… РѕС‚РґРµР»РµРЅРёР№ С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            20.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            20.12.2017
+
+
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345930841">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345930841">
+                                РџРѕСЃС‚Р°РІРєР° РєРѕРЅРІРµРєС‚РѕСЂРѕРІ СЌР»РµРєС‚СЂРёС‡РµСЃРєРёС… РґР»СЏ РЅСѓР¶Рґ РџРћ "РђР­РЎ" С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            15.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            15.12.2017
+
+
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345926923">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345926923">
+                                РџРѕСЃС‚Р°РІРєР° РјР°С‚РµСЂРёР°Р»Р° РёР·РѕР»СЏС†РёРѕРЅРЅРѕРіРѕ РґР»СЏ РЅСѓР¶Рґ РџРћ "РђР­РЎ" С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ СЃРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            14.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            14.12.2017
+
+
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345904666">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345904666">
+                                РџРѕСЃС‚Р°РІРєР° Р±СѓС‚РёР»РёСЂРѕРІР°РЅРЅРѕР№ РІРѕРґС‹ РґР»СЏ РЅСѓР¶Рґ РїСЂРѕРёР·РІРѕРґСЃС‚РІРµРЅРЅРѕРіРѕ РѕС‚РґРµР»РµРЅРёСЏ "РђР­РЎ" С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°" "РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            07.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            07.12.2017
+
+
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="b-purchase">
+                    <div class="b-purchase__body">
+                        <div class="b-number">в„– РџСЂРѕСЃС‚Р°СЏ Р·Р°РєСѓРїРєР°</div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345904412">
+                                Р—Р°РєСѓРїС‰РёРє - РђСЂС…СЌРЅРµСЂРіРѕ
+                            </a>
+                        </div>
+                        <div>
+                            <a class="b-link"
+                               href="http://www.mrsksevzap.ru/purchaseactive?purchase=1384345904412">
+                                РѕРєР°Р·Р°РЅРёРµ СѓСЃР»СѓРі РїРѕ СЂР°Р·СЂР°Р±РѕС‚РєРµ РїСЂРѕРµРєС‚Р° РЅРѕСЂРјР°С‚РёРІРѕРІ РѕР±СЂР°Р·РѕРІР°РЅРёСЏ РѕС‚С…РѕРґРѕРІ Рё Р»РёРјРёС‚РѕРІ РЅР° РёС… СЂР°Р·РјРµС‰РµРЅРёРµ РґР»СЏ РЅСѓР¶Рґ РџРћ "Р’Р­РЎ" С„РёР»РёР°Р»Р° РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°""РђСЂС…СЌРЅРµСЂРіРѕ"
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="b-purchase__footer b-clearfix">
+                        <li>OРїСѓР±Р»РёРєРѕРІР°РЅРѕ:</li>
+                        <li class="b-date">
+                            07.12.2017
+                        </li>
+                        <li>РћР±РЅРѕРІР»РµРЅРѕ:</li>
+                        <li class="b-date">
+
+
+                            07.12.2017
+
+
+                        </li>
+                    </ul>
+                </div>
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <ul class="b-pagination b-list">
+                <li class="b-pagination__item b-pagination__item_link_back">
+
+
+                    <a class="b-link-disabled">в†ђ РџСЂРµРґС‹РґСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р°</a>
+
+
+
+                </li>
+
+
+                <li class='b-pagination__item b-pagination__item_status_current'>
+
+
+                    <a class="b-link"
+
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=1">
+
+                        1
+
+                    </a>
+
+                </li>
+
+
+
+                <li class='b-pagination__item'>
+
+
+                    <a class="b-link"
+
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=2">
+
+                        2
+
+                    </a>
+
+                </li>
+
+
+
+                <li class='b-pagination__item'>
+
+
+                    <a class="b-link"
+
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=3">
+
+                        3
+
+                    </a>
+
+                </li>
+
+
+
+                <li class='b-pagination__item'>
+
+
+                    <a class="b-link"
+
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=4">
+
+                        4
+
+                    </a>
+
+                </li>
+
+
+
+                <li class='b-pagination__item'>
+
+
+                    <a class="b-link"
+
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=5">
+
+                        5
+
+                    </a>
+
+                </li>
+
+
+
+                <li class="b-pagination__item b-pagination__item_link_forward">
+
+
+
+
+
+
+
+                    <a class="b-link"
+                       href="http://www.mrsksevzap.ru/purchaseactive?page=2">РЎР»РµРґСѓСЋС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° в†’</a>
+
+
+
+
+
+                </li>
+
+            </ul>
+
+
+
         </div>
     </div>
 </div>
-<div class="oi_footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <b>2013-2017</b><br>
-                Оператор Системы &mdash;
-                &quot;ГазНефтеторг.ру&quot;<br>
-                Все права защищены &copy; <br>
-                <span>+7 (495) 231-46-71</span>
-            </div>
-            <div class="col-md-4">
-                <ul>
-                    <li><a href="/request/about.html">О компании</a></li>
-                    <li><a href="/personal/">Личный кабинет</a></li>
-                    <li><a href="/trades/">Торговая площадка</a></li>
-                    <li><a href="/news/">Новости</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <ul>
-                    <li>                <a href="/tariffs/">Тарифные планы</a>
-                    </li>
-                    <li><a href="/presentations/">Презентации</a></li>
-                    <li><a href="/rules/">Правила работы</a></li>
-                    <li>                <a href="/prices/">Прайс-листы</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="b-stripe b-stripe_content_bnr-list">
+    <div class="b-inn">
+        <ul class="b-list b-different-sides" id="footer-slider">
+
+            <li class="b-list__item">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://zakupki.gov.ru/"
+                   target="_blank"
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3Dportal-zakupok.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=13567&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384340500020&amp;ssbinary=true'
+                         class="b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+            <li class="b-list__item">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://www.b2b-energo.ru/"
+                   target="_blank"
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3Db2b-portal.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=6170&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384340501252&amp;ssbinary=true'
+                         class="b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+            <li class="b-list__item">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <a class="b-link"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   href="http://www.tzselektra.ru/"
+                   target="_blank"
+                >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <img src='/cs/Satellite?blobcol=urldata&amp;blobheader=image%2Fpng&amp;blobheadername1=Content-Disposition&amp;blobheadername2=MDT-Type&amp;blobheadername3=Content-Length&amp;blobheadervalue1=inline%3B+filename%3Dzakupki-support.png&amp;blobheadervalue2=abinary%3B+charset%3DUTF-8&amp;blobheadervalue3=15525&amp;blobkey=id&amp;blobtable=MungoBlobs&amp;blobwhere=1384340507419&amp;ssbinary=true'
+                         class="b-c-embbed"
+
+
+
+                    />
+
+
+                </a>
+
+            </li>
+
+        </ul>
     </div>
-</div><script type="text/javascript">
+</div>
 
-    (function() {
-        $.ajax({
-            url      : '/blocks/local_time.php',
-            cache    : false,
-            dataType : 'json',
-            success  : function(data)
-            {
-                $('#rus_date').text(data.rus_date);
 
-                window.CurrentDate = new Date(data.time);
 
-                Doo();
-            }
-        });
-    })();
 
-</script>
-<script type="text/javascript">
 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-28385057-1']);
-    _gaq.push(['_trackPageview']);
 
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
 
-</script></BODY>
-</HTML>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="b-stripe b-stripe_content_bottom-panel">
+    <div class="b-bottom-panel b-different-sides">
+
+
+
+
+        <div class="b-content-column b-content-column_content_copyright b-content-column_viewtype_multiline">
+            <div class="b-content-column__text">В© 2004вЂ“2018 РџРђРћ "РњР РЎРљ РЎРµРІРµСЂРѕ-Р—Р°РїР°РґР°"</div>
+            <a class="b-link"
+               href="http://www.mrsksevzap.ru/contacts" title="">РљРѕРЅС‚Р°РєС‚РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ</a>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_sitemap b-content-column_icon_sitemap">
+            <a class="b-link"
+               href="http://www.mrsksevzap.ru/sitemap" title="">РљР°СЂС‚Р° СЃР°Р№С‚Р°</a>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_print b-content-column_icon_printer">
+
+            <a class="b-link" href="http://www.mrsksevzap.ru/purchaseactive?style=print">Р Р°СЃРїРµС‡Р°С‚Р°С‚СЊ</a>
+        </div>
+
+
+
+
+
+
+
+
+
+        <div class="b-content-column b-content-column_content_typo">
+            <a class="b-link" href="https://clients.mrsksevzap.ru/sendfeedback" title="">РќР°С€Р»Рё РѕС€РёР±РєСѓ РЅР° СЃР°Р№С‚Рµ?</a>
+        </div>
+
+        <div class="b-content-column b-content-column_content_softline-copy b-content-column_viewtype_multiline" style="margin: -10px 0 -10px;">
+            <a class="b-link" href="http://develonica.ru" target="_blank" title="РЎРґРµР»Р°РЅРѕ РІ Develonica">
+                <img src="/cs/MRSKsevzap/images/content/develonica_logo.png " alt="Develonica" /></a>
+        </div>
+
+    </div>
+</div>
+<div class="metrics">
+    <!-- Yandex.Metrika counter -->
+    <noscript><div><img src="//mc.yandex.ru/watch/25778942" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <!-- Universal Analytics  -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-53543632-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <!-- Universal Analytics  -->
+    <!--LiveInternet counter-->
+    <script language="JavaScript"><!--
+    document.write('<a href="//www.liveinternet.ru/click" '+
+        'target=_blank><img src="//counter.yadro.ru/hit?t16.3;r'+
+        escape(document.referrer)+((typeof(screen)=='undefined')?'':
+            ';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+            screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+        ';'+Math.random()+
+        '" title="liveinternet.ru: РїРѕРєР°Р·Р°РЅРѕ С‡РёСЃР»Рѕ РїСЂРѕСЃРјРѕС‚СЂРѕРІ Р·Р° 24 С‡Р°СЃР°, РїРѕСЃРµС‚РёС‚РµР»РµР№ Р·Р° 24 С‡Р°СЃР° Рё Р·Р° СЃРµРіРѕРґРЅ\СЏ" '+
+        'border=0 width=88 height=31></a>')//--></script><!--/LiveInternet-->
+
+    <!--Rating@Mail.ru COUNTEr--><script language="JavaScript" type="text/javascript"><!--
+d=document;var a='';a+=';r='+escape(d.referrer);
+jsM=10//--></script><script language="JavaScript1.1" type="text/javascript"><!--
+a+=';j='+navigator.javaEnabled();
+jsM=11//--></script><script language="JavaScript1.2" type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+jsM=12//--></script><script language="JavaScript1.3" type="text/javascript"><!--
+jsM=13//--></script><script language="JavaScript" type="text/javascript"><!--
+d.write('<a href="//top.mail.ru/jump?from=943636"'+
+    ' target=_top><img src="//d6.c6.be.a0.top.list.ru/counter'+
+    '?id=943636;t=217;js='+jsM+a+';rand='+Math.random()+
+    '" alt="Р РµР№С‚РёРЅРі@Mail.ru"'+' border=0 height=31 width=88/><\/a>')
+if(11<jsM)d.write('<'+'!-- ')//--></script><noscript><a
+        target=_top href="//top.mail.ru/jump?from=943636"><img
+        src="//d6.c6.be.a0.top.list.ru/counter?js=na;id=943636;t=217"
+        border=0 height=31 width=88
+        alt="Р РµР№С‚РёРЅРі@Mail.ru"/></a></noscript><script language="JavaScript" type="text/javascript"><!--
+if(11<jsM)d.write('--'+'>')//--></script><!--/COUNTER-->
+    <!-- РўРѕРїР»РёРІРЅРѕ-Р­РЅРµСЂРіРµС‚РёС‡РµСЃРєРёР№ РљРѕРјРїР»РµРєc StaTek.Ru -->
+    <a href="//www.statek.ru/">
+        <script language="javascript">
+            java="1.0";
+            java1=""+"refer="+escape(document.referrer)+"&amp;page="+
+                escape(window.location.href);
+            document.cookie="astratop=1; path=/"; java1+="&amp;c="+(document.cookie?"yes":"now");
+        </script>
+        <script language="javascript1.1">java="1.1";java1+="&amp;java="+(navigator.javaEnabled()?"yes":"now")</script>
+        <script language="javascript1.2">java="1.2";
+        java1+="&amp;razresh="+screen.width+'x'+screen.height+"&amp;cvet="+
+            (((navigator.appName.substring(0,3)=="Mic"))?
+                screen.colorDepth:screen.pixelDepth)</script><script language="javascript1.3">java="1.3"</script>
+        <script language="javascript">java1+="&amp;jscript="+java+"&amp;rand="+Math.random();
+        document.write("<a href='//www.statek.ru/?fromsite=2' target='_blank'><img "+
+            " src='//www.statek.ru/img.php?id=2&amp;"+java1+"&amp;' border=0 alt='РўРѕРїР»РёРІРЅРѕ-Р­РЅРµСЂРіРµС‚РёС‡РµСЃРєРёР№ РљРѕРјРїР»РµРєc StaTek.Ru' width='88' height='31'></a>")</script>
+        <noscript><a href=//www.statek.ru/?fromsite=2 target=_blank><img src="//www.statek.ru/img.php?id=2" border=0 alt="РўРѕРїР»РёРІРЅРѕ-Р­РЅРµСЂРіРµС‚РёС‡РµСЃРєРёР№ РљРѕРјРїР»РµРєc StaTek.Ru" width='88' height='31'></a></noscript>
+    </a>
+    <!-- /РўРѕРїР»РёРІРЅРѕ-Р­РЅРµСЂРіРµС‚РёС‡РµСЃРєРёР№ РљРѕРјРїР»РµРєc StaTek.Ru -->
+</div>
+
+
+
+
+
+<script src="//yandex.st/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script src="/cs/MRSKsevzap/js/lib/yepnope.1.5.4-min.js" type="text/javascript"></script>
+<script src="/cs/MRSKsevzap/js/entryPoint.js" type="text/javascript"></script>
+
+
+</body>
+</html>
+
