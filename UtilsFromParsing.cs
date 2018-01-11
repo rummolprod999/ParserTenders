@@ -31,6 +31,25 @@ namespace ParserTenders
 
             return d;
         }
+        public static decimal ParsePriceMrsk(string s)
+        {
+            s = System.Net.WebUtility.HtmlDecode(s);
+            s = Regex.Replace(s, @"\s+", "");
+            s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
+            s = Regex.Replace(s, @"\(|\)|-", "");
+            decimal d = 0.0m;
+            try
+            {
+                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = "."};
+                d = Decimal.Parse(s, formatter);
+            }
+            catch (Exception)
+            {
+                //WriteLine(e);
+            }
+
+            return d;
+        }
 
         public static DateTime ParseDateTend(string s)
         {

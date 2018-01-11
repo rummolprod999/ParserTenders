@@ -60,6 +60,7 @@ namespace ParserTenders
                 }
                 catch (WebException ex)
                 {
+                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
                     if (ex.Response is HttpWebResponse errorResponse && errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
                         Log.Logger("Error 403");
