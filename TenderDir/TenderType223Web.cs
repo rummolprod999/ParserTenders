@@ -481,6 +481,7 @@ namespace ParserTenders.TenderDir
                     {
                         string lotMaxPrice = ((string) lot.SelectToken("lotData.initialSum") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("lotData.currency.name") ?? "").Trim();
+                        string lotSubj = ((string) lot.SelectToken("lotData.subject") ?? "").Trim();
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
@@ -498,7 +499,15 @@ namespace ParserTenders.TenderDir
                             string okpd2Code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
                             string additionalInfo = ((string) lotitem.SelectToken("additionalInfo") ?? "").Trim();
-                            string name = $"{additionalInfo} {okpdName}".Trim();
+                            string name = "";
+                            if (!String.IsNullOrEmpty(lotSubj))
+                            {
+                                name = $"{lotSubj} {additionalInfo}".Trim();
+                            }
+                            else
+                            {
+                                name = $"{additionalInfo} {okpdName}".Trim();
+                            }
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();

@@ -509,7 +509,6 @@ namespace ParserTenders.TenderDir
                             {
                                 name = $"{additionalInfo} {okpdName}".Trim();
                             }
-
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();
