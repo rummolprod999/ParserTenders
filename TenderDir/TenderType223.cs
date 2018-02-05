@@ -46,6 +46,7 @@ namespace ParserTenders.TenderDir
                 tend = ((JObject) firstOrDefault3.Value).Properties()
                     .FirstOrDefault(p => p.Name.StartsWith("purchase", StringComparison.Ordinal));
             }
+
             if (tend != null)
             {
                 JToken tender = tend.Value;
@@ -89,6 +90,7 @@ namespace ParserTenders.TenderDir
                     {
                         dateVersion = docPublishDate;
                     }
+
                     /*string utc_offset = "";
                     try
                     {
@@ -189,6 +191,7 @@ namespace ParserTenders.TenderDir
                     {
                         Log.Logger("Нет organizer_inn", FilePath);
                     }
+
                     int idPlacingWay = 0;
                     string placingWayCode = ((string) tender.SelectToken("purchaseMethodCode") ?? "").Trim();
                     string placingWayName = ((string) tender.SelectToken("purchaseCodeName") ?? "").Trim();
@@ -254,6 +257,7 @@ namespace ParserTenders.TenderDir
                             idEtp = (int) cmd7.LastInsertedId;
                         }
                     }
+
                     string endDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("submissionCloseDateTime") ?? "") ??
                      "").Trim('"');
@@ -279,6 +283,7 @@ namespace ParserTenders.TenderDir
                         (JsonConvert.SerializeObject(tender.SelectToken("quotationExaminationTime") ?? "") ??
                          "").Trim('"');
                     }
+
                     string insertTender =
                         $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, extend_scoring_date = @extend_scoring_date, extend_bidding_date = @extend_bidding_date";
                     MySqlCommand cmd8 = new MySqlCommand(insertTender, connect);
@@ -354,6 +359,7 @@ namespace ParserTenders.TenderDir
                             reader4.Read();
                             customerRegNumber = (string) reader4["regNumber"];
                         }
+
                         reader4.Close();
                         if (String.IsNullOrEmpty(customerRegNumber))
                         {
@@ -369,8 +375,10 @@ namespace ParserTenders.TenderDir
                                 reader5.Read();
                                 customerRegNumber = (string) reader5["regNumber"];
                             }
+
                             reader5.Close();
                         }
+
                         if (String.IsNullOrEmpty(customerRegNumber))
                         {
                             string selectOdCustomerFromFtp223 =
@@ -385,8 +393,10 @@ namespace ParserTenders.TenderDir
                                 reader6.Read();
                                 customerRegNumber = (string) reader6["regNumber"];
                             }
+
                             reader6.Close();
                         }
+
                         if (!String.IsNullOrEmpty(customerRegNumber))
                         {
                             string selectCustomer =
@@ -463,6 +473,7 @@ namespace ParserTenders.TenderDir
                     {
                         Log.Logger("У customer нет inn", FilePath);
                     }
+
                     int lotNumber = 1;
                     List<JToken> lots = GetElements(tender, "lots.lot");
                     if (lots.Count == 0)
@@ -471,6 +482,7 @@ namespace ParserTenders.TenderDir
                     {
                         string lotMaxPrice = ((string) lot.SelectToken("lotData.initialSum") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("lotData.currency.name") ?? "").Trim();
+                        string lotSubj = ((string) lot.SelectToken("lotData.subject") ?? "").Trim();
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
@@ -488,7 +500,16 @@ namespace ParserTenders.TenderDir
                             string okpd2Code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
                             string additionalInfo = ((string) lotitem.SelectToken("additionalInfo") ?? "").Trim();
-                            string name = $"{additionalInfo} {okpdName}".Trim();
+                            string name = "";
+                            if (!String.IsNullOrEmpty(lotSubj))
+                            {
+                                name = $"{lotSubj} {additionalInfo}".Trim();
+                            }
+                            else
+                            {
+                                name = $"{additionalInfo} {okpdName}".Trim();
+                            }
+
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();
@@ -498,6 +519,7 @@ namespace ParserTenders.TenderDir
                             {
                                 GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }
+
                             string insertLotitem =
                                 $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value";
                             MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -563,15 +585,18 @@ namespace ParserTenders.TenderDir
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("applExamPeriodTime") ?? "") ??
                                "").Trim('"');
             }
+
             if (String.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("examinationDateTime") ?? "") ??
                                "").Trim('"');
             }
+
             if (String.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = ParsingScoringDate(ten);
             }
+
             return scoringDate;
         }
 
@@ -587,10 +612,12 @@ namespace ParserTenders.TenderDir
                 (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
                  "").Trim('"');
             }
+
             if (String.IsNullOrEmpty(biddingDate))
             {
                 biddingDate = ParsingBiddingDate(ten);
             }
+
             return biddingDate;
         }
 
@@ -620,6 +647,7 @@ namespace ParserTenders.TenderDir
                         {
                             _extendScoringDate = dm;
                         }
+
                         return date;
                     }
                 }
@@ -654,6 +682,7 @@ namespace ParserTenders.TenderDir
                         {
                             _extendBiddingDate = dm;
                         }
+
                         return date;
                     }
                 }
@@ -680,6 +709,7 @@ namespace ParserTenders.TenderDir
                     Log.Logger("Не получилось пропарсить дату", match.Value, FilePath, e);
                 }
             }
+
             return d;
         }
     }
