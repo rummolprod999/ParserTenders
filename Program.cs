@@ -7,8 +7,10 @@ using ParserTenders.ParserDir;
 
 namespace ParserTenders
 {
-    internal class Program
+    internal static class Program
     {
+        private const string Arguments = "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft";
+
         private static string _database;
         private static string _tempPath44;
         private static string _logPath44;
@@ -32,6 +34,8 @@ namespace ParserTenders
         private static string _logPathWeb;
         private static string _tempMrsk;
         private static string _logMrsk;
+        private static string _tempRosneft;
+        private static string _logRosneft;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -95,6 +99,8 @@ namespace ParserTenders
                         return _tempPathWeb;
                     case TypeArguments.Mrsk:
                         return _tempMrsk;
+                    case TypeArguments.Rosneft:
+                        return _tempRosneft;
                     default:
                         return "";
                 }
@@ -134,6 +140,8 @@ namespace ParserTenders
                         return _logPathWeb;
                     case TypeArguments.Mrsk:
                         return _logMrsk;
+                    case TypeArguments.Rosneft:
+                        return _logRosneft;
                     default:
                         return "";
                 }
@@ -164,13 +172,13 @@ namespace ParserTenders
         public static int AddObTorgWeb = 0;
         public static int AddSpecTorgWeb = 0;
         public static int AddMrsk = 0;
-
+        public static int AddRosneft = 0;
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    "Недостаточно аргументов для запуска, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk в качестве аргумента");
+                    $"Недостаточно аргументов для запуска, используйте {Arguments} в качестве аргумента");
                 return;
             }
 
@@ -260,9 +268,14 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserMrsk(Periodparsing);
                     break;
+                case "rosneft":
+                    Periodparsing = TypeArguments.Rosneft;
+                    Init(Periodparsing);
+                    ParserRosneft(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk");
+                        $"Неправильно указан аргумент, используйте {Arguments}");
                     break;
             }
         }
@@ -301,6 +314,8 @@ namespace ParserTenders
             _logPathWeb = set.LogPathTendersWeb;
             _tempMrsk = set.TempMrsk;
             _logMrsk = set.LogMrsk;
+            _tempRosneft = set.TempRosneft;
+            _logRosneft = set.LogRosneft;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -360,19 +375,22 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Explanation223_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.GntWeb:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}GntWeb_{LocalDate:dd_MM_yyyy}.log";
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.ObTorgWeb:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}ObTorgWeb_{LocalDate:dd_MM_yyyy}.log";
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.SpecTorgWeb:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}SpecTorgWeb_{LocalDate:dd_MM_yyyy}.log";
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Web:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}TendersWeb_{LocalDate:dd_MM_yyyy}.log";
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Mrsk:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}TendersMrsk_{LocalDate:dd_MM_yyyy}.log";
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Rosneft:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -560,6 +578,14 @@ namespace ParserTenders
             ParserMrsk p = new ParserMrsk(arg);
             p.Parsing();
             Log.Logger("Добавили Mrsk", AddMrsk);
+        }
+        
+        private static void ParserRosneft(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Rosneft");
+            ParserRosneft p = new ParserRosneft(arg);
+            p.Parsing();
+            Log.Logger("Добавили Rosneft", AddRosneft);
         }
     }
 }

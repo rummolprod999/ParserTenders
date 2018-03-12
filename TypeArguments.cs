@@ -17,6 +17,7 @@ namespace ParserTenders
         ObTorgWeb,
         SpecTorgWeb,
         Web,
-        Mrsk
+        Mrsk,
+        Rosneft
     }
 }

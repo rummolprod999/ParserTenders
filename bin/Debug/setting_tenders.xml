@@ -23,6 +23,8 @@
 	<logdir_tenders_web>log_tenders_web</logdir_tenders_web>
 	<tempdir_mrsk>temp_mrsk</tempdir_mrsk>
 	<logdir_mrsk>log_mrsk</logdir_mrsk>
+	<tempdir_rosneft>temp_rosneft</tempdir_rosneft>
+	<logdir_rosneft>log_rosneft</logdir_rosneft>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
