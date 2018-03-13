@@ -490,8 +490,8 @@ namespace ParserTenders.ParserDir
                                         MySqlCommand cmd14 = new MySqlCommand(insertCustomer, connect);
                                         cmd14.Prepare();
                                         cmd14.Parameters.AddWithValue("@reg_num", cust.CustomerRegNumber);
-                                        cmd14.Parameters.AddWithValue("@full_name", cust.Inn);
-                                        cmd14.Parameters.AddWithValue("@inn", cust.Kpp);
+                                        cmd14.Parameters.AddWithValue("@full_name", cust.FullName);
+                                        cmd14.Parameters.AddWithValue("@inn", cust.Inn);
                                         cmd14.ExecuteNonQuery();
                                         idCustomer = (int) cmd14.LastInsertedId;
                                     }

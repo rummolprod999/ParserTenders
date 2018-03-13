@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace ParserTenders
 {
     public static class UtilsFromParsing
     {
-        static UtilsFromParsing()
-        {
-        }
-
         public static decimal ParsePrice(string s)
         {
-            s = System.Net.WebUtility.HtmlDecode(s);
+            s = WebUtility.HtmlDecode(s);
             s = Regex.Replace(s, @"\s+", "");
             s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
             s = Regex.Replace(s, @"\(|\)|-", "");
@@ -33,7 +30,7 @@ namespace ParserTenders
         }
         public static decimal ParsePriceMrsk(string s)
         {
-            s = System.Net.WebUtility.HtmlDecode(s);
+            s = WebUtility.HtmlDecode(s);
             s = Regex.Replace(s, @"\s+", "");
             s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
             s = Regex.Replace(s, @"\(|\)|-", "");
@@ -50,7 +47,25 @@ namespace ParserTenders
 
             return d;
         }
+        public static decimal ParsePriceRosneft(string s)
+        {
+            s = WebUtility.HtmlDecode(s);
+            s = Regex.Replace(s, @"\s+", "");
+            s = s.GetDateFromRegex(@"(\d+[\.,]?\d+)");
+            s = s.Replace('.', ',');
+            decimal d = 0.0m;
+            try
+            {
+                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
+                d = Decimal.Parse(s, formatter);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
 
+            return d;
+        }
         public static DateTime ParseDateTend(string s)
         {
             
@@ -85,6 +100,37 @@ namespace ParserTenders
                 }
             }
             return d;
+        }
+        
+        public static int GetConformity(string conf)
+        {
+            string sLower = conf.ToLower();
+            if (sLower.IndexOf("открыт", StringComparison.Ordinal) != -1)
+            {
+                return 5;
+            }
+
+            if (sLower.IndexOf("аукцион", StringComparison.Ordinal) != -1)
+            {
+                return 1;
+            }
+
+            if (sLower.IndexOf("котиров", StringComparison.Ordinal) != -1)
+            {
+                return 2;
+            }
+
+            if (sLower.IndexOf("предложен", StringComparison.Ordinal) != -1)
+            {
+                return 3;
+            }
+
+            if (sLower.IndexOf("единств", StringComparison.Ordinal) != -1)
+            {
+                return 4;
+            }
+
+            return 6;
         }
     }
 }

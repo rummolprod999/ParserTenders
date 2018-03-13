@@ -235,6 +235,7 @@
     <Compile Include="TenderDir\TenderTypeMrsk.cs" />
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
     <Compile Include="TenderDir\TenderTypeProlongation.cs" />
+    <Compile Include="TenderDir\TenderTypeRosneft.cs" />
     <Compile Include="TenderDir\TenderTypeSign.cs" />
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
     <Compile Include="TenderDir\TenderWeb.cs" />

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
+using AngleSharp.Dom;
+using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
+using ParserTenders.TenderDir;
 
 namespace ParserTenders.ParserDir
 {
@@ -22,7 +25,7 @@ namespace ParserTenders.ParserDir
                 }
                 catch (Exception e)
                 {
-                    Log.Logger(e);
+                    Log.Logger(e, urlpage);
                 }
             }
         }
@@ -40,7 +43,34 @@ namespace ParserTenders.ParserDir
             var tens = document.All.Where(m => m.ClassList.Contains("even") || m.ClassList.Contains("odd"));
             foreach (var t in tens)
             {
-                Console.WriteLine(t.InnerHtml);
+                try
+                {
+                    ParsingTender(t);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+        }
+
+        private void ParsingTender(IElement t)
+        {
+            var purNum = (t.QuerySelector("td.views-field-field-number-zakup-value > a")?.TextContent ?? "").Trim();
+            var url = (t.QuerySelector("td.views-field-field-number-zakup-value > a")?.GetAttribute("href") ?? "").Trim();
+            var placingWay = (t.QuerySelector("td.views-field-field-zakup-type-value")?.TextContent ?? "").Trim();
+            var datePubT = (t.QuerySelector("td.views-field-created")?.TextContent ?? "").Trim();
+            var dateEndT = (t.QuerySelector("td.views-field-field-zakup-end-value")?.TextContent ?? "").Trim();
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy - HH:mm");
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy - HH:mm");
+            try
+            {
+                var ten = new TenderTypeRosneft(purNum, url, placingWay, datePub, dateEnd);
+                ten.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e, url);
             }
         }
     }
