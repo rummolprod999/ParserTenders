@@ -10,7 +10,7 @@ using MySql.Data.MySqlClient;
 
 namespace ParserTenders.TenderDir
 {
-    public class TenderTypeRosneft
+    public class TenderTypeRosneft : TenderBase
     {
         private readonly string PurNum;
         private readonly string Url;
@@ -31,7 +31,7 @@ namespace ParserTenders.TenderDir
         public void Parsing()
         {
             string s = DownloadString.DownL(Url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in Parsing()", Url);
                 return;
@@ -64,7 +64,7 @@ namespace ParserTenders.TenderDir
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    Log.Logger("This tender is exist in base", PurNum);
+                    //Log.Logger("This tender is exist in base", PurNum);
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace ParserTenders.TenderDir
                 int organiserId = 0;
                 var orgFullName = (document.QuerySelector("td:contains('Организатор') +  td")?.QuerySelector("strong")
                                        ?.TextContent ?? "").Trim();
-                if (!String.IsNullOrEmpty(orgFullName))
+                if (!string.IsNullOrEmpty(orgFullName))
                 {
                     string selectOrg =
                         $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE full_name = @full_name";
@@ -152,7 +152,7 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                if (!String.IsNullOrEmpty(orgFullName))
+                if (!string.IsNullOrEmpty(orgFullName))
                 {
                     string selectCustomer =
                         $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
@@ -240,7 +240,7 @@ namespace ParserTenders.TenderDir
                     string recName = (document.QuerySelector("td:contains('Требования к участникам') +  td")
                                           ?.TextContent ?? "").Trim();
                     GetRec(recName, connect, idLot);
-                    if (!String.IsNullOrEmpty(purObjInfo))
+                    if (!string.IsNullOrEmpty(purObjInfo))
                     {
                         string insertLotitem =
                             $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum";
@@ -255,8 +255,85 @@ namespace ParserTenders.TenderDir
                 }
                 else
                 {
-                    Console.WriteLine(lots);
+                    foreach (var l in lots)
+                    {
+                        var lotNum = 1;
+                        var lotNumT = (l.QuerySelector("td.views-field-counter")?.TextContent ?? "").Trim();
+                        if (!string.IsNullOrEmpty(lotNumT))
+                        {
+                            lotNumT = lotNumT.replace("Лот №", "");
+                            lotNum = int.TryParse(lotNumT, out lotNum) ? int.Parse(lotNumT) : 1;
+                        }
+
+                        var urlLot = (l.QuerySelector("td.views-field-title > a")?.GetAttribute("href") ?? "").Trim();
+                        if (!string.IsNullOrEmpty(urlLot))
+                        {
+                            string sl = DownloadString.DownL(urlLot);
+                            if (string.IsNullOrEmpty(sl))
+                            {
+                                Log.Logger("Empty string in Parsing()", urlLot);
+                                continue;
+                            }
+
+                            var parserL = new HtmlParser();
+                            var docl = parserL.Parse(sl);
+                            var nmckT = (docl.QuerySelector("td:contains('Сведения о начальной') +  td")
+                                             ?.TextContent ?? "").Trim();
+                            var nmck = UtilsFromParsing.ParsePriceRosneft(nmckT);
+                            var currency = "";
+                            if (nmckT.Contains("руб"))
+                            {
+                                currency = "руб.";
+                            }
+
+                            string insertLot =
+                                $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                            MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
+                            cmd18.Prepare();
+                            cmd18.Parameters.AddWithValue("@id_tender", idTender);
+                            cmd18.Parameters.AddWithValue("@lot_number", lotNum);
+                            cmd18.Parameters.AddWithValue("@max_price", nmck);
+                            cmd18.Parameters.AddWithValue("@currency", currency);
+                            cmd18.ExecuteNonQuery();
+                            int idLot = (int) cmd18.LastInsertedId;
+                            string recName = (document.QuerySelector("td:contains('Требования к участникам') +  td")
+                                                  ?.TextContent ?? "").Trim();
+                            GetRec(recName, connect, idLot);
+                            var namePo = (docl.QuerySelector("td:contains('товар/работа') +  td")
+                                              ?.TextContent ?? "").Trim();
+                            if (!string.IsNullOrEmpty(namePo))
+                            {
+                                string insertLotitem =
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum";
+                                MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                                cmd19.Prepare();
+                                cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                                cmd19.Parameters.AddWithValue("@name", namePo);
+                                cmd19.Parameters.AddWithValue("@sum", nmck);
+                                cmd19.ExecuteNonQuery();
+                            }
+
+                            var deliveryPlace = (docl.QuerySelector("td:contains('Место поставки товара') +  td")
+                                                     ?.TextContent ?? "").Trim();
+                            if (!string.IsNullOrEmpty(deliveryPlace))
+                            {
+                                string insertCustomerRequirement =
+                                    $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price";
+                                MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                                cmd16.Prepare();
+                                cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                                cmd16.Parameters.AddWithValue("@delivery_place", deliveryPlace);
+                                cmd16.Parameters.AddWithValue("@max_price", nmck);
+                                cmd16.ExecuteNonQuery();
+                            }
+                        }
+                    }
                 }
+
+                Tender.TenderKwords(connect, idTender);
+                AddVerNumber(connect, PurNum, TypeFz);
             }
         }
 
@@ -326,7 +403,7 @@ namespace ParserTenders.TenderDir
 
         private void GetPlacingWay(MySqlConnection connect, out int idPlacingWay)
         {
-            if (!String.IsNullOrEmpty(PlacingWay))
+            if (!string.IsNullOrEmpty(PlacingWay))
             {
                 string selectPlacingWay =
                     $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE name = @name";

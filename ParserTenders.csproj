@@ -223,6 +223,7 @@
     <Compile Include="StringExtension.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="TenderDir\Tender.cs" />
+    <Compile Include="TenderDir\TenderBase.cs" />
     <Compile Include="TenderDir\TenderType223.cs" />
     <Compile Include="TenderDir\TenderType223Web.cs" />
     <Compile Include="TenderDir\TenderType44.cs" />
