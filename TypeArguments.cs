@@ -18,6 +18,7 @@ namespace ParserTenders
         SpecTorgWeb,
         Web,
         Mrsk,
-        Rosneft
+        Rosneft,
+        Sakhalin
     }
 }

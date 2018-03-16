@@ -9,7 +9,8 @@ namespace ParserTenders
 {
     internal static class Program
     {
-        private const string Arguments = "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft";
+        private const string Arguments =
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin";
 
         private static string _database;
         private static string _tempPath44;
@@ -36,6 +37,8 @@ namespace ParserTenders
         private static string _logMrsk;
         private static string _tempRosneft;
         private static string _logRosneft;
+        private static string _tempSakhalin;
+        private static string _logSakhalin;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -101,6 +104,8 @@ namespace ParserTenders
                         return _tempMrsk;
                     case TypeArguments.Rosneft:
                         return _tempRosneft;
+                    case TypeArguments.Sakhalin:
+                        return _tempSakhalin;
                     default:
                         return "";
                 }
@@ -142,6 +147,8 @@ namespace ParserTenders
                         return _logMrsk;
                     case TypeArguments.Rosneft:
                         return _logRosneft;
+                    case TypeArguments.Sakhalin:
+                        return _logSakhalin;
                     default:
                         return "";
                 }
@@ -173,6 +180,8 @@ namespace ParserTenders
         public static int AddSpecTorgWeb = 0;
         public static int AddMrsk = 0;
         public static int AddRosneft = 0;
+        public static int AddSakhalin = 0;
+
         public static void Main(string[] args)
         {
             if (args.Length == 0)
@@ -273,6 +282,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserRosneft(Periodparsing);
                     break;
+                case "sakhalin":
+                    Periodparsing = TypeArguments.Sakhalin;
+                    Init(Periodparsing);
+                    ParserSakhalin(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
                         $"Неправильно указан аргумент, используйте {Arguments}");
@@ -316,6 +330,8 @@ namespace ParserTenders
             _logMrsk = set.LogMrsk;
             _tempRosneft = set.TempRosneft;
             _logRosneft = set.LogRosneft;
+            _tempSakhalin = set.TempSakhalin;
+            _logSakhalin = set.LogSakhalin;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -390,6 +406,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Rosneft:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Sakhalin:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
@@ -523,7 +542,7 @@ namespace ParserTenders
             Log.Logger("Добавили GntWeb", AddGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");
         }
-        
+
         private static void ParserObTorgWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга ObTorgWeb");
@@ -561,7 +580,7 @@ namespace ParserTenders
             Log.Logger("Добавили SpecTorgWeb", AddSpecTorgWeb);
             Log.Logger("Время окончания парсинга SpecTorgWeb");
         }
-        
+
         private static void ParserWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Web");
@@ -579,13 +598,21 @@ namespace ParserTenders
             p.Parsing();
             Log.Logger("Добавили Mrsk", AddMrsk);
         }
-        
+
         private static void ParserRosneft(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Rosneft");
             ParserRosneft p = new ParserRosneft(arg);
             p.Parsing();
             Log.Logger("Добавили Rosneft", AddRosneft);
+        }
+
+        private static void ParserSakhalin(TypeArguments arg)
+        {
+            Log.Logger($"Время начала парсинга {arg}");
+            ParserSakhalin p = new ParserSakhalin(arg);
+            p.Parsing();
+            Log.Logger($"Добавили {arg}", AddSakhalin);
         }
     }
 }

@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea">
-      <HintPath>..\packages\AngleSharp.0.9.9.1\lib\net45\AngleSharp.dll</HintPath>
+      <HintPath>..\packages\AngleSharp.0.9.9.2\lib\net45\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.5.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.5.1\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
@@ -56,8 +56,8 @@
     <Reference Include="FluentFTP, Version=19.1.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
       <HintPath>..\packages\FluentFTP.19.1.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
-    <Reference Include="Ftp, Version=2.0.17331.1521, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
-      <HintPath>..\packages\Ftp.dll.2.0.17331.1521\lib\net45\Ftp.dll</HintPath>
+    <Reference Include="Ftp, Version=2.0.18072.1324, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
+      <HintPath>..\packages\Ftp.dll.2.0.18072.1324\lib\net45\Ftp.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.7.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
       <HintPath>..\packages\HtmlAgilityPack.1.7.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -208,6 +208,7 @@
     <Compile Include="ParserDir\ParserMrsk.cs" />
     <Compile Include="ParserDir\ParserObTorgWeb.cs" />
     <Compile Include="ParserDir\ParserRosneft.cs" />
+    <Compile Include="ParserDir\ParserSakhalin.cs" />
     <Compile Include="ParserDir\ParserSgn223.cs" />
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTend223.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
     <Compile Include="TenderDir\TenderTypeProlongation.cs" />
     <Compile Include="TenderDir\TenderTypeRosneft.cs" />
+    <Compile Include="TenderDir\TenderTypeSakhalin.cs" />
     <Compile Include="TenderDir\TenderTypeSign.cs" />
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
     <Compile Include="TenderDir\TenderWeb.cs" />
