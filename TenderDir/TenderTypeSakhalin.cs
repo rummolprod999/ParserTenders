@@ -258,14 +258,18 @@ namespace ParserTenders.TenderDir
                     var purObjA = purObj.Split('•');
                     foreach (var po in purObjA)
                     {
-                        string insertLotitem =
-                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
-                        MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
-                        cmd19.Prepare();
-                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
-                        cmd19.Parameters.AddWithValue("@name", po.Trim());
-                        cmd19.ExecuteNonQuery();
+                        if (!string.IsNullOrEmpty(po))
+                        {
+                            string insertLotitem =
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
+                            MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", po.Trim());
+                            cmd19.ExecuteNonQuery();
+                        }
+                        
                     }
                 }
 
