@@ -27,6 +27,8 @@ namespace ParserTenders
         public readonly string TempSpecTorgWeb;
         public readonly string LogPathTendersWeb;
         public readonly string TempPathTendersWeb;
+        public readonly string LogPathTektorgGazprom;
+        public readonly string TempPathTektorgGazprom;
         public readonly string LogMrsk;
         public readonly string TempMrsk;
         public readonly string LogRosneft;
@@ -134,6 +136,14 @@ namespace ParserTenders
                         case "tempdir_sakhalin":
                             TempSakhalin = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_tektorg_rosneft":
+                            LogPathTektorgGazprom =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tektorg_rosneft":
+                            TempPathTektorgGazprom =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -181,7 +191,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempPathTendersWeb) || String.IsNullOrEmpty(LogMrsk) ||
                 String.IsNullOrEmpty(TempMrsk) || String.IsNullOrEmpty(LogRosneft) ||
                 String.IsNullOrEmpty(TempRosneft) || String.IsNullOrEmpty(LogSakhalin) ||
-                String.IsNullOrEmpty(TempSakhalin))
+                String.IsNullOrEmpty(TempSakhalin) || String.IsNullOrEmpty(LogPathTektorgGazprom) ||
+                String.IsNullOrEmpty(TempPathTektorgGazprom))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

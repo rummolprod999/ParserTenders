@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm";
 
         private static string _database;
         private static string _tempPath44;
@@ -39,6 +39,8 @@ namespace ParserTenders
         private static string _logRosneft;
         private static string _tempSakhalin;
         private static string _logSakhalin;
+        private static string _tempTektorgGazprom;
+        private static string _logTektorgGazprom;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -106,6 +108,8 @@ namespace ParserTenders
                         return _tempRosneft;
                     case TypeArguments.Sakhalin:
                         return _tempSakhalin;
+                    case TypeArguments.TektorgGazprom:
+                        return _tempTektorgGazprom;
                     default:
                         return "";
                 }
@@ -149,6 +153,8 @@ namespace ParserTenders
                         return _logRosneft;
                     case TypeArguments.Sakhalin:
                         return _logSakhalin;
+                    case TypeArguments.TektorgGazprom:
+                        return _logTektorgGazprom;
                     default:
                         return "";
                 }
@@ -181,6 +187,7 @@ namespace ParserTenders
         public static int AddMrsk = 0;
         public static int AddRosneft = 0;
         public static int AddSakhalin = 0;
+        public static int AddTektorgGazprom = 0;
 
         public static void Main(string[] args)
         {
@@ -287,6 +294,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserSakhalin(Periodparsing);
                     break;
+                case "tekgpm":
+                    Periodparsing = TypeArguments.TektorgGazprom;
+                    Init(Periodparsing);
+                    ParserTektorgGazprom(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
                         $"Неправильно указан аргумент, используйте {Arguments}");
@@ -332,6 +344,8 @@ namespace ParserTenders
             _logRosneft = set.LogRosneft;
             _tempSakhalin = set.TempSakhalin;
             _logSakhalin = set.LogSakhalin;
+            _tempTektorgGazprom = set.TempPathTektorgGazprom;
+            _logTektorgGazprom = set.LogPathTektorgGazprom;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -409,6 +423,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Sakhalin:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.TektorgGazprom:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
@@ -613,6 +630,14 @@ namespace ParserTenders
             ParserSakhalin p = new ParserSakhalin(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddSakhalin);
+        }
+
+        private static void ParserTektorgGazprom(TypeArguments arg)
+        {
+            Log.Logger($"Время начала парсинга {arg}");
+            ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
+            p.Parsing();
+            Log.Logger($"Добавили {arg}", AddTektorgGazprom);
         }
     }
 }

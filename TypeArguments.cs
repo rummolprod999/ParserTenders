@@ -19,6 +19,7 @@ namespace ParserTenders
         Web,
         Mrsk,
         Rosneft,
-        Sakhalin
+        Sakhalin,
+        TektorgGazprom
     }
 }

@@ -2520,44 +2520,6 @@
             </summary>
             <returns>Loaded XML license document</returns>
         </member>
-        <member name="T:Limilabs.InternalLicensing.SnkUtil">
-            <summary>
-            NOTE: These methods assume 1024 bit keys, the same as exported from sn.exe.
-            </summary>
-        </member>
-        <member name="F:Limilabs.InternalLicensing.SnkUtil._rsa1Header">
-            <summary>
-            RSA1 header (public only)
-            </summary>
-        </member>
-        <member name="F:Limilabs.InternalLicensing.SnkUtil._rsa2Header">
-            <summary>
-             RSA2 header
-            </summary>
-        </member>
-        <member name="M:Limilabs.InternalLicensing.SnkUtil.GetRSAFromSnkFile(System.String)">
-            <summary>
-            Returns RSA object from *.snk key file.
-            </summary>
-            <param name="path">Path to snk file.</param>
-            <returns><c>RSACryptoServiceProvider</c></returns>
-        </member>
-        <member name="M:Limilabs.InternalLicensing.SnkUtil.GetRSAParameters(System.Byte[])">
-            <summary>
-            Returns <c>RSAParameters</c> from byte[].
-            Example to get rsa public key from assembly:
-            <example>
-            byte[] keyBytes=System.Reflection.Assembly.GetExecutingAssembly().GetName().GetPublicKey();
-            RSAParameters p = SnkUtil.GetRSAParameters(keyBytes); 
-            </example>
-            </summary>
-            <returns>RSAParameters</returns>
-        </member>
-        <member name="M:Limilabs.InternalLicensing.SnkUtil.IsPublicLength(System.Byte[])">
-            <summary>
-            Returns true if buffer length is public key size.
-            </summary>
-        </member>
         <member name="P:Limilabs.Parsers.NameValueParameter.Name">
             <summary>
             Gets parameter name.

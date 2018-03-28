@@ -27,6 +27,8 @@
 	<logdir_rosneft>log_rosneft</logdir_rosneft>
 	<tempdir_sakhalin>temp_sakhalin</tempdir_sakhalin>
 	<logdir_sakhalin>log_sakhalin</logdir_sakhalin>
+	<tempdir_tektorg_rosneft>temp_tektorg_rosneft</tempdir_tektorg_rosneft>
+	<logdir_tektorg_rosneft>log_tektorg_rosneft</logdir_tektorg_rosneft>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
