@@ -40,7 +40,7 @@ namespace ParserTenders.ParserDir
 
             for (int i = 1; i <= max; i++)
             {
-                var url = $"{urlStart}.page={i}";
+                var url = $"{urlStart}&page={i}";
                 try
                 {
                     ParsingPage(url);

@@ -5,6 +5,8 @@ namespace ParserTenders.TenderDir
 {
     public class TenderBase
     {
+        protected string PlacingWay;
+
         protected void AddVerNumber(MySqlConnection connect, string purchaseNumber, int typeFz)
         {
             int verNum = 1;
@@ -33,7 +35,7 @@ namespace ParserTenders.TenderDir
                 }
             }
         }
-        
+
         protected void GetEtp(MySqlConnection connect, out int idEtp, string etpName, string etpUrl)
         {
             string selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE name = @name AND url = @url";
@@ -58,6 +60,41 @@ namespace ParserTenders.TenderDir
                 cmd8.Parameters.AddWithValue("@url", etpUrl);
                 cmd8.ExecuteNonQuery();
                 idEtp = (int) cmd8.LastInsertedId;
+            }
+        }
+
+        protected void GetPlacingWay(MySqlConnection connect, out int idPlacingWay)
+        {
+            if (!string.IsNullOrEmpty(PlacingWay))
+            {
+                string selectPlacingWay =
+                    $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE name = @name";
+                MySqlCommand cmd5 = new MySqlCommand(selectPlacingWay, connect);
+                cmd5.Prepare();
+                cmd5.Parameters.AddWithValue("@name", PlacingWay);
+                DataTable dt4 = new DataTable();
+                MySqlDataAdapter adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
+                adapter4.Fill(dt4);
+                if (dt4.Rows.Count > 0)
+                {
+                    idPlacingWay = (int) dt4.Rows[0].ItemArray[0];
+                }
+                else
+                {
+                    string insertPlacingWay =
+                        $"INSERT INTO {Program.Prefix}placing_way SET name= @name, conformity = @conformity";
+                    MySqlCommand cmd6 = new MySqlCommand(insertPlacingWay, connect);
+                    cmd6.Prepare();
+                    int conformity = UtilsFromParsing.GetConformity(PlacingWay);
+                    cmd6.Parameters.AddWithValue("@name", PlacingWay);
+                    cmd6.Parameters.AddWithValue("@conformity", conformity);
+                    cmd6.ExecuteNonQuery();
+                    idPlacingWay = (int) cmd6.LastInsertedId;
+                }
+            }
+            else
+            {
+                idPlacingWay = 0;
             }
         }
     }
