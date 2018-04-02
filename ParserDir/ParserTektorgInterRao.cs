@@ -6,18 +6,18 @@ using ParserTenders.TenderDir;
 
 namespace ParserTenders.ParserDir
 {
-    public class ParserTektorgGazprom : AbstractParserTektorg
+    public class ParserTektorgInterRao : AbstractParserTektorg
     {
-        private int _dateMinus => 30;
+        private int _dateMinus => 35;
 
-        public ParserTektorgGazprom(TypeArguments ar) : base(ar)
+        public ParserTektorgInterRao(TypeArguments ar) : base(ar)
         {
         }
 
         public override void Parsing()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * _dateMinus * 24 * 60);
-            var urlStart = $"https://www.tektorg.ru/gazprom/procedures?dpfrom={dateM:dd.MM.yyyy}";
+            var urlStart = $"https://www.tektorg.ru/interao/procedures?dpfrom={dateM:dd.MM.yyyy}";
             int max = 0;
             try
             {
@@ -91,8 +91,8 @@ namespace ParserTenders.ParserDir
             var tenderUrl = urlT;
             try
             {
-                var ten = new TenderTypeTektorgGazprom("ТЭК Торг Газпром бурение",
-                    "https://www.tektorg.ru/gazprom/procedures", 22, tenderUrl);
+                var ten = new TenderTypeTektorgInterRao("ТЭК Торг Интер РАО",
+                    "https://www.tektorg.ru/interao/procedures", 24, tenderUrl);
                 ten.Parsing();
             }
             catch (Exception e)

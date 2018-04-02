@@ -156,7 +156,7 @@
       <HintPath>..\packages\MySql.Data.Entity.6.10.6\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -197,6 +197,7 @@
     <Compile Include="ObTorgType.cs" />
     <Compile Include="ObTorgWebTender.cs" />
     <Compile Include="OrganizerGpB.cs" />
+    <Compile Include="ParserDir\AbstractParserTektorg.cs" />
     <Compile Include="ParserDir\IParser.cs" />
     <Compile Include="ParserDir\IParserWeb.cs" />
     <Compile Include="ParserDir\Parser.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="ParserDir\ParserSgn223.cs" />
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTektorgGazprom.cs" />
+    <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
     <Compile Include="ParserDir\ParserTend223.cs" />
     <Compile Include="ParserDir\ParserTend44.cs" />
     <Compile Include="ParserDir\ParserTendersWeb.cs" />
@@ -244,6 +246,7 @@
     <Compile Include="TenderDir\TenderTypeSign.cs" />
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgGazprom.cs" />
+    <Compile Include="TenderDir\TenderTypeTektorgInterRao.cs" />
     <Compile Include="TenderDir\TenderWeb.cs" />
     <Compile Include="TimedWebClient.cs" />
     <Compile Include="TypeArguments.cs" />

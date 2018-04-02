@@ -29,6 +29,8 @@ namespace ParserTenders
         public readonly string TempPathTendersWeb;
         public readonly string LogPathTektorgGazprom;
         public readonly string TempPathTektorgGazprom;
+        public readonly string LogPathTektorgInterRao;
+        public readonly string TempPathTektorgInterRao;
         public readonly string LogMrsk;
         public readonly string TempMrsk;
         public readonly string LogRosneft;
@@ -136,12 +138,20 @@ namespace ParserTenders
                         case "tempdir_sakhalin":
                             TempSakhalin = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
-                        case "logdir_tektorg_rosneft":
+                        case "logdir_tektorg_gazprom":
                             LogPathTektorgGazprom =
                                 $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
-                        case "tempdir_tektorg_rosneft":
+                        case "tempdir_tektorg_gazprom":
                             TempPathTektorgGazprom =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "logdir_tektorg_interrao":
+                            LogPathTektorgInterRao =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tektorg_interrao":
+                            TempPathTektorgInterRao =
                                 $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "prefix":
@@ -192,7 +202,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempMrsk) || String.IsNullOrEmpty(LogRosneft) ||
                 String.IsNullOrEmpty(TempRosneft) || String.IsNullOrEmpty(LogSakhalin) ||
                 String.IsNullOrEmpty(TempSakhalin) || String.IsNullOrEmpty(LogPathTektorgGazprom) ||
-                String.IsNullOrEmpty(TempPathTektorgGazprom))
+                String.IsNullOrEmpty(TempPathTektorgGazprom) || String.IsNullOrEmpty(LogPathTektorgInterRao) ||
+                String.IsNullOrEmpty(TempPathTektorgInterRao))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

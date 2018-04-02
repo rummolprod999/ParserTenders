@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao";
 
         private static string _database;
         private static string _tempPath44;
@@ -41,6 +41,8 @@ namespace ParserTenders
         private static string _logSakhalin;
         private static string _tempTektorgGazprom;
         private static string _logTektorgGazprom;
+        private static string _tempTektorgInterRao;
+        private static string _logTektorgInterRao;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -110,6 +112,8 @@ namespace ParserTenders
                         return _tempSakhalin;
                     case TypeArguments.TektorgGazprom:
                         return _tempTektorgGazprom;
+                    case TypeArguments.TektorgInterRao:
+                        return _tempTektorgInterRao;
                     default:
                         return "";
                 }
@@ -155,6 +159,8 @@ namespace ParserTenders
                         return _logSakhalin;
                     case TypeArguments.TektorgGazprom:
                         return _logTektorgGazprom;
+                    case TypeArguments.TektorgInterRao:
+                        return _logTektorgInterRao;
                     default:
                         return "";
                 }
@@ -188,6 +194,7 @@ namespace ParserTenders
         public static int AddRosneft = 0;
         public static int AddSakhalin = 0;
         public static int AddTektorgGazprom = 0;
+        public static int AddTektorgInterRao = 0;
 
         public static void Main(string[] args)
         {
@@ -299,6 +306,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTektorgGazprom(Periodparsing);
                     break;
+                case "interrao":
+                    Periodparsing = TypeArguments.TektorgInterRao;
+                    Init(Periodparsing);
+                    ParserTektorgInterRao(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
                         $"Неправильно указан аргумент, используйте {Arguments}");
@@ -346,6 +358,8 @@ namespace ParserTenders
             _logSakhalin = set.LogSakhalin;
             _tempTektorgGazprom = set.TempPathTektorgGazprom;
             _logTektorgGazprom = set.LogPathTektorgGazprom;
+            _tempTektorgInterRao = set.TempPathTektorgInterRao;
+            _logTektorgInterRao = set.LogPathTektorgInterRao;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -426,6 +440,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.TektorgGazprom:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.TektorgInterRao:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
@@ -638,6 +655,14 @@ namespace ParserTenders
             ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgGazprom);
+        }
+        
+        private static void ParserTektorgInterRao(TypeArguments arg)
+        {
+            Log.Logger($"Время начала парсинга {arg}");
+            ParserTektorgInterRao p = new ParserTektorgInterRao(arg);
+            p.Parsing();
+            Log.Logger($"Добавили {arg}", AddTektorgInterRao);
         }
     }
 }

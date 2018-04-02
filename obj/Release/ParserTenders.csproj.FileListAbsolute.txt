@@ -1,6 +1,8 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release//ParserTenders.pdb
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/ParserTenders.exe.config
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/ParserTenders.exe
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.Scripting.JavaScript.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.SqlServer.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.dll
@@ -34,10 +36,13 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/IKVM.OpenJDK.XML.XPath.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/IKVM.Runtime.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/IKVM.Runtime.JNI.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/jint.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.Entity.EF6.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.TextExtraction.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.Scripting.JavaScript.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/EntityFramework.SqlServer.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/FluentFTP.xml
@@ -50,8 +55,5 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CoreCompileInputs.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.exe
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.pdb
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.dll
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.Scripting.JavaScript.dll
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/jint.dll
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.xml
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.Scripting.JavaScript.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.xml
