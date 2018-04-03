@@ -31,6 +31,8 @@ namespace ParserTenders
         public readonly string TempPathTektorgGazprom;
         public readonly string LogPathTektorgInterRao;
         public readonly string TempPathTektorgInterRao;
+        public readonly string LogPathTektorgRzd;
+        public readonly string TempPathTektorgRzd;
         public readonly string LogMrsk;
         public readonly string TempMrsk;
         public readonly string LogRosneft;
@@ -154,6 +156,14 @@ namespace ParserTenders
                             TempPathTektorgInterRao =
                                 $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_tektorg_rzd":
+                            LogPathTektorgRzd =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tektorg_rzd":
+                            TempPathTektorgRzd =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -203,7 +213,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempRosneft) || String.IsNullOrEmpty(LogSakhalin) ||
                 String.IsNullOrEmpty(TempSakhalin) || String.IsNullOrEmpty(LogPathTektorgGazprom) ||
                 String.IsNullOrEmpty(TempPathTektorgGazprom) || String.IsNullOrEmpty(LogPathTektorgInterRao) ||
-                String.IsNullOrEmpty(TempPathTektorgInterRao))
+                String.IsNullOrEmpty(TempPathTektorgInterRao) || String.IsNullOrEmpty(LogPathTektorgRzd) ||
+                String.IsNullOrEmpty(TempPathTektorgRzd))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

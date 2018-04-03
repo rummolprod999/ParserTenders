@@ -214,6 +214,7 @@
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTektorgGazprom.cs" />
     <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
+    <Compile Include="ParserDir\ParserTektorgRzd.cs" />
     <Compile Include="ParserDir\ParserTend223.cs" />
     <Compile Include="ParserDir\ParserTend44.cs" />
     <Compile Include="ParserDir\ParserTendersWeb.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgGazprom.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgInterRao.cs" />
+    <Compile Include="TenderDir\TenderTypeTektorgRzd.cs" />
     <Compile Include="TenderDir\TenderWeb.cs" />
     <Compile Include="TimedWebClient.cs" />
     <Compile Include="TypeArguments.cs" />

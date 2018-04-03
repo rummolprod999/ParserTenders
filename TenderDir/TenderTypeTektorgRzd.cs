@@ -6,9 +6,9 @@ using MySql.Data.MySqlClient;
 
 namespace ParserTenders.TenderDir
 {
-    public class TenderTypeTektorgInterRao : TenderBase, ITenderWeb
+    public class TenderTypeTektorgRzd : TenderBase, ITenderWeb
     {
-        public TenderTypeTektorgInterRao(string etpName, string etpUrl, int typeFz, string urlTender)
+        public TenderTypeTektorgRzd(string etpName, string etpUrl, int typeFz, string urlTender)
         {
             EtpName = etpName ?? throw new ArgumentNullException(nameof(etpName));
             EtpUrl = etpUrl ?? throw new ArgumentNullException(nameof(etpUrl));
@@ -17,7 +17,7 @@ namespace ParserTenders.TenderDir
             AddTender += delegate(int d)
             {
                 if (d > 0)
-                    Program.AddTektorgInterRao++;
+                    Program.AddTektorgRzd++;
                 else
                     Log.Logger($"Не удалось добавить {GetType().Name}", UrlTender);
             };

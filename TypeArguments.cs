@@ -21,6 +21,7 @@ namespace ParserTenders
         Rosneft,
         Sakhalin,
         TektorgGazprom,
-        TektorgInterRao
+        TektorgInterRao,
+        TektorgRzd
     }
 }

@@ -27,8 +27,12 @@
 	<logdir_rosneft>log_rosneft</logdir_rosneft>
 	<tempdir_sakhalin>temp_sakhalin</tempdir_sakhalin>
 	<logdir_sakhalin>log_sakhalin</logdir_sakhalin>
-	<tempdir_tektorg_rosneft>temp_tektorg_gazprom</tempdir_tektorg_rosneft>
-	<logdir_tektorg_rosneft>log_tektorg_gazprom</logdir_tektorg_rosneft>
+	<tempdir_tektorg_gazprom>temp_tektorg_gazprom</tempdir_tektorg_gazprom>
+	<logdir_tektorg_gazprom>log_tektorg_gazprom</logdir_tektorg_gazprom>
+	<tempdir_tektorg_interrao>temp_tektorg_interrao</tempdir_tektorg_interrao>
+	<logdir_tektorg_interrao>log_tektorg_interrao</logdir_tektorg_interrao>
+	<tempdir_tektorg_rzd>temp_tektorg_rzd</tempdir_tektorg_rzd>
+	<logdir_tektorg_rzd>log_tektorg_rzd</logdir_tektorg_rzd>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

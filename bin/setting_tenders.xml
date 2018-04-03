@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <setting>
-	<database>tenders_test</database>
+	<database>tender</database>
 	<tempdir_tenders44>temp_tenders44</tempdir_tenders44>
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
 	<logdir_tenders223>log_tenders223</logdir_tenders223>
+	<logdir_attach>log_attach</logdir_attach>
+	<tempdir_attach>temp_attach</tempdir_attach>
+	<logdir_sign223>log_sign223</logdir_sign223>
+	<tempdir_sign223>temp_sign223</tempdir_sign223>
+	<logdir_gazprom>log_gazprom</logdir_gazprom>
+	<tempdir_gazprom>temp_gazprom</tempdir_gazprom>
+	<logdir_exp223>log_exp223</logdir_exp223>
+	<tempdir_exp223>temp_exp223</tempdir_exp223>
+	<logdir_gntweb>log_gnt_web</logdir_gntweb>
+	<tempdir_gntweb>temp_gnt_web</tempdir_gntweb>
+	<logdir_obtorgweb>log_obtorg_web</logdir_obtorgweb>
+	<tempdir_obtorgweb>temp_obtorg_web</tempdir_obtorgweb>
+	<logdir_spectorgweb>log_spectorg_web</logdir_spectorgweb>
+	<tempdir_spectorgweb>temp_spectorg_web</tempdir_spectorgweb>
+	<tempdir_tenders_web>temp_tenders_web</tempdir_tenders_web>
+	<logdir_tenders_web>log_tenders_web</logdir_tenders_web>
+	<tempdir_mrsk>temp_mrsk</tempdir_mrsk>
+	<logdir_mrsk>log_mrsk</logdir_mrsk>
+	<tempdir_rosneft>temp_rosneft</tempdir_rosneft>
+	<logdir_rosneft>log_rosneft</logdir_rosneft>
+	<tempdir_sakhalin>temp_sakhalin</tempdir_sakhalin>
+	<logdir_sakhalin>log_sakhalin</logdir_sakhalin>
+	<tempdir_tektorg_gazprom>temp_tektorg_gazprom</tempdir_tektorg_gazprom>
+	<logdir_tektorg_gazprom>log_tektorg_gazprom</logdir_tektorg_gazprom>
+	<tempdir_tektorg_interrao>temp_tektorg_interrao</tempdir_tektorg_interrao>
+	<logdir_tektorg_interrao>log_tektorg_interrao</logdir_tektorg_interrao>
+	<tempdir_tektorg_rzd>temp_tektorg_rzd</tempdir_tektorg_rzd>
+	<logdir_tektorg_rzd>log_tektorg_rzd</logdir_tektorg_rzd>
 	<prefix></prefix>
-	<userdb>parser</userdb>
-	<passdb>Dft56Point</passdb>
+	<userdb>root</userdb>
+	<passdb>1234</passdb>
 	<server>localhost</server>
 	<port>3306</port>
-	<years>2016, 2017</years>
+	<years>2016, 2017, 2018</years>
+	<max_thread>20</max_thread>
+	<max_try_down>250</max_try_down>
 </setting>
