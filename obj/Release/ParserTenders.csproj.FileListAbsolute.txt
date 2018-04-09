@@ -39,6 +39,7 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/jint.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.Entity.EF6.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.TextExtraction.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/AngleSharp.xml
@@ -50,10 +51,9 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/HtmlAgilityPack.pdb
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/MySql.Data.Entity.EF6.xml
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.xml
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/TikaOnDotNet.TextExtraction.pdb
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csprojResolveAssemblyReference.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CoreCompileInputs.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.exe
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.pdb
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.dll
-/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/Newtonsoft.Json.xml

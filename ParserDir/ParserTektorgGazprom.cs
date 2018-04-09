@@ -89,6 +89,7 @@ namespace ParserTenders.ParserDir
             }
 
             var tenderUrl = urlT;
+            if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             try
             {
                 var ten = new TenderTypeTektorgGazprom("ТЭК Торг Газпром бурение",
