@@ -77,6 +77,7 @@ namespace ParserTenders.TenderDir
                     {
                         tempOkpd2GroupCode = 0;
                     }
+
                     okpd2GroupCode = tempOkpd2GroupCode;
                 }
                 else
@@ -88,6 +89,7 @@ namespace ParserTenders.TenderDir
             {
                 okpd2GroupCode = 0;
             }
+
             if (okpd2Code.Length > 3)
             {
                 int dot = okpd2Code.IndexOf(".");
@@ -106,9 +108,13 @@ namespace ParserTenders.TenderDir
             }
         }
 
-        public static void TenderKwords(MySqlConnection connect, int idTender)
+        public static void TenderKwords(MySqlConnection connect, int idTender, bool pils = false)
         {
             string resString = "";
+            if (pils)
+            {
+                resString = "|лекарственные средства| ";
+            }
             string selectPurObj =
                 $"SELECT DISTINCT po.name, po.okpd_name FROM {Program.Prefix}purchase_object AS po LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
             MySqlCommand cmd1 = new MySqlCommand(selectPurObj, connect);
@@ -128,6 +134,23 @@ namespace ParserTenders.TenderDir
                 }
             }
 
+            string selectCustReq =
+                $"SELECT DISTINCT cur.delivery_term FROM {Program.Prefix}customer_requirement AS cur JOIN {Program.Prefix}lot AS l ON l.id_lot = cur.id_lot WHERE l.id_tender = @id_tender";
+            MySqlCommand cmd7 = new MySqlCommand(selectCustReq, connect);
+            cmd7.Prepare();
+            cmd7.Parameters.AddWithValue("@id_tender", idTender);
+            DataTable dt7 = new DataTable();
+            MySqlDataAdapter adapter7 = new MySqlDataAdapter {SelectCommand = cmd7};
+            adapter7.Fill(dt7);
+            if (dt7.Rows.Count > 0)
+            {
+                var distrDeliv = dt7.AsEnumerable().Distinct(DataRowComparer.Default);
+                foreach (DataRow row in distrDeliv)
+                {
+                    string delivTerm = !row.IsNull("delivery_term") ? ((string) row["delivery_term"]) : "";
+                    resString += $"{delivTerm} ";
+                }
+            }
 
             string selectAttach = $"SELECT file_name FROM {Program.Prefix}attachment WHERE id_tender = @id_tender";
             MySqlCommand cmd2 = new MySqlCommand(selectAttach, connect);

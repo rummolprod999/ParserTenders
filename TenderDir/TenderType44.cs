@@ -109,6 +109,7 @@ namespace ParserTenders.TenderDir
                     xmlt = JsonExtensions.stripNS(xmlt);
                     var ttt = xmlt.XPathSelectElement("//docPublishDate");
                     Console.WriteLine(ttt.Value);*/
+                    var pils = false;
                     string href = ((string) tender.SelectToken("href") ?? "").Trim();
                     string printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
                     if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
@@ -420,7 +421,11 @@ namespace ParserTenders.TenderDir
                                 ((string) customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
                             string customerRequirementMaxPrice =
                                 ((string) customerRequirement.SelectToken("maxPrice") ?? "").Trim();
-
+                            string purchaseObjectDescription = ((string) customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
+                            if (!string.IsNullOrEmpty(purchaseObjectDescription))
+                            {
+                                deliveryTerm = $"{deliveryTerm} {purchaseObjectDescription}".Trim();
+                            }
                             if (!String.IsNullOrEmpty(customerRegNum))
                             {
                                 string selectCustomer =
@@ -671,9 +676,159 @@ namespace ParserTenders.TenderDir
                                 cmd24.ExecuteNonQuery();
                             }
                         }
+                        List<JToken> drugPurchaseObjectsInfo = GetElements(lot, "drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+                        foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
+                        {
+                            pils = true;
+                            List<JToken> drugQuantityCustomersInfo =
+                                GetElements(drugPurchaseObjectInfo, "customerQuantities.customerQuantity");
+                            foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
+                            {
+                                string customerQuantityValue =
+                                    ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
+                                string custRegNum = ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
+                                    .Trim();
+                                string custFullName =
+                                    ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
+                                int idCustomerQ = 0;
+                                if (!String.IsNullOrEmpty(custRegNum))
+                                {
+                                    string selectCustomerQ =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                    MySqlCommand cmd20 = new MySqlCommand(selectCustomerQ, connect);
+                                    cmd20.Prepare();
+                                    cmd20.Parameters.AddWithValue("@reg_num", custRegNum);
+                                    MySqlDataReader reader7 = cmd20.ExecuteReader();
+                                    if (reader7.HasRows)
+                                    {
+                                        reader7.Read();
+                                        idCustomerQ = reader7.GetInt32("id_customer");
+                                        reader7.Close();
+                                    }
+                                    else
+                                    {
+                                        reader7.Close();
+                                        string insertCustomerQ =
+                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
+                                        MySqlCommand cmd21 = new MySqlCommand(insertCustomerQ, connect);
+                                        cmd21.Prepare();
+                                        cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
+                                        cmd21.Parameters.AddWithValue("@full_name", custFullName);
+                                        cmd21.ExecuteNonQuery();
+                                        idCustomerQ = (int) cmd21.LastInsertedId;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!String.IsNullOrEmpty(custFullName))
+                                    {
+                                        string selectCustNameQ =
+                                            $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                        MySqlCommand cmd22 = new MySqlCommand(selectCustNameQ, connect);
+                                        cmd22.Prepare();
+                                        cmd22.Parameters.AddWithValue("@full_name", custFullName);
+                                        MySqlDataReader reader8 = cmd22.ExecuteReader();
+                                        if (reader8.HasRows)
+                                        {
+                                            reader8.Read();
+                                            idCustomerQ = reader8.GetInt32("id_customer");
+                                            Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
+                                        }
+                                        reader8.Close();
+                                    }
+                                }
+                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                                foreach (var drugInfo in drugsInfo)
+                                {
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(medicamentalFormName))
+                                    {
+                                        name = $"{name} {medicamentalFormName}";
+                                    }
+                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
+                                    {
+                                        name = $"{name} {dosageGrlsValue}";
+                                    }
+                                    if (!String.IsNullOrEmpty(name))
+                                        name = Regex.Replace(name, @"\s+", " ");
+                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                        .Trim();
+                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                    string insertCustomerquantity =
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                                    cmd23.Prepare();
+                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomerQ);
+                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                    cmd23.Parameters.AddWithValue("@name", name);
+                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                    cmd23.Parameters.AddWithValue("@price", price);
+                                    cmd23.Parameters.AddWithValue("@okei", okei);
+                                    cmd23.Parameters.AddWithValue("@sum", sumP);
+                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
+                                    cmd23.ExecuteNonQuery();
+                                    if (idCustomerQ == 0)
+                                        Log.Logger("Нет id_customer_q", FilePath);
+                                }
+                                
+                            }
+
+                            if (drugQuantityCustomersInfo.Count == 0)
+                            {
+                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                                foreach (var drugInfo in drugsInfo)
+                                {
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(medicamentalFormName))
+                                    {
+                                        name = $"{name} {medicamentalFormName}";
+                                    }
+                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
+                                    {
+                                        name = $"{name} {dosageGrlsValue}";
+                                    }
+                                    if (!String.IsNullOrEmpty(name))
+                                        name = Regex.Replace(name, @"\s+", " ");
+                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                        .Trim();
+                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                    string insertCustomerquantity =
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                                    cmd23.Prepare();
+                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomer);
+                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                    cmd23.Parameters.AddWithValue("@name", name);
+                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                    cmd23.Parameters.AddWithValue("@price", price);
+                                    cmd23.Parameters.AddWithValue("@okei", okei);
+                                    cmd23.Parameters.AddWithValue("@sum", sumP);
+                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                    cmd23.ExecuteNonQuery();
+                                    if (idCustomer == 0)
+                                        Log.Logger("Нет id_customer", FilePath);
+                                }
+                            }
+                        }
                     }
 
-                    TenderKwords(connect, idTender);
+                    TenderKwords(connect, idTender, pils);
                     AddVerNumber(connect, purchaseNumber);
                 }
             }

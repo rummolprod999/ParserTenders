@@ -474,8 +474,8 @@ namespace ParserTenders
             t44.Parsing();
             //Log.Logger("Время окончания парсинга Tenders44");
             /*ParserTend44 t44 = new ParserTend44(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/fcsNotificationEP44_0838100001317000145_13185076.xml");
-            t44.ParsingXML(f, "br", 32, TypeFile44.TypeTen44);*/
+            FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/MyConf/111111.xml");
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen44);*/
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Добавили tenderSign", AddTenderSign);
             Log.Logger("Добавили DateChange", AddDateChange);
