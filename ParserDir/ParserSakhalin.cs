@@ -55,6 +55,10 @@ namespace ParserTenders.ParserDir
             var purNum = urlT.GetDateFromRegex("tenderId=(.*)");
             if (string.IsNullOrEmpty(purNum))
             {
+                purNum = urlT.GetDateFromRegex("ID=(.*)");
+            }
+            if (string.IsNullOrEmpty(purNum))
+            {
                 Log.Logger("Cannot find purchase number", urlT);
                 return;
             }
