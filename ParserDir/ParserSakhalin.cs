@@ -63,6 +63,10 @@ namespace ParserTenders.ParserDir
                 return;
             }
             var url = $"http://www.sakhalinenergy.ru/ru/contractors/tenders/{urlT}";
+            if (urlT.Contains("contractors/tenders"))
+            {
+                url = $"http://www.sakhalinenergy.ru{urlT}";
+            }
             try
             {
                 var ten = new TenderTypeSakhalin(purNum, url);
