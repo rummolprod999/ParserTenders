@@ -14,7 +14,7 @@ namespace ParserTenders.ParserDir
 
         public override void Parsing()
         {
-            string urlpage = "http://www.sakhalinenergy.ru/ru/contractors/tenders/tenders.wbp";
+            string urlpage = "http://www.sakhalinenergy.ru/ru/contractors/tenders/";
             try
             {
                 ParsingPage(urlpage);
