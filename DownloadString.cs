@@ -27,7 +27,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    if (count >= 100)
+                    if (count >= 3)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
@@ -114,7 +114,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    if (count >= 100)
+                    if (count >= 3)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;

@@ -290,6 +290,12 @@ namespace ParserTenders.TenderDir
                     string endDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collecting.endDate") ?? "") ??
                      "").Trim('"');
+                    if (string.IsNullOrEmpty(endDate))
+                    {
+                        endDate =
+                            (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collectingEndDate") ?? "") ??
+                             "").Trim('"');
+                    }
                     string scoringDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.scoring.date") ?? "") ??
                      "").Trim('"');

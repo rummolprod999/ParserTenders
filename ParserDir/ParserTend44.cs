@@ -19,7 +19,7 @@ namespace ParserTenders.ParserDir
         private string[] _fileXml44 = new[]
         {
             "ea44_", "ep44_", "ok44_", "okd44_", "oku44_", "po44_", "za44_", "zk44_",
-            "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_"
+            "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_", "inm111_"
         };
 
         private string[] _fileCancel = new[] {"notificationcancel_"};
