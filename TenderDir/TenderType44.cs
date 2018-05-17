@@ -548,14 +548,35 @@ namespace ParserTenders.TenderDir
 
                         string restrictInfo = ((string) lot.SelectToken("restrictInfo") ?? "").Trim();
                         string foreignInfo = ((string) lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
-                        string insertRestrict =
-                            $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
-                        MySqlCommand cmd19 = new MySqlCommand(insertRestrict, connect);
-                        cmd19.Prepare();
-                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                        cmd19.Parameters.AddWithValue("@foreign_info", foreignInfo);
-                        cmd19.Parameters.AddWithValue("@info", restrictInfo);
-                        cmd19.ExecuteNonQuery();
+                        if (!string.IsNullOrEmpty(restrictInfo) || !string.IsNullOrEmpty(foreignInfo))
+                        {
+                            string insertRestrict =
+                                $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
+                            MySqlCommand cmd19 = new MySqlCommand(insertRestrict, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@foreign_info", foreignInfo);
+                            cmd19.Parameters.AddWithValue("@info", restrictInfo);
+                            cmd19.ExecuteNonQuery();
+                        }
+                        else
+                        {
+                            List<JToken> restricts = GetElements(lot, "restrictions.restriction");
+                            foreach (var restrict in restricts)
+                            {
+                                string rInfo = ((string) restrict.SelectToken("name") ?? "").Trim();
+                                string fInfo = ((string) restrict.SelectToken("content") ?? "").Trim();
+                                string insertRestrict =
+                                    $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
+                                MySqlCommand cmd19 = new MySqlCommand(insertRestrict, connect);
+                                cmd19.Prepare();
+                                cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd19.Parameters.AddWithValue("@foreign_info", fInfo);
+                                cmd19.Parameters.AddWithValue("@info", rInfo);
+                                cmd19.ExecuteNonQuery();
+                            }
+                        }
+                        
                         List<JToken> purchaseobjects = GetElements(lot, "purchaseObjects.purchaseObject");
                         foreach (var purchaseobject in purchaseobjects)
                         {
