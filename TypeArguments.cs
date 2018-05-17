@@ -22,6 +22,9 @@ namespace ParserTenders
         Sakhalin,
         TektorgGazprom,
         TektorgInterRao,
-        TektorgRzd
+        TektorgRzd,
+        Prev615,
+        Curr615,
+        Last615
     }
 }

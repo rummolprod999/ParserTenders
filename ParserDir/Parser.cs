@@ -33,6 +33,7 @@ namespace ParserTenders.ParserDir
                 adapter.Fill(ds);
                 dt = ds.Tables[0];
             }
+
             return dt;
         }
 
@@ -70,6 +71,7 @@ namespace ParserTenders.ParserDir
 
             return arch;
         }
+
         public virtual List<String> GetListArchDaily(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
@@ -96,7 +98,7 @@ namespace ParserTenders.ParserDir
             client.Connect();
             return client;
         }
-        
+
         public WorkWithFtp ClientFtp223_old()
         {
             WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
@@ -120,10 +122,14 @@ namespace ParserTenders.ParserDir
         {
         }
 
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile615 typefile)
+        {
+        }
+
         public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile223 typefile)
         {
         }
-        
+
         public virtual void Bolter(FileInfo f, string region, int regionId)
         {
         }
@@ -156,11 +162,11 @@ namespace ParserTenders.ParserDir
                     {
                         Log.Logger("Удалось скачать архив после попытки", count, pathParse);
                     }
+
                     return file;
                 }
                 catch (Exception e)
                 {
-                    
                     if (count > 50)
                     {
                         Log.Logger($"Не удалось скачать файл после попытки {count}", arch, e);
@@ -201,6 +207,7 @@ namespace ParserTenders.ParserDir
                     {
                         Log.Logger("Удалось скачать архив после попытки", count, pathParse);
                     }
+
                     return file;
                 }
                 catch (Exception e)
@@ -216,6 +223,7 @@ namespace ParserTenders.ParserDir
                 }
             }
         }
+
         protected List<string> GetListFtp223(string pathParse)
         {
             List<string> archtemp = new List<string>();
@@ -231,6 +239,7 @@ namespace ParserTenders.ParserDir
                     {
                         Log.Logger("Удалось получить список архивов после попытки", count);
                     }
+
                     break;
                 }
                 catch (Exception e)
@@ -240,13 +249,15 @@ namespace ParserTenders.ParserDir
                         Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
+
                     count++;
                     Thread.Sleep(2000);
                 }
             }
+
             return archtemp;
         }
-        
+
         protected List<string> GetListFtp44(string pathParse)
         {
             List<string> archtemp = new List<string>();
@@ -262,6 +273,7 @@ namespace ParserTenders.ParserDir
                     {
                         Log.Logger("Удалось получить список архивов после попытки", count);
                     }
+
                     break;
                 }
                 catch (Exception e)
@@ -271,13 +283,15 @@ namespace ParserTenders.ParserDir
                         Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
+
                     count++;
                     Thread.Sleep(2000);
                 }
             }
+
             return archtemp;
         }
-        
+
         public void CheckInn()
         {
             string cusNull = $"SELECT reg_num FROM {Program.Prefix}customer WHERE inn = ''";

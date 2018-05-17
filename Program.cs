@@ -10,11 +10,13 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615";
 
         private static string _database;
         private static string _tempPath44;
         private static string _logPath44;
+        private static string _tempPath615;
+        private static string _logPath615;
         private static string _tempPath223;
         private static string _logPath223;
         private static string _tempAttach;
@@ -85,6 +87,10 @@ namespace ParserTenders
                     case TypeArguments.Prev44:
                     case TypeArguments.Last44:
                         return _tempPath44;
+                    case TypeArguments.Curr615:
+                    case TypeArguments.Prev615:
+                    case TypeArguments.Last615:
+                        return _tempPath615;
                     case TypeArguments.Daily223:
                     case TypeArguments.Last223:
                         return _tempPath223;
@@ -134,6 +140,10 @@ namespace ParserTenders
                     case TypeArguments.Prev44:
                     case TypeArguments.Last44:
                         return _logPath44;
+                    case TypeArguments.Curr615:
+                    case TypeArguments.Prev615:
+                    case TypeArguments.Last615:
+                        return _logPath615;
                     case TypeArguments.Daily223:
                     case TypeArguments.Last223:
                         return _logPath223;
@@ -178,6 +188,7 @@ namespace ParserTenders
         public static string TableArchiveSign223;
         public static string TableArchiveExp223;
         public static int AddTender44 = 0;
+        public static int AddTender615 = 0;
         public static int AddTenderSign = 0;
         public static int AddDateChange = 0;
         public static int AddProlongation = 0;
@@ -232,6 +243,21 @@ namespace ParserTenders
                     Periodparsing = TypeArguments.Curr44;
                     Init(Periodparsing);
                     ParserTender44(Periodparsing);
+                    break;
+                case "last615":
+                    Periodparsing = TypeArguments.Last615;
+                    Init(Periodparsing);
+                    ParserTender615(Periodparsing);
+                    break;
+                case "prev615":
+                    Periodparsing = TypeArguments.Prev615;
+                    Init(Periodparsing);
+                    ParserTender615(Periodparsing);
+                    break;
+                case "curr615":
+                    Periodparsing = TypeArguments.Curr615;
+                    Init(Periodparsing);
+                    ParserTender615(Periodparsing);
                     break;
                 case "last223":
                     Periodparsing = TypeArguments.Last223;
@@ -335,11 +361,13 @@ namespace ParserTenders
             GetSettings set = new GetSettings();
             _database = set.Database;
             _logPath44 = set.LogPathTenders44;
+            _logPath615 = set.LogPathTenders615;
             _logPath223 = set.LogPathTenders223;
             _prefix = set.Prefix;
             _user = set.UserDb;
             _pass = set.PassDb;
             _tempPath44 = set.TempPathTenders44;
+            _tempPath615 = set.TempPathTenders615;
             _tempPath223 = set.TempPathTenders223;
             _server = set.Server;
             _port = set.Port;
@@ -414,6 +442,11 @@ namespace ParserTenders
                 case TypeArguments.Prev44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
                     break;
+                case TypeArguments.Curr615:
+                case TypeArguments.Last615:
+                case TypeArguments.Prev615:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders615_{LocalDate:dd_MM_yyyy}.log";
+                    break;
                 case TypeArguments.Daily223:
                 case TypeArguments.Last223:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders223_{LocalDate:dd_MM_yyyy}.log";
@@ -485,6 +518,18 @@ namespace ParserTenders
             Log.Logger("Добавили CancelFailure", AddCancelFailure);
             Log.Logger("Добавили Clarification", AddClarification);
             Log.Logger("Время окончания парсинга Tenders44");
+        }
+
+        private static void ParserTender615(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Tenders615");
+            /*var t615 = new ParserTend615(Periodparsing);
+            t615.Parsing();*/
+            var t615 = new ParserTend615(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/pprf615NotificationEF_204250000011800008_16370095.xml");
+            t615.ParsingXml(f, "br", 32, TypeFile615.TypeTen615);
+            Log.Logger("Добавили tender615", AddTender615);
+            Log.Logger("Время окончания парсинга Tenders615");
         }
 
         private static void ParserTender223(TypeArguments arg)
@@ -672,7 +717,7 @@ namespace ParserTenders
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgGazprom);
         }
-        
+
         private static void ParserTektorgInterRao(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");
@@ -680,7 +725,7 @@ namespace ParserTenders
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgInterRao);
         }
-        
+
         private static void ParserTektorgRzd(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");

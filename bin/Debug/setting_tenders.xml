@@ -5,6 +5,8 @@
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
 	<logdir_tenders223>log_tenders223</logdir_tenders223>
+	<tempdir_tenders615>temp_tenders615</tempdir_tenders615>
+	<logdir_tenders615>log_tenders615</logdir_tenders615>
 	<logdir_attach>log_attach</logdir_attach>
 	<tempdir_attach>temp_attach</tempdir_attach>
 	<logdir_sign223>log_sign223</logdir_sign223>

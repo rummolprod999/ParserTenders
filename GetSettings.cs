@@ -9,6 +9,8 @@ namespace ParserTenders
         public readonly string Database;
         public readonly string TempPathTenders44;
         public readonly string LogPathTenders44;
+        public readonly string TempPathTenders615;
+        public readonly string LogPathTenders615;
         public readonly string TempPathTenders223;
         public readonly string LogPathTenders223;
         public readonly string LogPathAttach;
@@ -67,6 +69,12 @@ namespace ParserTenders
                             break;
                         case "logdir_tenders44":
                             LogPathTenders44 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tenders615":
+                            TempPathTenders615 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "logdir_tenders615":
+                            LogPathTenders615 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "tempdir_tenders223":
                             TempPathTenders223 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
@@ -214,7 +222,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempSakhalin) || String.IsNullOrEmpty(LogPathTektorgGazprom) ||
                 String.IsNullOrEmpty(TempPathTektorgGazprom) || String.IsNullOrEmpty(LogPathTektorgInterRao) ||
                 String.IsNullOrEmpty(TempPathTektorgInterRao) || String.IsNullOrEmpty(LogPathTektorgRzd) ||
-                String.IsNullOrEmpty(TempPathTektorgRzd))
+                String.IsNullOrEmpty(TempPathTektorgRzd) || String.IsNullOrEmpty(LogPathTenders615) ||
+                String.IsNullOrEmpty(TempPathTenders615))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);
