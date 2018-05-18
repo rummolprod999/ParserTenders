@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
@@ -6,49 +6,41 @@ using Newtonsoft.Json.Linq;
 
 namespace ParserTenders.TenderDir
 {
-    public class TenderTypeLotCancel : Tender
+    public class TenderTypeLotCancel615 : Tender
     {
         public event Action<int> AddLotCancel;
 
-        public TenderTypeLotCancel(FileInfo f, string region, int regionId, JObject json)
+        public TenderTypeLotCancel615(FileInfo f, string region, int regionId, JObject json)
             : base(f, region, regionId, json)
         {
             AddLotCancel += delegate(int d)
             {
                 if (d > 0)
-                    Program.AddLotCancel++;
+                    Program.AddLotCancel615++;
             };
         }
 
         public override void Parsing()
         {
             JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
                 JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                string purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
-                    Log.Logger("Не могу найти purchaseNumber у TenderLotCancel", FilePath);
-                    return;
-                }
-                else
-                {
-                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                    {
-                        /*Log.Logger("Тестовый тендер TenderLotCancel", purchaseNumber, file_path);*/
-                        return;
-                    }
-                }
-
-                string lotNumber = ((string) tender.SelectToken("lot.lotNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(lotNumber))
-                {
-                    Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);
+                    Log.Logger("Не могу найти purchaseNumber у TenderLotCancel615", FilePath);
                     return;
                 }
 
+                if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
+                {
+                    /*Log.Logger("Тестовый тендер TenderLotCancel", purchaseNumber, file_path);*/
+                    return;
+                }
+
+                string lotNumber = "1";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     int idTender = 0;
@@ -68,7 +60,7 @@ namespace ParserTenders.TenderDir
                     reader.Close();
                     if (idTender == 0)
                     {
-                        Log.Logger("Не могу найти id_tender у TenderLotCancel", FilePath);
+                        Log.Logger("Не могу найти id_tender у TenderLotCancel615", FilePath);
                         return;
                     }
 
@@ -84,7 +76,6 @@ namespace ParserTenders.TenderDir
             }
             else
             {
-                if(root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615")) == null)
                 Log.Logger("Не могу найти тег TenderLotCancel", FilePath);
             }
         }

@@ -238,11 +238,14 @@
     <Compile Include="TenderDir\TenderType44.cs" />
     <Compile Include="TenderDir\TenderType615.cs" />
     <Compile Include="TenderDir\TenderTypeCancel.cs" />
+    <Compile Include="TenderDir\TenderTypeCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeCancelFailure.cs" />
     <Compile Include="TenderDir\TenderTypeClarification.cs" />
     <Compile Include="TenderDir\TenderTypeDateChange.cs" />
+    <Compile Include="TenderDir\TenderTypeDateChange615.cs" />
     <Compile Include="TenderDir\TenderTypeExp223.cs" />
     <Compile Include="TenderDir\TenderTypeLotCancel.cs" />
+    <Compile Include="TenderDir\TenderTypeLotCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeMrsk.cs" />
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
     <Compile Include="TenderDir\TenderTypeProlongation.cs" />

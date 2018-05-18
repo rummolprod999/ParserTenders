@@ -191,10 +191,13 @@ namespace ParserTenders
         public static int AddTender615 = 0;
         public static int AddTenderSign = 0;
         public static int AddDateChange = 0;
+        public static int AddDateChange615 = 0;
         public static int AddProlongation = 0;
         public static int AddOrgChange = 0;
         public static int AddLotCancel = 0;
+        public static int AddLotCancel615 = 0;
         public static int AddCancel = 0;
+        public static int AddCancel615 = 0;
         public static int AddCancelFailure = 0;
         public static int AddTender223 = 0;
         public static int AddAttach = 0;
@@ -523,12 +526,15 @@ namespace ParserTenders
         private static void ParserTender615(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders615");
-            /*var t615 = new ParserTend615(Periodparsing);
-            t615.Parsing();*/
             var t615 = new ParserTend615(Periodparsing);
+            t615.Parsing();
+            /*var t615 = new ParserTend615(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/pprf615NotificationEF_204250000011800008_16370095.xml");
-            t615.ParsingXml(f, "br", 32, TypeFile615.TypeTen615);
+            t615.ParsingXml(f, "br", 32, TypeFile615.TypeTen615);*/
             Log.Logger("Добавили tender615", AddTender615);
+            Log.Logger("Добавили LotCancel615", AddLotCancel615);
+            Log.Logger("Добавили Cancel615", AddCancel615);
+            Log.Logger("Добавили DateChange615", AddDateChange615);
             Log.Logger("Время окончания парсинга Tenders615");
         }
 

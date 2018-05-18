@@ -16,10 +16,11 @@ namespace ParserTenders.ParserDir
     public class ParserTend615 : Parser
     {
         protected DataTable DtRegion;
-
-
-        private string[] _fileXml615 = {"ef_", "po_"};
-
+        private string[] _fileXml615 = {"notificationef_", "notificationpo_"};
+        private string[] _fileLotcancel = {"lotcancel_"};
+        private string[] _fileCancel = {"notificationcancel_"};
+        private string[] _fileDatechange = {"datechange_", "timeef_"};
+        
         public ParserTend615(TypeArguments arg) : base(arg)
         {
         }
@@ -88,12 +89,35 @@ namespace ParserTenders.ParserDir
                             .Where(a => _fileXml615.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
+                        List<FileInfo> arrayLotcancel = filelist
+                            .Where(a => _fileLotcancel.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
+                        List<FileInfo> arrayCancel = filelist
+                            .Where(a => _fileCancel.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
+                        List<FileInfo> arrayDatechange = filelist
+                            .Where(a => _fileDatechange.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
 
                         foreach (var f in arrayXml615)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeTen615);
                         }
-
+                        foreach (var f in arrayLotcancel)
+                        {
+                            Bolter(f, region, regionId, TypeFile615.TypeLotCancel);
+                        }
+                        foreach (var f in arrayCancel)
+                        {
+                            Bolter(f, region, regionId, TypeFile615.TypeCancel);
+                        }
+                        foreach (var f in arrayDatechange)
+                        {
+                            Bolter(f, region, regionId, TypeFile615.TypeDateChange);
+                        }
                         dirInfo.Delete(true);
                     }
                 }
@@ -133,6 +157,20 @@ namespace ParserTenders.ParserDir
                         var a = new TenderType615(f, region, regionId, json);
                         a.Parsing();
                         break;
+                    case TypeFile615.TypeLotCancel:
+                        var e = new TenderTypeLotCancel615(f, region, regionId, json);
+                        e.Parsing();
+                        break;
+                    case TypeFile615.TypeCancel:
+                        var g = new TenderTypeCancel615(f, region, regionId, json);
+                        g.Parsing();
+                        break;
+                    case TypeFile615.TypeDateChange:
+                        var c = new TenderTypeDateChange615(f, region, regionId, json);
+                        c.Parsing();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(typefile), typefile, null);
                 }
             }
         }
@@ -155,6 +193,7 @@ namespace ParserTenders.ParserDir
             List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             foreach (var a in archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
+                var b = $"pprf615_{a}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
@@ -162,7 +201,7 @@ namespace ParserTenders.ParserDir
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a);
+                    cmd.Parameters.AddWithValue("@archive", b);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
@@ -172,7 +211,7 @@ namespace ParserTenders.ParserDir
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
+                        cmd1.Parameters.AddWithValue("@archive", b);
                         cmd1.ExecuteNonQuery();
                         arch.Add(a);
                     }
@@ -191,7 +230,7 @@ namespace ParserTenders.ParserDir
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
-                string prevA = $"prev_{a}";
+                string prevA = $"prev_pprf615_{a}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
