@@ -40,9 +40,9 @@ namespace ParserTenders.TenderDir
 
             var parser = new HtmlParser();
             var document = parser.Parse(s);
-            var datePubT = (document.QuerySelector("td:contains('Дата публикации:') + td")?.TextContent ?? "").Trim();
+            var datePubT = (document.QuerySelector("td:contains('Дата публикации') + td")?.TextContent ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            var dateEndT = (document.QuerySelector("td:contains('Дата окончания приема заявок') + td")?.TextContent ??
+            var dateEndT = (document.QuerySelector("td:contains('Дата и время окончания подачи заявок') + td")?.TextContent ??
                             "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
