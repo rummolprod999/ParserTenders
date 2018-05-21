@@ -52,12 +52,13 @@ namespace ParserTenders.TenderDir
                 return;
             }
 
-            var purNumT = (document.QuerySelector("h1.section-procurement__title")?.TextContent ?? "").Trim();
-            var purNum = purNumT.GetDateFromRegex("Извещение о процедуре (.+)");
+            /*var purNumT = (document.QuerySelector("h1.section-procurement__title")?.TextContent ?? "").Trim();
+            var purNum = purNumT.GetDateFromRegex("Извещение о процедуре (.+)");*/
+            var purNum = (document.QuerySelector("td:contains('Номер процедуры') + td")?.TextContent ?? "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    UrlTender, purNumT);
+                    UrlTender, purNum);
                 return;
             }
 
