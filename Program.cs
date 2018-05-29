@@ -190,6 +190,7 @@ namespace ParserTenders
         public static int AddTender44 = 0;
         public static int AddTender615 = 0;
         public static int AddTenderSign = 0;
+        public static int AddTenderSign615 = 0;
         public static int AddDateChange = 0;
         public static int AddDateChange615 = 0;
         public static int AddProlongation = 0;
@@ -528,6 +529,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders615");
             var t615 = new ParserTend615(Periodparsing);
             t615.Parsing();
+            //t615.ParsingContractS();
             /*var t615 = new ParserTend615(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/pprf615NotificationEF_204250000011800008_16370095.xml");
             t615.ParsingXml(f, "br", 32, TypeFile615.TypeTen615);*/

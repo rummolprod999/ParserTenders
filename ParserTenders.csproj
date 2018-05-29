@@ -253,6 +253,7 @@
     <Compile Include="TenderDir\TenderTypeSakhalin.cs" />
     <Compile Include="TenderDir\TenderTypeSign.cs" />
     <Compile Include="TenderDir\TenderTypeSign223.cs" />
+    <Compile Include="TenderDir\TenderTypeSign615.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgGazprom.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgInterRao.cs" />
     <Compile Include="TenderDir\TenderTypeTektorgRzd.cs" />

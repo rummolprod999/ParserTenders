@@ -20,6 +20,7 @@ namespace ParserTenders.ParserDir
         private string[] _fileLotcancel = {"lotcancel_"};
         private string[] _fileCancel = {"notificationcancel_"};
         private string[] _fileDatechange = {"datechange_", "timeef_"};
+        private string[] _filecontract = {"contract_"};
         
         public ParserTend615(TypeArguments arg) : base(arg)
         {
@@ -71,6 +72,51 @@ namespace ParserTenders.ParserDir
             }
         }
 
+        public void ParsingContractS()
+        {
+            DtRegion = GetRegions();
+            foreach (DataRow row in DtRegion.Rows)
+            {
+                List<String> arch = new List<string>();
+                string pathParse = "";
+                string regionPath = (string) row["path"];
+                switch (Program.Periodparsing)
+                {
+                    case TypeArguments.Last615:
+                        pathParse = $"/fcs_regions/{regionPath}/pprf615docs/contracts/";
+                        arch = GetListArchLast(pathParse, regionPath);
+                        break;
+                    case TypeArguments.Curr615:
+                        pathParse = $"/fcs_regions/{regionPath}/pprf615docs/contracts/currMonth/";
+                        arch = GetListArchCurr(pathParse, regionPath);
+                        break;
+                    case TypeArguments.Prev615:
+                        pathParse = $"/fcs_regions/{regionPath}/pprf615docs/contracts/prevMonth/";
+                        arch = GetListArchPrev(pathParse, regionPath);
+                        break;
+                }
+
+                if (arch.Count == 0)
+                {
+                    Log.Logger("Получен пустой список архивов", pathParse);
+                    continue;
+                }
+
+                foreach (var v in arch)
+                {
+                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                }
+            }
+
+            try
+            {
+                CheckInn();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при обновлении инн", e);
+            }
+        }
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             string filea = "";
@@ -101,6 +147,10 @@ namespace ParserTenders.ParserDir
                             .Where(a => _fileDatechange.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
+                        List<FileInfo> arrayContract = filelist
+                            .Where(a => _filecontract.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
 
                         foreach (var f in arrayXml615)
                         {
@@ -117,6 +167,10 @@ namespace ParserTenders.ParserDir
                         foreach (var f in arrayDatechange)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeDateChange);
+                        }
+                        foreach (var f in arrayContract)
+                        {
+                            Bolter(f, region, regionId, TypeFile615.TypeContract);
                         }
                         dirInfo.Delete(true);
                     }
@@ -168,6 +222,10 @@ namespace ParserTenders.ParserDir
                     case TypeFile615.TypeDateChange:
                         var c = new TenderTypeDateChange615(f, region, regionId, json);
                         c.Parsing();
+                        break;
+                    case TypeFile615.TypeContract:
+                        var d = new TenderTypeSign615(f, region, regionId, json);
+                        d.Parsing();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(typefile), typefile, null);

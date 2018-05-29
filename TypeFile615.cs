@@ -5,6 +5,7 @@
         TypeTen615,
         TypeLotCancel,
         TypeCancel,
-        TypeDateChange
+        TypeDateChange,
+        TypeContract
     }
 }
