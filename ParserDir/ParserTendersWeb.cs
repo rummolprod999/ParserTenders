@@ -20,7 +20,7 @@ namespace ParserTenders.ParserDir
             for (int i = 1; i <= PageCount; i++)
             {
                 string url =
-                    $"http://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&pageNumber={i}&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&priceFrom=&priceTo=&currencyId=1&regions=&af=true&ca=true&pc=true&pa=true&sortBy=UPDATE_DATE&openMode=USE_DEFAULT_PARAMS";
+                    $"http://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&pageNumber={i}&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&selectedSubjects=&af=true&priceFrom=&priceTo=&currencyId=1&regions=&regionDeleted=false&sortBy=PUBLISH_DATE&openMode=USE_DEFAULT_PARAMS";
                 try
                 {
                     ParserPage(url);
