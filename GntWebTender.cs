@@ -58,7 +58,7 @@ namespace ParserTenders
                 //WriteLine(pNum);
                 if (string.IsNullOrEmpty(pNum))
                 {
-                    Log.Logger("Not extract purchase number", _pNum);
+                    //Log.Logger("Not extract purchase number", _pNum);
                     return;
                 }
 

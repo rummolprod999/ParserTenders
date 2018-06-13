@@ -78,7 +78,7 @@ namespace ParserTenders
                     adapter.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
-                        Log.Logger("This tender is exist in base", pNum);
+                        //Log.Logger("This tender is exist in base", pNum);
                         return;
                     }
 
