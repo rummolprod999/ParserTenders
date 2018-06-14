@@ -65,15 +65,7 @@ namespace ParserTenders.ParserDir
                     }
                     catch (Exception)
                     {
-                        try
-                        {
-                            l.Add(lotNum+99, status);
-                        }
-                        catch (Exception exception)
-                        {
-                            Log.Logger("Ошибка при создании словаря ГПБ", exception, registryNumber);
-                        }
-                       
+                        // ignored
                     }
                 }
 
