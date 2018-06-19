@@ -9,7 +9,8 @@ namespace ParserTenders.ParserDir
 {
     public class ParserRosneft : ParserWeb
     {
-        private const int Count = 20;
+        private const int Count = 100;
+        private bool ct = true;
         public ParserRosneft(TypeArguments ar) : base(ar)
         {
         }
@@ -18,6 +19,7 @@ namespace ParserTenders.ParserDir
         {
             for (int i = 0; i <= Count; i++)
             {
+                if (!ct) break;
                 string urlpage = $"http://zakupki.rosneft.ru/zakupki?page={i}";
                 try
                 {
@@ -41,7 +43,14 @@ namespace ParserTenders.ParserDir
             var parser = new HtmlParser();
             var document = parser.Parse(s);
             var tens = document.All.Where(m => m.ClassList.Contains("even") || m.ClassList.Contains("odd"));
-            foreach (var t in tens)
+            var enumerable = tens.ToList();
+            if (!enumerable.Any())
+            {
+                ct = false;
+                Log.Logger("Last page", url);
+                return;
+            }
+            foreach (var t in enumerable)
             {
                 try
                 {
