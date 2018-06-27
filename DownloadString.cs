@@ -22,6 +22,7 @@ namespace ParserTenders
                         tmp = task.Result;
                         break;
                     }
+
                     throw new TimeoutException();
                     //tmp = new TimedWebClient().DownloadString(url);
                 }
@@ -32,14 +33,22 @@ namespace ParserTenders
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
+
+                    if (e is AggregateException && e.Message.Contains("(404) Not Found"))
+                    {
+                        Log.Logger("404 Exception", url);
+                        break;
+                    }
+
                     Log.Logger("Не удалось получить строку xml", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
             }
+
             return tmp;
         }
-        
+
         public static string DownLUserAgent(string url)
         {
             string tmp = "";
@@ -61,20 +70,22 @@ namespace ParserTenders
                 catch (WebException ex)
                 {
                     if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
-                    if (ex.Response is HttpWebResponse errorResponse && errorResponse.StatusCode == HttpStatusCode.Forbidden)
+                    if (ex.Response is HttpWebResponse errorResponse &&
+                        errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
                         Log.Logger("Error 403");
                         return tmp;
                     }
+
                     if (count >= 5)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
+
                     Log.Logger("Не удалось получить строку xml", ex, url);
                     count++;
                     Thread.Sleep(5000);
-
                 }
                 catch (Exception e)
                 {
@@ -83,14 +94,22 @@ namespace ParserTenders
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
+
+                    if (e is AggregateException && e.Message.Contains("(404) Not Found"))
+                    {
+                        Log.Logger("404 Exception", url);
+                        break;
+                    }
+
                     Log.Logger("Не удалось получить строку xml", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
             }
+
             return tmp;
         }
-        
+
         public static string DownL1251(string url)
         {
             string tmp = "";
@@ -109,6 +128,7 @@ namespace ParserTenders
                         tmp = task.Result;
                         break;
                     }
+
                     throw new TimeoutException();
                     //tmp = new TimedWebClient().DownloadString(url);
                 }
@@ -119,13 +139,14 @@ namespace ParserTenders
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
                     }
+
                     Log.Logger("Не удалось получить строку xml", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
             }
+
             return tmp;
         }
     }
-    
 }
