@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ParserTenders</RootNamespace>
     <AssemblyName>ParserTenders</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+      <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
@@ -194,6 +194,7 @@
     <Compile Include="GntType.cs" />
     <Compile Include="GntWebTender.cs" />
     <Compile Include="JsonExtensions.cs" />
+      <Compile Include="ListExtension.cs"/>
     <Compile Include="Log.cs" />
     <Compile Include="LotGpB.cs" />
     <Compile Include="ObTorgType.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="TenderDir\TenderType223.cs" />
     <Compile Include="TenderDir\TenderType223Web.cs" />
     <Compile Include="TenderDir\TenderType44.cs" />
+      <Compile Include="TenderDir\TenderType504.cs"/>
     <Compile Include="TenderDir\TenderType615.cs" />
     <Compile Include="TenderDir\TenderTypeCancel.cs" />
     <Compile Include="TenderDir\TenderTypeCancel615.cs" />
@@ -292,6 +294,12 @@
     <Content Include="test.html" />
     <Content Include="testorg.html" />
   </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ClassFSAharp\ClassFSAharp.fsproj">
+            <Project>{09557ad3-1975-4c21-8ab1-862acb8dd1e1}</Project>
+            <Name>ClassFSAharp</Name>
+        </ProjectReference>
+    </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

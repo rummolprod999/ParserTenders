@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+using ClassFSAharp;
 
 namespace ParserTenders.TenderDir
 {
@@ -13,7 +14,7 @@ namespace ParserTenders.TenderDir
     {
         protected readonly JObject T;
         protected readonly string FilePath;
-        protected int RegionId => 0;
+        protected int RegionId = 0;
 
         public TenderWeb(JObject json, string url)
         {
@@ -237,6 +238,11 @@ namespace ParserTenders.TenderDir
                     verNum++;
                 }
             }
+        }
+
+        public string GetRegionString(string s)
+        {
+            return Tools.GetRegionString(s);
         }
     }
 }

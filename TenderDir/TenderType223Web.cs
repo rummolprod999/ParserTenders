@@ -14,6 +14,7 @@ namespace ParserTenders.TenderDir
     public class TenderType223Web : TenderWeb
     {
         public event Action<int> AddTender223;
+        private bool Up = default ;
         private TypeFile223 _purchase;
         private string _extendScoringDate = "";
         private string _extendBiddingDate = "";
@@ -24,8 +25,10 @@ namespace ParserTenders.TenderDir
             _purchase = p;
             AddTender223 += delegate(int d)
             {
-                if (d > 0)
+                if (d > 0 && !Up)
                     Program.AddTender223++;
+                else if (d > 0 && Up)
+                    Program.UpdateTender223++;
                 else
                     Log.Logger("Не удалось добавить Tender223", FilePath);
             };
@@ -112,6 +115,7 @@ namespace ParserTenders.TenderDir
                         adapter.Fill(dt);
                         if (dt.Rows.Count > 0)
                         {
+                            Up = true;
                             foreach (DataRow row in dt.Rows)
                             {
                                 DateTime dateNew = DateTime.Parse(dateVersion);
@@ -146,6 +150,29 @@ namespace ParserTenders.TenderDir
                         .Trim();
                     string organizerFactAddress = ((string) tender.SelectToken("placer.mainInfo.legalAddress") ?? "")
                         .Trim();
+                    var addr = (organizerPostAddress != "") ? organizerPostAddress : organizerFactAddress;
+                    if (addr != "")
+                    {
+                        var regionS = GetRegionString(addr);
+                        if (regionS != "")
+                        {
+                            string selectReg = $"SELECT id FROM {Program.Prefix}region WHERE name LIKE @name";
+                            MySqlCommand cmd46 = new MySqlCommand(selectReg, connect);
+                            cmd46.Prepare();
+                            cmd46.Parameters.AddWithValue("@name", "%" + regionS + "%");
+                            MySqlDataReader reader46 = cmd46.ExecuteReader();
+                            if (reader46.HasRows)
+                            {
+                                reader46.Read();
+                                RegionId = reader46.GetInt32("id");
+                                reader46.Close();
+                            }
+                            else
+                            {
+                                reader46.Close();
+                            } 
+                        }
+                    }
                     string organizerInn = ((string) tender.SelectToken("placer.mainInfo.inn") ?? "").Trim();
                     string organizerKpp = ((string) tender.SelectToken("placer.mainInfo.kpp") ?? "").Trim();
                     string organizerEmail = ((string) tender.SelectToken("placer.mainInfo.email") ?? "").Trim();

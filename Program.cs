@@ -188,7 +188,11 @@ namespace ParserTenders
         public static string TableArchiveSign223;
         public static string TableArchiveExp223;
         public static int AddTender44 = 0;
+        public static int AddTender504 = 0;
         public static int AddTender615 = 0;
+        public static int UpdateTender44 = 0;
+        public static int UpdateTender504 = 0;
+        public static int UpdateTender615 = 0;
         public static int AddTenderSign = 0;
         public static int AddTenderSign615 = 0;
         public static int AddDateChange = 0;
@@ -201,6 +205,7 @@ namespace ParserTenders
         public static int AddCancel615 = 0;
         public static int AddCancelFailure = 0;
         public static int AddTender223 = 0;
+        public static int UpdateTender223 = 0;
         public static int AddAttach = 0;
         public static int NotAddAttach = 0;
         public static int AddSign223 = 0;
@@ -513,6 +518,9 @@ namespace ParserTenders
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/fcsNotificationINM111_0342100025718000009_16271439.xml");
             t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen44);*/
             Log.Logger("Добавили tender44", AddTender44);
+            Log.Logger("Обновили tender44", UpdateTender44);
+            Log.Logger("Добавили tender504", AddTender504);
+            Log.Logger("Обновили tender504", UpdateTender504);
             Log.Logger("Добавили tenderSign", AddTenderSign);
             Log.Logger("Добавили DateChange", AddDateChange);
             Log.Logger("Добавили Prolongation", AddProlongation);
@@ -534,6 +542,7 @@ namespace ParserTenders
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/pprf615NotificationEF_204250000011800008_16370095.xml");
             t615.ParsingXml(f, "br", 32, TypeFile615.TypeTen615);*/
             Log.Logger("Добавили tender615", AddTender615);
+            Log.Logger("Обновили tender615", UpdateTender615);
             Log.Logger("Добавили LotCancel615", AddLotCancel615);
             Log.Logger("Добавили Cancel615", AddCancel615);
             Log.Logger("Добавили DateChange615", AddDateChange615);
@@ -549,6 +558,7 @@ namespace ParserTenders
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Belgorodskaya_obl_20170201_000000_20170228_235959_015.xml");
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
             Log.Logger("Добавили tender223", AddTender223);
+            Log.Logger("Обновили tender223", UpdateTender223);
             Log.Logger("Время окончания парсинга Tenders223");
         }
 
@@ -690,7 +700,9 @@ namespace ParserTenders
             ParserTendersWeb p = new ParserTendersWeb(arg);
             p.Parsing();
             Log.Logger("Добавили tender44", AddTender44);
+            Log.Logger("Обновили tender44", UpdateTender44);
             Log.Logger("Добавили tender223", AddTender223);
+            Log.Logger("Обновили tender223", UpdateTender223);
             Log.Logger("Время окончания парсинга Web");
         }
 

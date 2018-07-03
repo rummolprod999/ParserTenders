@@ -30,9 +30,15 @@ namespace ParserTenders.ParserDir
         private string[] _fileOrgchange = new[] {"orgchange_"};
         private string[] _fileLotcancel = new[] {"lotcancel_"};
         private string[] _fileClarification = new[] {"clarification_"};
+        private string[] _fileXml504 = new[]
+        {
+            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_"
+        };
 
+        readonly List<string> summList;
         public ParserTend44(TypeArguments arg) : base(arg)
         {
+            summList = new List<string>().AddRangeAndReturnList(_fileCancel.ToList()).AddRangeAndReturnList(_fileCancelFailure.ToList()).AddRangeAndReturnList(_fileClarification.ToList()).AddRangeAndReturnList(_fileDatechange.ToList()).AddRangeAndReturnList(_fileLotcancel.ToList()).AddRangeAndReturnList(_fileOrgchange.ToList()).AddRangeAndReturnList(_fileProlongation.ToList()).AddRangeAndReturnList(_fileSign.ToList()).AddRangeAndReturnList(_fileXml44.ToList()).AddRangeAndReturnList(_fileXml504.ToList());
         }
 
         public override void Parsing()
@@ -131,6 +137,14 @@ namespace ParserTenders.ParserDir
                             .Where(a => _fileClarification.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
+                        List<FileInfo> arrayXml504 = filelist
+                            .Where(a => _fileXml504.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
+                        List<FileInfo> arrayNull = filelist
+                            .Where(a => summList.All(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) == -1))
+                            .ToList();
 
                         foreach (var f in arrayXml44)
                         {
@@ -159,7 +173,7 @@ namespace ParserTenders.ParserDir
                         foreach (var f in arraySign)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeSign);
-                        }
+                        } 
                         foreach (var f in arrayCancelFailure)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeCancelFailure);
@@ -169,7 +183,14 @@ namespace ParserTenders.ParserDir
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeClarification);
                         }
-
+                        foreach (var f in arrayXml504)
+                        {
+                            Bolter(f, region, regionId, TypeFile44.TypeTen504);
+                        }
+                        foreach (var f in arrayNull)
+                        {
+                            Bolter(f, region, regionId, TypeFile44.TypeNull);
+                        }
                         dirInfo.Delete(true);
                     }
                 }
@@ -183,6 +204,16 @@ namespace ParserTenders.ParserDir
                 return;
             }
 
+            if (typefile == TypeFile44.TypeNull)
+            {
+                if (!f.Name.Contains("PlacementResult_") && !f.Name.Contains("NotificationEA615_") && !f.Name.Contains("NotificationPO615_"))
+                {
+                    Log.Logger("!!!Can not parse this file", f.FullName, region);
+                    Log.Logger("\n");
+                }
+               
+                return;
+            }
             try
             {
                 ParsingXml(f, region, regionId, typefile);
@@ -240,6 +271,10 @@ namespace ParserTenders.ParserDir
                     case TypeFile44.TypeClarification:
                         TenderTypeClarification m = new TenderTypeClarification(f, region, regionId, json);
                         m.Parsing();
+                        break;
+                    case TypeFile44.TypeTen504:
+                        TenderType504 o = new TenderType504(f, region, regionId, json);
+                        o.Parsing();
                         break;
                 }
             }

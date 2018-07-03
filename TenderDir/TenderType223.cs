@@ -14,6 +14,7 @@ namespace ParserTenders.TenderDir
     public class TenderType223 : Tender
     {
         public event Action<int> AddTender223;
+        private bool Up = default ;
         private TypeFile223 _purchase;
         private string _extendScoringDate = "";
         private string _extendBiddingDate = "";
@@ -24,8 +25,10 @@ namespace ParserTenders.TenderDir
             _purchase = p;
             AddTender223 += delegate(int d)
             {
-                if (d > 0)
+                if (d > 0 && !Up)
                     Program.AddTender223++;
+                else if (d > 0 && Up)
+                    Program.UpdateTender223++;
                 else
                     Log.Logger("Не удалось добавить Tender223", FilePath);
             };
@@ -113,6 +116,7 @@ namespace ParserTenders.TenderDir
                         adapter.Fill(dt);
                         if (dt.Rows.Count > 0)
                         {
+                            Up = true;
                             foreach (DataRow row in dt.Rows)
                             {
                                 DateTime dateNew = DateTime.Parse(dateVersion);

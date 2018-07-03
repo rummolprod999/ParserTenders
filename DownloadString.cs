@@ -26,6 +26,7 @@ namespace ParserTenders
                     throw new TimeoutException();
                     //tmp = new TimedWebClient().DownloadString(url);
                 }
+                
                 catch (Exception e)
                 {
                     if (count >= 3)
@@ -34,7 +35,7 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && e.Message.Contains("(404) Not Found"))
+                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)")))
                     {
                         Log.Logger("404 Exception", url);
                         break;
@@ -73,7 +74,7 @@ namespace ParserTenders
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
-                        Log.Logger("Error 403");
+                        Log.Logger("Error 403 or 434");
                         return tmp;
                     }
 
@@ -95,9 +96,9 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && e.Message.Contains("(404) Not Found"))
+                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)")))
                     {
-                        Log.Logger("404 Exception", url);
+                        Log.Logger("404  or 434 Exception", url);
                         break;
                     }
 

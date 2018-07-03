@@ -10,6 +10,8 @@ namespace ParserTenders
             st = st.Replace("ns4:", "");
             st = st.Replace("ns5:", "");
             st = st.Replace("ns6:", "");
+            st = st.Replace("ns7:", "");
+            st = st.Replace("ns8:", "");
             st = st.Replace("oos:", "");
             st = st.Replace("", "");
             return st;
