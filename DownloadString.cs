@@ -35,7 +35,7 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)")))
+                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden")))
                     {
                         Log.Logger("404 Exception", url);
                         break;
@@ -96,7 +96,7 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)")))
+                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden")))
                     {
                         Log.Logger("404  or 434 Exception", url);
                         break;
