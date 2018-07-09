@@ -35,9 +35,9 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden")))
+                    if (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden"))
                     {
-                        Log.Logger("404 Exception", url);
+                        Log.Logger("404, 403, 434 Exception", url);
                         break;
                     }
 
@@ -84,7 +84,7 @@ namespace ParserTenders
                         break;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", ex, url);
+                    Log.Logger("Не удалось получить строку xml", ex.Message, url);
                     count++;
                     Thread.Sleep(5000);
                 }
@@ -96,13 +96,13 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e is AggregateException && (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden")))
+                    if (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden"))
                     {
-                        Log.Logger("404  or 434 Exception", url);
+                        Log.Logger("404, 403  or 434 Exception", e.Message, url);
                         break;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", e, url);
+                    Log.Logger("Не удалось получить строку xml", e.Message, url);
                     count++;
                     Thread.Sleep(5000);
                 }
