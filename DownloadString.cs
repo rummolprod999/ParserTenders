@@ -26,7 +26,7 @@ namespace ParserTenders
                     throw new TimeoutException();
                     //tmp = new TimedWebClient().DownloadString(url);
                 }
-                
+
                 catch (Exception e)
                 {
                     if (count >= 3)
@@ -35,10 +35,21 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden"))
+                    switch (e)
                     {
-                        Log.Logger("404, 403, 434 Exception", url);
-                        break;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
+                            Log.Logger("404 Exception", a.InnerException.Message, url);
+                            break;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
+                            Log.Logger("403 Exception", a.InnerException.Message, url);
+                            break;
+                        case AggregateException a when a.InnerException != null &&
+                                                       a.InnerException.Message.Contains(
+                                                           "The remote server returned an error: (434)"):
+                            Log.Logger("434 Exception", a.InnerException.Message, url);
+                            break;
                     }
 
                     Log.Logger("Не удалось получить строку xml", e, url);
@@ -96,10 +107,21 @@ namespace ParserTenders
                         break;
                     }
 
-                    if (e.Message.Contains("(404) Not Found") || e.Message.Contains("The remote server returned an error: (434)") || e.Message.Contains("(403) Forbidden"))
+                    switch (e)
                     {
-                        Log.Logger("404, 403  or 434 Exception", e.Message, url);
-                        break;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
+                            Log.Logger("404 Exception", a.InnerException.Message, url);
+                            break;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
+                            Log.Logger("403 Exception", a.InnerException.Message, url);
+                            break;
+                        case AggregateException a when a.InnerException != null &&
+                                                       a.InnerException.Message.Contains(
+                                                           "The remote server returned an error: (434)"):
+                            Log.Logger("434 Exception", a.InnerException.Message, url);
+                            break;
                     }
 
                     Log.Logger("Не удалось получить строку xml", e.Message, url);
