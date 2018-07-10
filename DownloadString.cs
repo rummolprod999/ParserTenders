@@ -40,16 +40,16 @@ namespace ParserTenders
                         case AggregateException a
                             when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
                             Log.Logger("404 Exception", a.InnerException.Message, url);
-                            break;
+                            return tmp;
                         case AggregateException a
                             when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
                             Log.Logger("403 Exception", a.InnerException.Message, url);
-                            break;
+                            return tmp;
                         case AggregateException a when a.InnerException != null &&
                                                        a.InnerException.Message.Contains(
                                                            "The remote server returned an error: (434)"):
                             Log.Logger("434 Exception", a.InnerException.Message, url);
-                            break;
+                            return tmp;
                     }
 
                     Log.Logger("Не удалось получить строку xml", e, url);
@@ -112,16 +112,16 @@ namespace ParserTenders
                         case AggregateException a
                             when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
                             Log.Logger("404 Exception", a.InnerException.Message, url);
-                            break;
+                            goto Finish;
                         case AggregateException a
                             when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
                             Log.Logger("403 Exception", a.InnerException.Message, url);
-                            break;
+                            goto Finish;
                         case AggregateException a when a.InnerException != null &&
                                                        a.InnerException.Message.Contains(
                                                            "The remote server returned an error: (434)"):
                             Log.Logger("434 Exception", a.InnerException.Message, url);
-                            break;
+                            goto Finish;
                     }
 
                     Log.Logger("Не удалось получить строку xml", e.Message, url);
@@ -130,7 +130,7 @@ namespace ParserTenders
                 }
             }
 
-            return tmp;
+            Finish: return tmp;
         }
 
         public static string DownL1251(string url)
