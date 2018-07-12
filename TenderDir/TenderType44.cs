@@ -604,7 +604,10 @@ namespace ParserTenders.TenderDir
                             {
                                 GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }
-
+                            if (string.IsNullOrEmpty(okpd2Code))
+                            {
+                                okpd2Code = ((string) purchaseobject.SelectToken("KTRU.code") ?? "").Trim();
+                            }
                             List<JToken> customerquantities =
                                 GetElements(purchaseobject, "customerQuantities.customerQuantity");
                             foreach (var customerquantity in customerquantities)

@@ -124,7 +124,7 @@ namespace ParserTenders
                             goto Finish;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", e.Message, url);
+                    Log.Logger("Не удалось получить строку xml", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
