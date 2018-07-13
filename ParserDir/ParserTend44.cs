@@ -286,6 +286,7 @@ namespace ParserTenders.ParserDir
             /*FtpClient ftp = ClientFtp44();*/
             archtemp = GetListFtp44(pathParse);
             List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
@@ -296,6 +297,7 @@ namespace ParserTenders.ParserDir
             /*FtpClient ftp = ClientFtp44();*/
             archtemp = GetListFtp44(pathParse);
             List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             foreach (var a in archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
