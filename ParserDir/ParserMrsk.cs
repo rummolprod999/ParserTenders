@@ -80,10 +80,10 @@ namespace ParserTenders.ParserDir
             }
 
             string datePub =
-            (n.SelectSingleNode("//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][1]")
+            (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][1]")
                  ?.InnerText ?? "").Trim();
             string dateUpd =
-            (n.SelectSingleNode("//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][2]")
+            (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][2]")
                  ?.InnerText ?? "").Trim();
             var tn = new TypeMrsk() {Href = href, IdTender = idTender, DatePub = datePub, DateUpd = dateUpd};
             try
