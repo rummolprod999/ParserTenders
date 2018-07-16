@@ -46,7 +46,7 @@ namespace ParserTenders.TenderDir
                 {
                     connect.Open();
                     string updateTender =
-                        $"UPDATE {Program.Prefix}tender SET cancel_failure = 1 WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                        $"UPDATE {Program.Prefix}tender SET cancel_failure = 1, cancel = 0 WHERE id_region = @id_region AND purchase_number = @purchase_number";
                     MySqlCommand cmd = new MySqlCommand(updateTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
@@ -80,7 +80,7 @@ namespace ParserTenders.TenderDir
                     {
                         connect.Open();
                         string updateTender =
-                            $"UPDATE {Program.Prefix}tender SET cancel_failure = 1 WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                            $"UPDATE {Program.Prefix}tender SET cancel_failure = 1, cancel = 0 WHERE id_region = @id_region AND purchase_number = @purchase_number";
                         MySqlCommand cmd = new MySqlCommand(updateTender, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_region", RegionId);
