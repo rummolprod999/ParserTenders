@@ -211,17 +211,27 @@ namespace ParserTenders
         public static int AddSign223 = 0;
         public static int UpdateSign223 = 0;
         public static int AddGazprom = 0;
+        public static int UpGazprom = 0;
         public static int AddClarification = 0;
         public static int AddClarification223 = 0;
         public static int AddGntWeb = 0;
+        public static int UpGntWeb = 0;
         public static int AddObTorgWeb = 0;
+        public static int UpObTorgWeb = 0;
         public static int AddSpecTorgWeb = 0;
+        public static int UpSpecTorgWeb = 0;
         public static int AddMrsk = 0;
+        public static int UpMrsk = 0;
         public static int AddRosneft = 0;
+        public static int UpRosneft = 0;
         public static int AddSakhalin = 0;
+        public static int UpSakhalin = 0;
         public static int AddTektorgGazprom = 0;
+        public static int UpTektorgGazprom = 0;
         public static int AddTektorgInterRao = 0;
+        public static int UpTektorgInterRao = 0;
         public static int AddTektorgRzd = 0;
+        public static int UpTektorgRzd = 0;
 
         public static void Main(string[] args)
         {
@@ -601,7 +611,9 @@ namespace ParserTenders
             ParserGpb p = new ParserGpb(Periodparsing);
             p.Parsing();
             Log.Logger("Добавили Gpb", AddGazprom);
+            Log.Logger("Обновили Gpb", UpGazprom);
             AddGazprom = 0;
+            UpGazprom = 0;
             ParserGpbGaz d = new ParserGpbGaz(Periodparsing);
             d.Parsing();
             /*ParserGpb p = new ParserGpb(Periodparsing);
@@ -615,6 +627,7 @@ namespace ParserTenders
                 EndDate = DateTime.MinValue
             });*/
             Log.Logger("Добавили GpbGaz", AddGazprom);
+            Log.Logger("Обновили GpbGaz", UpGazprom);
             Log.Logger("Время окончания парсинга Gpb");
         }
 
@@ -653,6 +666,7 @@ namespace ParserTenders
             };
             t.Parse();*/
             Log.Logger("Добавили GntWeb", AddGntWeb);
+            Log.Logger("Обновили GntWeb", UpGntWeb);
             Log.Logger("Время окончания парсинга GntWeb");
         }
 
@@ -682,6 +696,7 @@ namespace ParserTenders
             };
             t.ParseAuction();*/
             Log.Logger("Добавили ObTorgWeb", AddObTorgWeb);
+            Log.Logger("Обновили ObTorgWeb", UpObTorgWeb);
             Log.Logger("Время окончания парсинга ObTorgWeb");
         }
 
@@ -691,6 +706,7 @@ namespace ParserTenders
             ParserSpecTorgWeb p = new ParserSpecTorgWeb(arg);
             p.Parsing();
             Log.Logger("Добавили SpecTorgWeb", AddSpecTorgWeb);
+            Log.Logger("Обновили SpecTorgWeb", UpSpecTorgWeb);
             Log.Logger("Время окончания парсинга SpecTorgWeb");
         }
 
@@ -712,6 +728,8 @@ namespace ParserTenders
             ParserMrsk p = new ParserMrsk(arg);
             p.Parsing();
             Log.Logger("Добавили Mrsk", AddMrsk);
+            Log.Logger("Обновили Mrsk", UpMrsk);
+            Log.Logger("Время окончания парсинга");
         }
 
         private static void ParserRosneft(TypeArguments arg)
@@ -720,6 +738,8 @@ namespace ParserTenders
             ParserRosneft p = new ParserRosneft(arg);
             p.Parsing();
             Log.Logger("Добавили Rosneft", AddRosneft);
+            Log.Logger("Обновили Rosneft", UpRosneft);
+            Log.Logger("Время окончания парсинга");
         }
 
         private static void ParserSakhalin(TypeArguments arg)
@@ -728,6 +748,8 @@ namespace ParserTenders
             ParserSakhalin p = new ParserSakhalin(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddSakhalin);
+            Log.Logger($"Обновили {arg}", UpSakhalin);
+            Log.Logger("Время окончания парсинга");
         }
 
         private static void ParserTektorgGazprom(TypeArguments arg)
@@ -736,6 +758,8 @@ namespace ParserTenders
             ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgGazprom);
+            Log.Logger($"Обновили {arg}", UpTektorgGazprom);
+            Log.Logger("Время окончания парсинга");
         }
 
         private static void ParserTektorgInterRao(TypeArguments arg)
@@ -744,6 +768,8 @@ namespace ParserTenders
             ParserTektorgInterRao p = new ParserTektorgInterRao(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgInterRao);
+            Log.Logger($"Обновили {arg}", UpTektorgInterRao);
+            Log.Logger("Время окончания парсинга");
         }
 
         private static void ParserTektorgRzd(TypeArguments arg)
@@ -752,6 +778,8 @@ namespace ParserTenders
             ParserTektorgRzd p = new ParserTektorgRzd(arg);
             p.Parsing();
             Log.Logger($"Добавили {arg}", AddTektorgRzd);
+            Log.Logger($"Обновили {arg}", UpTektorgRzd);
+            Log.Logger("Время окончания парсинга");
         }
     }
 }

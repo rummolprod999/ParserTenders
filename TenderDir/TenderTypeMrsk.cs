@@ -54,6 +54,7 @@ namespace ParserTenders.TenderDir
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
                 int cancelStatus = 0;
+                var update = false;
                 string selectDateT =
                     $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
                 MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
@@ -67,7 +68,7 @@ namespace ParserTenders.TenderDir
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                    update = true;
                     if (dateUpd >= (DateTime) row["date_version"])
                     {
                         row["cancel"] = 1;
@@ -148,12 +149,12 @@ namespace ParserTenders.TenderDir
                 }
 
                 string _dateEnd =
-                (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Дата завершения']/td[last()]")
-                     ?.Value ?? "").Trim();
+                    (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Дата завершения']/td[last()]")
+                         ?.Value ?? "").Trim();
                 DateTime dateEnd = UtilsFromParsing.ParseDateMrsk(_dateEnd);
                 string purObjInfo =
-                (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Наименование заказа']/td[last()]")
-                     ?.Value ?? "").Trim();
+                    (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Наименование заказа']/td[last()]")
+                         ?.Value ?? "").Trim();
                 purObjInfo = System.Net.WebUtility.HtmlDecode(purObjInfo);
                 string insertTender =
                     $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
@@ -180,7 +181,15 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 int resInsertTender = cmd9.ExecuteNonQuery();
                 int idTender = (int) cmd9.LastInsertedId;
-                Program.AddMrsk++;
+                if (update)
+                {
+                    Program.UpMrsk++;
+                }
+                else
+                {
+                    Program.AddMrsk++;
+                }
+
                 var attach =
                     htmlDoc.DocumentNode.SelectNodes(
                         "//td[@class = 'b-cell b-cell_content_file']/div[@class = 'b-file']") ??
@@ -211,10 +220,10 @@ namespace ParserTenders.TenderDir
 
                 int lotNum = 1;
                 string prc =
-                (navT?.SelectSingleNode(
-                         "//table/tbody/tr[td[position()=1]/b= 'Сумма']/td[last()]")
-                     ?.Value ??
-                 "").Trim();
+                    (navT?.SelectSingleNode(
+                             "//table/tbody/tr[td[position()=1]/b= 'Сумма']/td[last()]")
+                         ?.Value ??
+                     "").Trim();
                 prc = System.Net.WebUtility.HtmlDecode(prc);
                 decimal maxP = UtilsFromParsing.ParsePriceMrsk(prc);
                 string currency = "";

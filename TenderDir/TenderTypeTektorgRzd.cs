@@ -21,6 +21,13 @@ namespace ParserTenders.TenderDir
                 else
                     Log.Logger($"Не удалось добавить {GetType().Name}", UrlTender);
             };
+            UpdateTender += delegate(int d)
+            {
+                if (d > 0)
+                    Program.UpTektorgGazprom++;
+                else
+                    Log.Logger("Не удалось обновить TektorgGazprom", UrlTender);
+            };
         }
 
         public string UrlTender { get; }
@@ -28,6 +35,7 @@ namespace ParserTenders.TenderDir
         public string EtpUrl { get; set; }
         public int TypeFz { get; set; }
         public event Action<int> AddTender;
+        public event Action<int> UpdateTender;
 
         public void Parsing()
         {
@@ -42,7 +50,8 @@ namespace ParserTenders.TenderDir
             var document = parser.Parse(s);
             var datePubT = (document.QuerySelector("td:contains('Дата публикации') + td")?.TextContent ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            var dateEndT = (document.QuerySelector("td:contains('Дата и время окончания подачи заявок') + td")?.TextContent ??
+            var dateEndT = (document.QuerySelector("td:contains('Дата и время окончания подачи заявок') + td")
+                                ?.TextContent ??
                             "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
@@ -87,6 +96,7 @@ namespace ParserTenders.TenderDir
 
                 var dateUpd = DateTime.Now;
                 int cancelStatus = 0;
+                var update = false;
                 string selectDateT =
                     $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
                 MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
@@ -99,7 +109,7 @@ namespace ParserTenders.TenderDir
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                    update = true;
                     if (dateUpd >= (DateTime) row["date_version"])
                     {
                         row["cancel"] = 1;
@@ -192,7 +202,15 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 int resInsertTender = cmd9.ExecuteNonQuery();
                 int idTender = (int) cmd9.LastInsertedId;
-                AddTender?.Invoke(resInsertTender);
+                if (update)
+                {
+                    UpdateTender?.Invoke(resInsertTender);
+                }
+                else
+                {
+                    AddTender?.Invoke(resInsertTender);
+                }
+
                 var docs = document.QuerySelectorAll(
                     "#documentation > a");
                 GetDocs(docs, connect, idTender);

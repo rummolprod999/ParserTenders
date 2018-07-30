@@ -32,7 +32,8 @@ namespace ParserTenders
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                string eis = (htmlDoc.DocumentNode.SelectSingleNode("//td[@class = \"fname\"]")?.InnerText ?? "").Trim();
+                string eis = (htmlDoc.DocumentNode.SelectSingleNode("//td[@class = \"fname\"]")?.InnerText ?? "")
+                    .Trim();
                 //WriteLine(eis);
                 if (eis == "Номер извещения в ЕИС:")
                 {
@@ -79,10 +80,10 @@ namespace ParserTenders
                     {
                         Log.Logger("This tender is exist in base", pNum);
                         return;
-                        
                     }
 
                     int cancelStatus = 0;
+                    var update = false;
                     string selectDateT =
                         $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = 6";
                     MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
@@ -95,7 +96,7 @@ namespace ParserTenders
                     foreach (DataRow row in dt2.Rows)
                     {
                         //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                        update = true;
                         if (DatePub >= (DateTime) row["date_version"])
                         {
                             row["cancel"] = 1;
@@ -117,9 +118,9 @@ namespace ParserTenders
                     int customerId = 0;
                     int organiserId = 0;
                     string _UrlOrg =
-                    (htmlDoc.DocumentNode
-                         .SelectSingleNode("//td/a[@title = \"Просмотреть информационную карту участника\"]")
-                         ?.Attributes["href"].Value ?? "").Trim();
+                        (htmlDoc.DocumentNode
+                             .SelectSingleNode("//td/a[@title = \"Просмотреть информационную карту участника\"]")
+                             ?.Attributes["href"].Value ?? "").Trim();
                     UrlOrg = $"{ParserGntWeb._site}{_UrlOrg}";
                     //WriteLine(UrlOrg);
                     string orgS = DownloadString.DownL1251(UrlOrg);
@@ -142,15 +143,15 @@ namespace ParserTenders
                             (navigator?.SelectSingleNode("//tr[td [position()=1]= \"КПП:\"]/td[last()]")?.Value ?? "")
                             .Trim();
                         string orgPostAdr =
-                        (navigator?.SelectSingleNode("//tr[td [position()=1]= \"Почтовый адрес:\"]/td[last()]")
-                             ?.Value ?? "").Trim();
+                            (navigator?.SelectSingleNode("//tr[td [position()=1]= \"Почтовый адрес:\"]/td[last()]")
+                                 ?.Value ?? "").Trim();
                         string orgFactAdr =
-                        (navigator?.SelectSingleNode("//tr[td [position()=1]= \"Юридический адрес:\"]/td[last()]")
-                             ?.Value ?? "").Trim();
+                            (navigator?.SelectSingleNode("//tr[td [position()=1]= \"Юридический адрес:\"]/td[last()]")
+                                 ?.Value ?? "").Trim();
                         string orgTel =
-                        (navigator?.SelectSingleNode(
-                                 "//tr[td [position()=1]= \"Телефоны и факсы организации\"]/following-sibling::tr [position()=1]/td[position()=2]")
-                             ?.Value ?? "").Trim();
+                            (navigator?.SelectSingleNode(
+                                     "//tr[td [position()=1]= \"Телефоны и факсы организации\"]/following-sibling::tr [position()=1]/td[position()=2]")
+                                 ?.Value ?? "").Trim();
                         orgTel = System.Net.WebUtility.HtmlDecode(orgTel);
                         //WriteLine(orgTel);
                         if (!String.IsNullOrEmpty(orgInn))
@@ -276,7 +277,15 @@ namespace ParserTenders
                     cmd9.Parameters.AddWithValue("@print_form", printForm);
                     int resInsertTender = cmd9.ExecuteNonQuery();
                     int idTender = (int) cmd9.LastInsertedId;
-                    Program.AddGntWeb++;
+                    if (update)
+                    {
+                        Program.UpGntWeb++;
+                    }
+                    else
+                    {
+                        Program.AddGntWeb++;
+                    }
+
                     var navT = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
                     string urlAtt = (navT?.SelectSingleNode("//td[a=\"Документация по торгам\"]/a/@href")?.Value ?? "")
                         .Trim();
@@ -299,6 +308,7 @@ namespace ParserTenders
                                 {
                                     urlF = $"{ParserGntWeb._site}{urlF}";
                                 }
+
                                 string Desc = (att.SelectSingleNode("td[3]")?.InnerText ?? "").Trim();
                                 Desc = System.Net.WebUtility.HtmlDecode(Desc);
                                 if (!string.IsNullOrEmpty(fName))
@@ -313,14 +323,13 @@ namespace ParserTenders
                                     cmd10.Parameters.AddWithValue("@description", Desc);
                                     cmd10.ExecuteNonQuery();
                                 }
-                                
                             }
                         }
                     }
 
                     string finSource =
-                    (navT?.SelectSingleNode("//tr[td [position()=1]= \"Источник финансирования:\"]/td[last()]")
-                         ?.Value ?? "").Trim();
+                        (navT?.SelectSingleNode("//tr[td [position()=1]= \"Источник финансирования:\"]/td[last()]")
+                             ?.Value ?? "").Trim();
                     int lotNum = 1;
                     var lots = htmlDoc.DocumentNode.SelectNodes("//div[@class = \"lot_info\"]") ??
                                new HtmlNodeCollection(null);
@@ -328,18 +337,18 @@ namespace ParserTenders
                     {
                         var navL = (HtmlNodeNavigator) lt.CreateNavigator();
                         string prc =
-                        (navL?.SelectSingleNode(
-                                 "table/tbody/tr[td [position()=1]= \"Начальная (максимальная) цена договора:\"]/td[last()]")
-                             ?.Value ??
-                         "").Trim();
+                            (navL?.SelectSingleNode(
+                                     "table/tbody/tr[td [position()=1]= \"Начальная (максимальная) цена договора:\"]/td[last()]")
+                                 ?.Value ??
+                             "").Trim();
                         prc = System.Net.WebUtility.HtmlDecode(prc);
                         decimal maxP = UtilsFromParsing.ParsePrice(prc);
                         //WriteLine(maxP);
                         string _price =
-                        (navL?.SelectSingleNode(
-                                 "table/tbody/tr[td [position()=1]= \"Цена за единицу продукции:\"]/td[last()]")
-                             ?.Value ??
-                         "").Trim();
+                            (navL?.SelectSingleNode(
+                                     "table/tbody/tr[td [position()=1]= \"Цена за единицу продукции:\"]/td[last()]")
+                                 ?.Value ??
+                             "").Trim();
                         _price = System.Net.WebUtility.HtmlDecode(_price);
                         decimal price = UtilsFromParsing.ParsePrice(_price);
                         string currency = "";
@@ -363,7 +372,9 @@ namespace ParserTenders
                         cmd18.ExecuteNonQuery();
                         int idLot = (int) cmd18.LastInsertedId;
                         string prefName =
-                            (navL?.SelectSingleNode("table/tbody/tr[td [position()=1]= \"Сведения о предоставлении преференций:\"]/td[last()]")?.Value ?? "").Trim();
+                            (navL?.SelectSingleNode(
+                                     "table/tbody/tr[td [position()=1]= \"Сведения о предоставлении преференций:\"]/td[last()]")
+                                 ?.Value ?? "").Trim();
                         if (!string.IsNullOrEmpty(prefName))
                         {
                             string insertPreference =
@@ -374,8 +385,11 @@ namespace ParserTenders
                             cmd17.Parameters.AddWithValue("@name", prefName);
                             cmd17.ExecuteNonQuery();
                         }
+
                         string recName =
-                            (navL?.SelectSingleNode("table/tbody/tr[starts-with(td[position()=1], \"Требования\")]/td[last()]")?.Value ?? "").Trim();
+                            (navL?.SelectSingleNode(
+                                 "table/tbody/tr[starts-with(td[position()=1], \"Требования\")]/td[last()]")?.Value ??
+                             "").Trim();
                         if (!string.IsNullOrEmpty(recName))
                         {
                             string insertRequirement =
@@ -386,11 +400,15 @@ namespace ParserTenders
                             cmd30.Parameters.AddWithValue("@content", recName);
                             cmd30.ExecuteNonQuery();
                         }
+
                         string restName =
-                            (navL?.SelectSingleNode("table/tbody/tr[starts-with(td[position()=1], \"Участниками закупки могут\")]/td[last()]")?.Value ?? "").Trim();
+                            (navL?.SelectSingleNode(
+                                     "table/tbody/tr[starts-with(td[position()=1], \"Участниками закупки могут\")]/td[last()]")
+                                 ?.Value ?? "").Trim();
                         if (restName == "Да")
                         {
-                            string restrictInfo = "Участниками закупки могут быть только субъекты малого и среднего предпринимательства";
+                            string restrictInfo =
+                                "Участниками закупки могут быть только субъекты малого и среднего предпринимательства";
                             string insertRestrict =
                                 $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, info = @info";
                             MySqlCommand cmd19 = new MySqlCommand(insertRestrict, connect);
@@ -399,9 +417,11 @@ namespace ParserTenders
                             cmd19.Parameters.AddWithValue("@info", restrictInfo);
                             cmd19.ExecuteNonQuery();
                         }
+
                         lotNum++;
                         string _urlPurObj =
-                            (navL?.SelectSingleNode("table/tbody/tr/td/p/a[. = \"Просмотр позиций по лоту\"]/@href")?.Value ?? "").Trim();
+                            (navL?.SelectSingleNode("table/tbody/tr/td/p/a[. = \"Просмотр позиций по лоту\"]/@href")
+                                 ?.Value ?? "").Trim();
                         if (!string.IsNullOrEmpty(_urlPurObj))
                         {
                             string urlObj = $"{ParserGntWeb._site}{_urlPurObj}";
@@ -442,18 +462,18 @@ namespace ParserTenders
                                 else
                                 {
                                     string pName =
-                                    (navL?.SelectSingleNode(
-                                             "table/tbody/tr[td [position()=1]/text()[1]  = \"Предмет договора\"]/td[last()]")
-                                         ?.Value ?? "").Trim();
+                                        (navL?.SelectSingleNode(
+                                                 "table/tbody/tr[td [position()=1]/text()[1]  = \"Предмет договора\"]/td[last()]")
+                                             ?.Value ?? "").Trim();
                                     pName = System.Net.WebUtility.HtmlDecode(pName);
                                     string okpd2Name =
-                                    (navL?.SelectSingleNode(
-                                             "table/tbody/tr[td [position()=1]= \"Категория продукции (ОКПД2):\"]/td[last()]")
-                                         ?.Value ?? "").Trim();
+                                        (navL?.SelectSingleNode(
+                                                 "table/tbody/tr[td [position()=1]= \"Категория продукции (ОКПД2):\"]/td[last()]")
+                                             ?.Value ?? "").Trim();
                                     string quantity =
-                                    (navL?.SelectSingleNode(
-                                             "table/tbody/tr[td [position()=1]= \"Количество поставляемого товара, объем выполняемых работ, оказываемых услуг:\"]/td[last()]")
-                                         ?.Value ?? "").Trim();
+                                        (navL?.SelectSingleNode(
+                                                 "table/tbody/tr[td [position()=1]= \"Количество поставляемого товара, объем выполняемых работ, оказываемых услуг:\"]/td[last()]")
+                                             ?.Value ?? "").Trim();
                                     quantity = System.Net.WebUtility.HtmlDecode(quantity);
                                     string insertLotitem =
                                         $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, sum = @sum, customer_quantity_value = @customer_quantity_value";
@@ -472,12 +492,13 @@ namespace ParserTenders
                             }
                         }
                     }
+
                     Tender.TenderKwords(connect, idTender);
                     AddVerNumber(connect, pNum);
                 }
             }
         }
-        
+
         private void AddVerNumber(MySqlConnection connect, string purchaseNumber)
         {
             int verNum = 1;

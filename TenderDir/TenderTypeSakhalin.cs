@@ -9,7 +9,7 @@ namespace ParserTenders.TenderDir
 {
     public class TenderTypeSakhalin : TenderBase
     {
-        public event Action<int> AddTenderSakhalin;
+        public event Action<int, bool> AddTenderSakhalin;
         private readonly string PurNum;
         private readonly string Url;
         private readonly DateTime DatePub;
@@ -24,10 +24,20 @@ namespace ParserTenders.TenderDir
             Url = url ?? throw new ArgumentNullException(nameof(url));
             DatePub = DateTime.Now;
             DateUpd = DatePub;
-            AddTenderSakhalin += delegate(int d)
+            AddTenderSakhalin += delegate(int d, bool b)
             {
                 if (d > 0)
-                    Program.AddSakhalin++;
+                {
+                    if (b)
+                    {
+                        Program.UpSakhalin++;
+                    }
+                    else
+                    {
+                        Program.AddSakhalin++;
+                    }
+                }
+
                 else
                     Log.Logger("Не удалось добавить Sakhalin", Url);
             };
@@ -68,6 +78,7 @@ namespace ParserTenders.TenderDir
                 }
 
                 int cancelStatus = 0;
+                var update = false;
                 string selectDateT =
                     $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
                 MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
@@ -80,7 +91,7 @@ namespace ParserTenders.TenderDir
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                    update = true;
                     if (DateUpd >= (DateTime) row["date_version"])
                     {
                         row["cancel"] = 1;
@@ -200,7 +211,7 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 int resInsertTender = cmd9.ExecuteNonQuery();
                 int idTender = (int) cmd9.LastInsertedId;
-                AddTenderSakhalin?.Invoke(resInsertTender);
+                AddTenderSakhalin?.Invoke(resInsertTender, update);
                 var docs = document.QuerySelectorAll(
                     "td:contains('Дополнительная информация') +  td a");
                 GetDocs(docs, connect, idTender);
@@ -269,7 +280,6 @@ namespace ParserTenders.TenderDir
                             cmd19.Parameters.AddWithValue("@name", po.Trim());
                             cmd19.ExecuteNonQuery();
                         }
-                        
                     }
                 }
 

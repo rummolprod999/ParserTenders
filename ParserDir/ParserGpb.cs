@@ -125,6 +125,7 @@ namespace ParserTenders.ParserDir
                 {
                     pr.DateVersion = pr.DatePublished;
                 }
+
                 /*DateTime firstDateVer = (DateTime?) proc.SelectToken("first_date_published") ?? DateTime.MinValue;
                 Console.WriteLine(firstDateVer);*/
                 /* if (String.IsNullOrEmpty(pr.dateVersion))
@@ -151,7 +152,9 @@ namespace ParserTenders.ParserDir
                     {
                         return;
                     }
+
                     int cancelStatus = 0;
+                    var update = false;
                     if (!String.IsNullOrEmpty(pr.RegistryNumber))
                     {
                         string selectDateT =
@@ -166,7 +169,7 @@ namespace ParserTenders.ParserDir
                         foreach (DataRow row in dt2.Rows)
                         {
                             //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                            update = true;
                             if (pr.DateVersion >= (DateTime) row["date_version"])
                             {
                                 row["cancel"] = 1;
@@ -178,11 +181,13 @@ namespace ParserTenders.ParserDir
                                 cancelStatus = 1;
                             }
                         }
+
                         MySqlCommandBuilder commandBuilder =
                             new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
                         //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                         adapter2.Update(dt2);
                     }
+
                     pr.Href = ((string) proc.SelectToken("procedure_url") ?? "").Trim();
                     pr.PurchaseObjectInfo = ((string) proc.SelectToken("title") ?? "").Trim();
                     pr.NoticeVersion = "";
@@ -195,6 +200,7 @@ namespace ParserTenders.ParserDir
                     {
                         Log.Logger("Получили пустую строку с заказчиком", urlCus);
                     }
+
                     xmlCus = ClearText.ClearStringGpb(xmlCus);
                     XmlDocument docCus = new XmlDocument();
                     docCus.LoadXml(xmlCus);
@@ -217,6 +223,7 @@ namespace ParserTenders.ParserDir
                         org.ContactPhone = ((string) customers[0].SelectToken("phone") ?? "").Trim();
                         org.ContactFax = ((string) customers[0].SelectToken("fax") ?? "").Trim();
                     }
+
                     pr.IdOrg = 0;
                     if (!String.IsNullOrEmpty(org.Inn))
                     {
@@ -250,12 +257,14 @@ namespace ParserTenders.ParserDir
                             cmd4.ExecuteNonQuery();
                             pr.IdOrg = (int) cmd4.LastInsertedId;
                         }
+
                         //Console.WriteLine(pr.IdOrg);
                     }
                     else
                     {
                         Log.Logger("Нет organizer_inn", urlCus);
                     }
+
                     pr.IdPlacingWay = 0;
                     var pw = new PlacingWayGpB {Code = "", Name = ""};
                     pw.Code = ((string) proc.SelectToken("procedure_type") ?? "").Trim();
@@ -287,6 +296,7 @@ namespace ParserTenders.ParserDir
                             pr.IdPlacingWay = (int) cmd5.LastInsertedId;
                         }
                     }
+
                     //Console.WriteLine(pr.IdPlacingWay);
                     pr.IdEtp = 0;
                     string etpName = "ЭТП ГПБ";
@@ -314,6 +324,7 @@ namespace ParserTenders.ParserDir
                         cmd7.ExecuteNonQuery();
                         pr.IdEtp = (int) cmd7.LastInsertedId;
                     }
+
                     pr.BiddingDate = DateTime.MinValue;
                     pr.EndDate = DateTime.MinValue;
                     pr.ScoringDate = DateTime.MinValue;
@@ -327,8 +338,11 @@ namespace ParserTenders.ParserDir
                             pr.BiddingDate =
                                 (DateTime?) lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
                         }
-                        pr.ScoringDate = (DateTime?) lots[0].SelectToken("date_end_first_parts_review") ?? DateTime.MinValue;
+
+                        pr.ScoringDate = (DateTime?) lots[0].SelectToken("date_end_first_parts_review") ??
+                                         DateTime.MinValue;
                     }
+
                     int typeFz = (int?) proc.SelectToken("FZ223") ?? 0;
                     typeFz = typeFz == 0 ? 1 : 223;
                     //Console.WriteLine(typeFz);
@@ -357,7 +371,15 @@ namespace ParserTenders.ParserDir
                     cmd8.Parameters.AddWithValue("@print_form", pr.Printform);
                     int resInsertTender = cmd8.ExecuteNonQuery();
                     int idTender = (int) cmd8.LastInsertedId;
-                    Program.AddGazprom++;
+                    if (update)
+                    {
+                        Program.UpGazprom++;
+                    }
+                    else
+                    {
+                        Program.AddGazprom++;
+                    }
+
                     List<JToken> attachments = GetElements(proc, "docs.doc");
                     attachments.AddRange(GetElements(proc, "procedure_common_docs.doc"));
                     foreach (var att in attachments)
@@ -375,6 +397,7 @@ namespace ParserTenders.ParserDir
                         cmd9.Parameters.AddWithValue("@description", attachDescription);
                         cmd9.ExecuteNonQuery();
                     }
+
                     foreach (var lot in lots)
                     {
                         var lt = new LotGpB();
@@ -409,6 +432,7 @@ namespace ParserTenders.ParserDir
                             cmd9.Parameters.AddWithValue("@description", attachDescription);
                             cmd9.ExecuteNonQuery();
                         }
+
                         int idCustomer = 0;
                         //string customerRegNumber = "";
                         var cust = new CustomerGpB();
@@ -435,6 +459,7 @@ namespace ParserTenders.ParserDir
                                     reader4.Read();
                                     cust.CustomerRegNumber = (string) reader4["regNumber"];
                                 }
+
                                 reader4.Close();
                                 if (String.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
@@ -450,8 +475,10 @@ namespace ParserTenders.ParserDir
                                         reader5.Read();
                                         cust.CustomerRegNumber = (string) reader5["regNumber"];
                                     }
+
                                     reader5.Close();
                                 }
+
                                 if (String.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     string selectOdCustomerFromFtp223 =
@@ -466,8 +493,10 @@ namespace ParserTenders.ParserDir
                                         reader6.Read();
                                         cust.CustomerRegNumber = (string) reader6["regNumber"];
                                     }
+
                                     reader6.Close();
                                 }
+
                                 if (!String.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     string selectCustomer =
@@ -519,6 +548,7 @@ namespace ParserTenders.ParserDir
                                         {
                                             Log.Logger("Получили пустую строку с customer", urlCusLot);
                                         }
+
                                         XmlDocument docCusLot = new XmlDocument();
                                         docCusLot.LoadXml(xmlCusLot);
                                         string jsonsCusLot = JsonConvert.SerializeXmlNode(docCusLot);
@@ -540,6 +570,7 @@ namespace ParserTenders.ParserDir
                                             cust.ContactFax = ((string) cst[0].SelectToken("fax") ?? "").Trim();
                                             cust.Ogrn = ((string) cst[0].SelectToken("ogrn") ?? "").Trim();
                                         }
+
                                         string regNum223 = $"00000223{cust.Inn}";
                                         string insertCustomer =
                                             $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, inn = @inn, is223=1";
@@ -572,6 +603,7 @@ namespace ParserTenders.ParserDir
                                 Log.Logger("У customer нет inn", pr.Xml);
                             }
                         }
+
                         string deliveryPlace = ((string) lot.SelectToken("delivery_places.place") ?? "").Trim();
                         string deliveryTerm = ((string) lot.SelectToken("delivery_places.term") ?? "").Trim();
                         string applicationGuaranteeAmount =
@@ -615,6 +647,7 @@ namespace ParserTenders.ParserDir
                             {
                                 Tender.GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }
+
                             string insertLotitem =
                                 $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value";
                             MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -632,7 +665,7 @@ namespace ParserTenders.ParserDir
                             cmd19.ExecuteNonQuery();
                         }
                     }
-                    
+
                     Tender.TenderKwords(connect, idTender);
                     Tender.AddVerNumber(connect, pr.RegistryNumber);
                 }
