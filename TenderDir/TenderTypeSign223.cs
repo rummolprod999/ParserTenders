@@ -164,7 +164,7 @@ namespace ParserTenders.TenderDir
                     }
                     else
                     {
-                        Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
+                        //Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
                     }
                     ContractSign ts = null;
                     if (upd == 1)
