@@ -522,8 +522,16 @@ namespace ParserTenders
         private static void ParserTender44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders44");
-            ParserTend44 t44 = new ParserTend44(Periodparsing);
-            t44.Parsing();
+            try
+            {
+                ParserTend44 t44 = new ParserTend44(Periodparsing);
+                t44.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/fcsNotificationINM111_0342100025718000009_16271439.xml");
             t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen44);*/
@@ -545,8 +553,16 @@ namespace ParserTenders
         private static void ParserTender615(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders615");
-            var t615 = new ParserTend615(Periodparsing);
-            t615.Parsing();
+            try
+            {
+                var t615 = new ParserTend615(Periodparsing);
+                t615.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             //t615.ParsingContractS();
             /*var t615 = new ParserTend615(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/pprf615NotificationEF_204250000011800008_16370095.xml");
@@ -562,8 +578,16 @@ namespace ParserTenders
         private static void ParserTender223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders223");
-            ParserTend223 t223 = new ParserTend223(Periodparsing);
-            t223.Parsing();
+            try
+            {
+                ParserTend223 t223 = new ParserTend223(Periodparsing);
+                t223.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*ParserTend223 t223 = new ParserTend223(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/purchaseNotice_Belgorodskaya_obl_20170201_000000_20170228_235959_015.xml");
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
@@ -575,8 +599,16 @@ namespace ParserTenders
         private static void ParserAtt(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Attach");
-            ParserAttach att = new ParserAttach(TypeArguments.Attach);
-            att.Parsing();
+            try
+            {
+                ParserAttach att = new ParserAttach(TypeArguments.Attach);
+                att.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*FileInfo fileInf = new FileInfo("");
             if (fileInf.Exists)
             {
@@ -595,8 +627,16 @@ namespace ParserTenders
         private static void ParserSign223(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Sign223");
-            ParserSgn223 s = new ParserSgn223(Periodparsing);
-            s.Parsing();
+            try
+            {
+                ParserSgn223 s = new ParserSgn223(Periodparsing);
+                s.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*ParserSgn223 t223 = new ParserSgn223(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/contract_Belgorodskaya_obl_20160202_000000_20160202_235959_daily_027.xml");
             t223.ParsingXml(f, "br", 32);*/
@@ -608,14 +648,30 @@ namespace ParserTenders
         private static void ParserGpb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Gpb");
-            ParserGpb p = new ParserGpb(Periodparsing);
-            p.Parsing();
+            try
+            {
+                ParserGpb p = new ParserGpb(Periodparsing);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили Gpb", AddGazprom);
             Log.Logger("Обновили Gpb", UpGazprom);
             AddGazprom = 0;
             UpGazprom = 0;
-            ParserGpbGaz d = new ParserGpbGaz(Periodparsing);
-            d.Parsing();
+            try
+            {
+                ParserGpbGaz d = new ParserGpbGaz(Periodparsing);
+                d.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*ParserGpb p = new ParserGpb(Periodparsing);
             var l = new Dictionary<int, int> {[1] = 6};
             p.ParsingProc(new ProcedureGpB
@@ -634,8 +690,16 @@ namespace ParserTenders
         private static void ParserExp(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Explanation");
-            ParserExp p = new ParserExp(arg);
-            p.Parsing();
+            try
+            {
+                ParserExp p = new ParserExp(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили Explanation", AddClarification223);
             Log.Logger("Время окончания парсинга Explanation");
         }
@@ -643,8 +707,16 @@ namespace ParserTenders
         private static void ParserGntWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга GntWeb");
-            ParserGntWeb p = new ParserGntWeb(arg);
-            p.Parsing();
+            try
+            {
+                ParserGntWeb p = new ParserGntWeb(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*GntWebTender t = new GntWebTender
             {
                 UrlTender = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=view&id=30493#lot_1",
@@ -673,8 +745,16 @@ namespace ParserTenders
         private static void ParserObTorgWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга ObTorgWeb");
-            ParserObTorgWeb p = new ParserObTorgWeb(arg);
-            p.Parsing();
+            try
+            {
+                ParserObTorgWeb p = new ParserObTorgWeb(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             /*ObTorgWebTender t = new ObTorgWebTender
             {
                 UrlTender = "https://www.oborontorg.ru/market/view.html?action=view_public_offer&type=1560&id=127906",
@@ -703,8 +783,16 @@ namespace ParserTenders
         private static void ParserSpecTorgTorgWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга SpecTorgWeb");
-            ParserSpecTorgWeb p = new ParserSpecTorgWeb(arg);
-            p.Parsing();
+            try
+            {
+                ParserSpecTorgWeb p = new ParserSpecTorgWeb(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили SpecTorgWeb", AddSpecTorgWeb);
             Log.Logger("Обновили SpecTorgWeb", UpSpecTorgWeb);
             Log.Logger("Время окончания парсинга SpecTorgWeb");
@@ -713,8 +801,16 @@ namespace ParserTenders
         private static void ParserWeb(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Web");
-            ParserTendersWeb p = new ParserTendersWeb(arg);
-            p.Parsing();
+            try
+            {
+                ParserTendersWeb p = new ParserTendersWeb(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Обновили tender44", UpdateTender44);
             Log.Logger("Добавили tender223", AddTender223);
@@ -725,8 +821,16 @@ namespace ParserTenders
         private static void ParserMrsk(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Mrsk");
-            ParserMrsk p = new ParserMrsk(arg);
-            p.Parsing();
+            try
+            {
+                ParserMrsk p = new ParserMrsk(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили Mrsk", AddMrsk);
             Log.Logger("Обновили Mrsk", UpMrsk);
             Log.Logger("Время окончания парсинга");
@@ -735,8 +839,16 @@ namespace ParserTenders
         private static void ParserRosneft(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Rosneft");
-            ParserRosneft p = new ParserRosneft(arg);
-            p.Parsing();
+            try
+            {
+                ParserRosneft p = new ParserRosneft(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger("Добавили Rosneft", AddRosneft);
             Log.Logger("Обновили Rosneft", UpRosneft);
             Log.Logger("Время окончания парсинга");
@@ -745,8 +857,16 @@ namespace ParserTenders
         private static void ParserSakhalin(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");
-            ParserSakhalin p = new ParserSakhalin(arg);
-            p.Parsing();
+            try
+            {
+                ParserSakhalin p = new ParserSakhalin(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger($"Добавили {arg}", AddSakhalin);
             Log.Logger($"Обновили {arg}", UpSakhalin);
             Log.Logger("Время окончания парсинга");
@@ -755,8 +875,16 @@ namespace ParserTenders
         private static void ParserTektorgGazprom(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");
-            ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
-            p.Parsing();
+            try
+            {
+                ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger($"Добавили {arg}", AddTektorgGazprom);
             Log.Logger($"Обновили {arg}", UpTektorgGazprom);
             Log.Logger("Время окончания парсинга");
@@ -765,8 +893,16 @@ namespace ParserTenders
         private static void ParserTektorgInterRao(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");
-            ParserTektorgInterRao p = new ParserTektorgInterRao(arg);
-            p.Parsing();
+            try
+            {
+                ParserTektorgInterRao p = new ParserTektorgInterRao(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger($"Добавили {arg}", AddTektorgInterRao);
             Log.Logger($"Обновили {arg}", UpTektorgInterRao);
             Log.Logger("Время окончания парсинга");
@@ -775,8 +911,16 @@ namespace ParserTenders
         private static void ParserTektorgRzd(TypeArguments arg)
         {
             Log.Logger($"Время начала парсинга {arg}");
-            ParserTektorgRzd p = new ParserTektorgRzd(arg);
-            p.Parsing();
+            try
+            {
+                ParserTektorgRzd p = new ParserTektorgRzd(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             Log.Logger($"Добавили {arg}", AddTektorgRzd);
             Log.Logger($"Обновили {arg}", UpTektorgRzd);
             Log.Logger("Время окончания парсинга");

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
@@ -70,7 +71,7 @@ namespace ParserTenders.ParserDir
             foreach (var a in archtemp
                 .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
-                using (ArchiveExp223Context db = new ArchiveExp223Context())
+                /*using (ArchiveExp223Context db = new ArchiveExp223Context())
                 {
                     var archives = db.ArchiveExp223Results.Where(p => p.Archive == a).ToList();
 
@@ -80,6 +81,29 @@ namespace ParserTenders.ParserDir
                         db.ArchiveExp223Results.Add(ar);
                         arch.Add(a);
                         db.SaveChanges();
+                    }
+                }*/
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                {
+                    connect.Open();
+                    string selectArch =
+                        $"SELECT id FROM {Program.Prefix}arhiv_explanation223 WHERE arhiv = @archive";
+                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@archive", a);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    bool resRead = reader.HasRows;
+                    reader.Close();
+                    if (!resRead)
+                    {
+                        string addArch =
+                            $"INSERT INTO {Program.Prefix}arhiv_explanation223 SET arhiv = @archive, region = @region";
+                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        cmd1.Prepare();
+                        cmd1.Parameters.AddWithValue("@archive", a);
+                        cmd1.Parameters.AddWithValue("@region", regionPath);
+                        cmd1.ExecuteNonQuery();
+                        arch.Add(a);
                     }
                 }
             }

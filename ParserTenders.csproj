@@ -150,21 +150,32 @@
     <Reference Include="jint, Version=2.10.4.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f">
       <HintPath>..\packages\jint.2.10.4\lib\net45\jint.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.10.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\packages\MySql.Data.6.10.6\lib\net452\MySql.Data.dll</HintPath>
+      <Reference Include="Microsoft.CSharp"/>
+      <Reference Include="MySql.Data, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+          <HintPath>..\packages\MySql.Data.6.10.7\lib\net452\MySql.Data.dll</HintPath>
+          <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\packages\MySql.Data.Entity.6.10.6\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+      <Reference Include="MySql.Data.Entity.EF6, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+          <HintPath>..\packages\MySql.Data.Entity.6.10.7\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+          <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+      <Reference Include="System.ComponentModel"/>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+      <Reference Include="System.Configuration"/>
+      <Reference Include="System.Configuration.Install"/>
     <Reference Include="System.Core" />
+      <Reference Include="System.Drawing"/>
+      <Reference Include="System.Drawing.Design"/>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+      <Reference Include="System.Management"/>
+      <Reference Include="System.Security"/>
+      <Reference Include="System.Transactions"/>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -277,17 +288,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="docs\MySqlCommand.xml" />
-    <None Include="docs\MySqlCommandBuilder.xml" />
-    <None Include="docs\MySqlConnection.xml" />
-    <None Include="docs\MySqlConnectionStringBuilder.xml" />
-    <None Include="docs\MySqlDataAdapter.xml" />
-    <None Include="docs\MySqlDataReader.xml" />
-    <None Include="docs\MySqlException.xml" />
-    <None Include="docs\MySqlHelper.xml" />
-    <None Include="docs\MySqlParameter.xml" />
-    <None Include="docs\MySqlParameterCollection.xml" />
-    <None Include="docs\MySqlTransaction.xml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
