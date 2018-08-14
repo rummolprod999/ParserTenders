@@ -99,6 +99,7 @@ namespace ParserTenders.TenderDir
                     MySqlDataReader reader22 = cmd22.ExecuteReader();
                     if (reader22.HasRows)
                     {
+                        reader22.Read();
                         idcSignNumber = reader22.GetInt32("id_contract_sign");
                         reader22.Close();
                     }
