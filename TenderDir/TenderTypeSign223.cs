@@ -171,6 +171,11 @@ namespace ParserTenders.TenderDir
                             idCustomer = reader2.GetInt32("id_customer");
                             reader2.Close();
                         }
+                        else
+                        {
+                            reader2.Close();
+                            //Log.Logger("У TenderSign нет id_customer", FilePath);
+                        }
                     }
                     else
                     {
