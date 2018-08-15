@@ -3,6 +3,7 @@
     public enum ObTorgType
     {
         ProposalRequest,
-        Auction
+        Auction,
+        ProcedurePurchase
     }
 }

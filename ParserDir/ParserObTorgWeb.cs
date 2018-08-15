@@ -19,9 +19,33 @@ namespace ParserTenders.ParserDir
             },
             new TypeObTorg()
             {
+                Type = ObTorgType.ProposalRequest,
+                UrlType = "/trades/corporate/ProposalRequest/?action=list_active&from=",
+                UrlTypeList = "https://www.oborontorg.ru/trades/corporate/ProposalRequest/?action=list_active&from=0"
+            },
+            new TypeObTorg()
+            {
                 Type = ObTorgType.Auction,
                 UrlType = "/market/?action=list_public_auctions&type=1560&status_group=sg_published&from=",
                 UrlTypeList = "https://www.oborontorg.ru/market/?action=list_public_auctions&type=1560&status_group=sg_published&from=0"
+            },
+            new TypeObTorg()
+            {
+                Type = ObTorgType.Auction,
+                UrlType = "/market/?action=list_public_auctions&type=1560&status_group=sg_active&from=",
+                UrlTypeList = "https://www.oborontorg.ru/market/?action=list_public_auctions&type=1560&status_group=sg_active&from=0"
+            },
+            new TypeObTorg()
+            {
+                Type = ObTorgType.ProcedurePurchase,
+                UrlType = "/trades/corporate/ProcedurePurchase/?action=list_published&from=",
+                UrlTypeList = "https://www.oborontorg.ru/trades/corporate/ProcedurePurchase/?action=list_published"
+            },
+            new TypeObTorg()
+            {
+                Type = ObTorgType.ProcedurePurchase,
+                UrlType = "/trades/corporate/ProcedurePurchase/?action=list_active&from=",
+                UrlTypeList = "https://www.oborontorg.ru/trades/corporate/ProcedurePurchase/?action=list_active"
             }
         };
         
@@ -113,6 +137,7 @@ namespace ParserTenders.ParserDir
                         switch (t.Type)
                         {
                             case ObTorgType.ProposalRequest:
+                            case ObTorgType.ProcedurePurchase:
                                 ParserTend(t, v);
                                 break;
                             case ObTorgType.Auction:
@@ -154,6 +179,11 @@ namespace ParserTenders.ParserDir
                 .Trim();
             string _dateEnd =
                 (node.SelectSingleNode("td/span[@title = \"Дата подведения итогов закупки\"]")?.InnerText ?? "").Trim();
+            if (string.IsNullOrEmpty(_dateEnd))
+            {
+                _dateEnd =
+                    (node.SelectSingleNode("td/span[@title = \"Дата подведения итогов процедуры\"]")?.InnerText ?? "").Trim();
+            }
             DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
             DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             if (dateOpen == DateTime.MinValue)
@@ -170,7 +200,8 @@ namespace ParserTenders.ParserDir
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }
             DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            ObTorgWebTender t = new ObTorgWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeObTorgT = tp};
+            var status = (node.SelectSingleNode("td[7]").InnerText ?? "").Trim();
+            ObTorgWebTender t = new ObTorgWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeObTorgT = tp, Status = status};
             try
             {
                 t.Parse();
@@ -226,6 +257,7 @@ namespace ParserTenders.ParserDir
                 switch (tp.Type)
                 {
                     case ObTorgType.ProposalRequest:
+                    case ObTorgType.ProcedurePurchase:
                         t.Parse();
                         break;
                     case ObTorgType.Auction:

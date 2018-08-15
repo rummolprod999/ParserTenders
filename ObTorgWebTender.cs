@@ -20,7 +20,8 @@ namespace ParserTenders
         public string UrlOrg;
         public decimal MaxPrice;
         public TypeObTorg TypeObTorgT;
-
+        public string Status;
+        
         public ObTorgWebTender()
         {
         }
@@ -44,7 +45,7 @@ namespace ParserTenders
                     return;
                 }
 
-                string _pNum = (htmlDoc.DocumentNode.SelectSingleNode("//tr[@class = \"thead\"]/td[@colspan = \"2\"]")?
+                string _pNum = (htmlDoc.DocumentNode.SelectSingleNode("//table[@class = 'blank']//tr[@class = \"thead\"]/td")?
                                     .InnerText ?? "").Trim();
                 string pNum = "";
                 try
@@ -67,12 +68,13 @@ namespace ParserTenders
                 {
                     connect.Open();
                     string selectTend =
-                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND date_version = @date_version AND end_date = @end_date AND type_fz = 7";
+                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND date_version = @date_version AND end_date = @end_date AND type_fz = 7 AND notice_version = @notice_version";
                     MySqlCommand cmd = new MySqlCommand(selectTend, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@purchase_number", pNum);
                     cmd.Parameters.AddWithValue("@date_version", DatePub);
                     cmd.Parameters.AddWithValue("@end_date", DateOpen);
+                    cmd.Parameters.AddWithValue("@notice_version", Status);
                     DataTable dt = new DataTable();
                     MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd};
                     adapter.Fill(dt);
@@ -113,7 +115,7 @@ namespace ParserTenders
                         new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
                     //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                     adapter2.Update(dt2);
-                    string noticeVersion = "";
+                    string noticeVersion = Status;
                     string printForm = UrlTender;
                     int customerId = 0;
                     int organiserId = 0;
@@ -192,6 +194,9 @@ namespace ParserTenders
                     {
                         case ObTorgType.ProposalRequest:
                             pwName = "Запрос предложений";
+                            break;
+                        case ObTorgType.ProcedurePurchase:
+                            pwName = "Комплексная закупка";
                             break;
                         case ObTorgType.Auction:
                             pwName = "Запрос котировок цен покупателя";
@@ -343,6 +348,10 @@ namespace ParserTenders
                              "").Trim();
                         prc = System.Net.WebUtility.HtmlDecode(prc);
                         decimal maxP = UtilsFromParsing.ParsePrice(prc);
+                        if (maxP == 0.0m)
+                        {
+                            maxP = MaxPrice;
+                        }
                         //WriteLine(maxP);
                         string currency = "";
                         if (!string.IsNullOrEmpty(prc))
@@ -489,6 +498,13 @@ namespace ParserTenders
                                 (navL?.SelectSingleNode(
                                          ".//tr[starts-with(td[position()=1], \"Предмет\")]/td[last()]/div/text()[2]")
                                      ?.Value ?? "").Trim();
+                            if (string.IsNullOrEmpty(pName))
+                            {
+                                pName =
+                                    (navL?.SelectSingleNode(
+                                             ".//tr[starts-with(td[position()=1], \"Наименование предмета\")]/td[last()]/div/text()")
+                                         ?.Value ?? "").Trim();
+                            }
                             pName = System.Net.WebUtility.HtmlDecode(pName);
                             string okpd2Name =
                                 (navL?.SelectSingleNode(
@@ -695,6 +711,9 @@ namespace ParserTenders
                     {
                         case ObTorgType.ProposalRequest:
                             pwName = "Запрос предложений";
+                            break;
+                        case ObTorgType.ProcedurePurchase:
+                            pwName = "Комплексная закупка";
                             break;
                         case ObTorgType.Auction:
                             pwName = "Запрос котировок цен покупателя";
