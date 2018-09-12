@@ -258,6 +258,7 @@
     <Compile Include="TenderDir\TenderTypeDateChange615.cs" />
     <Compile Include="TenderDir\TenderTypeExp223.cs" />
     <Compile Include="TenderDir\TenderTypeLotCancel.cs" />
+      <Compile Include="TenderDir\TenderTypeLotCancel223.cs"/>
     <Compile Include="TenderDir\TenderTypeLotCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeMrsk.cs" />
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />

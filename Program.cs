@@ -200,6 +200,7 @@ namespace ParserTenders
         public static int AddProlongation = 0;
         public static int AddOrgChange = 0;
         public static int AddLotCancel = 0;
+        public static int AddLotCancel223 = 0;
         public static int AddLotCancel615 = 0;
         public static int AddCancel = 0;
         public static int AddCancel615 = 0;
@@ -593,6 +594,7 @@ namespace ParserTenders
             t223.ParsingXML(f, "br", 32, TypeFile223.purchaseNotice);*/
             Log.Logger("Добавили tender223", AddTender223);
             Log.Logger("Обновили tender223", UpdateTender223);
+            Log.Logger("Добавили LotCancel223", AddLotCancel223);
             Log.Logger("Время окончания парсинга Tenders223");
         }
 

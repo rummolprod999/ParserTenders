@@ -19,7 +19,7 @@ namespace ParserTenders.ParserDir
         private string[] _purchaseDir = new[]
         {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
-            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK"
+            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation"
         };
 
         public ParserTend223(TypeArguments arg) : base(arg)
@@ -114,6 +114,9 @@ namespace ParserTenders.ParserDir
                                 case "purchaseNoticeZK":
                                     Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZk);
                                     break;
+                                case "lotCancellation":
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseLotCancellation);
+                                    break;
                             }
                         }
 
@@ -156,8 +159,17 @@ namespace ParserTenders.ParserDir
                 doc.LoadXml(ftext);
                 string jsons = JsonConvert.SerializeXmlNode(doc);
                 JObject json = JObject.Parse(jsons);
-                TenderType223 a = new TenderType223(f, region, regionId, json, typefile);
-                a.Parsing();
+                switch (typefile)
+                {
+                    case TypeFile223.PurchaseLotCancellation:
+                        TenderTypeLotCancel223 k = new TenderTypeLotCancel223(f, region, regionId, json);
+                        k.Parsing();
+                        break;
+                    default:
+                        TenderType223 a = new TenderType223(f, region, regionId, json, typefile);
+                        a.Parsing();
+                        break;
+                }
             }
         }
 
