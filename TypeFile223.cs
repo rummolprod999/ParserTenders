@@ -10,6 +10,7 @@ namespace ParserTenders
         PurchaseNoticeOa,
         PurchaseNoticeOk,
         PurchaseNoticeZk,
-        PurchaseLotCancellation
+        PurchaseLotCancellation,
+        PurchaseRejection
     }
 }

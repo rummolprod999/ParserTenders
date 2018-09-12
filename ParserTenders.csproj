@@ -251,6 +251,7 @@
       <Compile Include="TenderDir\TenderType504.cs"/>
     <Compile Include="TenderDir\TenderType615.cs" />
     <Compile Include="TenderDir\TenderTypeCancel.cs" />
+      <Compile Include="TenderDir\TenderTypeCancel223.cs"/>
     <Compile Include="TenderDir\TenderTypeCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeCancelFailure.cs" />
     <Compile Include="TenderDir\TenderTypeClarification.cs" />
