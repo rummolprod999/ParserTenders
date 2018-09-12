@@ -18,8 +18,8 @@ namespace ParserTenders.ParserDir
 
         private string[] _purchaseDir = new[]
         {
-            /*"purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
-            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation",*/ "purchaseRejection"
+            "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
+            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection"
         };
 
         public ParserTend223(TypeArguments arg) : base(arg)
