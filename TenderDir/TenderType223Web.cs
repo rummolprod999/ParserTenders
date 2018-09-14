@@ -138,6 +138,11 @@ namespace ParserTenders.TenderDir
                     }
 
                     string href = ((string) tender.SelectToken("urlVSRZ") ?? "").Trim();
+                    if (string.IsNullOrEmpty(href))
+                    {
+                        href =
+                            $"http://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
+                    }
                     string purchaseObjectInfo = ((string) tender.SelectToken("name") ?? "").Trim();
 
                     string numVersion = ((string) tender.SelectToken("version") ?? "").Trim();
