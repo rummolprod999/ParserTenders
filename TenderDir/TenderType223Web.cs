@@ -14,7 +14,7 @@ namespace ParserTenders.TenderDir
     public class TenderType223Web : TenderWeb
     {
         public event Action<int> AddTender223;
-        private bool Up = default ;
+        private bool Up = default;
         private TypeFile223 _purchase;
         private string _extendScoringDate = "";
         private string _extendBiddingDate = "";
@@ -84,8 +84,8 @@ namespace ParserTenders.TenderDir
 
                     reader.Close();
                     string docPublishDate =
-                    (JsonConvert.SerializeObject(tender.SelectToken("publicationDateTime") ?? "") ??
-                     "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("publicationDateTime") ?? "") ??
+                         "").Trim('"');
                     string dateVersion = (JsonConvert.SerializeObject(tender.SelectToken("modificationDate") ?? "") ??
                                           "").Trim('"');
                     if (String.IsNullOrEmpty(dateVersion))
@@ -143,6 +143,7 @@ namespace ParserTenders.TenderDir
                         href =
                             $"http://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
                     }
+
                     string purchaseObjectInfo = ((string) tender.SelectToken("name") ?? "").Trim();
 
                     string numVersion = ((string) tender.SelectToken("version") ?? "").Trim();
@@ -155,7 +156,13 @@ namespace ParserTenders.TenderDir
                         .Trim();
                     string organizerFactAddress = ((string) tender.SelectToken("placer.mainInfo.legalAddress") ?? "")
                         .Trim();
-                    var addr = (organizerPostAddress != "") ? organizerPostAddress : organizerFactAddress;
+                    string customerPostAddress =
+                        ((string) tender.SelectToken("customer.mainInfo.postalAddress") ?? "").Trim();
+                    string customerLegalAddress =
+                        ((string) tender.SelectToken("customer.mainInfo.legalAddress") ?? "").Trim();
+                    var addr = customerLegalAddress != "" ? customerLegalAddress :
+                        customerPostAddress != "" ? customerPostAddress :
+                        organizerFactAddress != "" ? organizerFactAddress : organizerPostAddress;
                     if (addr != "")
                     {
                         var regionS = GetRegionString(addr);
@@ -175,9 +182,10 @@ namespace ParserTenders.TenderDir
                             else
                             {
                                 reader46.Close();
-                            } 
+                            }
                         }
                     }
+
                     string organizerInn = ((string) tender.SelectToken("placer.mainInfo.inn") ?? "").Trim();
                     string organizerKpp = ((string) tender.SelectToken("placer.mainInfo.kpp") ?? "").Trim();
                     string organizerEmail = ((string) tender.SelectToken("placer.mainInfo.email") ?? "").Trim();
@@ -290,8 +298,8 @@ namespace ParserTenders.TenderDir
                     }
 
                     string endDate =
-                    (JsonConvert.SerializeObject(tender.SelectToken("submissionCloseDateTime") ?? "") ??
-                     "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("submissionCloseDateTime") ?? "") ??
+                         "").Trim('"');
                     string scoringDate = GetScogingDate(tender);
                     string biddingDate = GetBiddingDate(tender);
                     if (_purchase == TypeFile223.PurchaseNotice)
@@ -311,8 +319,8 @@ namespace ParserTenders.TenderDir
                     else if (_purchase == TypeFile223.PurchaseNoticeZk)
                     {
                         scoringDate = biddingDate =
-                        (JsonConvert.SerializeObject(tender.SelectToken("quotationExaminationTime") ?? "") ??
-                         "").Trim('"');
+                            (JsonConvert.SerializeObject(tender.SelectToken("quotationExaminationTime") ?? "") ??
+                             "").Trim('"');
                     }
 
                     string insertTender =
@@ -365,8 +373,6 @@ namespace ParserTenders.TenderDir
                         .Trim();
                     string customerKpp = ((string) tender.SelectToken("customer.mainInfo.kpp") ?? "").Trim();
                     string customerOgrn = ((string) tender.SelectToken("customer.mainInfo.ogrn") ?? "").Trim();
-                    string customerPostAddress =
-                        ((string) tender.SelectToken("customer.mainInfo.postalAddress") ?? "").Trim();
                     string customerPhone = ((string) tender.SelectToken("customer.mainInfo.phone") ?? "").Trim();
                     string customerFax = ((string) tender.SelectToken("customer.mainInfo.fax") ?? "").Trim();
                     string customerEmail = ((string) tender.SelectToken("customer.mainInfo.email") ?? "").Trim();
@@ -540,6 +546,7 @@ namespace ParserTenders.TenderDir
                             {
                                 name = $"{additionalInfo} {okpdName}".Trim();
                             }
+
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();
@@ -608,8 +615,8 @@ namespace ParserTenders.TenderDir
         {
             string scoringDate = "";
             scoringDate =
-            (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.examinationDateTime") ?? "") ??
-             "").Trim('"');
+                (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.examinationDateTime") ?? "") ??
+                 "").Trim('"');
             if (String.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("applExamPeriodTime") ?? "") ??
@@ -634,13 +641,13 @@ namespace ParserTenders.TenderDir
         {
             string biddingDate = "";
             biddingDate =
-            (JsonConvert.SerializeObject(ten.SelectToken("auctionTime") ?? "") ??
-             "").Trim('"');
+                (JsonConvert.SerializeObject(ten.SelectToken("auctionTime") ?? "") ??
+                 "").Trim('"');
             if (String.IsNullOrEmpty(biddingDate))
             {
                 biddingDate =
-                (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
-                 "").Trim('"');
+                    (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
+                     "").Trim('"');
             }
 
             if (String.IsNullOrEmpty(biddingDate))
