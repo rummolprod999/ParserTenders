@@ -160,9 +160,9 @@ namespace ParserTenders.TenderDir
                         ((string) tender.SelectToken("customer.mainInfo.postalAddress") ?? "").Trim();
                     string customerLegalAddress =
                         ((string) tender.SelectToken("customer.mainInfo.legalAddress") ?? "").Trim();
-                    var addr = customerLegalAddress != "" ? customerLegalAddress :
-                        customerPostAddress != "" ? customerPostAddress :
-                        organizerFactAddress != "" ? organizerFactAddress : organizerPostAddress;
+                    var addr = GetRegionString(customerLegalAddress) != "" ? customerLegalAddress :
+                        GetRegionString(customerPostAddress) != "" ? customerPostAddress :
+                        GetRegionString(organizerFactAddress) != "" ? organizerFactAddress : organizerPostAddress;
                     if (addr != "")
                     {
                         var regionS = GetRegionString(addr);

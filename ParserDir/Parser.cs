@@ -244,6 +244,12 @@ namespace ParserTenders.ParserDir
                 }
                 catch (Exception e)
                 {
+                    if (e.Message.Contains("550 Failed to change directory"))
+                    {
+                        Log.Logger("Не смогли найти директорию", pathParse);
+                        break;
+                    }
+
                     if (count > 3)
                     {
                         Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
