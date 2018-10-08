@@ -29,7 +29,7 @@ namespace ParserTenders.ParserDir
         private string[] _fileDatechange = new[] {"datechange_"};
         private string[] _fileOrgchange = new[] {"orgchange_"};
         private string[] _fileLotcancel = new[] {"lotcancel_"};
-        private string[] _fileClarification = new[] {"clarification_"};
+        private string[] _fileClarification = new[] {"clarification_", "epclarificationdoc_"};
         private string[] _fileXml504 = new[]
         {
             "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_"
