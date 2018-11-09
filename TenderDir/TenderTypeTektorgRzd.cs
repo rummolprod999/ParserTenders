@@ -213,6 +213,11 @@ namespace ParserTenders.TenderDir
 
                 var docs = document.QuerySelectorAll(
                     "#documentation > a");
+                if (docs.Length == 0)
+                {
+                    docs = document.QuerySelectorAll(
+                        "div.procedure__item--documents a");
+                }
                 GetDocs(docs, connect, idTender);
                 var lots = document.QuerySelectorAll(
                     "div.procedure__lots > div.procedure__lot");
