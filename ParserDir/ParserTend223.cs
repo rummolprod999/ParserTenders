@@ -14,13 +14,13 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTend223 : Parser
     {
-        protected DataTable DtRegion;
-
         private string[] _purchaseDir = new[]
         {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
             "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection"
         };
+
+        protected DataTable DtRegion;
 
         public ParserTend223(TypeArguments arg) : base(arg)
         {
@@ -126,6 +126,10 @@ namespace ParserTenders.ParserDir
                         dirInfo.Delete(true);
                     }
                 }
+                else
+                {
+                    Log.Logger("pathUnzip does not exist", filea);
+                }
             }
         }
 
@@ -139,6 +143,7 @@ namespace ParserTenders.ParserDir
             /*f.Refresh();*/
             if (f.Length == 0)
             {
+                //Log.Logger("!!!file size = 0", f);
                 return;
             }
 
@@ -191,35 +196,42 @@ namespace ParserTenders.ParserDir
         public override List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
             List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
-            archtemp = GetListFtp223(pathParse);
+            //List<string> archtemp = new List<string>();
+            //archtemp = GetListFtp223(pathParse);
+            var newLs = GetListFtp223New(pathParse);
             List<String> yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
-            foreach (var a in archtemp
-                .Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            foreach (var a in newLs
+                .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
+                if (a.Item2 == 0)
+                {
+                    Log.Logger("!!!archive size = 0", a.Item1);
+                    continue;
+                }
+
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
 
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
 
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a);
+                    cmd.Parameters.AddWithValue("@archive", a.Item1);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
-                    {
-                        string addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a);
-                    }
+                    if (resRead) continue;
+                    string addArch =
+                        $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
+                    MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                    cmd1.Prepare();
+                    cmd1.Parameters.AddWithValue("@archive", a.Item1);
+                    cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
+                    cmd1.ExecuteNonQuery();
+                    arch.Add(a.Item1);
                 }
             }
 

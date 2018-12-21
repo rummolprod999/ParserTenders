@@ -37,74 +37,6 @@ namespace ParserTenders.ParserDir
             return dt;
         }
 
-        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchDaily(string pathParse, string regionPath)
-        {
-            List<String> arch = new List<string>();
-
-            return arch;
-        }
-
-        public WorkWithFtp ClientFtp44_old()
-        {
-            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
-            return ftpCl;
-        }
-
-        public FtpClient ClientFtp44()
-        {
-            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "free", "free");
-            client.Connect();
-            return client;
-        }
-
-        public FtpClient ClientFtp223()
-        {
-            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "fz223free", "fz223free");
-            client.Connect();
-            return client;
-        }
-
-        public WorkWithFtp ClientFtp223_old()
-        {
-            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
-            return ftpCl;
-        }
-
         public virtual void GetListFileArch(string arch, string pathParse, string region)
         {
         }
@@ -115,22 +47,6 @@ namespace ParserTenders.ParserDir
 
         public virtual void GetListFileArch(string arch, string pathParse, string region, int regionId,
             string purchase)
-        {
-        }
-
-        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
-        {
-        }
-
-        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile615 typefile)
-        {
-        }
-
-        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile223 typefile)
-        {
-        }
-
-        public virtual void Bolter(FileInfo f, string region, int regionId)
         {
         }
 
@@ -224,6 +140,90 @@ namespace ParserTenders.ParserDir
             }
         }
 
+        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public virtual List<String> GetListArchDaily(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+
+            return arch;
+        }
+
+        public WorkWithFtp ClientFtp44_old()
+        {
+            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
+            return ftpCl;
+        }
+
+        public FtpClient ClientFtp44()
+        {
+            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "free", "free");
+            client.Connect();
+            return client;
+        }
+
+        public FtpClient ClientFtp223()
+        {
+            FtpClient client = new FtpClient("ftp.zakupki.gov.ru", "fz223free", "fz223free");
+            client.Connect();
+            return client;
+        }
+
+        public WorkWithFtp ClientFtp223_old()
+        {
+            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free", "fz223free");
+            return ftpCl;
+        }
+
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
+        {
+        }
+
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile615 typefile)
+        {
+        }
+
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile223 typefile)
+        {
+        }
+
+        public virtual void Bolter(FileInfo f, string region, int regionId)
+        {
+        }
+
         protected List<string> GetListFtp223(string pathParse)
         {
             List<string> archtemp = new List<string>();
@@ -235,6 +235,53 @@ namespace ParserTenders.ParserDir
                     WorkWithFtp ftp = ClientFtp223_old();
                     ftp.ChangeWorkingDirectory(pathParse);
                     archtemp = ftp.ListDirectory();
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (e.Message.Contains("550 Failed to change directory"))
+                    {
+                        Log.Logger("Не смогли найти директорию", pathParse);
+                        break;
+                    }
+
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
+                        break;
+                    }
+
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+
+            return archtemp;
+        }
+
+        protected List<(string, long)> GetListFtp223New(string pathParse)
+        {
+            List<(string, long)> archtemp = new List<(string, long)>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    FtpClient ftp = ClientFtp223();
+                    ftp.SetWorkingDirectory(pathParse);
+                    var filelist = ftp.GetListing();
+                    foreach (var ftpListItem in filelist)
+                    {
+                        var nameFile = ftpListItem.Name;
+                        var sizeFile = ftpListItem.Size;
+                        archtemp.Add((nameFile, sizeFile));
+                    }
+
                     if (count > 1)
                     {
                         Log.Logger("Удалось получить список архивов после попытки", count);

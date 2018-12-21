@@ -7,14 +7,14 @@ namespace ParserTenders
 {
     public class WorkWithFtp
     {
-        private string _password;
-        private string _userName;
-        private string _uri;
         private int _bufferSize = 1024;
-        public bool Passive = true;
+        private string _password;
+        private string _uri;
+        private string _userName;
         public bool Binary = true;
         public bool EnableSsl = false;
         public bool Hash = false;
+        public bool Passive = true;
 
         public WorkWithFtp(string uri, string userName, string password)
         {
@@ -101,6 +101,34 @@ namespace ParserTenders
                         while (!reader.EndOfStream)
                         {
                             list.Add(reader.ReadLine());
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public List<string> ListDirectoryFull()
+        {
+            var list = new List<string>();
+
+            var request = CreateRequest(WebRequestMethods.Ftp.ListDirectoryDetails);
+
+            using (var response = (FtpWebResponse) request.GetResponse())
+            {
+                using (var stream = response.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream, true))
+                    {
+                        while (!reader.EndOfStream)
+                        {
+                            var file = reader.ReadLine();
+                            //var size = GetFileSize(file);
+                            Console.WriteLine(file);
+                            //Console.WriteLine(size);
+                            Console.WriteLine();
+                            list.Add(file);
                         }
                     }
                 }

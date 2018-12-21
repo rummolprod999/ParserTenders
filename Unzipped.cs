@@ -26,7 +26,8 @@ namespace ParserTenders
                     Log.Logger("Не удалось извлечь файл", e, filea);
                     try
                     {
-                        var myProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {lDir}")};
+                        var myProcess = new Process
+                            {StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {lDir}")};
                         myProcess.Start();
                         myProcess.WaitForExit();
                         Log.Logger("Извлекли файл альтернативным методом", filea);
@@ -39,6 +40,8 @@ namespace ParserTenders
                     }
                 }
             }
+
+            Log.Logger("File does not exist", filea);
 
             return "";
         }
