@@ -12,6 +12,12 @@ namespace ParserTenders
             FileInfo fileInf = new FileInfo(filea);
             if (fileInf.Exists)
             {
+                fileInf.Refresh();
+                if (fileInf.Length == 0)
+                {
+                    Log.Logger("File archive has size 0!!!", filea);
+                }
+
                 int rPoint = filea.LastIndexOf('.');
                 string lDir = filea.Substring(0, rPoint);
                 Directory.CreateDirectory(lDir);
