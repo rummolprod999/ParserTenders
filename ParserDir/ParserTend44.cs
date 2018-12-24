@@ -14,7 +14,16 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTend44 : Parser
     {
-        protected DataTable DtRegion;
+        readonly List<string> summList;
+
+        private string[] _fileCancel = new[] {"notificationcancel_"};
+        private string[] _fileCancelFailure = new[] {"cancelfailure_"};
+        private string[] _fileClarification = new[] {"clarification_", "epclarificationdoc_"};
+        private string[] _fileDatechange = new[] {"datechange_"};
+        private string[] _fileLotcancel = new[] {"lotcancel_"};
+        private string[] _fileOrgchange = new[] {"orgchange_"};
+        private string[] _fileProlongation = new[] {"prolongation"};
+        private string[] _fileSign = new[] {"contractsign_"};
 
         private string[] _fileXml44 = new[]
         {
@@ -22,23 +31,21 @@ namespace ParserTenders.ParserDir
             "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_", "inm111_"
         };
 
-        private string[] _fileCancel = new[] {"notificationcancel_"};
-        private string[] _fileSign = new[] {"contractsign_"};
-        private string[] _fileCancelFailure = new[] {"cancelfailure_"};
-        private string[] _fileProlongation = new[] {"prolongation"};
-        private string[] _fileDatechange = new[] {"datechange_"};
-        private string[] _fileOrgchange = new[] {"orgchange_"};
-        private string[] _fileLotcancel = new[] {"lotcancel_"};
-        private string[] _fileClarification = new[] {"clarification_", "epclarificationdoc_"};
         private string[] _fileXml504 = new[]
         {
             "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_"
         };
 
-        readonly List<string> summList;
+        protected DataTable DtRegion;
+
         public ParserTend44(TypeArguments arg) : base(arg)
         {
-            summList = new List<string>().AddRangeAndReturnList(_fileCancel.ToList()).AddRangeAndReturnList(_fileCancelFailure.ToList()).AddRangeAndReturnList(_fileClarification.ToList()).AddRangeAndReturnList(_fileDatechange.ToList()).AddRangeAndReturnList(_fileLotcancel.ToList()).AddRangeAndReturnList(_fileOrgchange.ToList()).AddRangeAndReturnList(_fileProlongation.ToList()).AddRangeAndReturnList(_fileSign.ToList()).AddRangeAndReturnList(_fileXml44.ToList()).AddRangeAndReturnList(_fileXml504.ToList());
+            summList = new List<string>().AddRangeAndReturnList(_fileCancel.ToList())
+                .AddRangeAndReturnList(_fileCancelFailure.ToList()).AddRangeAndReturnList(_fileClarification.ToList())
+                .AddRangeAndReturnList(_fileDatechange.ToList()).AddRangeAndReturnList(_fileLotcancel.ToList())
+                .AddRangeAndReturnList(_fileOrgchange.ToList()).AddRangeAndReturnList(_fileProlongation.ToList())
+                .AddRangeAndReturnList(_fileSign.ToList()).AddRangeAndReturnList(_fileXml44.ToList())
+                .AddRangeAndReturnList(_fileXml504.ToList());
         }
 
         public override void Parsing()
@@ -150,30 +157,37 @@ namespace ParserTenders.ParserDir
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeTen44);
                         }
+
                         foreach (var f in arrayProlongation)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeProlongation);
                         }
+
                         foreach (var f in arrayDatechange)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeDateChange);
                         }
+
                         foreach (var f in arrayOrgchange)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeOrgChange);
                         }
+
                         foreach (var f in arrayLotcancel)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeLotCancel);
                         }
+
                         foreach (var f in arrayCancel)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeCancel);
                         }
+
                         foreach (var f in arraySign)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeSign);
-                        } 
+                        }
+
                         foreach (var f in arrayCancelFailure)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeCancelFailure);
@@ -183,14 +197,17 @@ namespace ParserTenders.ParserDir
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeClarification);
                         }
+
                         foreach (var f in arrayXml504)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeTen504);
                         }
+
                         foreach (var f in arrayNull)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeNull);
                         }
+
                         dirInfo.Delete(true);
                     }
                 }
@@ -206,14 +223,16 @@ namespace ParserTenders.ParserDir
 
             if (typefile == TypeFile44.TypeNull)
             {
-                if (!f.Name.Contains("PlacementResult_") && !f.Name.Contains("NotificationEA615_") && !f.Name.Contains("NotificationPO615_"))
+                if (!f.Name.Contains("PlacementResult_") && !f.Name.Contains("NotificationEA615_") &&
+                    !f.Name.Contains("NotificationPO615_"))
                 {
                     Log.Logger("!!!Can not parse this file", f.FullName, region);
                     Log.Logger("\n");
                 }
-               
+
                 return;
             }
+
             try
             {
                 ParsingXml(f, region, regionId, typefile);
@@ -293,33 +312,43 @@ namespace ParserTenders.ParserDir
         public override List<String> GetListArchCurr(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            //List<string> archtemp = new List<string>();
+            //archtemp = GetListFtp44(pathParse);
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(pathParse);
+            var newLs = GetListFtp44New(pathParse);
             List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
-            foreach (var a in archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            foreach (var a in newLs.Where(a =>
+                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
+                if (a.Item2 == 0)
+                {
+                    Log.Logger("!!!archive size = 0", a.Item1);
+                    continue;
+                }
+
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a);
+                    cmd.Parameters.AddWithValue("@archive", a.Item1);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
+                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
                         cmd1.ExecuteNonQuery();
-                        arch.Add(a);
+                        arch.Add(a.Item1);
                     }
                 }
             }
@@ -330,33 +359,36 @@ namespace ParserTenders.ParserDir
         public override List<String> GetListArchPrev(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            //List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(pathParse);
+            //archtemp = GetListFtp44(pathParse);
+            var newLs = GetListFtp44New(pathParse);
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
-            foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
+            foreach (var a in newLs.Where(a => a.Item1.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
                 string prevA = $"prev_{a}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", prevA);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", prevA);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
                         cmd1.ExecuteNonQuery();
-                        arch.Add(a);
+                        arch.Add(a.Item1);
                     }
                 }
             }

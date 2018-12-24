@@ -291,7 +291,54 @@ namespace ParserTenders.ParserDir
                 }
                 catch (Exception e)
                 {
-                    if (e.Message.Contains("550 Failed to change directory"))
+                    if (e.Message.Contains("Failed to change directory"))
+                    {
+                        Log.Logger("Не смогли найти директорию", pathParse);
+                        break;
+                    }
+
+                    if (count > 3)
+                    {
+                        Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
+                        break;
+                    }
+
+                    count++;
+                    Thread.Sleep(2000);
+                }
+            }
+
+            return archtemp;
+        }
+
+        protected List<(string, long)> GetListFtp44New(string pathParse)
+        {
+            List<(string, long)> archtemp = new List<(string, long)>();
+            int count = 1;
+            while (true)
+            {
+                try
+                {
+                    FtpClient ftp = ClientFtp44();
+                    ftp.SetWorkingDirectory(pathParse);
+                    var filelist = ftp.GetListing();
+                    foreach (var ftpListItem in filelist)
+                    {
+                        var nameFile = ftpListItem.Name;
+                        var sizeFile = ftpListItem.Size;
+                        archtemp.Add((nameFile, sizeFile));
+                    }
+
+                    if (count > 1)
+                    {
+                        Log.Logger("Удалось получить список архивов после попытки", count);
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (e.Message.Contains("Failed to change directory"))
                     {
                         Log.Logger("Не смогли найти директорию", pathParse);
                         break;

@@ -15,13 +15,13 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTend615 : Parser
     {
-        protected DataTable DtRegion;
-        private string[] _fileXml615 = {"notificationef_", "notificationpo_"};
-        private string[] _fileLotcancel = {"lotcancel_"};
         private string[] _fileCancel = {"notificationcancel_"};
-        private string[] _fileDatechange = {"datechange_", "timeef_"};
         private string[] _filecontract = {"contract_"};
-        
+        private string[] _fileDatechange = {"datechange_", "timeef_"};
+        private string[] _fileLotcancel = {"lotcancel_"};
+        private string[] _fileXml615 = {"notificationef_", "notificationpo_"};
+        protected DataTable DtRegion;
+
         public ParserTend615(TypeArguments arg) : base(arg)
         {
         }
@@ -117,6 +117,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при обновлении инн", e);
             }
         }
+
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             string filea = "";
@@ -156,22 +157,27 @@ namespace ParserTenders.ParserDir
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeTen615);
                         }
+
                         foreach (var f in arrayLotcancel)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeLotCancel);
                         }
+
                         foreach (var f in arrayCancel)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeCancel);
                         }
+
                         foreach (var f in arrayDatechange)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeDateChange);
                         }
+
                         foreach (var f in arrayContract)
                         {
                             Bolter(f, region, regionId, TypeFile615.TypeContract);
                         }
+
                         dirInfo.Delete(true);
                     }
                 }
@@ -245,33 +251,43 @@ namespace ParserTenders.ParserDir
         public override List<String> GetListArchCurr(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            //List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(pathParse);
+            //archtemp = GetListFtp44(pathParse);
+            var newLs = GetListFtp44New(pathParse);
             List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
-            foreach (var a in archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            foreach (var a in newLs.Where(a =>
+                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
-                var b = $"pprf615_{a}";
+                if (a.Item2 == 0)
+                {
+                    Log.Logger("!!!archive size = 0", a.Item1);
+                    continue;
+                }
+
+                var b = $"pprf615_{a.Item1}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", b);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", b);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
                         cmd1.ExecuteNonQuery();
-                        arch.Add(a);
+                        arch.Add(a.Item1);
                     }
                 }
             }
@@ -282,33 +298,36 @@ namespace ParserTenders.ParserDir
         public override List<String> GetListArchPrev(string pathParse, string regionPath)
         {
             List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            //List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(pathParse);
+            //archtemp = GetListFtp44(pathParse);
+            var newLs = GetListFtp44New(pathParse);
             string serachd = $"{Program.LocalDate:yyyyMMdd}";
-            foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
+            foreach (var a in newLs.Where(a => a.Item1.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
-                string prevA = $"prev_pprf615_{a}";
+                string prevA = $"prev_pprf615_{a.Item1}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     string selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive";
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
                     MySqlCommand cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", prevA);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     bool resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
                         string addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive";
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                         MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", prevA);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
                         cmd1.ExecuteNonQuery();
-                        arch.Add(a);
+                        arch.Add(a.Item1);
                     }
                 }
             }
