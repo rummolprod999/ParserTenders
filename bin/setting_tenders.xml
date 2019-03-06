@@ -5,6 +5,8 @@
 	<logdir_tenders44>log_tenders44</logdir_tenders44>
 	<tempdir_tenders223>temp_tenders223</tempdir_tenders223>
 	<logdir_tenders223>log_tenders223</logdir_tenders223>
+	<tempdir_tenders615>temp_tenders615</tempdir_tenders615>
+	<logdir_tenders615>log_tenders615</logdir_tenders615>
 	<logdir_attach>log_attach</logdir_attach>
 	<tempdir_attach>temp_attach</tempdir_attach>
 	<logdir_sign223>log_sign223</logdir_sign223>
@@ -33,12 +35,14 @@
 	<logdir_tektorg_interrao>log_tektorg_interrao</logdir_tektorg_interrao>
 	<tempdir_tektorg_rzd>temp_tektorg_rzd</tempdir_tektorg_rzd>
 	<logdir_tektorg_rzd>log_tektorg_rzd</logdir_tektorg_rzd>
+	<tempdir_tenders_web44>temp_tenders_web44</tempdir_tenders_web44>
+	<logdir_tenders_web44>log_tenders_web44</logdir_tenders_web44>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
 	<server>localhost</server>
 	<port>3306</port>
-	<years>2016, 2017, 2018</years>
+	<years>2016, 2017, 2018, 2019</years>
 	<max_thread>20</max_thread>
 	<max_try_down>250</max_try_down>
 </setting>

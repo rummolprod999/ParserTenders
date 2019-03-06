@@ -35,12 +35,14 @@
 	<logdir_tektorg_interrao>log_tektorg_interrao</logdir_tektorg_interrao>
 	<tempdir_tektorg_rzd>temp_tektorg_rzd</tempdir_tektorg_rzd>
 	<logdir_tektorg_rzd>log_tektorg_rzd</logdir_tektorg_rzd>
+	<tempdir_tenders_web44>temp_tenders_web44</tempdir_tenders_web44>
+	<logdir_tenders_web44>log_tenders_web44</logdir_tenders_web44>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
 	<server>localhost</server>
 	<port>3306</port>
-	<years>2016, 2017, 2018</years>
+	<years>2016, 2017, 2018, 2019</years>
 	<max_thread>20</max_thread>
 	<max_try_down>250</max_try_down>
 </setting>

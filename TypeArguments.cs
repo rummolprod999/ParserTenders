@@ -25,6 +25,7 @@ namespace ParserTenders
         TektorgRzd,
         Prev615,
         Curr615,
-        Last615
+        Last615,
+        Web44
     }
 }

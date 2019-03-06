@@ -1,54 +1,56 @@
 using System;
-using System.Xml;
 using System.IO;
+using System.Xml;
 
 namespace ParserTenders
 {
     public class GetSettings
     {
         public readonly string Database;
-        public readonly string TempPathTenders44;
-        public readonly string LogPathTenders44;
-        public readonly string TempPathTenders615;
-        public readonly string LogPathTenders615;
-        public readonly string TempPathTenders223;
-        public readonly string LogPathTenders223;
-        public readonly string LogPathAttach;
-        public readonly string TempPathAttach;
-        public readonly string LogPathSign223;
-        public readonly string TempPathSign223;
-        public readonly string LogPathGazProm;
-        public readonly string TempPathGazProm;
-        public readonly string LogPathExp223;
-        public readonly string TempPathExp223;
         public readonly string LogGntWeb;
-        public readonly string TempGntWeb;
-        public readonly string LogObTorgWeb;
-        public readonly string TempObTorgWeb;
-        public readonly string LogSpecTorgWeb;
-        public readonly string TempSpecTorgWeb;
-        public readonly string LogPathTendersWeb;
-        public readonly string TempPathTendersWeb;
-        public readonly string LogPathTektorgGazprom;
-        public readonly string TempPathTektorgGazprom;
-        public readonly string LogPathTektorgInterRao;
-        public readonly string TempPathTektorgInterRao;
-        public readonly string LogPathTektorgRzd;
-        public readonly string TempPathTektorgRzd;
         public readonly string LogMrsk;
-        public readonly string TempMrsk;
+        public readonly string LogObTorgWeb;
+        public readonly string LogPathAttach;
+        public readonly string LogPathExp223;
+        public readonly string LogPathGazProm;
+        public readonly string LogPathSign223;
+        public readonly string LogPathTektorgGazprom;
+        public readonly string LogPathTektorgInterRao;
+        public readonly string LogPathTektorgRzd;
+        public readonly string LogPathTenders223;
+        public readonly string LogPathTenders44;
+        public readonly string LogPathTenders615;
+        public readonly string LogPathTendersWeb;
+        public readonly string LogPathTendersWeb44;
         public readonly string LogRosneft;
-        public readonly string TempRosneft;
         public readonly string LogSakhalin;
-        public readonly string TempSakhalin;
-        public readonly string Prefix;
-        public readonly string UserDb;
-        public readonly string PassDb;
-        public readonly string Server;
-        public readonly int Port;
-        public readonly string Years;
+        public readonly string LogSpecTorgWeb;
         public readonly int MaxThread;
         public readonly int MaxTryDown;
+        public readonly string PassDb;
+        public readonly int Port;
+        public readonly string Prefix;
+        public readonly string Server;
+        public readonly string TempGntWeb;
+        public readonly string TempMrsk;
+        public readonly string TempObTorgWeb;
+        public readonly string TempPathAttach;
+        public readonly string TempPathExp223;
+        public readonly string TempPathGazProm;
+        public readonly string TempPathSign223;
+        public readonly string TempPathTektorgGazprom;
+        public readonly string TempPathTektorgInterRao;
+        public readonly string TempPathTektorgRzd;
+        public readonly string TempPathTenders223;
+        public readonly string TempPathTenders44;
+        public readonly string TempPathTenders615;
+        public readonly string TempPathTendersWeb;
+        public readonly string TempPathTendersWeb44;
+        public readonly string TempRosneft;
+        public readonly string TempSakhalin;
+        public readonly string TempSpecTorgWeb;
+        public readonly string UserDb;
+        public readonly string Years;
 
         public GetSettings()
         {
@@ -129,6 +131,14 @@ namespace ParserTenders
                             break;
                         case "tempdir_tenders_web":
                             TempPathTendersWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "logdir_tenders_web44":
+                            LogPathTendersWeb44 =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tenders_web44":
+                            TempPathTendersWeb44 =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "logdir_mrsk":
                             LogMrsk = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
@@ -223,7 +233,8 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempPathTektorgGazprom) || String.IsNullOrEmpty(LogPathTektorgInterRao) ||
                 String.IsNullOrEmpty(TempPathTektorgInterRao) || String.IsNullOrEmpty(LogPathTektorgRzd) ||
                 String.IsNullOrEmpty(TempPathTektorgRzd) || String.IsNullOrEmpty(LogPathTenders615) ||
-                String.IsNullOrEmpty(TempPathTenders615))
+                String.IsNullOrEmpty(TempPathTenders615) || String.IsNullOrEmpty(LogPathTendersWeb44) ||
+                String.IsNullOrEmpty(TempPathTendersWeb44))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

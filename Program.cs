@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44";
 
         private static string _database;
         private static string _tempPath44;
@@ -47,6 +47,8 @@ namespace ParserTenders
         private static string _logTektorgInterRao;
         private static string _tempTektorgRzd;
         private static string _logTektorgRzd;
+        private static string _tempPathWeb44;
+        private static string _logPathWeb44;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -55,16 +57,7 @@ namespace ParserTenders
         private static int _maxthread;
         private static int _maxtrydown;
         private static List<string> _years = new List<string>();
-        public static string Database => _database;
-        public static string Prefix => _prefix;
-        public static string User => _user;
-        public static string Pass => _pass;
-        public static string Server => _server;
-        public static int Port => _port;
-        public static List<string> Years => _years;
         public static readonly DateTime LocalDate = DateTime.Now;
-        public static int DownCount => _maxtrydown;
-        public static int MaxThread => _maxthread;
 
         public static string FileLog;
 
@@ -74,6 +67,68 @@ namespace ParserTenders
         public static TypeArguments Periodparsing;
 
         public static string PathProgram;
+
+        public static string TableContractsSign;
+        public static string TableSuppliers;
+        public static string TableArchiveSign223;
+        public static string TableArchiveExp223;
+        public static int AddTender44 = 0;
+        public static int AddTender504 = 0;
+        public static int AddTender615 = 0;
+        public static int UpdateTender44 = 0;
+        public static int UpdateTender504 = 0;
+        public static int UpdateTender615 = 0;
+        public static int AddTenderSign = 0;
+        public static int AddTenderSign615 = 0;
+        public static int AddDateChange = 0;
+        public static int AddDateChange615 = 0;
+        public static int AddProlongation = 0;
+        public static int AddOrgChange = 0;
+        public static int AddLotCancel = 0;
+        public static int AddLotCancel223 = 0;
+        public static int AddLotCancel615 = 0;
+        public static int AddCancel = 0;
+        public static int AddCancel223 = 0;
+        public static int AddCancel615 = 0;
+        public static int AddCancelFailure = 0;
+        public static int AddTender223 = 0;
+        public static int UpdateTender223 = 0;
+        public static int AddAttach = 0;
+        public static int NotAddAttach = 0;
+        public static int AddSign223 = 0;
+        public static int UpdateSign223 = 0;
+        public static int AddGazprom = 0;
+        public static int UpGazprom = 0;
+        public static int AddClarification = 0;
+        public static int AddClarification223 = 0;
+        public static int AddGntWeb = 0;
+        public static int UpGntWeb = 0;
+        public static int AddObTorgWeb = 0;
+        public static int UpObTorgWeb = 0;
+        public static int AddSpecTorgWeb = 0;
+        public static int UpSpecTorgWeb = 0;
+        public static int AddMrsk = 0;
+        public static int UpMrsk = 0;
+        public static int AddRosneft = 0;
+        public static int UpRosneft = 0;
+        public static int AddSakhalin = 0;
+        public static int UpSakhalin = 0;
+        public static int AddTektorgGazprom = 0;
+        public static int UpTektorgGazprom = 0;
+        public static int AddTektorgInterRao = 0;
+        public static int UpTektorgInterRao = 0;
+        public static int AddTektorgRzd = 0;
+        public static int UpTektorgRzd = 0;
+        public static string Database => _database;
+        public static string Prefix => _prefix;
+        public static string User => _user;
+        public static string Pass => _pass;
+        public static string Server => _server;
+        public static int Port => _port;
+        public static List<string> Years => _years;
+        public static int DownCount => _maxtrydown;
+
+        public static int MaxThread => _maxthread;
         //public static string LogAttach => _logAttach;
         //public static string TempAttach => _tempAttach;
 
@@ -124,6 +179,8 @@ namespace ParserTenders
                         return _tempTektorgInterRao;
                     case TypeArguments.TektorgRzd:
                         return _tempTektorgRzd;
+                    case TypeArguments.Web44:
+                        return _tempPathWeb44;
                     default:
                         return "";
                 }
@@ -177,63 +234,13 @@ namespace ParserTenders
                         return _logTektorgInterRao;
                     case TypeArguments.TektorgRzd:
                         return _logTektorgRzd;
+                    case TypeArguments.Web44:
+                        return _logPathWeb44;
                     default:
                         return "";
                 }
             }
         }
-
-        public static string TableContractsSign;
-        public static string TableSuppliers;
-        public static string TableArchiveSign223;
-        public static string TableArchiveExp223;
-        public static int AddTender44 = 0;
-        public static int AddTender504 = 0;
-        public static int AddTender615 = 0;
-        public static int UpdateTender44 = 0;
-        public static int UpdateTender504 = 0;
-        public static int UpdateTender615 = 0;
-        public static int AddTenderSign = 0;
-        public static int AddTenderSign615 = 0;
-        public static int AddDateChange = 0;
-        public static int AddDateChange615 = 0;
-        public static int AddProlongation = 0;
-        public static int AddOrgChange = 0;
-        public static int AddLotCancel = 0;
-        public static int AddLotCancel223 = 0;
-        public static int AddLotCancel615 = 0;
-        public static int AddCancel = 0;
-        public static int AddCancel223 = 0;
-        public static int AddCancel615 = 0;
-        public static int AddCancelFailure = 0;
-        public static int AddTender223 = 0;
-        public static int UpdateTender223 = 0;
-        public static int AddAttach = 0;
-        public static int NotAddAttach = 0;
-        public static int AddSign223 = 0;
-        public static int UpdateSign223 = 0;
-        public static int AddGazprom = 0;
-        public static int UpGazprom = 0;
-        public static int AddClarification = 0;
-        public static int AddClarification223 = 0;
-        public static int AddGntWeb = 0;
-        public static int UpGntWeb = 0;
-        public static int AddObTorgWeb = 0;
-        public static int UpObTorgWeb = 0;
-        public static int AddSpecTorgWeb = 0;
-        public static int UpSpecTorgWeb = 0;
-        public static int AddMrsk = 0;
-        public static int UpMrsk = 0;
-        public static int AddRosneft = 0;
-        public static int UpRosneft = 0;
-        public static int AddSakhalin = 0;
-        public static int UpSakhalin = 0;
-        public static int AddTektorgGazprom = 0;
-        public static int UpTektorgGazprom = 0;
-        public static int AddTektorgInterRao = 0;
-        public static int UpTektorgInterRao = 0;
-        public static int AddTektorgRzd = 0;
-        public static int UpTektorgRzd = 0;
 
         public static void Main(string[] args)
         {
@@ -340,6 +347,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserWeb(Periodparsing);
                     break;
+                case "web44":
+                    Periodparsing = TypeArguments.Web44;
+                    Init(Periodparsing);
+                    ParserWeb44(Periodparsing);
+                    break;
                 case "mrsk":
                     Periodparsing = TypeArguments.Mrsk;
                     Init(Periodparsing);
@@ -411,6 +423,8 @@ namespace ParserTenders
             _logSpecTorgWeb = set.LogSpecTorgWeb;
             _tempPathWeb = set.TempPathTendersWeb;
             _logPathWeb = set.LogPathTendersWeb;
+            _tempPathWeb44 = set.TempPathTendersWeb44;
+            _logPathWeb44 = set.LogPathTendersWeb44;
             _tempMrsk = set.TempMrsk;
             _logMrsk = set.LogMrsk;
             _tempRosneft = set.TempRosneft;
@@ -496,6 +510,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Web:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Web44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Mrsk:
@@ -820,6 +837,26 @@ namespace ParserTenders
             Log.Logger("Добавили tender223", AddTender223);
             Log.Logger("Обновили tender223", UpdateTender223);
             Log.Logger("Время окончания парсинга Web");
+        }
+
+        private static void ParserWeb44(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Web44");
+            try
+            {
+                ParserTendersWeb44 p = new ParserTendersWeb44(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
+            Log.Logger("Добавили tender44", AddTender44);
+            Log.Logger("Обновили tender44", UpdateTender44);
+            Log.Logger("Добавили tender504", AddTender504);
+            Log.Logger("Обновили tender504", UpdateTender504);
+            Log.Logger("Время окончания парсинга Web44");
         }
 
         private static void ParserMrsk(TypeArguments arg)
