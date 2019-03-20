@@ -371,6 +371,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     List<JToken> attachments = GetElements(tender, "attachments.attachment");
+                    attachments.AddRange(GetElements(tender, "notificationAttachments.attachment"));
                     foreach (var att in attachments)
                     {
                         string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();

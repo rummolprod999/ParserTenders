@@ -12,7 +12,6 @@ namespace ParserTenders.TenderDir
 {
     public class TenderType504 : Tender
     {
-        public event Action<int> AddTender504;
         private bool Up = default;
 
         public TenderType504(FileInfo f, string region, int regionId, JObject json)
@@ -28,6 +27,8 @@ namespace ParserTenders.TenderDir
                     Log.Logger("Не удалось добавить Tender504", FilePath);
             };
         }
+
+        public event Action<int> AddTender504;
 
         public override void Parsing()
         {
@@ -338,6 +339,7 @@ namespace ParserTenders.TenderDir
                     {
                         cmd9.Parameters.AddWithValue("@scoring_date", scoringDateT);
                     }
+
                     cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
                     cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
                     cmd9.Parameters.AddWithValue("@date_version", dateVersion);
@@ -360,6 +362,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     List<JToken> attachments = GetElements(tender, "attachmentsInfo.attachmentInfo");
+                    attachments.AddRange(GetElements(tender, "notificationAttachments.attachment"));
                     foreach (var att in attachments)
                     {
                         string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
@@ -551,11 +554,12 @@ namespace ParserTenders.TenderDir
                             Log.Logger("Нет id_customer", FilePath);
                         }
                     }
-                    
+
                     List<JToken> preferenses = GetElements(tender, "notificationInfo.preferensesInfo.preferenseInfo");
                     foreach (var preferense in preferenses)
                     {
-                        string preferenseName = ((string) preferense.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
+                        string preferenseName =
+                            ((string) preferense.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
                         string insertPreference =
                             $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
                         MySqlCommand cmd17 = new MySqlCommand(insertPreference, connect);
@@ -564,10 +568,13 @@ namespace ParserTenders.TenderDir
                         cmd17.Parameters.AddWithValue("@name", preferenseName);
                         cmd17.ExecuteNonQuery();
                     }
-                    List<JToken> requirements = GetElements(tender, "notificationInfo.requirementsInfo.requirementInfo");
+
+                    List<JToken> requirements =
+                        GetElements(tender, "notificationInfo.requirementsInfo.requirementInfo");
                     foreach (var requirement in requirements)
                     {
-                        string requirementName = ((string) requirement.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
+                        string requirementName =
+                            ((string) requirement.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
                         string requirementContent = ((string) requirement.SelectToken("content") ?? "").Trim();
                         string requirementCode = ((string) requirement.SelectToken("code") ?? "").Trim();
                         string insertRequirement =
@@ -580,6 +587,7 @@ namespace ParserTenders.TenderDir
                         cmd18.Parameters.AddWithValue("@code", requirementCode);
                         cmd18.ExecuteNonQuery();
                     }
+
                     List<JToken> restricts = GetElements(tender, "notificationInfo.restrictionsInfo.restrictionInfo");
                     foreach (var restrict in restricts)
                     {
@@ -594,99 +602,242 @@ namespace ParserTenders.TenderDir
                         cmd19.Parameters.AddWithValue("@info", rInfo);
                         cmd19.ExecuteNonQuery();
                     }
-                    List<JToken> purchaseobjects = GetElements(tender, "notificationInfo.purchaseObjectsInfo.notDrugPurchaseObjectsInfo.purchaseObject");
-                    foreach (var purchaseobject in purchaseobjects)
-                        {
-                            string okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.OKPDCode") ?? "").Trim();
-                            string okpdCode = ((string) purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
-                            string okpdName = ((string) purchaseobject.SelectToken("OKPD2.OKPDName") ?? "").Trim();
-                            if (String.IsNullOrEmpty(okpdName))
-                                okpdName = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
-                            string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
-                            if (!String.IsNullOrEmpty(name))
-                                name = Regex.Replace(name, @"\s+", " ");
-                            string quantityValue = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
-                                .Trim();
-                            string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
-                            price = price.Replace(",", ".");
-                            string okei = ((string) purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
-                            string sumP = ((string) purchaseobject.SelectToken("sum") ?? "").Trim();
-                            sumP = sumP.Replace(",", ".");
-                            int okpd2GroupCode = 0;
-                            string okpd2GroupLevel1Code = "";
-                            if (!String.IsNullOrEmpty(okpd2Code))
-                            {
-                                GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
-                            }
 
-                            List<JToken> customerquantities =
-                                GetElements(purchaseobject, "customerQuantities.customerQuantity");
-                            foreach (var customerquantity in customerquantities)
+                    List<JToken> purchaseobjects = GetElements(tender,
+                        "notificationInfo.purchaseObjectsInfo.notDrugPurchaseObjectsInfo.purchaseObject");
+                    foreach (var purchaseobject in purchaseobjects)
+                    {
+                        string okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.OKPDCode") ?? "").Trim();
+                        string okpdCode = ((string) purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
+                        string okpdName = ((string) purchaseobject.SelectToken("OKPD2.OKPDName") ?? "").Trim();
+                        if (String.IsNullOrEmpty(okpdName))
+                            okpdName = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
+                        string name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
+                        if (!String.IsNullOrEmpty(name))
+                            name = Regex.Replace(name, @"\s+", " ");
+                        string quantityValue = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
+                            .Trim();
+                        string price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
+                        price = price.Replace(",", ".");
+                        string okei = ((string) purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
+                        string sumP = ((string) purchaseobject.SelectToken("sum") ?? "").Trim();
+                        sumP = sumP.Replace(",", ".");
+                        int okpd2GroupCode = 0;
+                        string okpd2GroupLevel1Code = "";
+                        if (!String.IsNullOrEmpty(okpd2Code))
+                        {
+                            GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
+                        }
+
+                        List<JToken> customerquantities =
+                            GetElements(purchaseobject, "customerQuantities.customerQuantity");
+                        foreach (var customerquantity in customerquantities)
+                        {
+                            string customerQuantityValue =
+                                ((string) customerquantity.SelectToken("quantity") ?? "").Trim();
+                            string custRegNum = ((string) customerquantity.SelectToken("customer.regNum") ?? "")
+                                .Trim();
+                            string custFullName =
+                                ((string) customerquantity.SelectToken("customer.fullName") ?? "").Trim();
+                            int idCustomerQ = 0;
+                            if (!String.IsNullOrEmpty(custRegNum))
                             {
-                                string customerQuantityValue =
-                                    ((string) customerquantity.SelectToken("quantity") ?? "").Trim();
-                                string custRegNum = ((string) customerquantity.SelectToken("customer.regNum") ?? "")
-                                    .Trim();
-                                string custFullName =
-                                    ((string) customerquantity.SelectToken("customer.fullName") ?? "").Trim();
-                                int idCustomerQ = 0;
-                                if (!String.IsNullOrEmpty(custRegNum))
+                                string selectCustomerQ =
+                                    $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                MySqlCommand cmd20 = new MySqlCommand(selectCustomerQ, connect);
+                                cmd20.Prepare();
+                                cmd20.Parameters.AddWithValue("@reg_num", custRegNum);
+                                MySqlDataReader reader7 = cmd20.ExecuteReader();
+                                if (reader7.HasRows)
                                 {
-                                    string selectCustomerQ =
-                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
-                                    MySqlCommand cmd20 = new MySqlCommand(selectCustomerQ, connect);
-                                    cmd20.Prepare();
-                                    cmd20.Parameters.AddWithValue("@reg_num", custRegNum);
-                                    MySqlDataReader reader7 = cmd20.ExecuteReader();
-                                    if (reader7.HasRows)
-                                    {
-                                        reader7.Read();
-                                        idCustomerQ = reader7.GetInt32("id_customer");
-                                        reader7.Close();
-                                    }
-                                    else
-                                    {
-                                        reader7.Close();
-                                        string insertCustomerQ =
-                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
-                                        MySqlCommand cmd21 = new MySqlCommand(insertCustomerQ, connect);
-                                        cmd21.Prepare();
-                                        cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
-                                        cmd21.Parameters.AddWithValue("@full_name", custFullName);
-                                        cmd21.ExecuteNonQuery();
-                                        idCustomerQ = (int) cmd21.LastInsertedId;
-                                    }
+                                    reader7.Read();
+                                    idCustomerQ = reader7.GetInt32("id_customer");
+                                    reader7.Close();
                                 }
                                 else
                                 {
-                                    if (!String.IsNullOrEmpty(custFullName))
-                                    {
-                                        string selectCustNameQ =
-                                            $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
-                                        MySqlCommand cmd22 = new MySqlCommand(selectCustNameQ, connect);
-                                        cmd22.Prepare();
-                                        cmd22.Parameters.AddWithValue("@full_name", custFullName);
-                                        MySqlDataReader reader8 = cmd22.ExecuteReader();
-                                        if (reader8.HasRows)
-                                        {
-                                            reader8.Read();
-                                            idCustomerQ = reader8.GetInt32("id_customer");
-                                            Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
-                                        }
-                                        reader8.Close();
-                                    }
+                                    reader7.Close();
+                                    string insertCustomerQ =
+                                        $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
+                                    MySqlCommand cmd21 = new MySqlCommand(insertCustomerQ, connect);
+                                    cmd21.Prepare();
+                                    cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
+                                    cmd21.Parameters.AddWithValue("@full_name", custFullName);
+                                    cmd21.ExecuteNonQuery();
+                                    idCustomerQ = (int) cmd21.LastInsertedId;
                                 }
+                            }
+                            else
+                            {
+                                if (!String.IsNullOrEmpty(custFullName))
+                                {
+                                    string selectCustNameQ =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                    MySqlCommand cmd22 = new MySqlCommand(selectCustNameQ, connect);
+                                    cmd22.Prepare();
+                                    cmd22.Parameters.AddWithValue("@full_name", custFullName);
+                                    MySqlDataReader reader8 = cmd22.ExecuteReader();
+                                    if (reader8.HasRows)
+                                    {
+                                        reader8.Read();
+                                        idCustomerQ = reader8.GetInt32("id_customer");
+                                        Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
+                                    }
+
+                                    reader8.Close();
+                                }
+                            }
+
+                            string insertCustomerquantity =
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                            MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                            cmd23.Prepare();
+                            cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd23.Parameters.AddWithValue("@id_customer", idCustomerQ);
+                            cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                            cmd23.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
+                            cmd23.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
+                            cmd23.Parameters.AddWithValue("@okpd_code", okpdCode);
+                            cmd23.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd23.Parameters.AddWithValue("@name", name);
+                            cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                            cmd23.Parameters.AddWithValue("@price", price);
+                            cmd23.Parameters.AddWithValue("@okei", okei);
+                            cmd23.Parameters.AddWithValue("@sum", sumP);
+                            cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
+                            cmd23.ExecuteNonQuery();
+                            if (idCustomerQ == 0)
+                                Log.Logger("Нет id_customer_q", FilePath);
+                        }
+
+                        if (customerquantities.Count == 0)
+                        {
+                            string insertCustomerquantity =
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                            MySqlCommand cmd24 = new MySqlCommand(insertCustomerquantity, connect);
+                            cmd24.Prepare();
+                            cmd24.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd24.Parameters.AddWithValue("@id_customer", idCustomer);
+                            cmd24.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                            cmd24.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
+                            cmd24.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
+                            cmd24.Parameters.AddWithValue("@okpd_code", okpdCode);
+                            cmd24.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd24.Parameters.AddWithValue("@name", name);
+                            cmd24.Parameters.AddWithValue("@quantity_value", quantityValue);
+                            cmd24.Parameters.AddWithValue("@price", price);
+                            cmd24.Parameters.AddWithValue("@okei", okei);
+                            cmd24.Parameters.AddWithValue("@sum", sumP);
+                            cmd24.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                            cmd24.ExecuteNonQuery();
+                        }
+                    }
+
+                    List<JToken> drugPurchaseObjectsInfo = GetElements(tender,
+                        "notificationInfo.purchaseObjectsInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+                    foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
+                    {
+                        pils = true;
+                        List<JToken> drugQuantityCustomersInfo =
+                            GetElements(drugPurchaseObjectInfo, "drugQuantityCustomersInfo.drugQuantityCustomerInfo");
+                        foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
+                        {
+                            string customerQuantityValue =
+                                ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
+                            string custRegNum = ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
+                                .Trim();
+                            string custFullName =
+                                ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
+                            int idCustomerQ = 0;
+                            if (!String.IsNullOrEmpty(custRegNum))
+                            {
+                                string selectCustomerQ =
+                                    $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                MySqlCommand cmd20 = new MySqlCommand(selectCustomerQ, connect);
+                                cmd20.Prepare();
+                                cmd20.Parameters.AddWithValue("@reg_num", custRegNum);
+                                MySqlDataReader reader7 = cmd20.ExecuteReader();
+                                if (reader7.HasRows)
+                                {
+                                    reader7.Read();
+                                    idCustomerQ = reader7.GetInt32("id_customer");
+                                    reader7.Close();
+                                }
+                                else
+                                {
+                                    reader7.Close();
+                                    string insertCustomerQ =
+                                        $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
+                                    MySqlCommand cmd21 = new MySqlCommand(insertCustomerQ, connect);
+                                    cmd21.Prepare();
+                                    cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
+                                    cmd21.Parameters.AddWithValue("@full_name", custFullName);
+                                    cmd21.ExecuteNonQuery();
+                                    idCustomerQ = (int) cmd21.LastInsertedId;
+                                }
+                            }
+                            else
+                            {
+                                if (!String.IsNullOrEmpty(custFullName))
+                                {
+                                    string selectCustNameQ =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
+                                    MySqlCommand cmd22 = new MySqlCommand(selectCustNameQ, connect);
+                                    cmd22.Prepare();
+                                    cmd22.Parameters.AddWithValue("@full_name", custFullName);
+                                    MySqlDataReader reader8 = cmd22.ExecuteReader();
+                                    if (reader8.HasRows)
+                                    {
+                                        reader8.Read();
+                                        idCustomerQ = reader8.GetInt32("id_customer");
+                                        Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
+                                    }
+
+                                    reader8.Close();
+                                }
+                            }
+
+                            var drugsInfo = GetElements(drugPurchaseObjectInfo,
+                                "objectInfoUsingTextForm.drugsInfo.drugInfo");
+                            foreach (var drugInfo in drugsInfo)
+                            {
+                                string okpd2Code =
+                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                string medicamentalFormName =
+                                    ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
+                                    .Trim();
+                                if (!string.IsNullOrEmpty(medicamentalFormName))
+                                {
+                                    name = $"{name} {medicamentalFormName}";
+                                }
+
+                                string dosageGrlsValue =
+                                    ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                if (!string.IsNullOrEmpty(dosageGrlsValue))
+                                {
+                                    name = $"{name} {dosageGrlsValue}";
+                                }
+
+                                if (!String.IsNullOrEmpty(name))
+                                    name = Regex.Replace(name, @"\s+", " ");
+                                string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    .Trim();
+                                string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "")
+                                    .Trim();
+                                string price =
+                                    ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                price = price.Replace(",", ".");
+                                string sumP =
+                                    ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                sumP = sumP.Replace(",", ".");
                                 string insertCustomerquantity =
-                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
                                 MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                                 cmd23.Prepare();
                                 cmd23.Parameters.AddWithValue("@id_lot", idLot);
                                 cmd23.Parameters.AddWithValue("@id_customer", idCustomerQ);
                                 cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
-                                cmd23.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
-                                cmd23.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
-                                cmd23.Parameters.AddWithValue("@okpd_code", okpdCode);
-                                cmd23.Parameters.AddWithValue("@okpd_name", okpdName);
                                 cmd23.Parameters.AddWithValue("@name", name);
                                 cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
                                 cmd23.Parameters.AddWithValue("@price", price);
@@ -697,179 +848,64 @@ namespace ParserTenders.TenderDir
                                 if (idCustomerQ == 0)
                                     Log.Logger("Нет id_customer_q", FilePath);
                             }
-
-                            if (customerquantities.Count == 0)
-                            {
-                                string insertCustomerquantity =
-                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
-                                MySqlCommand cmd24 = new MySqlCommand(insertCustomerquantity, connect);
-                                cmd24.Prepare();
-                                cmd24.Parameters.AddWithValue("@id_lot", idLot);
-                                cmd24.Parameters.AddWithValue("@id_customer", idCustomer);
-                                cmd24.Parameters.AddWithValue("@okpd2_code", okpd2Code);
-                                cmd24.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
-                                cmd24.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
-                                cmd24.Parameters.AddWithValue("@okpd_code", okpdCode);
-                                cmd24.Parameters.AddWithValue("@okpd_name", okpdName);
-                                cmd24.Parameters.AddWithValue("@name", name);
-                                cmd24.Parameters.AddWithValue("@quantity_value", quantityValue);
-                                cmd24.Parameters.AddWithValue("@price", price);
-                                cmd24.Parameters.AddWithValue("@okei", okei);
-                                cmd24.Parameters.AddWithValue("@sum", sumP);
-                                cmd24.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
-                                cmd24.ExecuteNonQuery();
-                            }
                         }
-                    List<JToken> drugPurchaseObjectsInfo = GetElements(tender, "notificationInfo.purchaseObjectsInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
-                     foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
+
+                        if (drugQuantityCustomersInfo.Count == 0)
                         {
-                            pils = true;
-                            List<JToken> drugQuantityCustomersInfo =
-                                GetElements(drugPurchaseObjectInfo, "drugQuantityCustomersInfo.drugQuantityCustomerInfo");
-                            foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
+                            var drugsInfo = GetElements(drugPurchaseObjectInfo,
+                                "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                            foreach (var drugInfo in drugsInfo)
                             {
-                                string customerQuantityValue =
-                                    ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
-                                string custRegNum = ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
+                                string okpd2Code =
+                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                string medicamentalFormName =
+                                    ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
                                     .Trim();
-                                string custFullName =
-                                    ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
-                                int idCustomerQ = 0;
-                                if (!String.IsNullOrEmpty(custRegNum))
+                                if (!string.IsNullOrEmpty(medicamentalFormName))
                                 {
-                                    string selectCustomerQ =
-                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
-                                    MySqlCommand cmd20 = new MySqlCommand(selectCustomerQ, connect);
-                                    cmd20.Prepare();
-                                    cmd20.Parameters.AddWithValue("@reg_num", custRegNum);
-                                    MySqlDataReader reader7 = cmd20.ExecuteReader();
-                                    if (reader7.HasRows)
-                                    {
-                                        reader7.Read();
-                                        idCustomerQ = reader7.GetInt32("id_customer");
-                                        reader7.Close();
-                                    }
-                                    else
-                                    {
-                                        reader7.Close();
-                                        string insertCustomerQ =
-                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name";
-                                        MySqlCommand cmd21 = new MySqlCommand(insertCustomerQ, connect);
-                                        cmd21.Prepare();
-                                        cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
-                                        cmd21.Parameters.AddWithValue("@full_name", custFullName);
-                                        cmd21.ExecuteNonQuery();
-                                        idCustomerQ = (int) cmd21.LastInsertedId;
-                                    }
+                                    name = $"{name} {medicamentalFormName}";
                                 }
-                                else
-                                {
-                                    if (!String.IsNullOrEmpty(custFullName))
-                                    {
-                                        string selectCustNameQ =
-                                            $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
-                                        MySqlCommand cmd22 = new MySqlCommand(selectCustNameQ, connect);
-                                        cmd22.Prepare();
-                                        cmd22.Parameters.AddWithValue("@full_name", custFullName);
-                                        MySqlDataReader reader8 = cmd22.ExecuteReader();
-                                        if (reader8.HasRows)
-                                        {
-                                            reader8.Read();
-                                            idCustomerQ = reader8.GetInt32("id_customer");
-                                            Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
-                                        }
-                                        reader8.Close();
-                                    }
-                                }
-                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingTextForm.drugsInfo.drugInfo");
-                                foreach (var drugInfo in drugsInfo)
-                                {
-                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
-                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
-                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} {medicamentalFormName}";
-                                    }
-                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} {dosageGrlsValue}";
-                                    }
-                                    if (!String.IsNullOrEmpty(name))
-                                        name = Regex.Replace(name, @"\s+", " ");
-                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
-                                        .Trim();
-                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
-                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
-                                    price = price.Replace(",", ".");
-                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
-                                    sumP = sumP.Replace(",", ".");
-                                    string insertCustomerquantity =
-                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
-                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
-                                    cmd23.Prepare();
-                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
-                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomerQ);
-                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
-                                    cmd23.Parameters.AddWithValue("@name", name);
-                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
-                                    cmd23.Parameters.AddWithValue("@price", price);
-                                    cmd23.Parameters.AddWithValue("@okei", okei);
-                                    cmd23.Parameters.AddWithValue("@sum", sumP);
-                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
-                                    cmd23.ExecuteNonQuery();
-                                    if (idCustomerQ == 0)
-                                        Log.Logger("Нет id_customer_q", FilePath);
-                                }
-                                
-                            }
 
-                            if (drugQuantityCustomersInfo.Count == 0)
-                            {
-                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
-                                foreach (var drugInfo in drugsInfo)
+                                string dosageGrlsValue =
+                                    ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                if (!string.IsNullOrEmpty(dosageGrlsValue))
                                 {
-                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
-                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
-                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} {medicamentalFormName}";
-                                    }
-                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} {dosageGrlsValue}";
-                                    }
-                                    if (!String.IsNullOrEmpty(name))
-                                        name = Regex.Replace(name, @"\s+", " ");
-                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
-                                        .Trim();
-                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
-                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
-                                    price = price.Replace(",", ".");
-                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
-                                    sumP = sumP.Replace(",", ".");
-                                    string insertCustomerquantity =
-                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
-                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
-                                    cmd23.Prepare();
-                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
-                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomer);
-                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
-                                    cmd23.Parameters.AddWithValue("@name", name);
-                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
-                                    cmd23.Parameters.AddWithValue("@price", price);
-                                    cmd23.Parameters.AddWithValue("@okei", okei);
-                                    cmd23.Parameters.AddWithValue("@sum", sumP);
-                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
-                                    cmd23.ExecuteNonQuery();
-                                    if (idCustomer == 0)
-                                        Log.Logger("Нет id_customer", FilePath);
+                                    name = $"{name} {dosageGrlsValue}";
                                 }
+
+                                if (!String.IsNullOrEmpty(name))
+                                    name = Regex.Replace(name, @"\s+", " ");
+                                string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    .Trim();
+                                string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "")
+                                    .Trim();
+                                string price =
+                                    ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                price = price.Replace(",", ".");
+                                string sumP =
+                                    ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                sumP = sumP.Replace(",", ".");
+                                string insertCustomerquantity =
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                                cmd23.Prepare();
+                                cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd23.Parameters.AddWithValue("@id_customer", idCustomer);
+                                cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                cmd23.Parameters.AddWithValue("@name", name);
+                                cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                cmd23.Parameters.AddWithValue("@price", price);
+                                cmd23.Parameters.AddWithValue("@okei", okei);
+                                cmd23.Parameters.AddWithValue("@sum", sumP);
+                                cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                cmd23.ExecuteNonQuery();
+                                if (idCustomer == 0)
+                                    Log.Logger("Нет id_customer", FilePath);
                             }
                         }
+                    }
+
                     TenderKwords(connect, idTender, pils);
                     AddVerNumber(connect, purchaseNumber);
                 }

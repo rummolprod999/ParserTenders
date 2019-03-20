@@ -12,8 +12,8 @@ namespace ParserTenders.TenderDir
 {
     public class TenderType44 : Tender
     {
-        public event Action<int> AddTender44;
-        private bool Up = default ;
+        private bool Up = default;
+
         public TenderType44(FileInfo f, string region, int regionId, JObject json)
             : base(f, region, regionId, json)
         {
@@ -27,6 +27,8 @@ namespace ParserTenders.TenderDir
                     Log.Logger("Не удалось добавить Tender44", FilePath);
             };
         }
+
+        public event Action<int> AddTender44;
 
         public override void Parsing()
         {
@@ -170,14 +172,14 @@ namespace ParserTenders.TenderDir
                     string organizerResponsibleRole =
                         ((string) tender.SelectToken("purchaseResponsible.responsibleRole") ?? "").Trim();
                     string organizerLastName =
-                    ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.lastName") ??
-                     "").Trim();
+                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.lastName") ??
+                         "").Trim();
                     string organizerFirstName =
-                    ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.firstName") ??
-                     "").Trim();
+                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.firstName") ??
+                         "").Trim();
                     string organizerMiddleName =
-                    ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.middleName") ??
-                     "").Trim();
+                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.middleName") ??
+                         "").Trim();
                     string organizerContact = $"{organizerLastName} {organizerFirstName} {organizerMiddleName}"
                         .Trim();
                     string organizerEmail =
@@ -259,6 +261,7 @@ namespace ParserTenders.TenderDir
                             idPlacingWay = (int) cmd7.LastInsertedId;
                         }
                     }
+
                     int idEtp = 0;
                     string etpCode = ((string) tender.SelectToken("ETP.code") ?? "").Trim();
                     string etpName = ((string) tender.SelectToken("ETP.name") ?? "").Trim();
@@ -290,21 +293,23 @@ namespace ParserTenders.TenderDir
                             idEtp = (int) cmd8.LastInsertedId;
                         }
                     }
+
                     string endDate =
-                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collecting.endDate") ?? "") ??
-                     "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collecting.endDate") ?? "") ??
+                         "").Trim('"');
                     if (string.IsNullOrEmpty(endDate))
                     {
                         endDate =
                             (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.collectingEndDate") ?? "") ??
                              "").Trim('"');
                     }
+
                     string scoringDate =
-                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.scoring.date") ?? "") ??
-                     "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.scoring.date") ?? "") ??
+                         "").Trim('"');
                     string biddingDate =
-                    (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.bidding.date") ?? "") ??
-                     "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.bidding.date") ?? "") ??
+                         "").Trim('"');
                     string insertTender =
                         $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                     MySqlCommand cmd9 = new MySqlCommand(insertTender, connect);
@@ -341,7 +346,9 @@ namespace ParserTenders.TenderDir
                         cmd10.Parameters.AddWithValue("@id_tender", idTender);
                         cmd10.ExecuteNonQuery();
                     }
+
                     List<JToken> attachments = GetElements(tender, "attachments.attachment");
+                    attachments.AddRange(GetElements(tender, "notificationAttachments.attachment"));
                     foreach (var att in attachments)
                     {
                         string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
@@ -389,19 +396,19 @@ namespace ParserTenders.TenderDir
                         foreach (var customerRequirement in customerRequirements)
                         {
                             string kladrPlace =
-                            ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
-                             "").Trim();
+                                ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
+                                 "").Trim();
                             if (String.IsNullOrEmpty(kladrPlace))
                                 kladrPlace =
-                                ((string) customerRequirement.SelectToken(
-                                     "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
+                                    ((string) customerRequirement.SelectToken(
+                                         "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
                             string deliveryPlace =
                                 ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.deliveryPlace") ?? "")
                                 .Trim();
                             if (String.IsNullOrEmpty(deliveryPlace))
                                 deliveryPlace =
-                                ((string) customerRequirement.SelectToken(
-                                     "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
+                                    ((string) customerRequirement.SelectToken(
+                                         "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
                             string deliveryTerm =
                                 ((string) customerRequirement.SelectToken("deliveryTerm") ?? "").Trim();
                             string applicationGuaranteeAmount =
@@ -409,8 +416,8 @@ namespace ParserTenders.TenderDir
                             string contractGuaranteeAmount =
                                 ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
                             string applicationSettlementAccount =
-                            ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
-                             "").Trim();
+                                ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
+                                 "").Trim();
                             string applicationPersonalAccount =
                                 ((string) customerRequirement.SelectToken("applicationGuarantee.personalAccount") ?? "")
                                 .Trim();
@@ -430,11 +437,13 @@ namespace ParserTenders.TenderDir
                                 ((string) customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
                             string customerRequirementMaxPrice =
                                 ((string) customerRequirement.SelectToken("maxPrice") ?? "").Trim();
-                            string purchaseObjectDescription = ((string) customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
+                            string purchaseObjectDescription =
+                                ((string) customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
                             if (!string.IsNullOrEmpty(purchaseObjectDescription))
                             {
                                 deliveryTerm = $"{deliveryTerm} {purchaseObjectDescription}".Trim();
                             }
+
                             if (!String.IsNullOrEmpty(customerRegNum))
                             {
                                 string selectCustomer =
@@ -460,6 +469,7 @@ namespace ParserTenders.TenderDir
                                             customerInn = organizerInn;
                                         }
                                     }
+
                                     string insertCustomer =
                                         $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, inn = @inn";
                                     MySqlCommand cmd14 = new MySqlCommand(insertCustomer, connect);
@@ -487,6 +497,7 @@ namespace ParserTenders.TenderDir
                                         idCustomer = reader6.GetInt32("id_customer");
                                         Log.Logger("Получили id_customer по customer_full_name", FilePath);
                                     }
+
                                     reader6.Close();
                                 }
                             }
@@ -579,7 +590,7 @@ namespace ParserTenders.TenderDir
                                 cmd19.ExecuteNonQuery();
                             }
                         }
-                        
+
                         List<JToken> purchaseobjects = GetElements(lot, "purchaseObjects.purchaseObject");
                         foreach (var purchaseobject in purchaseobjects)
                         {
@@ -604,10 +615,12 @@ namespace ParserTenders.TenderDir
                             {
                                 GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }
+
                             if (string.IsNullOrEmpty(okpd2Code))
                             {
                                 okpd2Code = ((string) purchaseobject.SelectToken("KTRU.code") ?? "").Trim();
                             }
+
                             List<JToken> customerquantities =
                                 GetElements(purchaseobject, "customerQuantities.customerQuantity");
                             foreach (var customerquantity in customerquantities)
@@ -662,9 +675,11 @@ namespace ParserTenders.TenderDir
                                             idCustomerQ = reader8.GetInt32("id_customer");
                                             Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
                                         }
+
                                         reader8.Close();
                                     }
                                 }
+
                                 string insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
                                 MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
@@ -709,7 +724,9 @@ namespace ParserTenders.TenderDir
                                 cmd24.ExecuteNonQuery();
                             }
                         }
-                        List<JToken> drugPurchaseObjectsInfo = GetElements(lot, "drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+
+                        List<JToken> drugPurchaseObjectsInfo =
+                            GetElements(lot, "drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
                         foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                         {
                             pils = true;
@@ -719,7 +736,8 @@ namespace ParserTenders.TenderDir
                             {
                                 string customerQuantityValue =
                                     ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
-                                string custRegNum = ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
+                                string custRegNum =
+                                    ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
                                     .Trim();
                                 string custFullName =
                                     ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
@@ -767,32 +785,44 @@ namespace ParserTenders.TenderDir
                                             idCustomerQ = reader8.GetInt32("id_customer");
                                             Log.Logger("Получили id_customer_q по customer_full_name", FilePath);
                                         }
+
                                         reader8.Close();
                                     }
                                 }
-                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+
+                                var drugsInfo = GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                                 foreach (var drugInfo in drugsInfo)
                                 {
-                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                        .Trim();
                                     string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
-                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
+                                    string medicamentalFormName =
+                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                         "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
                                         name = $"{name} {medicamentalFormName}";
                                     }
-                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+
+                                    string dosageGrlsValue =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
                                         name = $"{name} {dosageGrlsValue}";
                                     }
+
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
                                     string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
-                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
-                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                    string okei =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                        .Trim();
                                     price = price.Replace(",", ".");
-                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                        .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     string insertCustomerquantity =
                                         $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
@@ -811,34 +841,43 @@ namespace ParserTenders.TenderDir
                                     if (idCustomerQ == 0)
                                         Log.Logger("Нет id_customer_q", FilePath);
                                 }
-                                
                             }
 
                             if (drugQuantityCustomersInfo.Count == 0)
                             {
-                                var drugsInfo = GetElements(drugPurchaseObjectInfo, "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                                var drugsInfo = GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                                 foreach (var drugInfo in drugsInfo)
                                 {
-                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                        .Trim();
                                     string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
-                                    string medicamentalFormName = ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "").Trim();
+                                    string medicamentalFormName =
+                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                         "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
                                         name = $"{name} {medicamentalFormName}";
                                     }
-                                    string dosageGrlsValue = ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+
+                                    string dosageGrlsValue =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
                                         name = $"{name} {dosageGrlsValue}";
                                     }
+
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
                                     string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
-                                    string okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
-                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                    string okei =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                        .Trim();
                                     price = price.Replace(",", ".");
-                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                        .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     string insertCustomerquantity =
                                         $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
