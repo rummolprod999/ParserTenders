@@ -11,6 +11,7 @@ namespace ParserTenders.TenderDir
 {
     public class TenderType44Web : TenderWeb
     {
+        private bool PoExist = default;
         private bool Up = default;
 
         public TenderType44Web(string url, JObject json, TypeFile44 p)
@@ -721,6 +722,7 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
                                 cmd23.ExecuteNonQuery();
+                                PoExist = true;
                                 if (idCustomerQ == 0)
                                     Log.Logger("Нет id_customer_q", FilePath);
                             }
@@ -745,6 +747,7 @@ namespace ParserTenders.TenderDir
                                 cmd24.Parameters.AddWithValue("@sum", sumP);
                                 cmd24.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                                 cmd24.ExecuteNonQuery();
+                                PoExist = true;
                             }
                         }
 
@@ -861,6 +864,7 @@ namespace ParserTenders.TenderDir
                                     cmd23.Parameters.AddWithValue("@sum", sumP);
                                     cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
                                     cmd23.ExecuteNonQuery();
+                                    PoExist = true;
                                     if (idCustomerQ == 0)
                                         Log.Logger("Нет id_customer_q", FilePath);
                                 }
@@ -916,11 +920,17 @@ namespace ParserTenders.TenderDir
                                     cmd23.Parameters.AddWithValue("@sum", sumP);
                                     cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                                     cmd23.ExecuteNonQuery();
+                                    PoExist = true;
                                     if (idCustomer == 0)
                                         Log.Logger("Нет id_customer", FilePath);
                                 }
                             }
                         }
+                    }
+
+                    if (!PoExist)
+                    {
+                        Log.Logger("Can not find purchase objects in ", FilePath);
                     }
 
                     Tender.TenderKwords(connect, idTender, pils);

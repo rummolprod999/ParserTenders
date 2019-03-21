@@ -12,6 +12,7 @@ namespace ParserTenders.TenderDir
 {
     public class TenderType504 : Tender
     {
+        private bool PoExist = default;
         private bool Up = default;
 
         public TenderType504(FileInfo f, string region, int regionId, JObject json)
@@ -706,6 +707,7 @@ namespace ParserTenders.TenderDir
                             cmd23.Parameters.AddWithValue("@sum", sumP);
                             cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
                             cmd23.ExecuteNonQuery();
+                            PoExist = true;
                             if (idCustomerQ == 0)
                                 Log.Logger("Нет id_customer_q", FilePath);
                         }
@@ -730,11 +732,13 @@ namespace ParserTenders.TenderDir
                             cmd24.Parameters.AddWithValue("@sum", sumP);
                             cmd24.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                             cmd24.ExecuteNonQuery();
+                            PoExist = true;
                         }
                     }
 
                     List<JToken> drugPurchaseObjectsInfo = GetElements(tender,
                         "notificationInfo.purchaseObjectsInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+
                     foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                     {
                         pils = true;
@@ -845,6 +849,7 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
                                 cmd23.ExecuteNonQuery();
+                                PoExist = true;
                                 if (idCustomerQ == 0)
                                     Log.Logger("Нет id_customer_q", FilePath);
                             }
@@ -900,10 +905,16 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                                 cmd23.ExecuteNonQuery();
+                                PoExist = true;
                                 if (idCustomer == 0)
                                     Log.Logger("Нет id_customer", FilePath);
                             }
                         }
+                    }
+
+                    if (!PoExist)
+                    {
+                        Log.Logger("Can not find purchase objects in ", FilePath);
                     }
 
                     TenderKwords(connect, idTender, pils);
