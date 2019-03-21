@@ -758,6 +758,8 @@ namespace ParserTenders.TenderDir
                             pils = true;
                             List<JToken> drugQuantityCustomersInfo =
                                 GetElements(drugPurchaseObjectInfo, "customerQuantities.customerQuantity");
+                            drugQuantityCustomersInfo.AddRange(GetElements(drugPurchaseObjectInfo,
+                                "drugQuantityCustomersInfo.drugQuantityCustomerInfo"));
                             foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
                             {
                                 string customerQuantityValue =
@@ -844,6 +846,69 @@ namespace ParserTenders.TenderDir
                                         .Trim();
                                     string okei =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    if (okei == "")
+                                    {
+                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                    }
+
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                        .Trim();
+                                    price = price.Replace(",", ".");
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                        .Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                    string insertCustomerquantity =
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                                    cmd23.Prepare();
+                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomerQ);
+                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                    cmd23.Parameters.AddWithValue("@name", name);
+                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                    cmd23.Parameters.AddWithValue("@price", price);
+                                    cmd23.Parameters.AddWithValue("@okei", okei);
+                                    cmd23.Parameters.AddWithValue("@sum", sumP);
+                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
+                                    cmd23.ExecuteNonQuery();
+                                    PoExist = true;
+                                    if (idCustomerQ == 0)
+                                        Log.Logger("Нет id_customer_q", FilePath);
+                                }
+
+                                var drugsInfoTextForm = GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingTextForm.drugsInfo.drugInfo");
+                                foreach (var drugInfo in drugsInfoTextForm)
+                                {
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                        .Trim();
+                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    string medicamentalFormName =
+                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                         "").Trim();
+                                    if (!string.IsNullOrEmpty(medicamentalFormName))
+                                    {
+                                        name = $"{name} {medicamentalFormName}";
+                                    }
+
+                                    string dosageGrlsValue =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
+                                    {
+                                        name = $"{name} {dosageGrlsValue}";
+                                    }
+
+                                    if (!String.IsNullOrEmpty(name))
+                                        name = Regex.Replace(name, @"\s+", " ");
+                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                        .Trim();
+                                    string okei =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    if (okei == "")
+                                    {
+                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                    }
+
                                     string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
@@ -900,6 +965,69 @@ namespace ParserTenders.TenderDir
                                         .Trim();
                                     string okei =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    if (okei == "")
+                                    {
+                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                    }
+
+                                    string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                        .Trim();
+                                    price = price.Replace(",", ".");
+                                    string sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                        .Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                    string insertCustomerquantity =
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    MySqlCommand cmd23 = new MySqlCommand(insertCustomerquantity, connect);
+                                    cmd23.Prepare();
+                                    cmd23.Parameters.AddWithValue("@id_lot", idLot);
+                                    cmd23.Parameters.AddWithValue("@id_customer", idCustomer);
+                                    cmd23.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                    cmd23.Parameters.AddWithValue("@name", name);
+                                    cmd23.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                    cmd23.Parameters.AddWithValue("@price", price);
+                                    cmd23.Parameters.AddWithValue("@okei", okei);
+                                    cmd23.Parameters.AddWithValue("@sum", sumP);
+                                    cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                    cmd23.ExecuteNonQuery();
+                                    PoExist = true;
+                                    if (idCustomer == 0)
+                                        Log.Logger("Нет id_customer", FilePath);
+                                }
+
+                                var drugsInfoTextForm = GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                                foreach (var drugInfo in drugsInfoTextForm)
+                                {
+                                    string okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                        .Trim();
+                                    string name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    string medicamentalFormName =
+                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                         "").Trim();
+                                    if (!string.IsNullOrEmpty(medicamentalFormName))
+                                    {
+                                        name = $"{name} {medicamentalFormName}";
+                                    }
+
+                                    string dosageGrlsValue =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
+                                    {
+                                        name = $"{name} {dosageGrlsValue}";
+                                    }
+
+                                    if (!String.IsNullOrEmpty(name))
+                                        name = Regex.Replace(name, @"\s+", " ");
+                                    string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                        .Trim();
+                                    string okei =
+                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                    if (okei == "")
+                                    {
+                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                    }
+
                                     string price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
