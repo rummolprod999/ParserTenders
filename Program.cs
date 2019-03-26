@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, signproj44";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44";
 
         private static string _database;
         private static string _tempPath44;
@@ -184,7 +184,9 @@ namespace ParserTenders
                         return _tempTektorgRzd;
                     case TypeArguments.Web44:
                         return _tempPathWeb44;
-                    case TypeArguments.SignProj44:
+                    case TypeArguments.CurrSignProj44:
+                    case TypeArguments.LastSignProj44:
+                    case TypeArguments.PrevSignProj44:
                         return _tempSignProj44;
                     default:
                         return "";
@@ -241,7 +243,9 @@ namespace ParserTenders
                         return _logTektorgRzd;
                     case TypeArguments.Web44:
                         return _logPathWeb44;
-                    case TypeArguments.SignProj44:
+                    case TypeArguments.CurrSignProj44:
+                    case TypeArguments.LastSignProj44:
+                    case TypeArguments.PrevSignProj44:
                         return _logSignProj44;
                     default:
                         return "";
@@ -389,8 +393,18 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTektorgRzd(Periodparsing);
                     break;
-                case "signproj44":
-                    Periodparsing = TypeArguments.SignProj44;
+                case "currsignproj44":
+                    Periodparsing = TypeArguments.CurrSignProj44;
+                    Init(Periodparsing);
+                    ParserSignProj44(Periodparsing);
+                    break;
+                case "lastsignproj44":
+                    Periodparsing = TypeArguments.LastSignProj44;
+                    Init(Periodparsing);
+                    ParserSignProj44(Periodparsing);
+                    break;
+                case "prevsignproj44":
+                    Periodparsing = TypeArguments.PrevSignProj44;
                     Init(Periodparsing);
                     ParserSignProj44(Periodparsing);
                     break;
@@ -547,8 +561,10 @@ namespace ParserTenders
                 case TypeArguments.TektorgRzd:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
-                case TypeArguments.SignProj44:
-                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                case TypeArguments.CurrSignProj44:
+                case TypeArguments.PrevSignProj44:
+                case TypeArguments.LastSignProj44:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}SignProject44_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
