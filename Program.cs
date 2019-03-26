@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, signproj44";
 
         private static string _database;
         private static string _tempPath44;
@@ -56,6 +56,8 @@ namespace ParserTenders
         private static int _port;
         private static int _maxthread;
         private static int _maxtrydown;
+        private static string _tempSignProj44;
+        private static string _logSignProj44;
         private static List<string> _years = new List<string>();
         public static readonly DateTime LocalDate = DateTime.Now;
 
@@ -79,6 +81,7 @@ namespace ParserTenders
         public static int UpdateTender504 = 0;
         public static int UpdateTender615 = 0;
         public static int AddTenderSign = 0;
+        public static int AddTenderSignProj44 = 0;
         public static int AddTenderSign615 = 0;
         public static int AddDateChange = 0;
         public static int AddDateChange615 = 0;
@@ -181,6 +184,8 @@ namespace ParserTenders
                         return _tempTektorgRzd;
                     case TypeArguments.Web44:
                         return _tempPathWeb44;
+                    case TypeArguments.SignProj44:
+                        return _tempSignProj44;
                     default:
                         return "";
                 }
@@ -236,6 +241,8 @@ namespace ParserTenders
                         return _logTektorgRzd;
                     case TypeArguments.Web44:
                         return _logPathWeb44;
+                    case TypeArguments.SignProj44:
+                        return _logSignProj44;
                     default:
                         return "";
                 }
@@ -382,6 +389,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserTektorgRzd(Periodparsing);
                     break;
+                case "signproj44":
+                    Periodparsing = TypeArguments.SignProj44;
+                    Init(Periodparsing);
+                    ParserSignProj44(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
                         $"Неправильно указан аргумент, используйте {Arguments}");
@@ -437,6 +449,8 @@ namespace ParserTenders
             _logTektorgInterRao = set.LogPathTektorgInterRao;
             _tempTektorgRzd = set.TempPathTektorgRzd;
             _logTektorgRzd = set.LogPathTektorgRzd;
+            _tempSignProj44 = set.TempPathSignProj44;
+            _logSignProj44 = set.LogPathSignProj44;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -531,6 +545,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.TektorgRzd:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.SignProj44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
@@ -967,6 +984,23 @@ namespace ParserTenders
 
             Log.Logger($"Добавили {arg}", AddTektorgRzd);
             Log.Logger($"Обновили {arg}", UpTektorgRzd);
+            Log.Logger("Время окончания парсинга");
+        }
+
+        private static void ParserSignProj44(TypeArguments arg)
+        {
+            Log.Logger($"Время начала парсинга {arg}");
+            try
+            {
+                var p = new ParserSignProj44(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
+            Log.Logger($"Добавили {arg}", AddTenderSignProj44);
             Log.Logger("Время окончания парсинга");
         }
     }

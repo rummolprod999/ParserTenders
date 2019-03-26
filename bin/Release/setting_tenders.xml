@@ -37,6 +37,8 @@
 	<logdir_tektorg_rzd>log_tektorg_rzd</logdir_tektorg_rzd>
 	<tempdir_tenders_web44>temp_tenders_web44</tempdir_tenders_web44>
 	<logdir_tenders_web44>log_tenders_web44</logdir_tenders_web44>
+	<tempdir_sign_proj44>temp_sign_proj44</tempdir_sign_proj44>
+	<logdir_sign_proj44>log_sign_proj44</logdir_sign_proj44>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>

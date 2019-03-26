@@ -225,6 +225,7 @@
     <Compile Include="ParserDir\ParserRosneft.cs" />
     <Compile Include="ParserDir\ParserSakhalin.cs" />
     <Compile Include="ParserDir\ParserSgn223.cs" />
+      <Compile Include="ParserDir\ParserSignProj44.cs"/>
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTektorgGazprom.cs" />
     <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="TenderDir\ITenderWeb.cs" />
     <Compile Include="TenderDir\Tender.cs" />
     <Compile Include="TenderDir\TenderBase.cs" />
+      <Compile Include="TenderDir\TenderTypeSignProj44.cs"/>
     <Compile Include="TenderDir\TenderType223.cs" />
     <Compile Include="TenderDir\TenderType223Web.cs" />
     <Compile Include="TenderDir\TenderType44.cs" />
