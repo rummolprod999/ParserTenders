@@ -12,10 +12,12 @@ namespace ParserTenders
             st = st.Replace("ns6:", "");
             st = st.Replace("ns7:", "");
             st = st.Replace("ns8:", "");
+            st = st.Replace("ns9:", "");
             st = st.Replace("oos:", "");
             st = st.Replace("", "");
             return st;
         }
+
         public static string ClearStringGpb(string s)
         {
             string st = s;
@@ -23,6 +25,5 @@ namespace ParserTenders
             st = st.Replace("", "");
             return st;
         }
-        
     }
 }

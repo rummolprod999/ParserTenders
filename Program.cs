@@ -1016,7 +1016,7 @@ namespace ParserTenders
                 Log.Logger(e);
             }
 
-            Log.Logger($"Добавили {arg}", AddTenderSignProj44);
+            Log.Logger($"Добавили SignProj44", AddTenderSignProj44);
             Log.Logger("Время окончания парсинга");
         }
     }

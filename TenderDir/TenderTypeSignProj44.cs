@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders.TenderDir
@@ -22,6 +23,29 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
+            var xml = GetXml(File.ToString());
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.StartsWith("cpContractSign"));
+            if (firstOrDefault is null)
+            {
+                Log.Logger("Не могу найти тег TenderSignProj44", FilePath);
+                return;
+            }
+
+            var tender = firstOrDefault.Value;
+            var purchaseNumber = ((string) tender.SelectToken("foundationInfo.purchaseNumber") ?? "").Trim();
+            Console.WriteLine(purchaseNumber);
+            if (string.IsNullOrEmpty(purchaseNumber))
+            {
+                Log.Logger("Не могу найти purchaseNumber у sign", FilePath);
+                //return;
+            }
+
+            using (var connect = ConnectToDb.GetDbConnection())
+            {
+                var idTender = 0;
+                connect.Open();
+            }
         }
     }
 }
