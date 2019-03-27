@@ -1005,7 +1005,7 @@ namespace ParserTenders
 
         private static void ParserSignProj44(TypeArguments arg)
         {
-            Log.Logger($"Время начала парсинга {arg}");
+            Log.Logger($"Время начала парсинга SignProj44");
             try
             {
                 var p = new ParserSignProj44(arg);
