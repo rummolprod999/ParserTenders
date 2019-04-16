@@ -17,7 +17,8 @@ namespace ParserTenders.ParserDir
         private string[] _purchaseDir = new[]
         {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
-            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection"
+            "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection",
+            "purchaseNoticeZPESMBO", "purchaseNoticeZKESMBO", "purchaseNoticeKESMBO", "purchaseNoticeAESMBO"
         };
 
         protected DataTable DtRegion;
@@ -119,6 +120,18 @@ namespace ParserTenders.ParserDir
                                     break;
                                 case "purchaseRejection":
                                     Bolter(f, region, regionId, TypeFile223.PurchaseRejection);
+                                    break;
+                                case "purchaseNoticeZPESMBO":
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZpesmbo);
+                                    break;
+                                case "purchaseNoticeZKESMBO":
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZkesmbo);
+                                    break;
+                                case "purchaseNoticeKESMBO":
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeKesmbo);
+                                    break;
+                                case "purchaseNoticeAESMBO":
+                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAesmbo);
                                     break;
                             }
                         }

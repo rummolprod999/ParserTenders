@@ -105,6 +105,22 @@ namespace ParserTenders.ParserDir
             doc.LoadXml(ftext);
             string jsons = JsonConvert.SerializeXmlNode(doc);
             JObject json = JObject.Parse(jsons);
+            if (ftext.Contains("purchaseNoticeZPESMBO"))
+            {
+                Bolter223(url, json, TypeFile223.PurchaseNoticeZpesmbo);
+            }
+            if (ftext.Contains("purchaseNoticeZKESMBO"))
+            {
+                Bolter223(url, json, TypeFile223.PurchaseNoticeZkesmbo);
+            }
+            if (ftext.Contains("purchaseNoticeKESMBO"))
+            {
+                Bolter223(url, json, TypeFile223.PurchaseNoticeKesmbo);
+            }
+            if (ftext.Contains("purchaseNoticeAESMBO"))
+            {
+                Bolter223(url, json, TypeFile223.PurchaseNoticeAesmbo);
+            }
             if (ftext.Contains("purchaseNoticeZK"))
             {
                 Bolter223(url, json, TypeFile223.PurchaseNoticeZk);

@@ -492,6 +492,9 @@ namespace ParserTenders.TenderDir
                         string lotMaxPrice = ((string) lot.SelectToken("lotData.initialSum") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("lotData.currency.name") ?? "").Trim();
                         string lotSubj = ((string) lot.SelectToken("lotData.subject") ?? "").Trim();
+                        var deliveryPlaceLot =
+                            ((string) lot.SelectToken("lotData.deliveryPlace.address") ?? "")
+                            .Trim();
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
@@ -543,6 +546,24 @@ namespace ParserTenders.TenderDir
                             cmd19.Parameters.AddWithValue("@okei", okei);
                             cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                             cmd19.ExecuteNonQuery();
+                            var deliveryPlace =
+                                ((string) lotitem.SelectToken("deliveryPlace.address") ?? "")
+                                .Trim();
+                            if (String.IsNullOrEmpty(deliveryPlace))
+                                deliveryPlace = deliveryPlaceLot;
+                            if (!String.IsNullOrEmpty(deliveryPlace))
+                            {
+                                string insertCustomerRequirement =
+                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term";
+                            MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                            cmd16.Prepare();
+                            cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd16.Parameters.AddWithValue("@id_customer", idCustomer);
+                            cmd16.Parameters.AddWithValue("@kladr_place", "");
+                            cmd16.Parameters.AddWithValue("@delivery_place", deliveryPlace);
+                            cmd16.Parameters.AddWithValue("@delivery_term", "");
+                            cmd16.ExecuteNonQuery();
+                            }
                         }
                     }
 

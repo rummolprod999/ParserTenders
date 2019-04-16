@@ -644,8 +644,8 @@ namespace ParserTenders
             }
 
             /*ParserTend223 t223 = new ParserTend223(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/MyConf/purchaseNotice_Belgorodskaya_obl_20190415_000000_20190415_235959_daily_017.xml");
-            t223.ParsingXml(f, "br", 32, TypeFile223.PurchaseNotice);*/
+            FileInfo f = new FileInfo("/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/MyConf/purchaseNoticeAESMBO_Moskva_20190404_000000_20190404_235959_daily_001.xml");
+            t223.ParsingXml(f, "br", 32, TypeFile223.PurchaseNoticeZpesmbo);*/
             Log.Logger("Добавили tender223", AddTender223);
             Log.Logger("Обновили tender223", UpdateTender223);
             Log.Logger("Добавили LotCancel223", AddLotCancel223);
