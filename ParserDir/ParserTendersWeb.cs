@@ -152,7 +152,9 @@ namespace ParserTenders.ParserDir
             }
             catch (Exception e)
             {
-                Log.Logger(e);
+                Log.Logger("Ошибка при парсинге xml", e, url);
+                Log.Logger(e.Source);
+                Log.Logger(e.StackTrace);
             }
         }
     }
