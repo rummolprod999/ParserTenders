@@ -69,7 +69,7 @@ namespace ParserTenders.TenderDir
                 {
                     connect.Open();
                     string selectTender =
-                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND purchase_number = @purchase_number  AND tender_kwords <> ''";
+                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND purchase_number = @purchase_number";
                     MySqlCommand cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
