@@ -70,7 +70,7 @@ namespace ParserTenders.TenderDir
                 {
                     connect.Open();
                     string selectTender =
-                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND id_region = @id_region AND purchase_number = @purchase_number";
+                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND id_region = @id_region AND purchase_number = @purchase_number AND tender_kwords <> ''";
                     MySqlCommand cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
@@ -357,7 +357,7 @@ namespace ParserTenders.TenderDir
                     if (!String.IsNullOrEmpty(customerInn))
                     {
                         string selectOdCustomer =
-                            $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp";
+                            $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                         MySqlCommand cmd10 = new MySqlCommand(selectOdCustomer, connect);
                         cmd10.Prepare();
                         cmd10.Parameters.AddWithValue("@inn", customerInn);
@@ -373,7 +373,7 @@ namespace ParserTenders.TenderDir
                         if (String.IsNullOrEmpty(customerRegNumber))
                         {
                             string selectOdCustomerFromFtp =
-                                $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp";
+                                $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                             MySqlCommand cmd11 = new MySqlCommand(selectOdCustomerFromFtp, connect);
                             cmd11.Prepare();
                             cmd11.Parameters.AddWithValue("@inn", customerInn);
@@ -391,7 +391,7 @@ namespace ParserTenders.TenderDir
                         if (String.IsNullOrEmpty(customerRegNumber))
                         {
                             string selectOdCustomerFromFtp223 =
-                                $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp";
+                                $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                             MySqlCommand cmd12 = new MySqlCommand(selectOdCustomerFromFtp223, connect);
                             cmd12.Prepare();
                             cmd12.Parameters.AddWithValue("@inn", customerInn);
