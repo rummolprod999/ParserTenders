@@ -40,8 +40,8 @@
 	<tempdir_sign_proj44>temp_sign_proj44</tempdir_sign_proj44>
 	<logdir_sign_proj44>log_sign_proj44</logdir_sign_proj44>
 	<prefix></prefix>
-	<userdb>root</userdb>
-	<passdb>1234</passdb>
+	<userdb>parser</userdb>
+	<passdb>Dft56Point</passdb>
 	<server>localhost</server>
 	<port>3306</port>
 	<years>2016, 2017, 2018, 2019</years>
