@@ -525,9 +525,20 @@ namespace ParserTenders.TenderDir
                                     reader6.Close();
                                 }
                             }
-
+                            var planNumber =
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "").Trim();
+                            if (string.IsNullOrEmpty(planNumber))
+                            {
+                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ?? "").Trim();
+                            }
+                            var positionNumber =
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "").Trim();
+                            if (string.IsNullOrEmpty(positionNumber))
+                            {
+                                positionNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "").Trim();
+                            }
                             string insertCustomerRequirement =
-                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
+                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number";
                             MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                             cmd16.Prepare();
                             cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -547,6 +558,8 @@ namespace ParserTenders.TenderDir
                             cmd16.Parameters.AddWithValue("@contract_personal_account", contractPersonalAccount);
                             cmd16.Parameters.AddWithValue("@contract_bik", contractBik);
                             cmd16.Parameters.AddWithValue("@max_price", customerRequirementMaxPrice);
+                            cmd16.Parameters.AddWithValue("@plan_number", planNumber);
+                            cmd16.Parameters.AddWithValue("@position_number", positionNumber);
                             cmd16.ExecuteNonQuery();
                             if (idCustomer == 0)
                             {
