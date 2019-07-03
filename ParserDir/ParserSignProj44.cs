@@ -173,8 +173,8 @@ namespace ParserTenders.ParserDir
             /*FtpClient ftp = ClientFtp44();*/
             //archtemp = GetListFtp44(pathParse);
             var newLs = GetListFtp44New(pathParse);
-            var serachd = $"{Program.LocalDate:yyyyMMdd}";
-            foreach (var a in newLs.Where(a => a.Item1.IndexOf(serachd, StringComparison.Ordinal) != -1))
+            //var serachd = $"{Program.LocalDate:yyyyMMdd}";
+            foreach (var a in newLs)
             {
                 var prevA = $"prev_{a}";
                 using (var connect = ConnectToDb.GetDbConnection())

@@ -302,8 +302,8 @@ namespace ParserTenders.ParserDir
             /*FtpClient ftp = ClientFtp44();*/
             //archtemp = GetListFtp44(pathParse);
             var newLs = GetListFtp44New(pathParse);
-            string serachd = $"{Program.LocalDate:yyyyMMdd}";
-            foreach (var a in newLs.Where(a => a.Item1.IndexOf(serachd, StringComparison.Ordinal) != -1))
+            //string serachd = $"{Program.LocalDate:yyyyMMdd}";
+            foreach (var a in newLs)
             {
                 string prevA = $"prev_pprf615_{a.Item1}";
                 using (MySqlConnection connect = ConnectToDb.GetDbConnection())
