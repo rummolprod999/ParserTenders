@@ -636,7 +636,8 @@ namespace ParserTenders
             try
             {
                 ParserTend223 t223 = new ParserTend223(Periodparsing);
-                t223.Parsing();
+                //t223.Parsing();
+                t223.ParserLostTens();
             }
             catch (Exception e)
             {

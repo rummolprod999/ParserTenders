@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -72,77 +73,157 @@ namespace ParserTenders.ParserDir
             }
         }
 
+        public void ParserLostTens()
+        {
+            var rootPath = "/out";
+            var archtemp = GetListFtp223(rootPath);
+            foreach (var a in archtemp)
+            {
+                if (!a.Contains("0000")) continue;
+                try
+                {
+                    GetElementsFromFtp($"/{a}/");
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+        }
+
+        private void GetElementsFromFtp(string s)
+        {
+            var arr = new ListArchDailyLost(this, s);
+            foreach (var s1 in arr)
+            {
+                if (s1.Contains("purchaseNoticeAESMBO"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeAESMBO");
+                }
+                else if (s1.Contains("purchaseNoticeKESMBO"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeKESMBO");
+                }
+                else if (s1.Contains("purchaseNoticeZKESMBO"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeZKESMBO");
+                }
+                else if (s1.Contains("purchaseNoticeZPESMBO"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeZPESMBO");
+                }
+                else if (s1.Contains("purchaseRejection"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseRejection");
+                }
+                else if (s1.Contains("lotCancellation"))
+                {
+                    GetListFileArch(s1, s, "", 0, "lotCancellation");
+                }
+                else if (s1.Contains("purchaseNoticeZK"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeZK");
+                }
+                else if (s1.Contains("purchaseNoticeOK"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeOK");
+                }
+                else if (s1.Contains("purchaseNoticeOA"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeOA");
+                }
+                else if (s1.Contains("purchaseNoticeIS"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeIS");
+                }
+                else if (s1.Contains("purchaseNoticeEP"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeEP");
+                }
+                else if (s1.Contains("purchaseNoticeAE94"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeAE94");
+                }
+                else if (s1.Contains("purchaseNoticeAE"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNoticeAE");
+                }
+                else if (s1.Contains("purchaseNotice"))
+                {
+                    GetListFileArch(s1, s, "", 0, "purchaseNotice");
+                }
+            }
+        }
+
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId,
             string purchase)
         {
             string filea = "";
             string pathUnzip = "";
             filea = GetArch223(arch, pathParse);
-            if (!String.IsNullOrEmpty(filea))
+            if (String.IsNullOrEmpty(filea)) return;
+            pathUnzip = Unzipped.Unzip(filea);
+            if (pathUnzip != "")
             {
-                pathUnzip = Unzipped.Unzip(filea);
-                if (pathUnzip != "")
+                if (Directory.Exists(pathUnzip))
                 {
-                    if (Directory.Exists(pathUnzip))
+                    DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
+                    FileInfo[] filelist = dirInfo.GetFiles();
+                    foreach (var f in filelist)
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
-                        FileInfo[] filelist = dirInfo.GetFiles();
-                        foreach (var f in filelist)
+                        switch (purchase)
                         {
-                            switch (purchase)
-                            {
-                                case "purchaseNotice":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNotice);
-                                    break;
-                                case "purchaseNoticeAE":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe);
-                                    break;
-                                case "purchaseNoticeAE94":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe94);
-                                    break;
-                                case "purchaseNoticeEP":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeEp);
-                                    break;
-                                case "purchaseNoticeIS":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeIs);
-                                    break;
-                                case "purchaseNoticeOA":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOa);
-                                    break;
-                                case "purchaseNoticeOK":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOk);
-                                    break;
-                                case "purchaseNoticeZK":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZk);
-                                    break;
-                                case "lotCancellation":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseLotCancellation);
-                                    break;
-                                case "purchaseRejection":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseRejection);
-                                    break;
-                                case "purchaseNoticeZPESMBO":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZpesmbo);
-                                    break;
-                                case "purchaseNoticeZKESMBO":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZkesmbo);
-                                    break;
-                                case "purchaseNoticeKESMBO":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeKesmbo);
-                                    break;
-                                case "purchaseNoticeAESMBO":
-                                    Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAesmbo);
-                                    break;
-                            }
+                            case "purchaseNotice":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNotice);
+                                break;
+                            case "purchaseNoticeAE":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe);
+                                break;
+                            case "purchaseNoticeAE94":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAe94);
+                                break;
+                            case "purchaseNoticeEP":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeEp);
+                                break;
+                            case "purchaseNoticeIS":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeIs);
+                                break;
+                            case "purchaseNoticeOA":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOa);
+                                break;
+                            case "purchaseNoticeOK":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeOk);
+                                break;
+                            case "purchaseNoticeZK":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZk);
+                                break;
+                            case "lotCancellation":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseLotCancellation);
+                                break;
+                            case "purchaseRejection":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseRejection);
+                                break;
+                            case "purchaseNoticeZPESMBO":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZpesmbo);
+                                break;
+                            case "purchaseNoticeZKESMBO":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeZkesmbo);
+                                break;
+                            case "purchaseNoticeKESMBO":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeKesmbo);
+                                break;
+                            case "purchaseNoticeAESMBO":
+                                Bolter(f, region, regionId, TypeFile223.PurchaseNoticeAesmbo);
+                                break;
                         }
-
-                        dirInfo.Delete(true);
                     }
+
+                    dirInfo.Delete(true);
                 }
-                else
-                {
-                    Log.Logger("pathUnzip does not exist", filea);
-                }
+            }
+            else
+            {
+                Log.Logger("pathUnzip does not exist", filea);
             }
         }
 
@@ -251,6 +332,68 @@ namespace ParserTenders.ParserDir
             }
 
             return arch;
+        }
+
+
+        class ListArchDailyLost: IEnumerable<string>
+        {
+            private ParserTend223 tnd;
+            private string pathParse;
+
+            public ListArchDailyLost(ParserTend223 t, string pathParse)
+            {
+                tnd = t;
+                this.pathParse = pathParse;
+            }
+
+            public IEnumerator<string> GetEnumerator()
+            {
+                var arch = new List<string>();
+                var newLs = tnd.GetListFtp223New(pathParse);
+                var yearsSearch = Program.Years.Select(y => $"{y}").ToList();
+                foreach (var a in newLs
+                    .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1))
+                    .Where(a => tnd._purchaseDir.Any(t => a.Item1.ToLower().Contains(t.ToLower()))))
+                {
+                    if (a.Item2 == 0)
+                    {
+                        Log.Logger("!!!archive size = 0", a.Item1);
+                        continue;
+                    }
+
+                    using (var connect = ConnectToDb.GetDbConnection())
+                    {
+                        connect.Open();
+
+                        var selectArch =
+                            $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
+
+                        var cmd = new MySqlCommand(selectArch, connect);
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("@archive", a.Item1);
+                        cmd.Parameters.AddWithValue("@size_archive", a.Item2);
+                        var reader = cmd.ExecuteReader();
+                        var resRead = reader.HasRows;
+                        reader.Close();
+                        if (resRead) continue;
+                        var addArch =
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
+                        var cmd1 = new MySqlCommand(addArch, connect);
+                        cmd1.Prepare();
+                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
+                        cmd1.ExecuteNonQuery();
+                        arch.Add(a.Item1);
+                    }
+
+                    yield return a.Item1;
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
     }
 }
