@@ -353,7 +353,7 @@ namespace ParserTenders.ParserDir
                 var yearsSearch = Program.Years.Select(y => $"{y}").ToList();
                 foreach (var a in newLs
                     .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1))
-                    .Where(a => tnd._purchaseDir.Any(t => a.Item1.ToLower().Contains(t.ToLower()))))
+                    .Where(a => tnd._purchaseDir.Any(t => a.Item1.ToLower().Contains(t.ToLower()))).Reverse())
                 {
                     if (a.Item2 == 0)
                     {
