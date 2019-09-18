@@ -72,6 +72,51 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при обновлении инн", e);
             }
         }
+        
+        public void ParsingAst()
+        {
+            DtRegion = GetRegions();
+            foreach (DataRow row in DtRegion.Rows)
+            {
+                foreach (string purchase in _purchaseDir)
+                {
+                    List<String> arch = new List<string>();
+                    string pathParse = "";
+                    string regionPath = (string) row["path223"];
+                    switch (Program.Periodparsing)
+                    {
+                        case (TypeArguments.Last223):
+                            pathParse = $"/out/published/ast/{regionPath}/{purchase}/";
+                            arch = GetListArchLast(pathParse, regionPath, purchase);
+                            break;
+                        case (TypeArguments.Daily223):
+                            pathParse = $"/out/published/ast/{regionPath}/{purchase}/daily/";
+                            arch = GetListArchDaily(pathParse, regionPath, purchase);
+                            break;
+                    }
+
+                    if (arch.Count == 0)
+                    {
+                        Log.Logger("Получен пустой список архивов", pathParse);
+                        continue;
+                    }
+
+                    foreach (var v in arch)
+                    {
+                        GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"], purchase);
+                    }
+                }
+            }
+
+            try
+            {
+                CheckInn();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Ошибка при обновлении инн", e);
+            }
+        }
 
         public void ParserLostTens()
         {
