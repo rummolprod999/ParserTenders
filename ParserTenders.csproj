@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ParserTenders</RootNamespace>
     <AssemblyName>ParserTenders</AssemblyName>
-      <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
@@ -150,32 +150,32 @@
     <Reference Include="jint, Version=2.10.4.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f">
       <HintPath>..\packages\jint.2.10.4\lib\net45\jint.dll</HintPath>
     </Reference>
-      <Reference Include="Microsoft.CSharp"/>
-      <Reference Include="MySql.Data, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-          <HintPath>..\packages\MySql.Data.6.10.7\lib\net452\MySql.Data.dll</HintPath>
-          <Private>True</Private>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\packages\MySql.Data.6.10.7\lib\net452\MySql.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-      <Reference Include="MySql.Data.Entity.EF6, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-          <HintPath>..\packages\MySql.Data.Entity.6.10.7\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
-          <Private>True</Private>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\packages\MySql.Data.Entity.6.10.7\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-      <Reference Include="System.ComponentModel"/>
+    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-      <Reference Include="System.Configuration"/>
-      <Reference Include="System.Configuration.Install"/>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-      <Reference Include="System.Drawing"/>
-      <Reference Include="System.Drawing.Design"/>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-      <Reference Include="System.Management"/>
-      <Reference Include="System.Security"/>
-      <Reference Include="System.Transactions"/>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -205,7 +205,7 @@
     <Compile Include="GntType.cs" />
     <Compile Include="GntWebTender.cs" />
     <Compile Include="JsonExtensions.cs" />
-      <Compile Include="ListExtension.cs"/>
+    <Compile Include="ListExtension.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LotGpB.cs" />
     <Compile Include="ObTorgType.cs" />
@@ -225,7 +225,7 @@
     <Compile Include="ParserDir\ParserRosneft.cs" />
     <Compile Include="ParserDir\ParserSakhalin.cs" />
     <Compile Include="ParserDir\ParserSgn223.cs" />
-      <Compile Include="ParserDir\ParserSignProj44.cs"/>
+    <Compile Include="ParserDir\ParserSignProj44.cs" />
     <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
     <Compile Include="ParserDir\ParserTektorgGazprom.cs" />
     <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="ParserDir\ParserTend44.cs" />
     <Compile Include="ParserDir\ParserTend615.cs" />
     <Compile Include="ParserDir\ParserTendersWeb.cs" />
-      <Compile Include="ParserDir\ParserTendersWeb44.cs"/>
+    <Compile Include="ParserDir\ParserTendersWeb44.cs" />
     <Compile Include="ParserDir\ParserWeb.cs" />
     <Compile Include="PlacingWayGpB.cs" />
     <Compile Include="ProcedureGpB.cs" />
@@ -247,16 +247,17 @@
     <Compile Include="TenderDir\ITenderWeb.cs" />
     <Compile Include="TenderDir\Tender.cs" />
     <Compile Include="TenderDir\TenderBase.cs" />
-      <Compile Include="TenderDir\TenderTypeSignProj44.cs"/>
+    <Compile Include="TenderDir\TenderTypeClarificationResult.cs" />
+    <Compile Include="TenderDir\TenderTypeSignProj44.cs" />
     <Compile Include="TenderDir\TenderType223.cs" />
     <Compile Include="TenderDir\TenderType223Web.cs" />
     <Compile Include="TenderDir\TenderType44.cs" />
-      <Compile Include="TenderDir\TenderType44Web.cs"/>
-      <Compile Include="TenderDir\TenderType504.cs"/>
-      <Compile Include="TenderDir\TenderType504Web.cs"/>
+    <Compile Include="TenderDir\TenderType44Web.cs" />
+    <Compile Include="TenderDir\TenderType504.cs" />
+    <Compile Include="TenderDir\TenderType504Web.cs" />
     <Compile Include="TenderDir\TenderType615.cs" />
     <Compile Include="TenderDir\TenderTypeCancel.cs" />
-      <Compile Include="TenderDir\TenderTypeCancel223.cs"/>
+    <Compile Include="TenderDir\TenderTypeCancel223.cs" />
     <Compile Include="TenderDir\TenderTypeCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeCancelFailure.cs" />
     <Compile Include="TenderDir\TenderTypeClarification.cs" />
@@ -264,7 +265,7 @@
     <Compile Include="TenderDir\TenderTypeDateChange615.cs" />
     <Compile Include="TenderDir\TenderTypeExp223.cs" />
     <Compile Include="TenderDir\TenderTypeLotCancel.cs" />
-      <Compile Include="TenderDir\TenderTypeLotCancel223.cs"/>
+    <Compile Include="TenderDir\TenderTypeLotCancel223.cs" />
     <Compile Include="TenderDir\TenderTypeLotCancel615.cs" />
     <Compile Include="TenderDir\TenderTypeMrsk.cs" />
     <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
@@ -301,12 +302,12 @@
     <Content Include="test.html" />
     <Content Include="testorg.html" />
   </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\ClassFSAharp\ClassFSAharp.fsproj">
-            <Project>{09557ad3-1975-4c21-8ab1-862acb8dd1e1}</Project>
-            <Name>ClassFSAharp</Name>
-        </ProjectReference>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassFSAharp\ClassFSAharp.fsproj">
+      <Project>{09557ad3-1975-4c21-8ab1-862acb8dd1e1}</Project>
+      <Name>ClassFSAharp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

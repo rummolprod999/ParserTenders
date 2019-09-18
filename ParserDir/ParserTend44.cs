@@ -19,6 +19,7 @@ namespace ParserTenders.ParserDir
         private string[] _fileCancel = new[] {"notificationcancel_"};
         private string[] _fileCancelFailure = new[] {"cancelfailure_"};
         private string[] _fileClarification = new[] {"clarification_", "epclarificationdoc_"};
+        private string[] _fileClarificationResult = new[] {"epclarificationresult_"};
         private string[] _fileDatechange = new[] {"datechange_"};
         private string[] _fileLotcancel = new[] {"lotcancel_"};
         private string[] _fileOrgchange = new[] {"orgchange_"};
@@ -45,7 +46,7 @@ namespace ParserTenders.ParserDir
                 .AddRangeAndReturnList(_fileDatechange.ToList()).AddRangeAndReturnList(_fileLotcancel.ToList())
                 .AddRangeAndReturnList(_fileOrgchange.ToList()).AddRangeAndReturnList(_fileProlongation.ToList())
                 .AddRangeAndReturnList(_fileSign.ToList()).AddRangeAndReturnList(_fileXml44.ToList())
-                .AddRangeAndReturnList(_fileXml504.ToList());
+                .AddRangeAndReturnList(_fileXml504.ToList()).AddRangeAndReturnList(_fileClarificationResult.ToList());
         }
 
         public override void Parsing()
@@ -144,6 +145,10 @@ namespace ParserTenders.ParserDir
                             .Where(a => _fileClarification.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
+                        List<FileInfo> arrayClarificationResult = filelist
+                            .Where(a => _fileClarificationResult.Any(
+                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                            .ToList();
                         List<FileInfo> arrayXml504 = filelist
                             .Where(a => _fileXml504.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
@@ -196,6 +201,10 @@ namespace ParserTenders.ParserDir
                         foreach (var f in arrayClarification)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeClarification);
+                        }
+                        foreach (var f in arrayClarificationResult)
+                        {
+                            Bolter(f, region, regionId, TypeFile44.TypeClarificationResult);
                         }
 
                         foreach (var f in arrayXml504)
@@ -290,6 +299,10 @@ namespace ParserTenders.ParserDir
                     case TypeFile44.TypeClarification:
                         TenderTypeClarification m = new TenderTypeClarification(f, region, regionId, json);
                         m.Parsing();
+                        break;
+                    case TypeFile44.TypeClarificationResult:
+                        TenderTypeClarificationResult r = new TenderTypeClarificationResult(f, region, regionId, json);
+                        r.Parsing();
                         break;
                     case TypeFile44.TypeTen504:
                         TenderType504 o = new TenderType504(f, region, regionId, json);

@@ -11,6 +11,7 @@ namespace ParserTenders
         TypeOrgChange,
         TypeLotCancel,
         TypeClarification,
+        TypeClarificationResult,
         TypeNull,
         TypeTen504
     }
