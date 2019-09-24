@@ -69,8 +69,8 @@ namespace ParserTenders.TenderDir
                                           "").Trim('"');
                     }
                     string href = ((string) c.SelectToken("urlOOS") ?? "").Trim();
-                    string question = ((string) c.SelectToken("description") ?? "").Trim();
-                    string topic = ((string) c.SelectToken("requestSubjectInfo") ?? "").Trim();
+                    string question = ((string) c.SelectToken("requestSubjectInfo") ?? "").Trim();
+                    string topic = ((string) c.SelectToken("description") ?? "").Trim();
                     string insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
                     MySqlCommand cmd2 = new MySqlCommand(insertClarification, connect);
