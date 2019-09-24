@@ -574,7 +574,7 @@ namespace ParserTenders
         private static void ParserTender44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders44");
-            /*try
+            try
             {
                 ParserTend44 t44 = new ParserTend44(Periodparsing);
                 t44.Parsing();
@@ -582,13 +582,13 @@ namespace ParserTenders
             catch (Exception e)
             {
                 Log.Logger(e);
-            }*/
+            }
 
-            ParserTend44 t44 = new ParserTend44(Periodparsing);
+            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f =
                 new FileInfo(
-                    "/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/11111111.xml");
-            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen44);
+                    "/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/222.xml");
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen44);*/
 
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Обновили tender44", UpdateTender44);
