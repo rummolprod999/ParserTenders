@@ -1055,7 +1055,7 @@ namespace ParserTenders.TenderDir
                     {
                         //Log.Logger("Can not find purchase objects in ", FilePath);
                     }
-                    if(pils){
+                    /*if(pils){
                         string updateTender =
                             $"UPDATE {Program.Prefix}tender SET is_medicine = @is_medicine WHERE id_tender = @id_tender";
                         MySqlCommand cmd5 = new MySqlCommand(updateTender, connect);
@@ -1063,7 +1063,7 @@ namespace ParserTenders.TenderDir
                         cmd5.Parameters.AddWithValue("@id_tender", idTender);
                         cmd5.Parameters.AddWithValue("@is_medicine", 1);
                         cmd5.ExecuteNonQuery();
-                    }
+                    }*/
                     TenderKwords(connect, idTender, pils);
                     AddVerNumber(connect, purchaseNumber);
                 }
