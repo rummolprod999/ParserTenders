@@ -99,6 +99,7 @@ namespace ParserTenders.ParserDir
         {
             string file = "";
             int count = 1;
+            var timeout = 5000;
             while (true)
             {
                 try
@@ -128,14 +129,15 @@ namespace ParserTenders.ParserDir
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не удалось скачать файл", arch, e);
+                    //Log.Logger("Не удалось скачать файл", arch, e);
                     if (count > 50)
                     {
                         return file;
                     }
-
+                    
+                    Thread.Sleep(timeout);
                     count++;
-                    Thread.Sleep(5000);
+                    timeout += 5000;
                 }
             }
         }
@@ -228,6 +230,7 @@ namespace ParserTenders.ParserDir
         {
             List<string> archtemp = new List<string>();
             int count = 1;
+            var timeout = 5000;
             while (true)
             {
                 try
@@ -250,14 +253,15 @@ namespace ParserTenders.ParserDir
                         break;
                     }
 
-                    if (count > 3)
+                    if (count > 4)
                     {
                         Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
 
+                    Thread.Sleep(timeout);
                     count++;
-                    Thread.Sleep(2000);
+                    timeout += 5000;
                 }
             }
 
@@ -268,6 +272,7 @@ namespace ParserTenders.ParserDir
         {
             List<(string, long)> archtemp = new List<(string, long)>();
             int count = 1;
+            var timeout = 5000;
             while (true)
             {
                 try
@@ -281,7 +286,7 @@ namespace ParserTenders.ParserDir
                         var sizeFile = ftpListItem.Size;
                         archtemp.Add((nameFile, sizeFile));
                     }
-
+                    ftp.Disconnect();
                     if (count > 1)
                     {
                         Log.Logger("Удалось получить список архивов после попытки", count);
@@ -297,14 +302,15 @@ namespace ParserTenders.ParserDir
                         break;
                     }
 
-                    if (count > 3)
+                    if (count > 4)
                     {
                         Log.Logger($"Не смогли найти директорию после попытки {count}", pathParse, e);
                         break;
                     }
 
+                    Thread.Sleep(timeout);
                     count++;
-                    Thread.Sleep(2000);
+                    timeout += 5000;
                 }
             }
 
