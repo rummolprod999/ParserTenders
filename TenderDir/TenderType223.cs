@@ -500,13 +500,14 @@ namespace ParserTenders.TenderDir
                         var positionNumber =
                             ((string) lot.SelectToken("lotPlanInfo.positionNumber") ?? "").Trim();
                         string insertLot =
-                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
                         cmd18.Prepare();
                         cmd18.Parameters.AddWithValue("@id_tender", idTender);
                         cmd18.Parameters.AddWithValue("@lot_number", lotNumber);
                         cmd18.Parameters.AddWithValue("@max_price", lotMaxPrice);
                         cmd18.Parameters.AddWithValue("@currency", lotCurrency);
+                        cmd18.Parameters.AddWithValue("@lot_name", lotSubj);
                         cmd18.ExecuteNonQuery();
                         int idLot = (int) cmd18.LastInsertedId;
                         lotNumber++;
@@ -516,15 +517,7 @@ namespace ParserTenders.TenderDir
                             string okpd2Code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
                             string additionalInfo = ((string) lotitem.SelectToken("additionalInfo") ?? "").Trim();
-                            string name = "";
-                            if (!String.IsNullOrEmpty(lotSubj))
-                            {
-                                name = $"{lotSubj} {additionalInfo}".Trim();
-                            }
-                            else
-                            {
-                                name = $"{additionalInfo} {okpdName}".Trim();
-                            }
+                            string name = $"{additionalInfo} {okpdName}".Trim();
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
                                 .Trim();
                             string okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();

@@ -378,8 +378,9 @@ namespace ParserTenders.TenderDir
                         string lotMaxPrice = ((string) lot.SelectToken("maxPrice") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("currency.name") ?? "").Trim();
                         string lotFinanceSource = ((string) lot.SelectToken("financeSource") ?? "").Trim();
+                        var lotName = ((string) lot.SelectToken("lotObjectInfo") ?? "").Trim();
                         string insertLot =
-                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
+                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
                         MySqlCommand cmd12 = new MySqlCommand(insertLot, connect);
                         cmd12.Prepare();
                         cmd12.Parameters.AddWithValue("@id_tender", idTender);
@@ -387,6 +388,7 @@ namespace ParserTenders.TenderDir
                         cmd12.Parameters.AddWithValue("@max_price", lotMaxPrice);
                         cmd12.Parameters.AddWithValue("@currency", lotCurrency);
                         cmd12.Parameters.AddWithValue("@finance_source", lotFinanceSource);
+                        cmd12.Parameters.AddWithValue("@lot_name", lotName);
                         cmd12.ExecuteNonQuery();
                         int idLot = (int) cmd12.LastInsertedId;
                         if (idLot < 1)
