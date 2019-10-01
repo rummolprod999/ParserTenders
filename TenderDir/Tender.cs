@@ -115,6 +115,25 @@ namespace ParserTenders.TenderDir
             {
                 resString = "|лекарственные средства| ";
             }
+
+            string selectLot =
+                $"SELECT DISTINCT l.lot_name FROM {Program.Prefix}tender AS t LEFT JOIN lot AS l ON l.id_tender = t.id_tender WHERE t.id_tender = @id_tender";
+            MySqlCommand cmd0 = new MySqlCommand(selectLot, connect);
+            cmd0.Prepare();
+            cmd0.Parameters.AddWithValue("@id_tender", idTender);
+            DataTable dt0 = new DataTable();
+            MySqlDataAdapter adapter0 = new MySqlDataAdapter {SelectCommand = cmd0};
+            adapter0.Fill(dt0);
+            if (dt0.Rows.Count > 0)
+            {
+                var distrDt = dt0.AsEnumerable().Distinct(DataRowComparer.Default);
+                foreach (DataRow row in distrDt)
+                {
+                    string lotName = !row.IsNull("lot_name") ? ((string) row["lot_name"]) : "";
+                    resString += $"{lotName} ";
+                }
+            }
+
             string selectPurObj =
                 $"SELECT DISTINCT po.name, po.okpd_name FROM {Program.Prefix}purchase_object AS po LEFT JOIN {Program.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
             MySqlCommand cmd1 = new MySqlCommand(selectPurObj, connect);
@@ -190,6 +209,9 @@ namespace ParserTenders.TenderDir
                 }
             }
 
+            string innOrg = "";
+            string nameOrg = "";
+            
             if (idOrg != 0)
             {
                 string selectOrg =
@@ -204,8 +226,8 @@ namespace ParserTenders.TenderDir
                 {
                     foreach (DataRow row in dt4.Rows)
                     {
-                        string innOrg = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
-                        string nameOrg = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
+                        innOrg = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
+                        nameOrg = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
                         resString += $" {innOrg} {nameOrg}";
                     }
                 }
@@ -226,7 +248,10 @@ namespace ParserTenders.TenderDir
                 {
                     string innC = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
                     string fullNameC = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
-                    resString += $" {innC} {fullNameC}";
+                    if ((innC != innOrg) || (fullNameC != nameOrg))
+                    {
+                        resString += $" {innC} {fullNameC}";
+                    }
                 }
             }
 
