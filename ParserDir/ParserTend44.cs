@@ -61,7 +61,8 @@ namespace ParserTenders.ParserDir
                 {
                     case TypeArguments.Last44:
                         pathParse = $"/fcs_regions/{regionPath}/notifications/";
-                        arch = GetListArchLast(pathParse, regionPath);
+                        //arch = GetListArchLast(pathParse, regionPath);
+                        arch = GetListArchCurrLast(pathParse, regionPath);
                         break;
                     case TypeArguments.Curr44:
                         pathParse = $"/fcs_regions/{regionPath}/notifications/currMonth/";
@@ -202,6 +203,7 @@ namespace ParserTenders.ParserDir
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeClarification);
                         }
+
                         foreach (var f in arrayClarificationResult)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeClarificationResult);
@@ -333,6 +335,48 @@ namespace ParserTenders.ParserDir
             yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             foreach (var a in newLs.Where(a =>
                 yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+            {
+                if (a.Item2 == 0)
+                {
+                    Log.Logger("!!!archive size = 0", a.Item1);
+                    continue;
+                }
+
+                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                {
+                    connect.Open();
+                    string selectArch =
+                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
+                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@archive", a.Item1);
+                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    bool resRead = reader.HasRows;
+                    reader.Close();
+                    if (!resRead)
+                    {
+                        string addArch =
+                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
+                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        cmd1.Prepare();
+                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
+                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
+                        cmd1.ExecuteNonQuery();
+                        arch.Add(a.Item1);
+                    }
+                }
+            }
+
+            return arch;
+        }
+
+        public List<String> GetListArchCurrLast(string pathParse, string regionPath)
+        {
+            List<String> arch = new List<string>();
+            var newLs = GetListFtp44New(pathParse);
+            foreach (var a in newLs.Where(a =>
+                a.Item1.Contains($"_{Program.LocalDate:yyyy}")))
             {
                 if (a.Item2 == 0)
                 {
