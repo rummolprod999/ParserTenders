@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44";
 
         private static string _database;
         private static string _tempPath44;
@@ -144,6 +144,7 @@ namespace ParserTenders
                     case TypeArguments.Curr44:
                     case TypeArguments.Prev44:
                     case TypeArguments.Last44:
+                    case TypeArguments.LastCurr44:
                         return _tempPath44;
                     case TypeArguments.Curr615:
                     case TypeArguments.Prev615:
@@ -203,6 +204,7 @@ namespace ParserTenders
                     case TypeArguments.Curr44:
                     case TypeArguments.Prev44:
                     case TypeArguments.Last44:
+                    case TypeArguments.LastCurr44:
                         return _logPath44;
                     case TypeArguments.Curr615:
                     case TypeArguments.Prev615:
@@ -280,6 +282,11 @@ namespace ParserTenders
                     break;
                 case "curr44":
                     Periodparsing = TypeArguments.Curr44;
+                    Init(Periodparsing);
+                    ParserTender44(Periodparsing);
+                    break;
+                case "lastcurr44":
+                    Periodparsing = TypeArguments.LastCurr44;
                     Init(Periodparsing);
                     ParserTender44(Periodparsing);
                     break;
@@ -503,6 +510,7 @@ namespace ParserTenders
                 case TypeArguments.Curr44:
                 case TypeArguments.Last44:
                 case TypeArguments.Prev44:
+                case TypeArguments.LastCurr44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Curr615:

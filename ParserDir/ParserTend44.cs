@@ -61,8 +61,7 @@ namespace ParserTenders.ParserDir
                 {
                     case TypeArguments.Last44:
                         pathParse = $"/fcs_regions/{regionPath}/notifications/";
-                        //arch = GetListArchLast(pathParse, regionPath);
-                        arch = GetListArchCurrLast(pathParse, regionPath);
+                        arch = GetListArchLast(pathParse, regionPath);
                         break;
                     case TypeArguments.Curr44:
                         pathParse = $"/fcs_regions/{regionPath}/notifications/currMonth/";
@@ -71,6 +70,10 @@ namespace ParserTenders.ParserDir
                     case TypeArguments.Prev44:
                         pathParse = $"/fcs_regions/{regionPath}/notifications/prevMonth/";
                         arch = GetListArchPrev(pathParse, regionPath);
+                        break;
+                    case TypeArguments.LastCurr44:
+                        pathParse = $"/fcs_regions/{regionPath}/notifications/";
+                        arch = GetListArchCurrLast(pathParse, regionPath);
                         break;
                 }
 

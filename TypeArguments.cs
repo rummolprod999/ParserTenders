@@ -29,6 +29,7 @@ namespace ParserTenders
         Web44,
         CurrSignProj44,
         LastSignProj44,
-        PrevSignProj44
+        PrevSignProj44,
+        LastCurr44
     }
 }
