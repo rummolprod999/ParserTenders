@@ -35,12 +35,12 @@ namespace ParserTenders.ParserDir
                 Log.Logger(
                     $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     urlStart);
-                return;
+                max = 0;
             }
 
             for (int i = 1; i <= max; i++)
             {
-                var url = $"{urlStart}&page={i}";
+                var url = $"{urlStart}&page={i}&limit=500";
                 try
                 {
                     ParsingPage(url);
