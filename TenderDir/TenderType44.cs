@@ -506,17 +506,35 @@ namespace ParserTenders.TenderDir
                             }
 
                             var planNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "").Trim();
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "")
+                                .Trim();
                             if (string.IsNullOrEmpty(planNumber))
                             {
-                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ?? "").Trim();
+                                planNumber = ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ??
+                                              "").Trim();
                             }
+                            if (string.IsNullOrEmpty(planNumber))
+                            {
+                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ??
+                                              "").Trim();
+                            }
+
                             var positionNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "").Trim();
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "")
+                                .Trim();
                             if (string.IsNullOrEmpty(positionNumber))
                             {
-                                positionNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "").Trim();
+                                positionNumber =
+                                    ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ?? "")
+                                    .Trim();
                             }
+                            if (string.IsNullOrEmpty(positionNumber))
+                            {
+                                positionNumber =
+                                    ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "")
+                                    .Trim();
+                            }
+
                             string insertCustomerRequirement =
                                 $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number";
                             MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
@@ -1053,6 +1071,7 @@ namespace ParserTenders.TenderDir
                     {
                         //Log.Logger("Can not find purchase objects in ", FilePath);
                     }
+
                     /*if(pils){
                         string updateTender =
                             $"UPDATE {Program.Prefix}tender SET is_medicine = @is_medicine WHERE id_tender = @id_tender";

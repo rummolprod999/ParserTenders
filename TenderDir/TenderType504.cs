@@ -531,10 +531,21 @@ namespace ParserTenders.TenderDir
                             ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlanInfo.plan2017Number") ?? "").Trim();
                         if (string.IsNullOrEmpty(planNumber))
                         {
+                            planNumber = ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlan2020Info.plan2020Number") ??
+                                          "").Trim();
+                        }
+                        if (string.IsNullOrEmpty(planNumber))
+                        {
                             planNumber = ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlanInfo.planNumber") ?? "").Trim();
                         }
                         var positionNumber =
                             ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlanInfo.position2017Number") ?? "").Trim();
+                        if (string.IsNullOrEmpty(positionNumber))
+                        {
+                            positionNumber =
+                                ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlan2020Info.plan2020Number") ?? "")
+                                .Trim();
+                        }
                         if (string.IsNullOrEmpty(positionNumber))
                         {
                             positionNumber = ((string) customerRequirement.SelectToken("contractConditionsInfo.tenderPlanInfo.positionNumber") ?? "").Trim();
