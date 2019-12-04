@@ -17,7 +17,7 @@ namespace ParserTenders
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClient()).DownloadString(url));
-                    if (task.Wait(TimeSpan.FromSeconds(650)))
+                    if (task.Wait(TimeSpan.FromSeconds(30)))
                     {
                         tmp = task.Result;
                         break;
@@ -29,7 +29,7 @@ namespace ParserTenders
 
                 catch (Exception e)
                 {
-                    if (count >= 3)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
@@ -70,7 +70,7 @@ namespace ParserTenders
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClientUa()).DownloadString(url));
-                    if (task.Wait(TimeSpan.FromSeconds(100)))
+                    if (task.Wait(TimeSpan.FromSeconds(30)))
                     {
                         tmp = task.Result;
                         break;
@@ -89,7 +89,7 @@ namespace ParserTenders
                         return tmp;
                     }
 
-                    if (count >= 5)
+                    if (count >= 3)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
@@ -101,7 +101,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    if (count >= 5)
+                    if (count >= 3)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
@@ -146,7 +146,7 @@ namespace ParserTenders
                         var v = new TimedWebClient {Encoding = Encoding.GetEncoding("windows-1251")};
                         return v.DownloadString(url);
                     });
-                    if (task.Wait(TimeSpan.FromSeconds(650)))
+                    if (task.Wait(TimeSpan.FromSeconds(30)))
                     {
                         tmp = task.Result;
                         break;
@@ -157,7 +157,7 @@ namespace ParserTenders
                 }
                 catch (Exception e)
                 {
-                    if (count >= 3)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать xml за {count} попыток", url);
                         break;
