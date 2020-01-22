@@ -401,8 +401,9 @@ namespace ParserTenders.TenderDir
                         string lotMaxPrice = ((string) lot.SelectToken("maxPrice") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("currency.name") ?? "").Trim();
                         string lotFinanceSource = ((string) lot.SelectToken("financeSource") ?? "").Trim();
+                        var lotName = ((string) lot.SelectToken("lotObjectInfo") ?? "").Trim();
                         string insertLot =
-                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
+                            $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
                         MySqlCommand cmd12 = new MySqlCommand(insertLot, connect);
                         cmd12.Prepare();
                         cmd12.Parameters.AddWithValue("@id_tender", idTender);
@@ -410,6 +411,7 @@ namespace ParserTenders.TenderDir
                         cmd12.Parameters.AddWithValue("@max_price", lotMaxPrice);
                         cmd12.Parameters.AddWithValue("@currency", lotCurrency);
                         cmd12.Parameters.AddWithValue("@finance_source", lotFinanceSource);
+                        cmd12.Parameters.AddWithValue("@lot_name", lotName);
                         cmd12.ExecuteNonQuery();
                         int idLot = (int) cmd12.LastInsertedId;
                         if (idLot < 1)
@@ -439,6 +441,24 @@ namespace ParserTenders.TenderDir
                                 ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
                             string contractGuaranteeAmount =
                                 ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
+                            // TODO change it
+                            /*if (string.IsNullOrEmpty(contractGuaranteeAmount))
+                            {
+                                try
+                                {
+                                    var contractGuaranteeAmountPart = (decimal?) customerRequirement.SelectToken("contractGuarantee.part") ?? Decimal.Zero;
+                                    if (contractGuaranteeAmountPart != Decimal.Zero)
+                                    {
+                                        var NmckDec = Decimal.Parse(lotMaxPrice);
+                                        var decContGuarAmount = NmckDec * contractGuaranteeAmountPart;
+                                        contractGuaranteeAmount = decContGuarAmount.ToString();
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.Logger(e);
+                                }
+                            }*/
                             string applicationSettlementAccount =
                                 ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
                                  "").Trim();
@@ -526,19 +546,42 @@ namespace ParserTenders.TenderDir
                                 }
                             }
                             var planNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "").Trim();
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "")
+                                .Trim();
                             if (string.IsNullOrEmpty(planNumber))
                             {
-                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ?? "").Trim();
+                                planNumber = ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ??
+                                              "").Trim();
                             }
+                            if (string.IsNullOrEmpty(planNumber))
+                            {
+                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ??
+                                              "").Trim();
+                            }
+
                             var positionNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "").Trim();
+                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "")
+                                .Trim();
                             if (string.IsNullOrEmpty(positionNumber))
                             {
-                                positionNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "").Trim();
+                                positionNumber =
+                                    ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ?? "")
+                                    .Trim();
                             }
+                            if (string.IsNullOrEmpty(positionNumber))
+                            {
+                                positionNumber =
+                                    ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "")
+                                    .Trim();
+                            }
+                            var provWarAmount =
+                                ((string) customerRequirement.SelectToken("provisionWarranty.amount") ?? "")
+                                .Trim();
+                            var provWarPart =
+                                ((string) customerRequirement.SelectToken("provisionWarranty.part") ?? "")
+                                .Trim();
                             string insertCustomerRequirement =
-                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number";
+                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part";
                             MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                             cmd16.Prepare();
                             cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -560,6 +603,8 @@ namespace ParserTenders.TenderDir
                             cmd16.Parameters.AddWithValue("@max_price", customerRequirementMaxPrice);
                             cmd16.Parameters.AddWithValue("@plan_number", planNumber);
                             cmd16.Parameters.AddWithValue("@position_number", positionNumber);
+                            cmd16.Parameters.AddWithValue("@prov_war_amount", provWarAmount);
+                            cmd16.Parameters.AddWithValue("@prov_war_part", provWarPart);
                             cmd16.ExecuteNonQuery();
                             if (idCustomer == 0)
                             {
@@ -1073,8 +1118,17 @@ namespace ParserTenders.TenderDir
                     {
                         //Log.Logger("Can not find purchase objects in ", FilePath);
                     }
-
-                    Tender.TenderKwords(connect, idTender, pils);
+                    
+                    /*if(pils){
+                        string updateTender =
+                            $"UPDATE {Program.Prefix}tender SET is_medicine = @is_medicine WHERE id_tender = @id_tender";
+                        MySqlCommand cmd5 = new MySqlCommand(updateTender, connect);
+                        cmd5.Prepare();
+                        cmd5.Parameters.AddWithValue("@id_tender", idTender);
+                        cmd5.Parameters.AddWithValue("@is_medicine", 1);
+                        cmd5.ExecuteNonQuery();
+                    }*/
+                    TenderKwords(connect, idTender, pils);
                     AddVerNumber(connect, purchaseNumber);
                 }
             }
