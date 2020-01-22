@@ -20,7 +20,8 @@ namespace ParserTenders.ParserDir
             for (int i = 1; i <= PageCount; i++)
             {
                 string url =
-                    $"http://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&pageNumber={i}&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&selectedSubjects=&af=true&priceFrom=&priceTo=&currencyId=1&regions=&regionDeleted=false&sortBy=PUBLISH_DATE&openMode=USE_DEFAULT_PARAMS";
+                    Uri.EscapeUriString($"https://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&search-filter=Дате+размещения&search-filter=&pageNumber={i}&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&sortBy=PUBLISH_DATE&okpd2Ids=&okpd2IdsCodes=&af=on&placingWaysList=&placingWaysList223=&placingChildWaysList=&publishDateFrom=&publishDateTo=&applSubmissionCloseDateFrom=&applSubmissionCloseDateTo=&priceFromGeneral=&priceFromGWS=&priceFromUnitGWS=&priceToGeneral=&priceToGWS=&priceToUnitGWS=&currencyIdGeneral=-1&customerTitle=&customerCode=&customerFz94id=&customerFz223id=&customerInn=&orderPlacement94_0=&orderPlacement94_1=&orderPlacement94_2=&npaHidden=&restrictionsToPurchase44=");
+                Console.WriteLine(url);
                 try
                 {
                     ParserPage(url);
@@ -43,7 +44,7 @@ namespace ParserTenders.ParserDir
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
-            var tens = htmlDoc.DocumentNode.SelectNodes("//div[@class = \"boxIcons\"]/a[@class = \"printLink\"]") ??
+            var tens = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'search-registry-entry-block')]/div[contains(@class, 'row')][1]//a[contains(@href, 'print-form')]") ??
                        new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
