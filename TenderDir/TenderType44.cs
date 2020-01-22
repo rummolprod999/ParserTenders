@@ -418,6 +418,24 @@ namespace ParserTenders.TenderDir
                                 ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
                             string contractGuaranteeAmount =
                                 ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
+                            // TODO change it
+                            /*if (string.IsNullOrEmpty(contractGuaranteeAmount))
+                            {
+                                try
+                                {
+                                    var contractGuaranteeAmountPart = (decimal?) customerRequirement.SelectToken("contractGuarantee.part") ?? Decimal.Zero;
+                                    if (contractGuaranteeAmountPart != Decimal.Zero)
+                                    {
+                                        var NmckDec = Decimal.Parse(lotMaxPrice);
+                                        var decContGuarAmount = NmckDec * contractGuaranteeAmountPart;
+                                        contractGuaranteeAmount = decContGuarAmount.ToString();
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Log.Logger(e);
+                                }
+                            }*/
                             string applicationSettlementAccount =
                                 ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
                                  "").Trim();
