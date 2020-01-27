@@ -299,6 +299,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fz_223_test.xml" />
     <Content Include="test.html" />
     <Content Include="testorg.html" />
   </ItemGroup>

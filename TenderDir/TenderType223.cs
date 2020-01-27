@@ -492,6 +492,13 @@ namespace ParserTenders.TenderDir
                         string lotMaxPrice = ((string) lot.SelectToken("lotData.initialSum") ?? "").Trim();
                         string lotCurrency = ((string) lot.SelectToken("lotData.currency.name") ?? "").Trim();
                         string lotSubj = ((string) lot.SelectToken("lotData.subject") ?? "").Trim();
+                        var purchaseDescription =
+                            ((string) lot.SelectToken("lotData.purchaseDescription") ?? "").Trim();
+                        if (purchaseDescription != "")
+                        {
+                            lotSubj = $"{lotSubj}. {purchaseDescription}";
+                        }
+
                         var deliveryPlaceLot =
                             ((string) lot.SelectToken("lotData.deliveryPlace.address") ?? "")
                             .Trim();
@@ -562,6 +569,203 @@ namespace ParserTenders.TenderDir
                             cmd16.Parameters.AddWithValue("@plan_number", planNumber);
                             cmd16.Parameters.AddWithValue("@position_number", positionNumber);
                             cmd16.ExecuteNonQuery();
+                            }
+                        }
+                        
+                        List<JToken> lotitemsJoin = GetElements(lot, "jointLotData.lotCustomers.lotCustomer");
+                        foreach (var lotitem in lotitemsJoin)
+                        {
+                            string customerInnJoin =
+                                ((string) lotitem.SelectToken("customerInfo.inn") ?? "").Trim();
+                            string customerFullNameJoin =
+                                ((string) lotitem.SelectToken("customerInfo.fullName") ?? "")
+                                .Trim();
+                            string customerKppJoin =
+                                ((string) lotitem.SelectToken("customerInfo.kpp") ?? "").Trim();
+                            int idCustomerJoin = 0;
+                            string customerRegNumberJoin = "";
+                            if (!String.IsNullOrEmpty(customerInnJoin))
+                            {
+                                string selectOdCustomer =
+                                    $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                MySqlCommand cmd10 = new MySqlCommand(selectOdCustomer, connect);
+                                cmd10.Prepare();
+                                cmd10.Parameters.AddWithValue("@inn", customerInnJoin);
+                                cmd10.Parameters.AddWithValue("@kpp", customerKppJoin);
+                                MySqlDataReader reader4 = cmd10.ExecuteReader();
+                                if (reader4.HasRows)
+                                {
+                                    reader4.Read();
+                                    customerRegNumberJoin = (string) reader4["regNumber"];
+                                }
+
+                                reader4.Close();
+                                if (String.IsNullOrEmpty(customerRegNumberJoin))
+                                {
+                                    string selectOdCustomerFromFtp =
+                                        $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                    MySqlCommand cmd11 = new MySqlCommand(selectOdCustomerFromFtp, connect);
+                                    cmd11.Prepare();
+                                    cmd11.Parameters.AddWithValue("@inn", customerInnJoin);
+                                    cmd11.Parameters.AddWithValue("@kpp", customerKppJoin);
+                                    MySqlDataReader reader5 = cmd11.ExecuteReader();
+                                    if (reader5.HasRows)
+                                    {
+                                        reader5.Read();
+                                        customerRegNumberJoin = (string) reader5["regNumber"];
+                                    }
+
+                                    reader5.Close();
+                                }
+
+                                if (String.IsNullOrEmpty(customerRegNumberJoin))
+                                {
+                                    string selectOdCustomerFromFtp223 =
+                                        $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                    MySqlCommand cmd12 = new MySqlCommand(selectOdCustomerFromFtp223, connect);
+                                    cmd12.Prepare();
+                                    cmd12.Parameters.AddWithValue("@inn", customerInnJoin);
+                                    cmd12.Parameters.AddWithValue("@kpp", customerKppJoin);
+                                    MySqlDataReader reader6 = cmd12.ExecuteReader();
+                                    if (reader6.HasRows)
+                                    {
+                                        reader6.Read();
+                                        customerRegNumberJoin = (string) reader6["regNumber"];
+                                    }
+
+                                    reader6.Close();
+                                }
+
+                                if (!String.IsNullOrEmpty(customerRegNumberJoin))
+                                {
+                                    string selectCustomer =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
+                                    MySqlCommand cmd13 = new MySqlCommand(selectCustomer, connect);
+                                    cmd13.Prepare();
+                                    cmd13.Parameters.AddWithValue("@reg_num", customerRegNumberJoin);
+                                    MySqlDataReader reader7 = cmd13.ExecuteReader();
+                                    if (reader7.HasRows)
+                                    {
+                                        reader7.Read();
+                                        idCustomerJoin = (int) reader7["id_customer"];
+                                        reader7.Close();
+                                    }
+                                    else
+                                    {
+                                        reader7.Close();
+                                        string insertCustomer =
+                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, inn = @inn, is223=1";
+                                        MySqlCommand cmd14 = new MySqlCommand(insertCustomer, connect);
+                                        cmd14.Prepare();
+                                        cmd14.Parameters.AddWithValue("@reg_num", customerRegNumberJoin);
+                                        cmd14.Parameters.AddWithValue("@full_name", customerFullNameJoin);
+                                        cmd14.Parameters.AddWithValue("@inn", customerInnJoin);
+                                        cmd14.ExecuteNonQuery();
+                                        idCustomerJoin = (int) cmd14.LastInsertedId;
+                                    }
+                                }
+                                else
+                                {
+                                    string selectCustomerInn =
+                                        $"SELECT id_customer FROM {Program.Prefix}customer WHERE inn = @inn";
+                                    MySqlCommand cmd15 = new MySqlCommand(selectCustomerInn, connect);
+                                    cmd15.Prepare();
+                                    cmd15.Parameters.AddWithValue("@inn", customerInnJoin);
+                                    MySqlDataReader reader8 = cmd15.ExecuteReader();
+                                    if (reader8.HasRows)
+                                    {
+                                        reader8.Read();
+                                        idCustomerJoin = (int) reader8["id_customer"];
+                                        reader8.Close();
+                                    }
+                                    else
+                                    {
+                                        reader8.Close();
+                                        string regNum223 = $"00000223{customerInnJoin}";
+                                        string insertCustomer =
+                                            $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, inn = @inn, is223=1";
+                                        MySqlCommand cmd16 = new MySqlCommand(insertCustomer, connect);
+                                        cmd16.Prepare();
+                                        cmd16.Parameters.AddWithValue("@reg_num", regNum223);
+                                        cmd16.Parameters.AddWithValue("@full_name", customerFullNameJoin);
+                                        cmd16.Parameters.AddWithValue("@inn", customerInnJoin);
+                                        cmd16.ExecuteNonQuery();
+                                        idCustomerJoin = (int) cmd16.LastInsertedId;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Log.Logger("У customer нет inn", FilePath);
+                            }
+
+                            if (idCustomerJoin == 0)
+                            {
+                                idCustomerJoin = idCustomer;
+                            }
+
+                            var planNumberJoin =
+                                ((string) lotitem.SelectToken("lotPlanInfo.planRegistrationNumber") ?? "").Trim();
+                            var positionNumberJoin =
+                                ((string) lotitem.SelectToken("lotPlanInfo.positionNumber") ?? "").Trim();
+                            var deliveryPlaceJoin =
+                                ((string) lotitem.SelectToken("lotCustomerData.deliveryPlace.address") ?? "")
+                                .Trim();
+                            if (String.IsNullOrEmpty(deliveryPlaceJoin))
+                                deliveryPlaceJoin = deliveryPlaceLot;
+                            var sumJoin = ((string) lotitem.SelectToken("lotCustomerData.initialSum") ?? "")
+                                .Trim();
+                            if (!String.IsNullOrEmpty(deliveryPlaceJoin) || !string.IsNullOrEmpty(planNumberJoin) ||
+                                !string.IsNullOrEmpty(positionNumberJoin))
+                            {
+                                string insertCustomerRequirement =
+                                    $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, plan_number = @plan_number, position_number = @position_number, max_price = @max_price";
+                                MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                                cmd16.Prepare();
+                                cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd16.Parameters.AddWithValue("@id_customer", idCustomerJoin);
+                                cmd16.Parameters.AddWithValue("@kladr_place", "");
+                                cmd16.Parameters.AddWithValue("@delivery_place", deliveryPlaceJoin);
+                                cmd16.Parameters.AddWithValue("@delivery_term", "");
+                                cmd16.Parameters.AddWithValue("@plan_number", planNumberJoin);
+                                cmd16.Parameters.AddWithValue("@position_number", positionNumberJoin);
+                                cmd16.Parameters.AddWithValue("@max_price", sumJoin);
+                                cmd16.ExecuteNonQuery();
+                            }
+
+                            List<JToken> items = GetElements(lotitem, "lotCustomerData.lotItems.lotItem");
+                            foreach (var item in items)
+                            {
+                                string okpd2Code = ((string) item.SelectToken("okpd2.code") ?? "").Trim();
+                                string okpdName = ((string) item.SelectToken("okpd2.name") ?? "").Trim();
+                                string additionalInfo = ((string) item.SelectToken("additionalInfo") ?? "").Trim();
+                                string name = $"{additionalInfo} {okpdName}".Trim();
+                                string quantityValue = ((string) item.SelectToken("qty") ?? "")
+                                    .Trim();
+                                string okei = ((string) item.SelectToken("okei.name") ?? "").Trim();
+                                int okpd2GroupCode = 0;
+                                string okpd2GroupLevel1Code = "";
+                                if (!String.IsNullOrEmpty(okpd2Code))
+                                {
+                                    GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
+                                }
+
+                                string insertLotitem =
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, sum = @sum";
+                                MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                                cmd19.Prepare();
+                                cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                                cmd19.Parameters.AddWithValue("@id_customer", idCustomerJoin);
+                                cmd19.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                                cmd19.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
+                                cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
+                                cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                                cmd19.Parameters.AddWithValue("@name", name);
+                                cmd19.Parameters.AddWithValue("@quantity_value", quantityValue);
+                                cmd19.Parameters.AddWithValue("@okei", okei);
+                                cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                cmd19.Parameters.AddWithValue("@sum", sumJoin);
+                                cmd19.ExecuteNonQuery();
                             }
                         }
                     }
