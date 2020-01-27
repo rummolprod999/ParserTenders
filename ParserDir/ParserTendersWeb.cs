@@ -41,8 +41,9 @@ namespace ParserTenders.ParserDir
 
         private void ParserPage(string url)
         {
+            if(DownloadString.MaxDownload > 1000) return;
             var s = DownloadString.DownLUserAgent(url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
                 return;
@@ -68,10 +69,10 @@ namespace ParserTenders.ParserDir
         private void ParserLink(HtmlNode n)
         {
             var url = (n.Attributes["href"]?.Value ?? "").Trim();
-            if (!String.IsNullOrEmpty(url))
+            if (!string.IsNullOrEmpty(url))
             {
                 var s = DownloadString.DownLUserAgent(url);
-                if (String.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParserLink()", url);
                     return;
@@ -81,7 +82,7 @@ namespace ParserTenders.ParserDir
                 htmlDoc.LoadHtml(s);
                 var xml = (htmlDoc.DocumentNode.SelectSingleNode("//div[@id= \"tabs-2\"]")?.InnerText ?? "").Trim();
                 xml = System.Net.WebUtility.HtmlDecode(xml);
-                if (String.IsNullOrEmpty(xml))
+                if (string.IsNullOrEmpty(xml))
                 {
                     Log.Logger("empty xml in ParserLink", url);
                     return;
