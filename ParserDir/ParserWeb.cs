@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders.ParserDir
@@ -38,6 +40,28 @@ namespace ParserTenders.ParserDir
             }
 
             return els;
+        }
+        
+        protected int MaxPage(string u)
+        {
+            if (DownloadString.MaxDownload >= 1000) return 1;
+            var s = DownloadString.DownLUserAgent(u);
+            if (string.IsNullOrEmpty(s))
+            {
+                Log.Logger("cannot get first page from EIS", u);
+                throw new Exception("cannot get first page from EIS");
+            }
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(s);
+            var maxPageS =
+                htmlDoc.DocumentNode.SelectSingleNode("//ul[@class = 'pages']/li[last()]/a/span")?.InnerText ?? "1";
+            if (int.TryParse(maxPageS, out var maxP))
+            {
+                return maxP;
+            }
+
+            return 1;
         }
     }
 }

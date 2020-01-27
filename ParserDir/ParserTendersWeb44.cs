@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using HtmlAgilityPack;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
@@ -29,7 +30,8 @@ namespace ParserTenders.ParserDir
 
         private void ParsingPage(string u)
         {
-            for (var i = 1; i <= PageCount; i++)
+            var maxP = MaxPage(u);
+            for (var i = 1; i <= maxP; i++)
             {
                 var url =
                     Uri.EscapeUriString($"{u}{i}");
@@ -39,7 +41,7 @@ namespace ParserTenders.ParserDir
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Error in ParserTendersWeb44.Parsing", e);
+                    Log.Logger("Error in ParserTendersWeb44.ParserPage", e);
                 }
             }
         }
@@ -56,7 +58,8 @@ namespace ParserTenders.ParserDir
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
-            var tens = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'search-registry-entry-block')]/div[contains(@class, 'row')][1]//a[contains(@href, 'printForm/view')]") ??
+            var tens = htmlDoc.DocumentNode.SelectNodes(
+                           "//div[contains(@class, 'search-registry-entry-block')]/div[contains(@class, 'row')][1]") ??
                        new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -73,28 +76,52 @@ namespace ParserTenders.ParserDir
 
         private void ParserLink(HtmlNode n)
         {
-            var url = (n.Attributes["href"]?.Value ?? "").Trim();
-            if (!string.IsNullOrEmpty(url))
+            if (DownloadString.MaxDownload > 1000) return;
+            var url =
+                (n.SelectSingleNode(".//a[contains(@href, 'printForm/view')]")?.Attributes["href"]?.Value ?? "").Trim();
+            var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
+                               ?.Attributes["href"]?.Value ?? "").Trim();
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
+            var purNum = purNumT.GetDateFromRegex(@"regNumber=(\d+)$");
+            if (purNum == "")
             {
-                url = url.Replace("view.html", "viewXml.html");
-                url = $"http://zakupki.gov.ru{url}";
-                var s = DownloadString.DownLUserAgent(url);
-                if (string.IsNullOrEmpty(s))
+                Log.Logger("purNum not found");
+                return;
+            }
+            using (var connect = ConnectToDb.GetDbConnection())
+            {
+                connect.Open();
+                var selectTender =
+                    $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
+                var cmd = new MySqlCommand(selectTender, connect);
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue("@purchase_number", purNum);
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    Log.Logger("Empty string in ParserLink()", url);
+                    reader.Close();
                     return;
                 }
+                reader.Close();
+            }
+            url = url.Replace("view.html", "viewXml.html");
+            url = $"http://zakupki.gov.ru{url}";
+            var s = DownloadString.DownLUserAgent(url);
+            if (string.IsNullOrEmpty(s))
+            {
+                Log.Logger("Empty string in ParserLink()", url);
+                return;
+            }
 
-                var xml = s;
-                try
-                {
-                    Parser44Web(xml, url);
-                    //Console.WriteLine(xml);
-                }
-                catch (Exception e)
-                {
-                    Log.Logger("Error in Parser44Web()", e, url);
-                }
+            var xml = s;
+            try
+            {
+                Parser44Web(xml, url);
+                //Console.WriteLine(xml);
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Error in Parser44Web()", e, url);
             }
         }
 

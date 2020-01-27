@@ -57,6 +57,9 @@ namespace ParserTenders
                                                            "The remote server returned an error: (434)"):
                             Log.Logger("434 Exception", a.InnerException.Message, url);
                             return tmp;
+                        case  TimeoutException a:
+                            Log.Logger("Timeout exception");
+                            return tmp;
                     }
 
                     Log.Logger("Не удалось получить строку xml", e, url);
@@ -129,6 +132,9 @@ namespace ParserTenders
                                                        a.InnerException.Message.Contains(
                                                            "The remote server returned an error: (434)"):
                             Log.Logger("434 Exception", a.InnerException.Message, url);
+                            goto Finish;
+                        case  TimeoutException a:
+                            Log.Logger("Timeout exception");
                             goto Finish;
                     }
 
