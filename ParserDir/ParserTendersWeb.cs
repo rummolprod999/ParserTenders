@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -10,18 +11,23 @@ namespace ParserTenders.ParserDir
     public class ParserTendersWeb : ParserWeb
     {
         private int PageCount = 20;
-
+        private List<string> _listUrls = new List<string>
+        {
+            "https://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&search-filter=Дате+размещения&search-filter=&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&sortBy=PUBLISH_DATE&okpd2Ids=&okpd2IdsCodes=&af=on&placingWaysList=&placingWaysList223=&placingChildWaysList=&publishDateFrom=&publishDateTo=&applSubmissionCloseDateFrom=&applSubmissionCloseDateTo=&priceFromGeneral=&priceFromGWS=&priceFromUnitGWS=&priceToGeneral=&priceToGWS=&priceToUnitGWS=&currencyIdGeneral=-1&customerTitle=&customerCode=&customerFz94id=&customerFz223id=&customerInn=&orderPlacement94_0=&orderPlacement94_1=&orderPlacement94_2=&npaHidden=&restrictionsToPurchase44=&pageNumber="
+        };
         public ParserTendersWeb(TypeArguments a) : base(a)
         {
         }
-
         public override void Parsing()
         {
-            for (int i = 1; i <= PageCount; i++)
+            _listUrls.ForEach(ParsingPage);
+        }
+        private void ParsingPage(string u)
+        {
+            for (var i = 1; i <= PageCount; i++)
             {
-                string url =
-                    Uri.EscapeUriString($"https://zakupki.gov.ru/epz/order/extendedsearch/results.html?searchString=&morphology=on&search-filter=Дате+размещения&search-filter=&pageNumber={i}&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz223=on&sortBy=PUBLISH_DATE&okpd2Ids=&okpd2IdsCodes=&af=on&placingWaysList=&placingWaysList223=&placingChildWaysList=&publishDateFrom=&publishDateTo=&applSubmissionCloseDateFrom=&applSubmissionCloseDateTo=&priceFromGeneral=&priceFromGWS=&priceFromUnitGWS=&priceToGeneral=&priceToGWS=&priceToUnitGWS=&currencyIdGeneral=-1&customerTitle=&customerCode=&customerFz94id=&customerFz223id=&customerInn=&orderPlacement94_0=&orderPlacement94_1=&orderPlacement94_2=&npaHidden=&restrictionsToPurchase44=");
-                Console.WriteLine(url);
+                var url =
+                    Uri.EscapeUriString($"{u}{i}");
                 try
                 {
                     ParserPage(url);
@@ -35,7 +41,7 @@ namespace ParserTenders.ParserDir
 
         private void ParserPage(string url)
         {
-            string s = DownloadString.DownLUserAgent(url);
+            var s = DownloadString.DownLUserAgent(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
@@ -61,10 +67,10 @@ namespace ParserTenders.ParserDir
 
         private void ParserLink(HtmlNode n)
         {
-            string url = (n.Attributes["href"]?.Value ?? "").Trim();
+            var url = (n.Attributes["href"]?.Value ?? "").Trim();
             if (!String.IsNullOrEmpty(url))
             {
-                string s = DownloadString.DownLUserAgent(url);
+                var s = DownloadString.DownLUserAgent(url);
                 if (String.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParserLink()", url);
@@ -73,7 +79,7 @@ namespace ParserTenders.ParserDir
 
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
-                string xml = (htmlDoc.DocumentNode.SelectSingleNode("//div[@id= \"tabs-2\"]")?.InnerText ?? "").Trim();
+                var xml = (htmlDoc.DocumentNode.SelectSingleNode("//div[@id= \"tabs-2\"]")?.InnerText ?? "").Trim();
                 xml = System.Net.WebUtility.HtmlDecode(xml);
                 if (String.IsNullOrEmpty(xml))
                 {
@@ -102,10 +108,10 @@ namespace ParserTenders.ParserDir
         private void Parser223Web(string ftext, string url)
         {
             ftext = ClearText.ClearString(ftext);
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(ftext);
-            string jsons = JsonConvert.SerializeXmlNode(doc);
-            JObject json = JObject.Parse(jsons);
+            var jsons = JsonConvert.SerializeXmlNode(doc);
+            var json = JObject.Parse(jsons);
             if (ftext.Contains("purchaseNoticeZPESMBO"))
             {
                 Bolter223(url, json, TypeFile223.PurchaseNoticeZpesmbo);
@@ -164,7 +170,7 @@ namespace ParserTenders.ParserDir
         {
             try
             {
-                TenderType223Web a = new TenderType223Web(url, json, typefile);
+                var a = new TenderType223Web(url, json, typefile);
                 a.Parsing();
             }
             catch (Exception e)

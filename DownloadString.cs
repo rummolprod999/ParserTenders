@@ -8,6 +8,13 @@ namespace ParserTenders
 {
     public static class DownloadString
     {
+        public static int MaxDownload;
+
+        static DownloadString()
+        {
+            MaxDownload = 0;
+        }
+
         public static string DownL(string url)
         {
             string tmp = "";
@@ -63,6 +70,7 @@ namespace ParserTenders
 
         public static string DownLUserAgent(string url)
         {
+            MaxDownload++;
             string tmp = "";
             int count = 0;
             while (true)
