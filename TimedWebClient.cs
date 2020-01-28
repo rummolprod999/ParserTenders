@@ -39,6 +39,7 @@ namespace ParserTenders
             wr.Headers.Add(HttpRequestHeader.Pragma, "no-cache");
             wr.Headers.Add(HttpRequestHeader.CacheControl, "no-cache");*/
             /*wr.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate, br");*/
+            wr.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.None;
             return wr;
         }
     }
