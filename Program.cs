@@ -882,7 +882,7 @@ namespace ParserTenders
             Log.Logger("Обновили tender44", UpdateTender44);
             Log.Logger("Добавили tender223", AddTender223);
             Log.Logger("Обновили tender223", UpdateTender223);
-            Log.Logger($"Current number of download is {DownloadString.MaxDownload}");
+            Log.Logger($"Количество скачиваний {DownloadString.MaxDownload}");
             Log.Logger("Время окончания парсинга Web");
         }
 
@@ -903,7 +903,7 @@ namespace ParserTenders
             Log.Logger("Обновили tender44", UpdateTender44);
             Log.Logger("Добавили tender504", AddTender504);
             Log.Logger("Обновили tender504", UpdateTender504);
-            Log.Logger($"Current number of download is {DownloadString.MaxDownload}");
+            Log.Logger($"Количество скачиваний {DownloadString.MaxDownload}");
             Log.Logger("Время окончания парсинга Web44");
         }
 

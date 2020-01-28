@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 
@@ -45,11 +44,10 @@ namespace ParserTenders.ParserDir
         protected int MaxPage(string u)
         {
             if (DownloadString.MaxDownload >= 1000) return 1;
-            var s = DownloadString.DownLUserAgent(u);
+            var s = DownloadString.DownLUserAgentEis(u);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("cannot get first page from EIS", u);
-                throw new Exception("cannot get first page from EIS");
             }
 
             var htmlDoc = new HtmlDocument();
@@ -61,7 +59,7 @@ namespace ParserTenders.ParserDir
                 return maxP;
             }
 
-            return 1;
+            return 10;
         }
     }
 }

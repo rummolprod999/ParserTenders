@@ -40,7 +40,7 @@ namespace ParserTenders.ParserDir
 
         private void ParsingPage(string u)
         {
-            var maxP = MaxPage(u);
+            var maxP = MaxPage(Uri.EscapeUriString($"{u}1"));
             for (var i = 1; i <= maxP; i++)
             {
                 var url =
@@ -59,7 +59,7 @@ namespace ParserTenders.ParserDir
         private void ParserPage(string url)
         {
             if(DownloadString.MaxDownload > 1000) return;
-            var s = DownloadString.DownLUserAgent(url);
+            var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
@@ -116,7 +116,7 @@ namespace ParserTenders.ParserDir
             }
             url = url.Replace("view.html", "viewXml.html");
             url = $"http://zakupki.gov.ru{url}";
-            var s = DownloadString.DownLUserAgent(url);
+            var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserLink()", url);
