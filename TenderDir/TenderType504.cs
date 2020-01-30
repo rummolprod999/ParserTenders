@@ -98,7 +98,7 @@ namespace ParserTenders.TenderDir
                     if (!String.IsNullOrEmpty(docPublishDate))
                     {
                         string selectDateT =
-                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number";
                         MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", RegionId);

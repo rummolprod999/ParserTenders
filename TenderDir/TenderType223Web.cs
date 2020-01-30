@@ -162,7 +162,7 @@ namespace ParserTenders.TenderDir
                     var addr = GetRegionString(customerLegalAddress) != "" ? customerLegalAddress :
                         GetRegionString(customerPostAddress) != "" ? customerPostAddress :
                         GetRegionString(organizerFactAddress) != "" ? organizerFactAddress : organizerPostAddress;
-                    if (addr != "")
+                    /*if (addr != "")
                     {
                         var regionS = GetRegionString(addr);
                         if (regionS != "")
@@ -183,7 +183,7 @@ namespace ParserTenders.TenderDir
                                 reader46.Close();
                             }
                         }
-                    }
+                    }*/
 
                     string organizerInn = ((string) tender.SelectToken("placer.mainInfo.inn") ?? "").Trim();
                     string organizerKpp = ((string) tender.SelectToken("placer.mainInfo.kpp") ?? "").Trim();

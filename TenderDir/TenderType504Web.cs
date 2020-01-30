@@ -95,7 +95,7 @@ namespace ParserTenders.TenderDir
                     if (!String.IsNullOrEmpty(docPublishDate))
                     {
                         string selectDateT =
-                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number";
                         MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", RegionId);
@@ -174,7 +174,7 @@ namespace ParserTenders.TenderDir
                     var addr = GetRegionString(organizerFactAddress) != "" ? organizerFactAddress :
                         GetRegionString(organizerPostAddress) != "" ? organizerPostAddress :
                         GetRegionString(organizerFactAddress) != "" ? organizerFactAddress : organizerPostAddress;
-                    if (addr != "")
+                    /*if (addr != "")
                     {
                         var regionS = GetRegionString(addr);
                         if (regionS != "")
@@ -195,7 +195,7 @@ namespace ParserTenders.TenderDir
                                 reader46.Close();
                             }
                         }
-                    }
+                    }*/
 
                     int idOrganizer = 0;
                     int idCustomer = 0;
