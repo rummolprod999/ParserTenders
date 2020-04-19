@@ -866,14 +866,14 @@ namespace ParserTenders.TenderDir
                                          "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
-                                        name = $"{name} {medicamentalFormName}";
+                                        name = $"{name} | {medicamentalFormName}";
                                     }
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
-                                        name = $"{name} {dosageGrlsValue}";
+                                        name = $"{name} | {dosageGrlsValue}";
                                     }
 
                                     if (!String.IsNullOrEmpty(name))
@@ -924,14 +924,14 @@ namespace ParserTenders.TenderDir
                                          "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
-                                        name = $"{name} {medicamentalFormName}";
+                                        name = $"{name} | {medicamentalFormName}";
                                     }
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
-                                        name = $"{name} {dosageGrlsValue}";
+                                        name = $"{name} | {dosageGrlsValue}";
                                     }
 
                                     if (!String.IsNullOrEmpty(name))
@@ -985,14 +985,14 @@ namespace ParserTenders.TenderDir
                                          "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
-                                        name = $"{name} {medicamentalFormName}";
+                                        name = $"{name} | {medicamentalFormName}";
                                     }
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
-                                        name = $"{name} {dosageGrlsValue}";
+                                        name = $"{name} | {dosageGrlsValue}";
                                     }
 
                                     if (!String.IsNullOrEmpty(name))
@@ -1043,14 +1043,14 @@ namespace ParserTenders.TenderDir
                                          "").Trim();
                                     if (!string.IsNullOrEmpty(medicamentalFormName))
                                     {
-                                        name = $"{name} {medicamentalFormName}";
+                                        name = $"{name} | {medicamentalFormName}";
                                     }
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     if (!string.IsNullOrEmpty(dosageGrlsValue))
                                     {
-                                        name = $"{name} {dosageGrlsValue}";
+                                        name = $"{name} | {dosageGrlsValue}";
                                     }
 
                                     if (!String.IsNullOrEmpty(name))
