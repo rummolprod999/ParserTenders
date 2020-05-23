@@ -864,17 +864,11 @@ namespace ParserTenders.TenderDir
                                     string medicamentalFormName =
                                         ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} | {medicamentalFormName}";
-                                    }
+                                    name = $"{name} | {medicamentalFormName}";
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} | {dosageGrlsValue}";
-                                    }
+                                    name = $"{name} | {dosageGrlsValue}";
 
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
@@ -922,17 +916,11 @@ namespace ParserTenders.TenderDir
                                     string medicamentalFormName =
                                         ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} | {medicamentalFormName}";
-                                    }
+                                    name = $"{name} | {medicamentalFormName}";
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} | {dosageGrlsValue}";
-                                    }
+                                    name = $"{name} | {dosageGrlsValue}";
 
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
