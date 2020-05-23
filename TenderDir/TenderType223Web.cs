@@ -533,6 +533,7 @@ namespace ParserTenders.TenderDir
                             ((string) lot.SelectToken("lotPlanInfo.planRegistrationNumber") ?? "").Trim();
                         var positionNumber =
                             ((string) lot.SelectToken("lotPlanInfo.positionNumber") ?? "").Trim();
+                        var applicationSupplySumm = ((string) lot.SelectToken("lotData.applicationSupplySumm") ?? "").Trim();
                         string insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                         MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
@@ -550,6 +551,8 @@ namespace ParserTenders.TenderDir
                         {
                             string okpd2Code = ((string) lotitem.SelectToken("okpd2.code") ?? "").Trim();
                             string okpdName = ((string) lotitem.SelectToken("okpd2.name") ?? "").Trim();
+                            string commodityItemPrice = ((string) lotitem.SelectToken("commodityItemPrice") ?? "")
+                                .Trim();
                             string additionalInfo = ((string) lotitem.SelectToken("additionalInfo") ?? "").Trim();
                             string name = $"{additionalInfo} {okpdName}".Trim();
                             string quantityValue = ((string) lotitem.SelectToken("qty") ?? "")
@@ -563,7 +566,7 @@ namespace ParserTenders.TenderDir
                             }
 
                             string insertLotitem =
-                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value";
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
                             MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
                             cmd19.Prepare();
                             cmd19.Parameters.AddWithValue("@id_lot", idLot);
@@ -575,6 +578,8 @@ namespace ParserTenders.TenderDir
                             cmd19.Parameters.AddWithValue("@name", name);
                             cmd19.Parameters.AddWithValue("@quantity_value", quantityValue);
                             cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@price", commodityItemPrice);
+                            cmd19.Parameters.AddWithValue("@sum", lotMaxPrice);
                             cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                             cmd19.ExecuteNonQuery();
                             var deliveryPlace =
@@ -586,7 +591,7 @@ namespace ParserTenders.TenderDir
                                 !string.IsNullOrEmpty(positionNumber))
                             {
                                 string insertCustomerRequirement =
-                                    $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, plan_number = @plan_number, position_number = @position_number";
+                                    $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, plan_number = @plan_number, position_number = @position_number, application_guarantee_amount = @application_guarantee_amount, max_price = @max_price";
                                 MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                                 cmd16.Prepare();
                                 cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -596,6 +601,8 @@ namespace ParserTenders.TenderDir
                                 cmd16.Parameters.AddWithValue("@delivery_term", "");
                                 cmd16.Parameters.AddWithValue("@plan_number", planNumber);
                                 cmd16.Parameters.AddWithValue("@position_number", positionNumber);
+                                cmd16.Parameters.AddWithValue("@application_guarantee_amount", applicationSupplySumm);
+                                cmd16.Parameters.AddWithValue("@max_price", lotMaxPrice);
                                 cmd16.ExecuteNonQuery();
                             }
                         }
