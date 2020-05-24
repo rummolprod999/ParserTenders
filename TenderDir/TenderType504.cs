@@ -774,6 +774,7 @@ namespace ParserTenders.TenderDir
                     foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                     {
                         pils = true;
+                        var isZnvlp = ((string) drugPurchaseObjectInfo.SelectToken("isZNVLP") ?? "").Trim();
                         List<JToken> drugQuantityCustomersInfo =
                             GetElements(drugPurchaseObjectInfo, "drugQuantityCustomersInfo.drugQuantityCustomerInfo");
                         foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
@@ -848,6 +849,7 @@ namespace ParserTenders.TenderDir
                                 string dosageGrlsValue =
                                     ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                 name = $"{name} | {dosageGrlsValue}";
+                                name = $"{name} | {isZnvlp}";
 
                                 if (!String.IsNullOrEmpty(name))
                                     name = Regex.Replace(name, @"\s+", " ");
@@ -900,6 +902,7 @@ namespace ParserTenders.TenderDir
                                 string dosageGrlsValue =
                                     ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                 name = $"{name} | {dosageGrlsValue}";
+                                name = $"{name} | {isZnvlp}";
 
                                 if (!String.IsNullOrEmpty(name))
                                     name = Regex.Replace(name, @"\s+", " ");
@@ -950,17 +953,12 @@ namespace ParserTenders.TenderDir
                                 string medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
                                     .Trim();
-                                if (!string.IsNullOrEmpty(medicamentalFormName))
-                                {
-                                    name = $"{name} | {medicamentalFormName}";
-                                }
+                                name = $"{name} | {medicamentalFormName}";
 
                                 string dosageGrlsValue =
                                     ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                {
-                                    name = $"{name} | {dosageGrlsValue}";
-                                }
+                                name = $"{name} | {dosageGrlsValue}";
+                                name = $"{name} | {isZnvlp}";
 
                                 if (!String.IsNullOrEmpty(name))
                                     name = Regex.Replace(name, @"\s+", " ");
@@ -1008,17 +1006,12 @@ namespace ParserTenders.TenderDir
                                 string medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
                                     .Trim();
-                                if (!string.IsNullOrEmpty(medicamentalFormName))
-                                {
-                                    name = $"{name} | {medicamentalFormName}";
-                                }
+                                name = $"{name} | {medicamentalFormName}";
 
                                 string dosageGrlsValue =
                                     ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                {
-                                    name = $"{name} | {dosageGrlsValue}";
-                                }
+                                name = $"{name} | {dosageGrlsValue}";
+                                name = $"{name} | {isZnvlp}";
 
                                 if (!String.IsNullOrEmpty(name))
                                     name = Regex.Replace(name, @"\s+", " ");

@@ -814,6 +814,7 @@ namespace ParserTenders.TenderDir
                         foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                         {
                             pils = true;
+                            var isZnvlp = ((string) drugPurchaseObjectInfo.SelectToken("isZNVLP") ?? "").Trim();
                             List<JToken> drugQuantityCustomersInfo =
                                 GetElements(drugPurchaseObjectInfo, "customerQuantities.customerQuantity");
                             drugQuantityCustomersInfo.AddRange(GetElements(drugPurchaseObjectInfo,
@@ -886,12 +887,13 @@ namespace ParserTenders.TenderDir
                                     string medicamentalFormName =
                                         ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
-                                    name = $"{name} {medicamentalFormName}";
+                                    name = $"{name} | {medicamentalFormName}";
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    name = $"{name} {dosageGrlsValue}";
-
+                                    name = $"{name} | {dosageGrlsValue}";
+                                    name = $"{name} | {isZnvlp}";
+                                    
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
                                     string quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
@@ -943,6 +945,7 @@ namespace ParserTenders.TenderDir
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
+                                    name = $"{name} | {isZnvlp}";
 
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
@@ -993,17 +996,12 @@ namespace ParserTenders.TenderDir
                                     string medicamentalFormName =
                                         ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} {medicamentalFormName}";
-                                    }
+                                    name = $"{name} | {medicamentalFormName}";
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} {dosageGrlsValue}";
-                                    }
+                                    name = $"{name} | {dosageGrlsValue}";
+                                    name = $"{name} | {isZnvlp}";
 
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
@@ -1051,17 +1049,12 @@ namespace ParserTenders.TenderDir
                                     string medicamentalFormName =
                                         ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
-                                    if (!string.IsNullOrEmpty(medicamentalFormName))
-                                    {
-                                        name = $"{name} {medicamentalFormName}";
-                                    }
+                                    name = $"{name} | {medicamentalFormName}";
 
                                     string dosageGrlsValue =
                                         ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
-                                    if (!string.IsNullOrEmpty(dosageGrlsValue))
-                                    {
-                                        name = $"{name} {dosageGrlsValue}";
-                                    }
+                                    name = $"{name} | {dosageGrlsValue}";
+                                    name = $"{name} | {isZnvlp}";
 
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
