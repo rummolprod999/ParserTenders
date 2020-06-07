@@ -556,7 +556,7 @@ namespace ParserTenders.TenderDir
                             cmd19.Parameters.AddWithValue("@quantity_value", quantityValue);
                             cmd19.Parameters.AddWithValue("@okei", okei);
                             cmd19.Parameters.AddWithValue("@price", commodityItemPrice);
-                            cmd19.Parameters.AddWithValue("@sum", lotMaxPrice);
+                            cmd19.Parameters.AddWithValue("@sum", "");
                             cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                             cmd19.ExecuteNonQuery();
                             var deliveryPlace =
