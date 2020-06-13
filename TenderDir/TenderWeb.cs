@@ -14,6 +14,7 @@ namespace ParserTenders.TenderDir
         protected readonly JObject T;
         protected readonly string FilePath;
         protected int RegionId = 0;
+        protected bool isRegionExsist = default;
 
         public TenderWeb(JObject json, string url)
         {

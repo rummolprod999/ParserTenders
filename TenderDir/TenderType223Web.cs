@@ -368,6 +368,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     string customerInn = ((string) tender.SelectToken("customer.mainInfo.inn") ?? "").Trim();
+                    UpdateRegionId(customerInn, idTender, connect);
                     string customerFullName = ((string) tender.SelectToken("customer.mainInfo.fullName") ?? "")
                         .Trim();
                     string customerKpp = ((string) tender.SelectToken("customer.mainInfo.kpp") ?? "").Trim();
@@ -612,6 +613,7 @@ namespace ParserTenders.TenderDir
                         {
                             string customerInnJoin =
                                 ((string) lotitem.SelectToken("customerInfo.inn") ?? "").Trim();
+                            UpdateRegionId(customerInnJoin, idTender, connect);
                             string customerFullNameJoin =
                                 ((string) lotitem.SelectToken("customerInfo.fullName") ?? "")
                                 .Trim();
@@ -986,6 +988,46 @@ namespace ParserTenders.TenderDir
             }
 
             return d;
+        }
+        
+        private void UpdateRegionId(string cusInn, int idTender, MySqlConnection connect)
+        {
+            if (string.IsNullOrEmpty(cusInn))
+                return;
+            if(isRegionExsist)
+                return;
+            var selectCustomerRegion =
+                $"SELECT region FROM nsi_eis_organizations_223 WHERE inn = @inn";
+            var cmd = new MySqlCommand(selectCustomerRegion, connect);
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue("@inn", cusInn);
+            var reader = cmd.ExecuteReader();
+            var idRegion = 0;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                idRegion = reader.GetInt32("region");
+                reader.Close();
+            }
+            else
+            {
+                reader.Close();
+                return;
+            }
+
+            if (idRegion != 0)
+            {
+                var updateTender =
+                    $"UPDATE tender SET id_region = @id_region WHERE id_tender = @id_tender";
+                var cmd1 = new MySqlCommand(updateTender, connect);
+                cmd1.Prepare();
+                cmd1.Parameters.AddWithValue("@id_tender", idTender);
+                cmd1.Parameters.AddWithValue("@id_region", idRegion);
+                var resT = cmd1.ExecuteNonQuery();
+                if (resT == 1)
+                    isRegionExsist = true;
+            }
+            
         }
     }
 }
