@@ -481,6 +481,7 @@ namespace ParserTenders.TenderDir
                             ((string) customerRequirement.SelectToken("contractGuarantee.account.bik") ?? "").Trim();
                         string customerRegNum = ((string) customerRequirement.SelectToken("customer.regNum") ?? "")
                             .Trim();
+                        UpdateRegionId(customerRegNum, idTender, connect);
                         string customerFullName =
                             ((string) customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
                         string customerRequirementMaxPrice =
@@ -693,6 +694,7 @@ namespace ParserTenders.TenderDir
                                 ((string) customerquantity.SelectToken("quantity") ?? "").Trim();
                             string custRegNum = ((string) customerquantity.SelectToken("customer.regNum") ?? "")
                                 .Trim();
+                            UpdateRegionId(custRegNum, idTender, connect);
                             string custFullName =
                                 ((string) customerquantity.SelectToken("customer.fullName") ?? "").Trim();
                             int idCustomerQ = 0;
@@ -805,6 +807,7 @@ namespace ParserTenders.TenderDir
                                 ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
                             string custRegNum = ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
                                 .Trim();
+                            UpdateRegionId(custRegNum, idTender, connect);
                             string custFullName =
                                 ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
                             int idCustomerQ = 0;
@@ -1121,6 +1124,46 @@ namespace ParserTenders.TenderDir
             }
 
             return 6;
+        }
+        
+        private void UpdateRegionId(string cusRegNum, int idTender, MySqlConnection connect)
+        {
+            if (string.IsNullOrEmpty(cusRegNum))
+                return;
+            if(isRegionExsist)
+                return;
+            var selectCustomerRegion =
+                $"SELECT region FROM nsi_eis_organizations_44 WHERE eis_regNumber = @eis_regNumber";
+            var cmd = new MySqlCommand(selectCustomerRegion, connect);
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue("@eis_regNumber", cusRegNum);
+            var reader = cmd.ExecuteReader();
+            var idRegion = 0;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                idRegion = reader.GetInt32("region");
+                reader.Close();
+            }
+            else
+            {
+                reader.Close();
+                return;
+            }
+
+            if (idRegion != 0)
+            {
+                var updateTender =
+                    $"UPDATE tender SET id_region = @id_region WHERE id_tender = @id_tender";
+                var cmd1 = new MySqlCommand(updateTender, connect);
+                cmd1.Prepare();
+                cmd1.Parameters.AddWithValue("@id_tender", idTender);
+                cmd1.Parameters.AddWithValue("@id_region", idRegion);
+                var resT = cmd1.ExecuteNonQuery();
+                if (resT == 1)
+                    isRegionExsist = true;
+            }
+            
         }
     }
 }
