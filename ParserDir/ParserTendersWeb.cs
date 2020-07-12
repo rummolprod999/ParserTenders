@@ -110,7 +110,7 @@ namespace ParserTenders.ParserDir
             var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
                                ?.Attributes["href"]?.Value ?? "").Trim();
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
-            var purNum = purNumT.GetDateFromRegex(@"regNumber=(\d+)$");
+            var purNum = purNumT.GetDateFromRegex(@"regNumber=(\d+)");
             if (purNum == "")
             {
                 Log.Logger("purNum not found");
