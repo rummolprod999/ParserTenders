@@ -57,20 +57,20 @@ namespace ParserTenders.ParserDir
 
         private void ParserListUrl(TypeSpecTorg t)
         {
-            string str = DownloadString.DownL(t.UrlTypeList);
+            var str = DownloadString.DownL(t.UrlTypeList);
             if (!string.IsNullOrEmpty(str))
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                string maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"navbar\"]/a)[last()-1]")?.InnerText;
+                var maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"navbar\"]/a)[last()-1]")?.InnerText;
                 //Console.WriteLine(maxNumPage);              
                 if (!string.IsNullOrEmpty(maxNumPage))
                 {
                     maxNumPage = (System.Net.WebUtility.HtmlDecode(maxNumPage)).Trim();
-                    if (Int32.TryParse(maxNumPage, out int page))
+                    if (Int32.TryParse(maxNumPage, out var page))
                     {
-                        List<string> lPage = new List<string>();
-                        int i = 0;
+                        var lPage = new List<string>();
+                        var i = 0;
                         while (i < page)
                         {
                             lPage.Add($"{_site}{t.UrlType}{i * 20}");
@@ -106,7 +106,7 @@ namespace ParserTenders.ParserDir
 
         private void ParserListTend(TypeSpecTorg t, string url)
         {
-            string str = DownloadString.DownL1251(url);
+            var str = DownloadString.DownL1251(url);
             if (!string.IsNullOrEmpty(str))
             {
                 //str = str.Win1251ToUtf8();
@@ -148,23 +148,23 @@ namespace ParserTenders.ParserDir
 
         private void ParserTendAdvert(TypeSpecTorg tp, HtmlNode node)
         {
-            string urlT = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlT = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             urlT = $"{_site}{urlT}";
             //string title1 = (node.SelectSingleNode("td[3]").InnerText ?? "").Trim();
-            string title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
-            string entity = $"{title2}".Trim();
+            var title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
+            var entity = $"{title2}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
             entity = System.Net.WebUtility.HtmlDecode(entity);
-            string _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
-            string urlOrg = $"{_site}{_urlOrg}";
+            var _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlOrg = $"{_site}{_urlOrg}";
             
-            string _datePub =
+            var _datePub =
                 (node.SelectSingleNode("td[5]/text()[1]")?.InnerText ?? "").Trim();
-            string _dateOpen =
+            var _dateOpen =
                 (node.SelectSingleNode("td[5]/text()[2]")?.InnerText ?? "").Trim();
-            DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
-            DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
-            SpecTorgTender t = new SpecTorgTender{UrlTender = urlT, Entity = entity, DateOpen = dateOpen, DatePub = datePub, TypeSpecTorgT = tp};
+            var datePub = UtilsFromParsing.ParseDateTend(_datePub);
+            var dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            var t = new SpecTorgTender{UrlTender = urlT, Entity = entity, DateOpen = dateOpen, DatePub = datePub, TypeSpecTorgT = tp};
             try
             {
                 
@@ -189,44 +189,44 @@ namespace ParserTenders.ParserDir
         
         private void ParserTendAuction(TypeSpecTorg tp, HtmlNode node)
         {
-            string urlT = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlT = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             urlT = $"{_site}{urlT}";
             //string title1 = (node.SelectSingleNode("td[3]").InnerText ?? "").Trim();
-            string title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
-            string entity = $"{title2}".Trim();
+            var title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
+            var entity = $"{title2}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
             entity = System.Net.WebUtility.HtmlDecode(entity);
-            string _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
-            string urlOrg = $"{_site}{_urlOrg}";
-            string _price = (node.SelectSingleNode("td[5]").InnerText ?? "").Trim();
-            decimal maxPrice = UtilsFromParsing.ParsePrice(_price);
-            string _datePub =
+            var _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlOrg = $"{_site}{_urlOrg}";
+            var _price = (node.SelectSingleNode("td[5]").InnerText ?? "").Trim();
+            var maxPrice = UtilsFromParsing.ParsePrice(_price);
+            var _datePub =
                 (node.SelectSingleNode("td[6]/text()[1]")?.InnerText ?? "").Trim();
-            string _dateOpen =
+            var _dateOpen =
                 (node.SelectSingleNode("td[6]/text()[2]")?.InnerText ?? "").Trim();
             
-            string _dateRes =
+            var _dateRes =
                 (node.SelectSingleNode("td[6]/text()[2]")?.InnerText ?? "")
                 .Trim();
-            string _dateEnd =
+            var _dateEnd =
                 (node.SelectSingleNode("td[6]/text()[3]")?.InnerText ?? "").Trim();
-            DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
-            DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            var datePub = UtilsFromParsing.ParseDateTend(_datePub);
+            var dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             /*if (dateOpen == DateTime.MinValue)
             {
                 _dateOpen =
                     (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]/strong")?.InnerText ?? "").Trim();
                 dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             }*/
-            DateTime dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
+            var dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             /*if (dateRes == DateTime.MinValue)
             {
                 _dateRes =
                     (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]/strong")?.InnerText ?? "").Trim();
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }*/
-            DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            SpecTorgTender t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
+            var dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
+            var t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
             try
             {
                 switch (tp.Type)
@@ -248,44 +248,44 @@ namespace ParserTenders.ParserDir
         
         private void ParserRequest(TypeSpecTorg tp, HtmlNode node)
         {
-            string urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             urlT = $"{_site}{urlT}";
-            string title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
-            string title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
-            string entity = $"{title2} {title1}".Trim();
+            var title1 = (node.SelectSingleNode("td[2]").InnerText ?? "").Trim();
+            var title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
+            var entity = $"{title2} {title1}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
             entity = System.Net.WebUtility.HtmlDecode(entity);
-            string _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
-            string urlOrg = $"{_site}{_urlOrg}";
-            string _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
-            decimal maxPrice = UtilsFromParsing.ParsePrice(_price);
-            string _datePub =
+            var _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
+            var urlOrg = $"{_site}{_urlOrg}";
+            var _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
+            var maxPrice = UtilsFromParsing.ParsePrice(_price);
+            var _datePub =
                 (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]")?.InnerText ?? "").Trim();
-            string _dateOpen =
+            var _dateOpen =
                 (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]")?.InnerText ?? "").Trim();
             
-            string _dateRes =
+            var _dateRes =
                 (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]")?.InnerText ?? "")
                 .Trim();
-            string _dateEnd =
+            var _dateEnd =
                 (node.SelectSingleNode("td/span[@title = \"Дата подведения итогов закупки\"]")?.InnerText ?? "").Trim();
-            DateTime datePub = UtilsFromParsing.ParseDateTend(_datePub);
-            DateTime dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
+            var datePub = UtilsFromParsing.ParseDateTend(_datePub);
+            var dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             if (dateOpen == DateTime.MinValue)
             {
                 _dateOpen =
                     (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]/strong")?.InnerText ?? "").Trim();
                 dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             }
-            DateTime dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
+            var dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             if (dateRes == DateTime.MinValue)
             {
                 _dateRes =
                     (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]/strong")?.InnerText ?? "").Trim();
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }
-            DateTime dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            SpecTorgTender t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
+            var dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
+            var t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
             try
             {
                 t.ParseRequest();

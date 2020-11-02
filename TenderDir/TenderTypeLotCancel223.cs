@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
@@ -24,11 +23,11 @@ namespace ParserTenders.TenderDir
         public override void Parsing()
         {
             JProperty tend = null;
-            JProperty firstOrDefault = T.Properties()
+            var firstOrDefault = T.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("purchase", StringComparison.Ordinal));
-            JProperty firstOrDefault2 = ((JObject) firstOrDefault?.Value)?.Properties()
+            var firstOrDefault2 = ((JObject) firstOrDefault?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("body", StringComparison.Ordinal));
-            JProperty firstOrDefault3 = ((JObject) firstOrDefault2?.Value)?.Properties()
+            var firstOrDefault3 = ((JObject) firstOrDefault2?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("item", StringComparison.Ordinal));
             if (firstOrDefault3 != null)
             {
@@ -38,41 +37,41 @@ namespace ParserTenders.TenderDir
 
             if (tend != null)
             {
-                JToken tender = tend.Value;
-                string purchaseNumber = ((string) tender.SelectToken("purchaseInfo.purchaseNoticeNumber") ?? "").Trim();
+                var tender = tend.Value;
+                var purchaseNumber = ((string) tender.SelectToken("purchaseInfo.purchaseNoticeNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                     return;
                 }
 
-                List<JToken> lots = GetElements(tender, "cancelledLots.cancelledLot");
+                var lots = GetElements(tender, "cancelledLots.cancelledLot");
                 if (lots.Count == 0)
                 {
                     Log.Logger("Can not find lots in lotcancellation", FilePath);
                     return;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     foreach (var l in lots)
                     {
-                        string lotNumber = ((string) l.SelectToken("ordinalNumber") ?? "").Trim();
+                        var lotNumber = ((string) l.SelectToken("ordinalNumber") ?? "").Trim();
                         if (String.IsNullOrEmpty(lotNumber))
                         {
                             Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);
                             continue;
                         }
 
-                        int idTender = 0;
-                        string selectTender =
+                        var idTender = 0;
+                        var selectTender =
                             $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number AND cancel=0";
-                        MySqlCommand cmd = new MySqlCommand(selectTender, connect);
+                        var cmd = new MySqlCommand(selectTender, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_region", RegionId);
                         cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                        MySqlDataReader reader = cmd.ExecuteReader();
+                        var reader = cmd.ExecuteReader();
                         if (reader.HasRows)
                         {
                             reader.Read();
@@ -86,13 +85,13 @@ namespace ParserTenders.TenderDir
                             continue;
                         }
 
-                        string updateTender =
+                        var updateTender =
                             $"UPDATE {Program.Prefix}lot SET cancel=1 WHERE id_tender = @id_tender AND lot_number = @lot_number";
-                        MySqlCommand cmd1 = new MySqlCommand(updateTender, connect);
+                        var cmd1 = new MySqlCommand(updateTender, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@id_tender", idTender);
                         cmd1.Parameters.AddWithValue("@lot_number", lotNumber);
-                        int resUpd = cmd1.ExecuteNonQuery();
+                        var resUpd = cmd1.ExecuteNonQuery();
                         AddLotCancel223?.Invoke(resUpd);
                     }
                 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
@@ -26,36 +25,36 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            string xml = GetXml(File.ToString());
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            var xml = GetXml(File.ToString());
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string idT = ((string) tender.SelectToken("id") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var idT = ((string) tender.SelectToken("id") ?? "").Trim();
                 if (String.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет id", FilePath);
                     return;
                 }
-                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
-                string docNumber = ((string) tender.SelectToken("docNumber") ?? "").Trim();
+                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var docNumber = ((string) tender.SelectToken("docNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У clarification нет purchaseNumber", FilePath);
                     return;
                 }
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectCl =
+                    var selectCl =
                         $"SELECT id_clarification FROM {Program.Prefix}clarifications WHERE id_xml = @id_xml AND doc_number = @doc_number AND purchase_number = @purchase_number";
-                    MySqlCommand cmd = new MySqlCommand(selectCl, connect);
+                    var cmd = new MySqlCommand(selectCl, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
                     cmd.Parameters.AddWithValue("@doc_number", docNumber);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    var reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Close();
@@ -63,14 +62,14 @@ namespace ParserTenders.TenderDir
                     }
 
                     reader.Close();
-                    string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
-                                             "").Trim('"');
-                    string href = ((string) tender.SelectToken("href") ?? "").Trim();
-                    string question = ((string) tender.SelectToken("question") ?? "").Trim();
-                    string topic = ((string) tender.SelectToken("topic") ?? "").Trim();
-                    string insertClarification =
+                    var docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("docPublishDate") ?? "") ??
+                                          "").Trim('"');
+                    var href = ((string) tender.SelectToken("href") ?? "").Trim();
+                    var question = ((string) tender.SelectToken("question") ?? "").Trim();
+                    var topic = ((string) tender.SelectToken("topic") ?? "").Trim();
+                    var insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
-                    MySqlCommand cmd2 = new MySqlCommand(insertClarification, connect);
+                    var cmd2 = new MySqlCommand(insertClarification, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_xml", idT);
                     cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
@@ -80,20 +79,20 @@ namespace ParserTenders.TenderDir
                     cmd2.Parameters.AddWithValue("@question", question);
                     cmd2.Parameters.AddWithValue("@topic", topic);
                     cmd2.Parameters.AddWithValue("@xml", xml);
-                    int resInsertC = cmd2.ExecuteNonQuery();
-                    int idClar = (int) cmd2.LastInsertedId;
+                    var resInsertC = cmd2.ExecuteNonQuery();
+                    var idClar = (int) cmd2.LastInsertedId;
                     AddClarification44?.Invoke(resInsertC);
-                    List<JToken> attachments = GetElements(tender, "attachments.attachment");
+                    var attachments = GetElements(tender, "attachments.attachment");
                     foreach (var att in attachments)
                     {
-                        string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        string attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
-                        string attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
+                        var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
+                        var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
+                        var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
                         if (!String.IsNullOrEmpty(attachName))
                         {
-                            string insertAttach =
+                            var insertAttach =
                                 $"INSERT INTO {Program.Prefix}clarif_attachments SET id_clarification = @id_clarification, file_name = @file_name, url = @url, description = @description";
-                            MySqlCommand cmd11 = new MySqlCommand(insertAttach, connect);
+                            var cmd11 = new MySqlCommand(insertAttach, connect);
                             cmd11.Prepare();
                             cmd11.Parameters.AddWithValue("@id_clarification", idClar);
                             cmd11.Parameters.AddWithValue("@file_name", attachName);
@@ -109,31 +108,31 @@ namespace ParserTenders.TenderDir
             firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string idT = ((string) tender.SelectToken("id") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var idT = ((string) tender.SelectToken("id") ?? "").Trim();
                 if (String.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет id", FilePath);
                     return;
                 }
-                string purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
-                string docNumber = ((string) tender.SelectToken("commonInfo.docNumber") ?? "").Trim();
+                var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                var docNumber = ((string) tender.SelectToken("commonInfo.docNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У clarification нет purchaseNumber", FilePath);
                     return;
                 }
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectCl =
+                    var selectCl =
                         $"SELECT id_clarification FROM {Program.Prefix}clarifications WHERE id_xml = @id_xml AND doc_number = @doc_number AND purchase_number = @purchase_number";
-                    MySqlCommand cmd = new MySqlCommand(selectCl, connect);
+                    var cmd = new MySqlCommand(selectCl, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
                     cmd.Parameters.AddWithValue("@doc_number", docNumber);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    var reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Close();
@@ -141,14 +140,14 @@ namespace ParserTenders.TenderDir
                     }
 
                     reader.Close();
-                    string docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
-                                             "").Trim('"');
-                    string href = ((string) tender.SelectToken("href") ?? "").Trim();
-                    string question = ((string) tender.SelectToken("question") ?? "").Trim();
-                    string topic = ((string) tender.SelectToken("commonInfo.topic") ?? "").Trim();
-                    string insertClarification =
+                    var docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
+                                          "").Trim('"');
+                    var href = ((string) tender.SelectToken("href") ?? "").Trim();
+                    var question = ((string) tender.SelectToken("question") ?? "").Trim();
+                    var topic = ((string) tender.SelectToken("commonInfo.topic") ?? "").Trim();
+                    var insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
-                    MySqlCommand cmd2 = new MySqlCommand(insertClarification, connect);
+                    var cmd2 = new MySqlCommand(insertClarification, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_xml", idT);
                     cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
@@ -158,20 +157,20 @@ namespace ParserTenders.TenderDir
                     cmd2.Parameters.AddWithValue("@question", question);
                     cmd2.Parameters.AddWithValue("@topic", topic);
                     cmd2.Parameters.AddWithValue("@xml", xml);
-                    int resInsertC = cmd2.ExecuteNonQuery();
-                    int idClar = (int) cmd2.LastInsertedId;
+                    var resInsertC = cmd2.ExecuteNonQuery();
+                    var idClar = (int) cmd2.LastInsertedId;
                     AddClarification44?.Invoke(resInsertC);
-                    List<JToken> attachments = GetElements(tender, "attachments.attachment");
+                    var attachments = GetElements(tender, "attachments.attachment");
                     foreach (var att in attachments)
                     {
-                        string attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        string attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
-                        string attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
+                        var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
+                        var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
+                        var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
                         if (!String.IsNullOrEmpty(attachName))
                         {
-                            string insertAttach =
+                            var insertAttach =
                                 $"INSERT INTO {Program.Prefix}clarif_attachments SET id_clarification = @id_clarification, file_name = @file_name, url = @url, description = @description";
-                            MySqlCommand cmd11 = new MySqlCommand(insertAttach, connect);
+                            var cmd11 = new MySqlCommand(insertAttach, connect);
                             cmd11.Prepare();
                             cmd11.Parameters.AddWithValue("@id_clarification", idClar);
                             cmd11.Parameters.AddWithValue("@file_name", attachName);

@@ -4,7 +4,7 @@ namespace ParserTenders
     {
         public static string ClearString(string s)
         {
-            string st = s;
+            var st = s;
             st = st.Replace("ns2:", "");
             st = st.Replace("ns3:", "");
             st = st.Replace("ns4:", "");
@@ -20,7 +20,7 @@ namespace ParserTenders
 
         public static string ClearStringGpb(string s)
         {
-            string st = s;
+            var st = s;
             st = st.Replace("", "");
             st = st.Replace("", "");
             return st;

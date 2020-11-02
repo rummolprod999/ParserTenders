@@ -56,9 +56,9 @@ namespace ParserTenders
 
         public GetSettings()
         {
-            XmlDocument xDoc = new XmlDocument();
+            var xDoc = new XmlDocument();
             xDoc.Load(Program.PathProgram + Path.DirectorySeparatorChar + "setting_tenders.xml");
-            XmlElement xRoot = xDoc.DocumentElement;
+            var xRoot = xDoc.DocumentElement;
             if (xRoot != null)
             {
                 foreach (XmlNode xnode in xRoot)

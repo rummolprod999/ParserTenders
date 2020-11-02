@@ -23,11 +23,11 @@ namespace ParserTenders.TenderDir
         public override void Parsing()
         {
             JProperty tend = null;
-            JProperty firstOrDefault = T.Properties()
+            var firstOrDefault = T.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("purchase", StringComparison.Ordinal));
-            JProperty firstOrDefault2 = ((JObject) firstOrDefault?.Value)?.Properties()
+            var firstOrDefault2 = ((JObject) firstOrDefault?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("body", StringComparison.Ordinal));
-            JProperty firstOrDefault3 = ((JObject) firstOrDefault2?.Value)?.Properties()
+            var firstOrDefault3 = ((JObject) firstOrDefault2?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("item", StringComparison.Ordinal));
             if (firstOrDefault3 != null)
             {
@@ -37,24 +37,24 @@ namespace ParserTenders.TenderDir
 
             if (tend != null)
             {
-                JToken tender = tend.Value;
-                string purchaseNumber = ((string) tender.SelectToken("cancelNoticeRegistrationNumber") ?? "").Trim();
+                var tender = tend.Value;
+                var purchaseNumber = ((string) tender.SelectToken("cancelNoticeRegistrationNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                     return;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string updateTender =
+                    var updateTender =
                         $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                    MySqlCommand cmd = new MySqlCommand(updateTender, connect);
+                    var cmd = new MySqlCommand(updateTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    int resUpd = cmd.ExecuteNonQuery();
+                    var resUpd = cmd.ExecuteNonQuery();
                     AddCancel223?.Invoke(resUpd);
                 }
             }

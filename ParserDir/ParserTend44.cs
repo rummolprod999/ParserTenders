@@ -54,9 +54,9 @@ namespace ParserTenders.ParserDir
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                List<String> arch = new List<string>();
-                string pathParse = "";
-                string regionPath = (string) row["path"];
+                var arch = new List<string>();
+                var pathParse = "";
+                var regionPath = (string) row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last44:
@@ -101,8 +101,8 @@ namespace ParserTenders.ParserDir
 
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
-            string filea = "";
-            string pathUnzip = "";
+            var filea = "";
+            var pathUnzip = "";
             filea = GetArch44(arch, pathParse);
             if (!String.IsNullOrEmpty(filea))
             {
@@ -111,53 +111,53 @@ namespace ParserTenders.ParserDir
                 {
                     if (Directory.Exists(pathUnzip))
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
-                        FileInfo[] filelist = dirInfo.GetFiles();
-                        List<FileInfo> arrayXml44 = filelist
+                        var dirInfo = new DirectoryInfo(pathUnzip);
+                        var filelist = dirInfo.GetFiles();
+                        var arrayXml44 = filelist
                             .Where(a => _fileXml44.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayProlongation = filelist
+                        var arrayProlongation = filelist
                             .Where(a => _fileProlongation.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayDatechange = filelist
+                        var arrayDatechange = filelist
                             .Where(a => _fileDatechange.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayOrgchange = filelist
+                        var arrayOrgchange = filelist
                             .Where(a => _fileOrgchange.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayLotcancel = filelist
+                        var arrayLotcancel = filelist
                             .Where(a => _fileLotcancel.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayCancel = filelist
+                        var arrayCancel = filelist
                             .Where(a => _fileCancel.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arraySign = filelist
+                        var arraySign = filelist
                             .Where(a => _fileSign.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayCancelFailure = filelist
+                        var arrayCancelFailure = filelist
                             .Where(a => _fileCancelFailure.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayClarification = filelist
+                        var arrayClarification = filelist
                             .Where(a => _fileClarification.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayClarificationResult = filelist
+                        var arrayClarificationResult = filelist
                             .Where(a => _fileClarificationResult.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayXml504 = filelist
+                        var arrayXml504 = filelist
                             .Where(a => _fileXml504.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayNull = filelist
+                        var arrayNull = filelist
                             .Where(a => summList.All(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) == -1))
                             .ToList();
@@ -259,58 +259,58 @@ namespace ParserTenders.ParserDir
 
         public void ParsingXml(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
-            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            using (var sr = new StreamReader(f.ToString(), Encoding.Default))
             {
                 var ftext = sr.ReadToEnd();
                 ftext = ClearText.ClearString(ftext);
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(ftext);
-                string jsons = JsonConvert.SerializeXmlNode(doc);
-                JObject json = JObject.Parse(jsons);
+                var jsons = JsonConvert.SerializeXmlNode(doc);
+                var json = JObject.Parse(jsons);
                 switch (typefile)
                 {
                     case TypeFile44.TypeTen44:
-                        TenderType44 a = new TenderType44(f, region, regionId, json);
+                        var a = new TenderType44(f, region, regionId, json);
                         a.Parsing();
                         break;
                     case TypeFile44.TypeProlongation:
-                        TenderTypeProlongation b = new TenderTypeProlongation(f, region, regionId, json);
+                        var b = new TenderTypeProlongation(f, region, regionId, json);
                         b.Parsing();
                         break;
                     case TypeFile44.TypeDateChange:
-                        TenderTypeDateChange c = new TenderTypeDateChange(f, region, regionId, json);
+                        var c = new TenderTypeDateChange(f, region, regionId, json);
                         c.Parsing();
                         break;
                     case TypeFile44.TypeOrgChange:
-                        TenderTypeOrgChange d = new TenderTypeOrgChange(f, region, regionId, json);
+                        var d = new TenderTypeOrgChange(f, region, regionId, json);
                         d.Parsing();
                         break;
                     case TypeFile44.TypeLotCancel:
-                        TenderTypeLotCancel e = new TenderTypeLotCancel(f, region, regionId, json);
+                        var e = new TenderTypeLotCancel(f, region, regionId, json);
                         e.Parsing();
                         break;
                     case TypeFile44.TypeCancel:
-                        TenderTypeCancel g = new TenderTypeCancel(f, region, regionId, json);
+                        var g = new TenderTypeCancel(f, region, regionId, json);
                         g.Parsing();
                         break;
                     case TypeFile44.TypeCancelFailure:
-                        TenderTypeCancelFailure h = new TenderTypeCancelFailure(f, region, regionId, json);
+                        var h = new TenderTypeCancelFailure(f, region, regionId, json);
                         h.Parsing();
                         break;
                     case TypeFile44.TypeSign:
-                        TenderTypeSign n = new TenderTypeSign(f, region, regionId, json);
+                        var n = new TenderTypeSign(f, region, regionId, json);
                         n.Parsing();
                         break;
                     case TypeFile44.TypeClarification:
-                        TenderTypeClarification m = new TenderTypeClarification(f, region, regionId, json);
+                        var m = new TenderTypeClarification(f, region, regionId, json);
                         m.Parsing();
                         break;
                     case TypeFile44.TypeClarificationResult:
-                        TenderTypeClarificationResult r = new TenderTypeClarificationResult(f, region, regionId, json);
+                        var r = new TenderTypeClarificationResult(f, region, regionId, json);
                         r.Parsing();
                         break;
                     case TypeFile44.TypeTen504:
-                        TenderType504 o = new TenderType504(f, region, regionId, json);
+                        var o = new TenderType504(f, region, regionId, json);
                         o.Parsing();
                         break;
                 }
@@ -319,22 +319,22 @@ namespace ParserTenders.ParserDir
 
         public override List<String> GetListArchLast(string pathParse, string regionPath)
         {
-            List<string> archtemp = new List<string>();
+            var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
             archtemp = GetListFtp44(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            var yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
         public override List<String> GetListArchCurr(string pathParse, string regionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
             //List<string> archtemp = new List<string>();
             //archtemp = GetListFtp44(pathParse);
             /*FtpClient ftp = ClientFtp44();*/
             var newLs = GetListFtp44New(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
+            var yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             foreach (var a in newLs.Where(a =>
                 yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
@@ -345,23 +345,23 @@ namespace ParserTenders.ParserDir
                     continue;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectArch =
+                    var selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    var cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a.Item1);
                     cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool resRead = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
-                        string addArch =
+                        var addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        var cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a.Item1);
                         cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
@@ -376,7 +376,7 @@ namespace ParserTenders.ParserDir
 
         public List<String> GetListArchCurrLast(string pathParse, string regionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
             var newLs = GetListFtp44New(pathParse);
             foreach (var a in newLs.Where(a =>
                 a.Item1.Contains($"_{Program.LocalDate:yyyy}")))
@@ -387,23 +387,23 @@ namespace ParserTenders.ParserDir
                     continue;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectArch =
+                    var selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    var cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a.Item1);
                     cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool resRead = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
-                        string addArch =
+                        var addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        var cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a.Item1);
                         cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
@@ -418,7 +418,7 @@ namespace ParserTenders.ParserDir
 
         public override List<String> GetListArchPrev(string pathParse, string regionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
             //List<string> archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
             //archtemp = GetListFtp44(pathParse);
@@ -426,24 +426,24 @@ namespace ParserTenders.ParserDir
             //string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in newLs)
             {
-                string prevA = $"prev_{a}";
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                var prevA = $"prev_{a}";
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectArch =
+                    var selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    var cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", prevA);
                     cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool resRead = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
-                        string addArch =
+                        var addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        var cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", prevA);
                         cmd1.Parameters.AddWithValue("@size_archive", a.Item2);

@@ -23,12 +23,12 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
@@ -43,41 +43,41 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                string collectingEndDate =
+                var collectingEndDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("collectingEndDate") ?? "") ?? "").Trim('"');
-                string collectingProlongationDate =
+                var collectingProlongationDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("collectingProlongationDate") ?? "") ?? "")
                     .Trim('"');
-                string scoringDate =
+                var scoringDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("scoringDate") ?? "") ?? "").Trim('"');
-                string scoringProlongationDate =
+                var scoringProlongationDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("scoringProlongationDate") ?? "") ?? "").Trim('"');
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
                     if (!String.IsNullOrEmpty(collectingEndDate) && !String.IsNullOrEmpty(collectingProlongationDate))
                     {
-                        string updateTenderEnd =
+                        var updateTenderEnd =
                             $"UPDATE {Program.Prefix}tender SET end_date = @end_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                        MySqlCommand cmd = new MySqlCommand(updateTenderEnd, connect);
+                        var cmd = new MySqlCommand(updateTenderEnd, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_region", RegionId);
                         cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                         cmd.Parameters.AddWithValue("@end_date", collectingProlongationDate);
-                        int resEnd = cmd.ExecuteNonQuery();
+                        var resEnd = cmd.ExecuteNonQuery();
                         AddProlongation?.Invoke(resEnd);
                     }
 
                     if (!String.IsNullOrEmpty(scoringDate) && !String.IsNullOrEmpty(scoringProlongationDate))
                     {
-                        string updateTenderScor =
+                        var updateTenderScor =
                             $"UPDATE {Program.Prefix}tender SET scoring_date = @scoring_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                        MySqlCommand cmd = new MySqlCommand(updateTenderScor, connect);
+                        var cmd = new MySqlCommand(updateTenderScor, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_region", RegionId);
                         cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                         cmd.Parameters.AddWithValue("@scoring_date", scoringProlongationDate);
-                        int resScor = cmd.ExecuteNonQuery();
+                        var resScor = cmd.ExecuteNonQuery();
                         AddProlongation?.Invoke(resScor);
                     }
 
@@ -93,8 +93,8 @@ namespace ParserTenders.TenderDir
                 firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epP"));
                 if (firstOrDefault != null)
                 {
-                    JToken tender = firstOrDefault.Value;
-                    string purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                    var tender = firstOrDefault.Value;
+                    var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                     if (String.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
@@ -109,10 +109,10 @@ namespace ParserTenders.TenderDir
                         }
                     }
 
-                    string collectingEndDate =
+                    var collectingEndDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingEndDate") ?? "") ?? "").Trim('"');
                     
-                    string collectingProlongationDate =
+                    var collectingProlongationDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.newCollectingEndDT") ?? "") ?? "")
                         .Trim('"');
                     if (collectingProlongationDate == "")
@@ -120,9 +120,9 @@ namespace ParserTenders.TenderDir
                         collectingProlongationDate =
                             (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingInfo.endDT") ?? "") ?? "").Trim('"');
                     }
-                    string scoringDate =
+                    var scoringDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.firstPartsDT") ?? "") ?? "").Trim('"');
-                    string scoringProlongationDate =
+                    var scoringProlongationDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.firstPartsDT") ?? "") ?? "")
                         .Trim('"');
                     if (scoringProlongationDate == "")
@@ -130,33 +130,33 @@ namespace ParserTenders.TenderDir
                         scoringProlongationDate =
                             (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.scoringInfo.firstPartsDT") ?? "") ?? "").Trim('"');
                     }
-                    using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                    using (var connect = ConnectToDb.GetDbConnection())
                     {
                         connect.Open();
                         if (!String.IsNullOrEmpty(collectingEndDate) &&
                             !String.IsNullOrEmpty(collectingProlongationDate))
                         {
-                            string updateTenderEnd =
+                            var updateTenderEnd =
                                 $"UPDATE {Program.Prefix}tender SET end_date = @end_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                            MySqlCommand cmd = new MySqlCommand(updateTenderEnd, connect);
+                            var cmd = new MySqlCommand(updateTenderEnd, connect);
                             cmd.Prepare();
                             cmd.Parameters.AddWithValue("@id_region", RegionId);
                             cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                             cmd.Parameters.AddWithValue("@end_date", collectingProlongationDate);
-                            int resEnd = cmd.ExecuteNonQuery();
+                            var resEnd = cmd.ExecuteNonQuery();
                             AddProlongation?.Invoke(resEnd);
                         }
 
                         if (!String.IsNullOrEmpty(scoringProlongationDate))
                         {
-                            string updateTenderScor =
+                            var updateTenderScor =
                                 $"UPDATE {Program.Prefix}tender SET scoring_date = @scoring_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                            MySqlCommand cmd = new MySqlCommand(updateTenderScor, connect);
+                            var cmd = new MySqlCommand(updateTenderScor, connect);
                             cmd.Prepare();
                             cmd.Parameters.AddWithValue("@id_region", RegionId);
                             cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                             cmd.Parameters.AddWithValue("@scoring_date", scoringProlongationDate);
-                            int resScor = cmd.ExecuteNonQuery();
+                            var resScor = cmd.ExecuteNonQuery();
                             AddProlongation?.Invoke(resScor);
                         }
 

@@ -22,12 +22,12 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderCancelFailure", FilePath);
@@ -42,16 +42,16 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string updateTender =
+                    var updateTender =
                         $"UPDATE {Program.Prefix}tender SET cancel_failure = 1, cancel = 0 WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                    MySqlCommand cmd = new MySqlCommand(updateTender, connect);
+                    var cmd = new MySqlCommand(updateTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    int resUpd = cmd.ExecuteNonQuery();
+                    var resUpd = cmd.ExecuteNonQuery();
                     AddCancelFailure?.Invoke(resUpd);
                 }
             }
@@ -60,8 +60,8 @@ namespace ParserTenders.TenderDir
                 firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epN"));
                 if (firstOrDefault != null)
                 {
-                    JToken tender = firstOrDefault.Value;
-                    string purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                    var tender = firstOrDefault.Value;
+                    var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                     if (String.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderCancelFailure", FilePath);
@@ -76,16 +76,16 @@ namespace ParserTenders.TenderDir
                         }
                     }
 
-                    using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                    using (var connect = ConnectToDb.GetDbConnection())
                     {
                         connect.Open();
-                        string updateTender =
+                        var updateTender =
                             $"UPDATE {Program.Prefix}tender SET cancel_failure = 1, cancel = 0 WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                        MySqlCommand cmd = new MySqlCommand(updateTender, connect);
+                        var cmd = new MySqlCommand(updateTender, connect);
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("@id_region", RegionId);
                         cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                        int resUpd = cmd.ExecuteNonQuery();
+                        var resUpd = cmd.ExecuteNonQuery();
                         AddCancelFailure?.Invoke(resUpd);
                     }
                 }

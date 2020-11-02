@@ -23,7 +23,7 @@ namespace ParserTenders.ParserDir
         
         public List<JToken> GetElements(JToken j, string s)
         {
-            List<JToken> els = new List<JToken>();
+            var els = new List<JToken>();
             var elsObj = j.SelectToken(s);
             if (elsObj != null && elsObj.Type != JTokenType.Null)
             {

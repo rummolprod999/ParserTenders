@@ -41,7 +41,7 @@ namespace ParserTenders
         {
             var request = CreateRequest(Combine(_uri, source), WebRequestMethods.Ftp.DownloadFile);
 
-            byte[] buffer = new byte[_bufferSize];
+            var buffer = new byte[_bufferSize];
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -49,7 +49,7 @@ namespace ParserTenders
                 {
                     using (var fs = new FileStream(dest, FileMode.OpenOrCreate))
                     {
-                        int readCount = stream.Read(buffer, 0, _bufferSize);
+                        var readCount = stream.Read(buffer, 0, _bufferSize);
 
                         while (readCount > 0)
                         {
@@ -200,7 +200,7 @@ namespace ParserTenders
                 {
                     int num;
 
-                    byte[] buffer = new byte[_bufferSize];
+                    var buffer = new byte[_bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
@@ -225,7 +225,7 @@ namespace ParserTenders
                 {
                     int num;
 
-                    byte[] buffer = new byte[_bufferSize];
+                    var buffer = new byte[_bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {

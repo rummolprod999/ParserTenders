@@ -18,7 +18,7 @@ namespace ParserTenders.ParserDir
         {
             var dateM = DateTime.Now.AddMinutes(-1 * _dateMinus * 24 * 60);
             var urlStart = $"https://www.tektorg.ru/rzd/procedures?dpfrom={dateM:dd.MM.yyyy}";
-            int max = 0;
+            var max = 0;
             try
             {
                 max = GetCountPage(urlStart);
@@ -38,7 +38,7 @@ namespace ParserTenders.ParserDir
                 max = 0;
             }
 
-            for (int i = 1; i <= max; i++)
+            for (var i = 1; i <= max; i++)
             {
                 var url = $"{urlStart}&page={i}&limit=500";
                 try
@@ -56,7 +56,7 @@ namespace ParserTenders.ParserDir
 
         private void ParsingPage(string url)
         {
-            string s = DownloadString.DownL(url);
+            var s = DownloadString.DownL(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

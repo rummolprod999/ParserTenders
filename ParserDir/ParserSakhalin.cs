@@ -14,7 +14,7 @@ namespace ParserTenders.ParserDir
 
         public override void Parsing()
         {
-            string urlpage = "http://www.sakhalinenergy.ru/ru/contractors/tenders/";
+            var urlpage = "http://www.sakhalinenergy.ru/ru/contractors/tenders/";
             try
             {
                 ParsingPage(urlpage);
@@ -27,7 +27,7 @@ namespace ParserTenders.ParserDir
 
         private void ParsingPage(string url)
         {
-            string s = DownloadString.DownL(url);
+            var s = DownloadString.DownL(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);

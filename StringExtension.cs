@@ -17,7 +17,7 @@ namespace ParserTenders
         public static DateTime ParseDateUn(this string s, string form)
         {
             
-            DateTime d = DateTime.MinValue;
+            var d = DateTime.MinValue;
             if (!String.IsNullOrEmpty(s))
             {
                 try
@@ -34,11 +34,11 @@ namespace ParserTenders
 
         public static string GetDateFromRegex(this string s, string r)
         {
-            string ret = "";
+            var ret = "";
             try
             {
-                Regex regex = new Regex(r, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                MatchCollection matches = regex.Matches(s);
+                var regex = new Regex(r, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var matches = regex.Matches(s);
                 if (matches.Count > 0)
                 {
                     ret = matches[0].Groups[1].Value.Trim();

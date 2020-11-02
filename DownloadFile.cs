@@ -15,13 +15,13 @@ namespace ParserTenders
         public void DownloadF(string sSourceUrl, string sDestinationPath, string proxy, int port, string useragent)
         {
             long iFileSize = 0;
-            int iBufferSize = 1024;
+            var iBufferSize = 1024;
             iBufferSize *= 1000;
             long iExistLen = 0;
             FileStream saveFileStream;
             if (File.Exists(sDestinationPath))
             {
-                FileInfo fINfo =
+                var fINfo =
                     new FileInfo(sDestinationPath);
                 iExistLen = fINfo.Length;
             }
@@ -47,7 +47,7 @@ namespace ParserTenders
                 smRespStream = hwRes.GetResponseStream();
                 iFileSize = hwRes.ContentLength;
                 int iByteSize;
-                byte[] downBuffer = new byte[iBufferSize];
+                var downBuffer = new byte[iBufferSize];
 
                 while ((iByteSize = smRespStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                 {
@@ -74,7 +74,7 @@ namespace ParserTenders
 
         public string DownL(string url, int idAtt, TypeFileAttach tp, List<string> proxies, List<string> useragents)
         {
-            string patharch = "";
+            var patharch = "";
             switch (tp)
             {
                 case TypeFileAttach.Doc:
@@ -85,16 +85,16 @@ namespace ParserTenders
                     break;
             }
 
-            int count = 0;
+            var count = 0;
             while (_downCount)
             {
-                string proxy = proxies[new Random().Next(proxies.Count)];
-                string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                var proxy = proxies[new Random().Next(proxies.Count)];
+                var ip = proxy.Substring(0, proxy.IndexOf(":"));
                 //ip = "67.205.191.44";
-                string portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                int port = Int32.Parse(portS);
+                var portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                var port = Int32.Parse(portS);
                 //port = 8083;
-                string useragent = useragents[new Random().Next(useragents.Count)];
+                var useragent = useragents[new Random().Next(useragents.Count)];
                 try
                 {
                     DownloadF(url, patharch, ip, port, useragent);
@@ -118,7 +118,7 @@ namespace ParserTenders
         {
             //List<string> proxies_copy = proxies.ToList();
             //List<string> proxies_auth_copy = proxies_auth.ToList();
-            string patharch = "";
+            var patharch = "";
             switch (tp)
             {
                 case TypeFileAttach.Doc:
@@ -129,12 +129,12 @@ namespace ParserTenders
                     break;
             }
 
-            int count = 0;
+            var count = 0;
             while (count <= Program.DownCount)
             {
-                int rnd = 0;
-                string proxy = "";
-                int r = new Random().Next(2);
+                var rnd = 0;
+                var proxy = "";
+                var r = new Random().Next(2);
                 lock (_locker)
                 {
                     rnd = new Random().Next(proxies.Count);
@@ -150,14 +150,14 @@ namespace ParserTenders
                 }
                 try
                 {
-                    string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                    var ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
-                    string portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                    int port = Int32.Parse(portS);
+                    var portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                    var port = Int32.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
-                    string useragent = useragents[new Random().Next(useragents.Count)];
+                    var useragent = useragents[new Random().Next(useragents.Count)];
                     /*WebClient wc = new WebClient();
                     wc.Headers.Add("user-agent", useragent);
                     WebProxy wp = new WebProxy(ip, port);
@@ -170,7 +170,7 @@ namespace ParserTenders
                     using (var client = new WebDownload())
                     {
                         client.Headers.Add("user-agent", useragent);
-                        WebProxy wp = new WebProxy(ip, port);
+                        var wp = new WebProxy(ip, port);
                         if (r == 1)
                         {
                             wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
@@ -179,7 +179,7 @@ namespace ParserTenders
 
                         using (var stream = client.OpenRead(url))
                         {
-                            Int64 bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            var bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
                             if (bytesTotal > 5000000)
                             {
                                 Log.Logger("Too many file", url);
@@ -196,7 +196,7 @@ namespace ParserTenders
                             }
                         }
                     }
-                    FileInfo fileD = new FileInfo(patharch);
+                    var fileD = new FileInfo(patharch);
                     if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
@@ -228,7 +228,7 @@ namespace ParserTenders
             Log.Logger($"Не скачали файл за {count} попыток", url);
             try
             {
-                WebClient wc = new WebClient();
+                var wc = new WebClient();
                 wc.Headers.Add("user-agent",
                     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
                 wc.DownloadFile(url, patharch);
@@ -246,9 +246,9 @@ namespace ParserTenders
         public string DownLOld(string url, int idAtt, TypeFileAttach tp, List<string> proxies,
             List<string> proxiesAuth, List<string> useragents)
         {
-            List<string> proxiesCopy = proxies.ToList();
-            List<string> proxiesAuthCopy = proxiesAuth.ToList();
-            string patharch = "";
+            var proxiesCopy = proxies.ToList();
+            var proxiesAuthCopy = proxiesAuth.ToList();
+            var patharch = "";
             switch (tp)
             {
                 case TypeFileAttach.Doc:
@@ -259,12 +259,12 @@ namespace ParserTenders
                     break;
             }
 
-            int count = 0;
+            var count = 0;
             while (count <= Program.DownCount)
             {
-                int r = new Random().Next(2);
-                int rnd = new Random().Next(proxiesCopy.Count);
-                string proxy = proxiesCopy[rnd];
+                var r = new Random().Next(2);
+                var rnd = new Random().Next(proxiesCopy.Count);
+                var proxy = proxiesCopy[rnd];
                 if (r == 1)
                 {
                     rnd = new Random().Next(proxiesAuthCopy.Count);
@@ -272,14 +272,14 @@ namespace ParserTenders
                 }
                 try
                 {
-                    string ip = proxy.Substring(0, proxy.IndexOf(":"));
+                    var ip = proxy.Substring(0, proxy.IndexOf(":"));
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
-                    string portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                    int port = Int32.Parse(portS);
+                    var portS = proxy.Substring(proxy.IndexOf(":") + 1);
+                    var port = Int32.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
-                    string useragent = useragents[new Random().Next(useragents.Count)];
+                    var useragent = useragents[new Random().Next(useragents.Count)];
                     /*WebClient wc = new WebClient();
                                         wc.Headers.Add("user-agent", useragent);
                                         WebProxy wp = new WebProxy(ip, port);
@@ -292,7 +292,7 @@ namespace ParserTenders
                     using (var client = new WebDownload())
                     {
                         client.Headers.Add("user-agent", useragent);
-                        WebProxy wp = new WebProxy(ip, port);
+                        var wp = new WebProxy(ip, port);
                         if (r == 1)
                         {
                             wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
@@ -301,7 +301,7 @@ namespace ParserTenders
 
                         using (var stream = client.OpenRead(url))
                         {
-                            Int64 bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                            var bytesTotal = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
                             if (bytesTotal > 5000000)
                             {
                                 Log.Logger("Too lagre file!!!!", url);
@@ -318,7 +318,7 @@ namespace ParserTenders
                             }
                         }
                     }
-                    FileInfo fileD = new FileInfo(patharch);
+                    var fileD = new FileInfo(patharch);
                     if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
@@ -344,7 +344,7 @@ namespace ParserTenders
             Log.Logger($"Не скачали файл за {count} попыток", url);
             try
             {
-                WebClient wc = new WebClient();
+                var wc = new WebClient();
                 wc.Headers.Add("user-agent",
                     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0");
                 wc.DownloadFile(url, patharch);

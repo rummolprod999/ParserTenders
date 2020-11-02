@@ -23,12 +23,12 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderDateChange615", FilePath);
@@ -41,7 +41,7 @@ namespace ParserTenders.TenderDir
                     return;
                 }
 
-                string auctionTime =
+                var auctionTime =
                     (JsonConvert.SerializeObject(tender.SelectToken("auctionTime") ?? "") ?? "").Trim('"');
                 if (String.IsNullOrEmpty(auctionTime))
                 {
@@ -49,17 +49,17 @@ namespace ParserTenders.TenderDir
                     return;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string updateTender =
+                    var updateTender =
                         $"UPDATE {Program.Prefix}tender SET bidding_date = @bidding_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
-                    MySqlCommand cmd = new MySqlCommand(updateTender, connect);
+                    var cmd = new MySqlCommand(updateTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                     cmd.Parameters.AddWithValue("@bidding_date", auctionTime);
-                    int resUpd = cmd.ExecuteNonQuery();
+                    var resUpd = cmd.ExecuteNonQuery();
                     AddDateChange?.Invoke(resUpd);
                 }
             }

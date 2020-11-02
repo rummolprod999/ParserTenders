@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders.TenderDir
@@ -25,13 +23,13 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            string xml = GetXml(File.ToString());
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
+            var xml = GetXml(File.ToString());
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("id") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("id") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", FilePath);

@@ -33,11 +33,11 @@ namespace ParserTenders.ParserDir
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                foreach (string purchase in _purchaseDir)
+                foreach (var purchase in _purchaseDir)
                 {
-                    List<String> arch = new List<string>();
-                    string pathParse = "";
-                    string regionPath = (string) row["path223"];
+                    var arch = new List<string>();
+                    var pathParse = "";
+                    var regionPath = (string) row["path223"];
                     switch (Program.Periodparsing)
                     {
                         case (TypeArguments.Last223):
@@ -78,11 +78,11 @@ namespace ParserTenders.ParserDir
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                foreach (string purchase in _purchaseDir)
+                foreach (var purchase in _purchaseDir)
                 {
-                    List<String> arch = new List<string>();
-                    string pathParse = "";
-                    string regionPath = (string) row["path223"];
+                    var arch = new List<string>();
+                    var pathParse = "";
+                    var regionPath = (string) row["path223"];
                     switch (Program.Periodparsing)
                     {
                         case (TypeArguments.Last223):
@@ -203,8 +203,8 @@ namespace ParserTenders.ParserDir
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId,
             string purchase)
         {
-            string filea = "";
-            string pathUnzip = "";
+            var filea = "";
+            var pathUnzip = "";
             filea = GetArch223(arch, pathParse);
             if (String.IsNullOrEmpty(filea)) return;
             pathUnzip = Unzipped.Unzip(filea);
@@ -212,8 +212,8 @@ namespace ParserTenders.ParserDir
             {
                 if (Directory.Exists(pathUnzip))
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
-                    FileInfo[] filelist = dirInfo.GetFiles();
+                    var dirInfo = new DirectoryInfo(pathUnzip);
+                    var filelist = dirInfo.GetFiles();
                     foreach (var f in filelist)
                     {
                         switch (purchase)
@@ -300,26 +300,26 @@ namespace ParserTenders.ParserDir
 
         public void ParsingXml(FileInfo f, string region, int regionId, TypeFile223 typefile)
         {
-            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            using (var sr = new StreamReader(f.ToString(), Encoding.Default))
             {
                 var ftext = sr.ReadToEnd();
                 ftext = ClearText.ClearString(ftext);
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(ftext);
-                string jsons = JsonConvert.SerializeXmlNode(doc);
-                JObject json = JObject.Parse(jsons);
+                var jsons = JsonConvert.SerializeXmlNode(doc);
+                var json = JObject.Parse(jsons);
                 switch (typefile)
                 {
                     case TypeFile223.PurchaseLotCancellation:
-                        TenderTypeLotCancel223 k = new TenderTypeLotCancel223(f, region, regionId, json);
+                        var k = new TenderTypeLotCancel223(f, region, regionId, json);
                         k.Parsing();
                         break;
                     case TypeFile223.PurchaseRejection:
-                        TenderTypeCancel223 r = new TenderTypeCancel223(f, region, regionId, json);
+                        var r = new TenderTypeCancel223(f, region, regionId, json);
                         r.Parsing();
                         break;
                     default:
-                        TenderType223 a = new TenderType223(f, region, regionId, json, typefile);
+                        var a = new TenderType223(f, region, regionId, json, typefile);
                         a.Parsing();
                         break;
                 }
@@ -328,19 +328,19 @@ namespace ParserTenders.ParserDir
 
         public override List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
         {
-            List<string> archtemp = new List<string>();
+            var archtemp = new List<string>();
             archtemp = GetListFtp223(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
+            var yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
         public override List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
             //List<string> archtemp = new List<string>();
             //archtemp = GetListFtp223(pathParse);
             var newLs = GetListFtp223New(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
+            var yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
             foreach (var a in newLs
                 .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
@@ -350,24 +350,24 @@ namespace ParserTenders.ParserDir
                     continue;
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
 
-                    string selectArch =
+                    var selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
 
-                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    var cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a.Item1);
                     cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool resRead = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var resRead = reader.HasRows;
                     reader.Close();
                     if (resRead) continue;
-                    string addArch =
+                    var addArch =
                         $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                    MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                    var cmd1 = new MySqlCommand(addArch, connect);
                     cmd1.Prepare();
                     cmd1.Parameters.AddWithValue("@archive", a.Item1);
                     cmd1.Parameters.AddWithValue("@size_archive", a.Item2);

@@ -261,7 +261,7 @@ namespace ParserTenders.TenderDir
                     var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
                     if (!string.IsNullOrEmpty(attachName))
                     {
-                        string insertAttach =
+                        var insertAttach =
                             $"INSERT INTO {Program.Prefix}contract_sign_project_attach SET id_contract_sign_project = @id_contract_sign_project, file_name = @file_name, url = @url, description = @description";
                         var cmd11 = new MySqlCommand(insertAttach, connect);
                         cmd11.Prepare();

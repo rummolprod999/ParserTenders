@@ -22,12 +22,12 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderLotCancel615", FilePath);
@@ -40,18 +40,18 @@ namespace ParserTenders.TenderDir
                     return;
                 }
 
-                string lotNumber = "1";
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                var lotNumber = "1";
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
-                    int idTender = 0;
+                    var idTender = 0;
                     connect.Open();
-                    string selectTender =
+                    var selectTender =
                         $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number AND cancel=0";
-                    MySqlCommand cmd = new MySqlCommand(selectTender, connect);
+                    var cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    var reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Read();
@@ -64,13 +64,13 @@ namespace ParserTenders.TenderDir
                         return;
                     }
 
-                    string updateTender =
+                    var updateTender =
                         $"UPDATE {Program.Prefix}lot SET cancel=1 WHERE id_tender = @id_tender AND lot_number = @lot_number";
-                    MySqlCommand cmd1 = new MySqlCommand(updateTender, connect);
+                    var cmd1 = new MySqlCommand(updateTender, connect);
                     cmd1.Prepare();
                     cmd1.Parameters.AddWithValue("@id_tender", idTender);
                     cmd1.Parameters.AddWithValue("@lot_number", lotNumber);
-                    int resUpd = cmd1.ExecuteNonQuery();
+                    var resUpd = cmd1.ExecuteNonQuery();
                     AddLotCancel?.Invoke(resUpd);
                 }
             }

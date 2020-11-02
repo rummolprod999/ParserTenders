@@ -28,9 +28,9 @@ namespace ParserTenders.ParserDir
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                List<String> arch = new List<string>();
-                string pathParse = "";
-                string regionPath = (string) row["path223"];
+                var arch = new List<string>();
+                var pathParse = "";
+                var regionPath = (string) row["path223"];
                 switch (Program.Periodparsing)
                 {
                     case (TypeArguments.LastExp223):
@@ -60,14 +60,14 @@ namespace ParserTenders.ParserDir
         {
             /*FtpClient ftp = ClientFtp44();*/
             var archtemp = GetListFtp223(pathParse);
-            List<String> yearsSearch = Program.Years.Select(y => $"explanation_{regionPath}{y}").ToList();
+            var yearsSearch = Program.Years.Select(y => $"explanation_{regionPath}{y}").ToList();
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
         
         public override List<String> GetListArchDaily(string pathParse, string regionPath)
         {
-            List<String> arch = new List<string>();
-            List<string> archtemp = GetListFtp223(pathParse);
+            var arch = new List<string>();
+            var archtemp = GetListFtp223(pathParse);
             foreach (var a in archtemp
                 .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
@@ -83,22 +83,22 @@ namespace ParserTenders.ParserDir
                         db.SaveChanges();
                     }
                 }*/
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    string selectArch =
+                    var selectArch =
                         $"SELECT id FROM {Program.Prefix}arhiv_explanation223 WHERE arhiv = @archive";
-                    MySqlCommand cmd = new MySqlCommand(selectArch, connect);
+                    var cmd = new MySqlCommand(selectArch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool resRead = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var resRead = reader.HasRows;
                     reader.Close();
                     if (!resRead)
                     {
-                        string addArch =
+                        var addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_explanation223 SET arhiv = @archive, region = @region";
-                        MySqlCommand cmd1 = new MySqlCommand(addArch, connect);
+                        var cmd1 = new MySqlCommand(addArch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
                         cmd1.Parameters.AddWithValue("@region", regionPath);
@@ -112,8 +112,8 @@ namespace ParserTenders.ParserDir
         
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
-            string filea = "";
-            string pathUnzip = "";
+            var filea = "";
+            var pathUnzip = "";
             filea = GetArch223(arch, pathParse);
             if (!String.IsNullOrEmpty(filea))
             {
@@ -122,9 +122,9 @@ namespace ParserTenders.ParserDir
                 {
                     if (Directory.Exists(pathUnzip))
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(pathUnzip);
-                        FileInfo[] filelist = dirInfo.GetFiles();
-                        List<FileInfo> arraySign223 = filelist
+                        var dirInfo = new DirectoryInfo(pathUnzip);
+                        var filelist = dirInfo.GetFiles();
+                        var arraySign223 = filelist
                             .Where(a => _fileExp223.Any(
                                             t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1) &&
                                         a.Length != 0).ToList();
@@ -171,15 +171,15 @@ namespace ParserTenders.ParserDir
         
         public void ParsingXml(FileInfo f, string region, int regionId)
         {
-            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            using (var sr = new StreamReader(f.ToString(), Encoding.Default))
             {
                 var ftext = sr.ReadToEnd();
                 ftext = ClearText.ClearString(ftext);
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(ftext);
-                string jsons = JsonConvert.SerializeXmlNode(doc);
-                JObject json = JObject.Parse(jsons);
-                TenderTypeExp223 a = new TenderTypeExp223(f, region, regionId, json);
+                var jsons = JsonConvert.SerializeXmlNode(doc);
+                var json = JObject.Parse(jsons);
+                var a = new TenderTypeExp223(f, region, regionId, json);
                 a.Parsing();
             }
         }

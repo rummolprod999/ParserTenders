@@ -2,7 +2,6 @@
 using System.Data;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
-using ikvm.extensions;
 using MySql.Data.MySqlClient;
 
 namespace ParserTenders.TenderDir
@@ -45,7 +44,7 @@ namespace ParserTenders.TenderDir
 
         public void Parsing()
         {
-            string s = DownloadString.DownL(Url);
+            var s = DownloadString.DownL(Url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in Parsing()", Url);
@@ -58,18 +57,18 @@ namespace ParserTenders.TenderDir
             var dateEndT = (document.QuerySelector("td:contains('Финальная дата') +  td")?.TextContent ?? "").Trim();
             if (!string.IsNullOrEmpty(dateEndT))
                 dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
-            using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+            using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
-                string selectTend =
+                var selectTend =
                     $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND end_date = @end_date AND type_fz = @type_fz";
-                MySqlCommand cmd = new MySqlCommand(selectTend, connect);
+                var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", PurNum);
                 cmd.Parameters.AddWithValue("@end_date", dateEnd);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
-                DataTable dt = new DataTable();
-                MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var dt = new DataTable();
+                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -77,16 +76,16 @@ namespace ParserTenders.TenderDir
                     return;
                 }
 
-                int cancelStatus = 0;
+                var cancelStatus = 0;
                 var update = false;
-                string selectDateT =
+                var selectDateT =
                     $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
-                MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
+                var cmd2 = new MySqlCommand(selectDateT, connect);
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@purchase_number", PurNum);
                 cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-                MySqlDataAdapter adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
-                DataTable dt2 = new DataTable();
+                var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                var dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 foreach (DataRow row in dt2.Rows)
                 {
@@ -104,27 +103,27 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                MySqlCommandBuilder commandBuilder =
+                var commandBuilder =
                     new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
                 //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                 adapter2.Update(dt2);
-                string noticeVersion =
+                var noticeVersion =
                     (document.QuerySelector("td:contains('Дополнительная информация') +  td")?.TextContent ?? "")
                     .Trim();
                 noticeVersion = $"Дополнительная информация: {noticeVersion}";
-                string printForm = Url;
-                int customerId = 0;
-                int organiserId = 0;
+                var printForm = Url;
+                var customerId = 0;
+                var organiserId = 0;
                 var orgFullName = etpName;
                 if (!string.IsNullOrEmpty(orgFullName))
                 {
-                    string selectOrg =
+                    var selectOrg =
                         $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE full_name = @full_name";
-                    MySqlCommand cmd3 = new MySqlCommand(selectOrg, connect);
+                    var cmd3 = new MySqlCommand(selectOrg, connect);
                     cmd3.Prepare();
                     cmd3.Parameters.AddWithValue("@full_name", orgFullName);
-                    DataTable dt3 = new DataTable();
-                    MySqlDataAdapter adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                    var dt3 = new DataTable();
+                    var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
                     adapter3.Fill(dt3);
                     if (dt3.Rows.Count > 0)
                     {
@@ -136,9 +135,9 @@ namespace ParserTenders.TenderDir
                         var (factAddr, contactP, email, phone) = (
                             "693020, Сахалинская область, г Южно-Сахалинск, УЛ ДЗЕРЖИНСКОГО, 35", "",
                             "ask@sakhalinenergy.ru", "+7 4242 66 2000");
-                        string addOrganizer =
+                        var addOrganizer =
                             $"INSERT INTO {Program.Prefix}organizer SET full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email";
-                        MySqlCommand cmd4 = new MySqlCommand(addOrganizer, connect);
+                        var cmd4 = new MySqlCommand(addOrganizer, connect);
                         cmd4.Prepare();
                         cmd4.Parameters.AddWithValue("@full_name", orgFullName);
                         cmd4.Parameters.AddWithValue("@post_address", factAddr);
@@ -155,12 +154,12 @@ namespace ParserTenders.TenderDir
 
                 if (!string.IsNullOrEmpty(orgFullName))
                 {
-                    string selectCustomer =
+                    var selectCustomer =
                         $"SELECT id_customer FROM {Program.Prefix}customer WHERE full_name = @full_name";
-                    MySqlCommand cmd13 = new MySqlCommand(selectCustomer, connect);
+                    var cmd13 = new MySqlCommand(selectCustomer, connect);
                     cmd13.Prepare();
                     cmd13.Parameters.AddWithValue("@full_name", orgFullName);
-                    MySqlDataReader reader7 = cmd13.ExecuteReader();
+                    var reader7 = cmd13.ExecuteReader();
                     if (reader7.HasRows)
                     {
                         reader7.Read();
@@ -170,9 +169,9 @@ namespace ParserTenders.TenderDir
                     else
                     {
                         reader7.Close();
-                        string insertCustomer =
+                        var insertCustomer =
                             $"INSERT INTO {Program.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, is223=1, inn = @inn";
-                        MySqlCommand cmd14 = new MySqlCommand(insertCustomer, connect);
+                        var cmd14 = new MySqlCommand(insertCustomer, connect);
                         cmd14.Prepare();
                         var customerRegNumber = Guid.NewGuid().ToString();
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
@@ -183,12 +182,12 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                int idPlacingWay = 0;
-                GetEtp(connect, out int idEtp, etpName, _etpUrl);
+                var idPlacingWay = 0;
+                GetEtp(connect, out var idEtp, etpName, _etpUrl);
                 var purObjInfo = (document.QuerySelector("div.page-cols > h1")?.TextContent ?? "").Trim();
-                string insertTender =
+                var insertTender =
                     $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
-                MySqlCommand cmd9 = new MySqlCommand(insertTender, connect);
+                var cmd9 = new MySqlCommand(insertTender, connect);
                 cmd9.Prepare();
                 cmd9.Parameters.AddWithValue("@id_region", 0);
                 cmd9.Parameters.AddWithValue("@id_xml", PurNum);
@@ -209,21 +208,21 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@notice_version", noticeVersion);
                 cmd9.Parameters.AddWithValue("@xml", Url);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
-                int resInsertTender = cmd9.ExecuteNonQuery();
-                int idTender = (int) cmd9.LastInsertedId;
+                var resInsertTender = cmd9.ExecuteNonQuery();
+                var idTender = (int) cmd9.LastInsertedId;
                 AddTenderSakhalin?.Invoke(resInsertTender, update);
                 var docs = document.QuerySelectorAll(
                     "td:contains('Дополнительная информация') +  td a");
                 GetDocs(docs, connect, idTender);
-                string insertLot =
+                var insertLot =
                     $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number";
-                MySqlCommand cmd18 = new MySqlCommand(insertLot, connect);
+                var cmd18 = new MySqlCommand(insertLot, connect);
                 cmd18.Prepare();
                 cmd18.Parameters.AddWithValue("@id_tender", idTender);
                 cmd18.Parameters.AddWithValue("@lot_number", 1);
                 cmd18.ExecuteNonQuery();
-                int idLot = (int) cmd18.LastInsertedId;
-                string recName = (document.QuerySelector("td:contains('Требования') +  td")
+                var idLot = (int) cmd18.LastInsertedId;
+                var recName = (document.QuerySelector("td:contains('Требования') +  td")
                                       ?.TextContent ?? "").Trim();
                 if (!string.IsNullOrEmpty(recName))
                 {
@@ -245,9 +244,9 @@ namespace ParserTenders.TenderDir
                 {
                     var deliveryTerm =
                         $"Планируемый период присуждения договора: {startD}, Планируемый срок действия договора: {startS}";
-                    string insertCustomerRequirement =
+                    var insertCustomerRequirement =
                         $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, delivery_term = @delivery_term";
-                    MySqlCommand cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                    var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                     cmd16.Prepare();
                     cmd16.Parameters.AddWithValue("@id_lot", idLot);
                     cmd16.Parameters.AddWithValue("@id_customer", customerId);
@@ -271,9 +270,9 @@ namespace ParserTenders.TenderDir
                     {
                         if (!string.IsNullOrEmpty(po))
                         {
-                            string insertLotitem =
+                            var insertLotitem =
                                 $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
-                            MySqlCommand cmd19 = new MySqlCommand(insertLotitem, connect);
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
                             cmd19.Prepare();
                             cmd19.Parameters.AddWithValue("@id_lot", idLot);
                             cmd19.Parameters.AddWithValue("@id_customer", customerId);
@@ -292,9 +291,9 @@ namespace ParserTenders.TenderDir
         {
             if (!string.IsNullOrEmpty(recName))
             {
-                string insertRequirement =
+                var insertRequirement =
                     $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, content = @content";
-                MySqlCommand cmd30 = new MySqlCommand(insertRequirement, connect);
+                var cmd30 = new MySqlCommand(insertRequirement, connect);
                 cmd30.Prepare();
                 cmd30.Parameters.AddWithValue("@id_lot", idLot);
                 cmd30.Parameters.AddWithValue("@content", recName);
@@ -312,9 +311,9 @@ namespace ParserTenders.TenderDir
                 var urlAtt = $"http://www.sakhalinenergy.ru{urlAttT}";
                 if (!string.IsNullOrEmpty(fName))
                 {
-                    string insertAttach =
+                    var insertAttach =
                         $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
-                    MySqlCommand cmd10 = new MySqlCommand(insertAttach, connect);
+                    var cmd10 = new MySqlCommand(insertAttach, connect);
                     cmd10.Prepare();
                     cmd10.Parameters.AddWithValue("@id_tender", idTender);
                     cmd10.Parameters.AddWithValue("@file_name", fName);

@@ -15,7 +15,7 @@ namespace ParserTenders
             s = Regex.Replace(s, @"\(|\)|-", "");
             s = s.Replace(".", "");
             //Console.WriteLine(s);
-            decimal d = 0.0m;
+            var d = 0.0m;
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
@@ -34,7 +34,7 @@ namespace ParserTenders
             s = Regex.Replace(s, @"\s+", "");
             s = Regex.Replace(s, @"[A-Za-zА-Яа-я]", "");
             s = Regex.Replace(s, @"\(|\)|-", "");
-            decimal d = 0.0m;
+            var d = 0.0m;
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = "."};
@@ -53,7 +53,7 @@ namespace ParserTenders
             s = Regex.Replace(s, @"\s+", "");
             s = s.GetDateFromRegex(@"(\d+[\.,]?\d+)");
             s = s.Replace('.', ',');
-            decimal d = 0.0m;
+            var d = 0.0m;
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
@@ -69,7 +69,7 @@ namespace ParserTenders
         public static DateTime ParseDateTend(string s)
         {
             
-            DateTime d = DateTime.MinValue;
+            var d = DateTime.MinValue;
             if (!String.IsNullOrEmpty(s))
             {
                 try
@@ -87,7 +87,7 @@ namespace ParserTenders
         public static DateTime ParseDateMrsk(string s)
         {
             
-            DateTime d = DateTime.MinValue;
+            var d = DateTime.MinValue;
             if (!String.IsNullOrEmpty(s))
             {
                 try
@@ -104,7 +104,7 @@ namespace ParserTenders
         
         public static int GetConformity(string conf)
         {
-            string sLower = conf.ToLower();
+            var sLower = conf.ToLower();
             if (sLower.IndexOf("открыт", StringComparison.Ordinal) != -1)
             {
                 return 5;

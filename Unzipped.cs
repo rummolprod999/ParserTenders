@@ -9,7 +9,7 @@ namespace ParserTenders
     {
         public static string Unzip(string filea)
         {
-            FileInfo fileInf = new FileInfo(filea);
+            var fileInf = new FileInfo(filea);
             if (fileInf.Exists)
             {
                 fileInf.Refresh();
@@ -18,8 +18,8 @@ namespace ParserTenders
                     Log.Logger("File archive has size 0!!!", filea);
                 }
 
-                int rPoint = filea.LastIndexOf('.');
-                string lDir = filea.Substring(0, rPoint);
+                var rPoint = filea.LastIndexOf('.');
+                var lDir = filea.Substring(0, rPoint);
                 Directory.CreateDirectory(lDir);
                 try
                 {

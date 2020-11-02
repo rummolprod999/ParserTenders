@@ -14,7 +14,7 @@ namespace ParserTenders
         
         public static MySqlConnection GetDbConnection()
         {
-            MySqlConnection conn = new MySqlConnection(ConnectString);
+            var conn = new MySqlConnection(ConnectString);
 
             return conn;
         }

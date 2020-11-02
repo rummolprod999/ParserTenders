@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
@@ -25,13 +24,13 @@ namespace ParserTenders.TenderDir
 
         public override void Parsing()
         {
-            string xml = GetXml(File.ToString());
-            JObject root = (JObject) T.SelectToken("export");
-            JProperty firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
+            var xml = GetXml(File.ToString());
+            var root = (JObject) T.SelectToken("export");
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
-                JToken tender = firstOrDefault.Value;
-                string purchaseNumber = ((string) tender.SelectToken("foundation.order.purchaseNumber") ?? "").Trim();
+                var tender = firstOrDefault.Value;
+                var purchaseNumber = ((string) tender.SelectToken("foundation.order.purchaseNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", FilePath);
@@ -46,17 +45,17 @@ namespace ParserTenders.TenderDir
                     }
                 }
 
-                using (MySqlConnection connect = ConnectToDb.GetDbConnection())
+                using (var connect = ConnectToDb.GetDbConnection())
                 {
-                    int idTender = 0;
+                    var idTender = 0;
                     connect.Open();
-                    string selectTender =
+                    var selectTender =
                         $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number AND cancel=0";
-                    MySqlCommand cmd = new MySqlCommand(selectTender, connect);
+                    var cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);
                     cmd.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    var reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         reader.Read();
@@ -69,14 +68,14 @@ namespace ParserTenders.TenderDir
                         //return;
                     }
 
-                    string idSign = ((string) tender.SelectToken("id") ?? "").Trim();
-                    string selectSign =
+                    var idSign = ((string) tender.SelectToken("id") ?? "").Trim();
+                    var selectSign =
                         $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE id_tender = @id_tender AND id_sign = @id_sign";
-                    MySqlCommand cmd1 = new MySqlCommand(selectSign, connect);
+                    var cmd1 = new MySqlCommand(selectSign, connect);
                     cmd1.Prepare();
                     cmd1.Parameters.AddWithValue("@id_tender", idTender);
                     cmd1.Parameters.AddWithValue("@id_sign", idSign);
-                    MySqlDataReader reader1 = cmd1.ExecuteReader();
+                    var reader1 = cmd1.ExecuteReader();
                     if (reader1.HasRows)
                     {
                         reader1.Close();
@@ -84,27 +83,27 @@ namespace ParserTenders.TenderDir
                     }
 
                     reader1.Close();
-                    string signNumber =
+                    var signNumber =
                         ((string) tender.SelectToken("foundation.order.foundationProtocolNumber") ?? "").Trim();
-                    string signDate = ((string) tender.SelectToken("signDate") ?? "").Trim();
-                    string customerRegNum = ((string) tender.SelectToken("customer.regNum") ?? "").Trim();
-                    string contractSignPrice = ((string) tender.SelectToken("price") ?? "").Trim();
+                    var signDate = ((string) tender.SelectToken("signDate") ?? "").Trim();
+                    var customerRegNum = ((string) tender.SelectToken("customer.regNum") ?? "").Trim();
+                    var contractSignPrice = ((string) tender.SelectToken("price") ?? "").Trim();
                     contractSignPrice = contractSignPrice.Replace(",", ".");
-                    string signCurrency = ((string) tender.SelectToken("currency.name") ?? "").Trim();
-                    string concludeContractRight = ((string) tender.SelectToken("concludeContractRight") ?? "")
+                    var signCurrency = ((string) tender.SelectToken("currency.name") ?? "").Trim();
+                    var concludeContractRight = ((string) tender.SelectToken("concludeContractRight") ?? "")
                         .Trim();
-                    string protocoleDate = ((string) tender.SelectToken("protocolDate") ?? "").Trim();
+                    var protocoleDate = ((string) tender.SelectToken("protocolDate") ?? "").Trim();
                     var (supplierContact, supplierEmail, supplierContactPhone, supplierContactFax, supplierInn,
                         supplierKpp, participantType, organizationName, countryFullName, factualAddress,
                         postAddress) = ("", "", "", "", "", "", "", "", "", "", "");
-                    List<JToken> suppliers = GetElements(tender, "suppliers.supplier");
+                    var suppliers = GetElements(tender, "suppliers.supplier");
                     if (suppliers.Count != 0)
                     {
-                        string supplierLastName = ((string) suppliers[0].SelectToken("contactInfo.lastName") ?? "")
+                        var supplierLastName = ((string) suppliers[0].SelectToken("contactInfo.lastName") ?? "")
                             .Trim();
-                        string supplierFirstName = ((string) suppliers[0].SelectToken("contactInfo.firstName") ?? "")
+                        var supplierFirstName = ((string) suppliers[0].SelectToken("contactInfo.firstName") ?? "")
                             .Trim();
-                        string supplierMiddleName = ((string) suppliers[0].SelectToken("contactInfo.middleName") ?? "")
+                        var supplierMiddleName = ((string) suppliers[0].SelectToken("contactInfo.middleName") ?? "")
                             .Trim();
                         supplierContact = $"{supplierLastName} {supplierFirstName} {supplierMiddleName}".Trim();
                         supplierEmail = ((string) suppliers[0].SelectToken("contactEMail") ?? "").Trim();
@@ -126,15 +125,15 @@ namespace ParserTenders.TenderDir
                     {
                         Log.Logger("У TenderSign несколько supplier", FilePath);
                     }
-                    int idCustomer = 0;
+                    var idCustomer = 0;
                     if (!String.IsNullOrEmpty(customerRegNum))
                     {
-                        string selectCustomer =
+                        var selectCustomer =
                             $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
-                        MySqlCommand cmd2 = new MySqlCommand(selectCustomer, connect);
+                        var cmd2 = new MySqlCommand(selectCustomer, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@reg_num", customerRegNum);
-                        MySqlDataReader reader2 = cmd2.ExecuteReader();
+                        var reader2 = cmd2.ExecuteReader();
                         if (reader2.HasRows)
                         {
                             reader2.Read();
@@ -152,16 +151,16 @@ namespace ParserTenders.TenderDir
                         Log.Logger("У TenderSign нет customer_reg_num", FilePath);
                     }
 
-                    int idSupplier = 0;
+                    var idSupplier = 0;
                     if (!String.IsNullOrEmpty(supplierInn))
                     {
-                        string selectSupplier =
+                        var selectSupplier =
                             $"SELECT id_supplier FROM {Program.Prefix}supplier WHERE inn_supplier = @inn_supplier AND kpp_supplier = @kpp_supplier";
-                        MySqlCommand cmd3 = new MySqlCommand(selectSupplier, connect);
+                        var cmd3 = new MySqlCommand(selectSupplier, connect);
                         cmd3.Prepare();
                         cmd3.Parameters.AddWithValue("@inn_supplier", supplierInn);
                         cmd3.Parameters.AddWithValue("@kpp_supplier", supplierKpp);
-                        MySqlDataReader reader3 = cmd3.ExecuteReader();
+                        var reader3 = cmd3.ExecuteReader();
                         if (reader3.HasRows)
                         {
                             reader3.Read();
@@ -171,9 +170,9 @@ namespace ParserTenders.TenderDir
                         else
                         {
                             reader3.Close();
-                            string insertSupplier =
+                            var insertSupplier =
                                 $"INSERT INTO {Program.Prefix}supplier SET participant_type = @participant_type, inn_supplier = @inn_supplier, kpp_supplier = @kpp_supplier, organization_name = @organization_name, country_full_name = @country_full_name, factual_address = @factual_address, post_address = @post_address, contact = @contact, email = @email, phone = @phone, fax = @fax";
-                            MySqlCommand cmd4 = new MySqlCommand(insertSupplier, connect);
+                            var cmd4 = new MySqlCommand(insertSupplier, connect);
                             cmd4.Prepare();
                             cmd4.Parameters.AddWithValue("@inn_supplier", supplierInn);
                             cmd4.Parameters.AddWithValue("@kpp_supplier", supplierKpp);
@@ -195,9 +194,9 @@ namespace ParserTenders.TenderDir
                         //Log.Logger("Нет supplier_inn в TenderSign", FilePath);
                     }
 
-                    string insertContract =
+                    var insertContract =
                         $"INSERT INTO {Program.Prefix}contract_sign SET id_tender = @id_tender, id_sign = @id_sign, purchase_number = @purchase_number, sign_number = @sign_number, sign_date = @sign_date, id_customer = @id_customer, customer_reg_num = @customer_reg_num, id_supplier = @id_supplier, contract_sign_price = @contract_sign_price, sign_currency = @sign_currency, conclude_contract_right = @conclude_contract_right, protocole_date = @protocole_date, supplier_contact = @supplier_contact, supplier_email = @supplier_email, supplier_contact_phone = @supplier_contact_phone, supplier_contact_fax = @supplier_contact_fax, xml = @xml";
-                    MySqlCommand cmd5 = new MySqlCommand(insertContract, connect);
+                    var cmd5 = new MySqlCommand(insertContract, connect);
                     cmd5.Prepare();
                     cmd5.Parameters.AddWithValue("@id_tender", idTender);
                     cmd5.Parameters.AddWithValue("@id_sign", idSign);
@@ -216,7 +215,7 @@ namespace ParserTenders.TenderDir
                     cmd5.Parameters.AddWithValue("@supplier_contact_phone", supplierContactPhone);
                     cmd5.Parameters.AddWithValue("@supplier_contact_fax", supplierContactFax);
                     cmd5.Parameters.AddWithValue("@xml", xml);
-                    int resCont = cmd5.ExecuteNonQuery();
+                    var resCont = cmd5.ExecuteNonQuery();
                     AddTenderSign?.Invoke(resCont);
                 }
             }

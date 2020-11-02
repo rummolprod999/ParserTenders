@@ -264,7 +264,7 @@ namespace ParserTenders
                 return;
             }
 
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
                 .CodeBase);
             if (path != null) PathProgram = path.Substring(5);
             StrArg = args[0];
@@ -424,7 +424,7 @@ namespace ParserTenders
 
         private static void Init(TypeArguments arg)
         {
-            GetSettings set = new GetSettings();
+            var set = new GetSettings();
             _database = set.Database;
             _logPath44 = set.LogPathTenders44;
             _logPath615 = set.LogPathTenders615;
@@ -441,7 +441,7 @@ namespace ParserTenders
             _tempAttach = set.TempPathAttach;
             _maxthread = set.MaxThread;
             _maxtrydown = set.MaxTryDown;
-            string tmp = set.Years;
+            var tmp = set.Years;
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
             _logGazProm = set.LogPathGazProm;
@@ -476,7 +476,7 @@ namespace ParserTenders
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
             TableSuppliers = $"{Prefix}supplier";
-            string[] tempYears = tmp.Split(new char[] {','});
+            var tempYears = tmp.Split(new char[] {','});
 
             foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
             {
@@ -491,7 +491,7 @@ namespace ParserTenders
 
             if (Directory.Exists(TempPath))
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(TempPath);
+                var dirInfo = new DirectoryInfo(TempPath);
                 dirInfo.Delete(true);
                 Directory.CreateDirectory(TempPath);
             }
@@ -584,7 +584,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders44");
             try
             {
-                ParserTend44 t44 = new ParserTend44(Periodparsing);
+                var t44 = new ParserTend44(Periodparsing);
                 t44.Parsing();
             }
             catch (Exception e)
@@ -643,7 +643,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders223");
             try
             {
-                ParserTend223 t223 = new ParserTend223(Periodparsing);
+                var t223 = new ParserTend223(Periodparsing);
                 t223.Parsing();
                 t223.ParserLostTens();
                 t223.ParsingAst();
@@ -668,7 +668,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Attach");
             try
             {
-                ParserAttach att = new ParserAttach(TypeArguments.Attach);
+                var att = new ParserAttach(TypeArguments.Attach);
                 att.Parsing();
             }
             catch (Exception e)
@@ -696,7 +696,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Sign223");
             try
             {
-                ParserSgn223 s = new ParserSgn223(Periodparsing);
+                var s = new ParserSgn223(Periodparsing);
                 s.Parsing();
             }
             catch (Exception e)
@@ -717,7 +717,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Gpb");
             try
             {
-                ParserGpb p = new ParserGpb(Periodparsing);
+                var p = new ParserGpb(Periodparsing);
                 p.Parsing();
             }
             catch (Exception e)
@@ -731,7 +731,7 @@ namespace ParserTenders
             UpGazprom = 0;
             try
             {
-                ParserGpbGaz d = new ParserGpbGaz(Periodparsing);
+                var d = new ParserGpbGaz(Periodparsing);
                 d.Parsing();
             }
             catch (Exception e)
@@ -759,7 +759,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Explanation");
             try
             {
-                ParserExp p = new ParserExp(arg);
+                var p = new ParserExp(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -776,7 +776,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга GntWeb");
             try
             {
-                ParserGntWeb p = new ParserGntWeb(arg);
+                var p = new ParserGntWeb(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -814,7 +814,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга ObTorgWeb");
             try
             {
-                ParserObTorgWeb p = new ParserObTorgWeb(arg);
+                var p = new ParserObTorgWeb(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -852,7 +852,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга SpecTorgWeb");
             try
             {
-                ParserSpecTorgWeb p = new ParserSpecTorgWeb(arg);
+                var p = new ParserSpecTorgWeb(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -870,7 +870,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Web");
             try
             {
-                ParserTendersWeb p = new ParserTendersWeb(arg);
+                var p = new ParserTendersWeb(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -891,7 +891,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Web44");
             try
             {
-                ParserTendersWeb44 p = new ParserTendersWeb44(arg);
+                var p = new ParserTendersWeb44(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -912,7 +912,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Mrsk");
             try
             {
-                ParserMrsk p = new ParserMrsk(arg);
+                var p = new ParserMrsk(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -930,7 +930,7 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Rosneft");
             try
             {
-                ParserRosneft p = new ParserRosneft(arg);
+                var p = new ParserRosneft(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -948,7 +948,7 @@ namespace ParserTenders
             Log.Logger($"Время начала парсинга {arg}");
             try
             {
-                ParserSakhalin p = new ParserSakhalin(arg);
+                var p = new ParserSakhalin(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -966,7 +966,7 @@ namespace ParserTenders
             Log.Logger($"Время начала парсинга {arg}");
             try
             {
-                ParserTektorgGazprom p = new ParserTektorgGazprom(arg);
+                var p = new ParserTektorgGazprom(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -984,7 +984,7 @@ namespace ParserTenders
             Log.Logger($"Время начала парсинга {arg}");
             try
             {
-                ParserTektorgInterRao p = new ParserTektorgInterRao(arg);
+                var p = new ParserTektorgInterRao(arg);
                 p.Parsing();
             }
             catch (Exception e)
@@ -1002,7 +1002,7 @@ namespace ParserTenders
             Log.Logger($"Время начала парсинга {arg}");
             try
             {
-                ParserTektorgRzd p = new ParserTektorgRzd(arg);
+                var p = new ParserTektorgRzd(arg);
                 p.Parsing();
             }
             catch (Exception e)

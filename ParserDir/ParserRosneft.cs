@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AngleSharp.Dom;
-using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
 using ParserTenders.TenderDir;
 
@@ -17,10 +16,10 @@ namespace ParserTenders.ParserDir
         
         public override void Parsing()
         {
-            for (int i = 0; i <= Count; i++)
+            for (var i = 0; i <= Count; i++)
             {
                 if (!ct) break;
-                string urlpage = $"http://zakupki.rosneft.ru/zakupki?page={i}";
+                var urlpage = $"http://zakupki.rosneft.ru/zakupki?page={i}";
                 try
                 {
                     ParsingPage(urlpage);
@@ -34,7 +33,7 @@ namespace ParserTenders.ParserDir
 
         private void ParsingPage(string url)
         {
-            string s = DownloadString.DownL(url);
+            var s = DownloadString.DownL(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);

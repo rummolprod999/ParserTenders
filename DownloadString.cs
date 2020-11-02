@@ -17,8 +17,8 @@ namespace ParserTenders
 
         public static string DownL(string url)
         {
-            string tmp = "";
-            int count = 0;
+            var tmp = "";
+            var count = 0;
             while (true)
             {
                 try
@@ -74,8 +74,8 @@ namespace ParserTenders
         public static string DownLUserAgent(string url)
         {
             MaxDownload++;
-            string tmp = "";
-            int count = 0;
+            var tmp = "";
+            var count = 0;
             while (true)
             {
                 try
@@ -151,8 +151,8 @@ namespace ParserTenders
         public static string DownLUserAgentEis(string url)
         {
             MaxDownload++;
-            string tmp = "";
-            int count = 0;
+            var tmp = "";
+            var count = 0;
             while (true)
             {
                 try
@@ -227,8 +227,8 @@ namespace ParserTenders
 
         public static string DownL1251(string url)
         {
-            string tmp = "";
-            int count = 0;
+            var tmp = "";
+            var count = 0;
             while (true)
             {
                 try
