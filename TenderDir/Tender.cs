@@ -108,7 +108,8 @@ namespace ParserTenders.TenderDir
             }
         }
 
-        public static void TenderKwords(MySqlConnection connect, int idTender, bool pils = false)
+        public static void TenderKwords(MySqlConnection connect, int idTender, bool pils = false,
+            params string[] additionParametrs)
         {
             var resString = "";
             if (pils)
@@ -211,7 +212,7 @@ namespace ParserTenders.TenderDir
 
             var innOrg = "";
             var nameOrg = "";
-            
+
             if (idOrg != 0)
             {
                 var selectOrg =
@@ -255,6 +256,8 @@ namespace ParserTenders.TenderDir
                 }
             }
 
+            resString = additionParametrs.Where(additionParametr => !string.IsNullOrEmpty(additionParametr))
+                .Aggregate(resString, (current, additionParametr) => current + $" {additionParametr}");
             resString = Regex.Replace(resString, @"\s+", " ");
             resString = resString.Trim();
             var updateTender =
