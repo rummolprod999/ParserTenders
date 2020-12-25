@@ -203,7 +203,7 @@ namespace ParserTenders
                     }
                     return patharch;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     switch (r)
                     {
