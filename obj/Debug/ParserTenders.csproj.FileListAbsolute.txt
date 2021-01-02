@@ -76,3 +76,5 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/en/FSharp.Core.resources.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Debug/ParserTenders.csprojAssemblyReference.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Debug/ParserTenders.csproj.CopyComplete
+/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Debug/RandonUaNET.dll
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Debug/ParserTenders.csproj.CoreCompileInputs.cache
