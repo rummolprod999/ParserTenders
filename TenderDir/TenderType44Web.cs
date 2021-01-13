@@ -580,8 +580,14 @@ namespace ParserTenders.TenderDir
                             var provWarPart =
                                 ((string) customerRequirement.SelectToken("provisionWarranty.part") ?? "")
                                 .Trim();
+                            var okpdName =
+                                ((string) customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDName") ?? "")
+                                .Trim();
+                            var okpdCode =
+                                ((string) customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDCode") ?? "")
+                                .Trim();
                             var insertCustomerRequirement =
-                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part";
+                                $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name";
                             var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                             cmd16.Prepare();
                             cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -605,6 +611,8 @@ namespace ParserTenders.TenderDir
                             cmd16.Parameters.AddWithValue("@position_number", positionNumber);
                             cmd16.Parameters.AddWithValue("@prov_war_amount", provWarAmount);
                             cmd16.Parameters.AddWithValue("@prov_war_part", provWarPart);
+                            cmd16.Parameters.AddWithValue("@OKPD2_code", okpdCode);
+                            cmd16.Parameters.AddWithValue("@OKPD2_name", okpdName);
                             cmd16.ExecuteNonQuery();
                             if (idCustomer == 0)
                             {
