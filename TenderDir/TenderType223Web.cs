@@ -149,6 +149,11 @@ namespace ParserTenders.TenderDir
                     var printform = ((string) tender.SelectToken("urlOOS") ?? "").Trim();
                     if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                         printform = printform.Substring(9, printform.Length - 12);
+                    if (String.IsNullOrEmpty(printform))
+                    {
+                        printform = xml;
+
+                    }
                     var organizerFullName = ((string) tender.SelectToken("placer.mainInfo.fullName") ?? "").Trim();
                     var organizerPostAddress = ((string) tender.SelectToken("placer.mainInfo.postalAddress") ?? "")
                         .Trim();
