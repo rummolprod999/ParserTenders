@@ -898,36 +898,38 @@ namespace ParserTenders.TenderDir
 
                                 var drugsInfo = GetElements(drugPurchaseObjectInfo,
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                                drugsInfo.AddRange(GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
                                 foreach (var drugInfo in drugsInfo)
                                 {
-                                    var okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                    var okpd2Code = ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "")
                                         .Trim();
-                                    var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                     var medicamentalFormName =
-                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                        ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
                                     name = $"{name} | {medicamentalFormName}";
 
                                     var dosageGrlsValue =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                        ((string) drugInfo.SelectToken("..dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
                                     
                                     if (!String.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
-                                    var quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    var quantityValue = ((string) drugInfo.SelectToken("..drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                        ((string) drugInfo.SelectToken("..dosageInfo.dosageUserOKEI.name") ?? "").Trim();
                                     if (okei == "")
                                     {
-                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                        okei = ((string) drugInfo.SelectToken("..manualUserOKEI.name") ?? "").Trim();
                                     }
 
-                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
-                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "")
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =

@@ -913,37 +913,39 @@ namespace ParserTenders.TenderDir
 
                             var drugsInfoRef = GetElements(drugPurchaseObjectInfo,
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
+                            drugsInfo.AddRange(GetElements(drugPurchaseObjectInfo,
+                                "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
                             foreach (var drugInfo in drugsInfoRef)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
-                                var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "").Trim();
+                                var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
-                                    ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
+                                    ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ?? "")
                                     .Trim();
                                 name = $"{name} | {medicamentalFormName}";
 
                                 var dosageGrlsValue =
-                                    ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                    ((string) drugInfo.SelectToken("..dosageInfo.dosageGRLSValue") ?? "").Trim();
                                 name = $"{name} | {dosageGrlsValue}";
                                 name = $"{name} | {isZnvlp}";
 
                                 if (!String.IsNullOrEmpty(name))
                                     name = Regex.Replace(name, @"\s+", " ");
-                                var quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                var quantityValue = ((string) drugInfo.SelectToken("..drugQuantity") ?? "")
                                     .Trim();
-                                var okei = ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "")
+                                var okei = ((string) drugInfo.SelectToken("..dosageInfo.dosageUserOKEI.name") ?? "")
                                     .Trim();
                                 if (okei == "")
                                 {
-                                    okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                    okei = ((string) drugInfo.SelectToken("..manualUserOKEI.name") ?? "").Trim();
                                 }
 
                                 var price =
-                                    ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
+                                    ((string) drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "").Trim();
                                 price = price.Replace(",", ".");
                                 var sumP =
-                                    ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
