@@ -39,6 +39,8 @@
 	<logdir_tenders_web44>log_tenders_web44</logdir_tenders_web44>
 	<tempdir_sign_proj44>temp_sign_proj44</tempdir_sign_proj44>
 	<logdir_sign_proj44>log_sign_proj44</logdir_sign_proj44>
+	<tempdir_preq44>temp_preq44</tempdir_preq44>
+	<logdir_preq44>log_preq44</logdir_preq44>
 	<prefix></prefix>
 	<userdb>parser</userdb>
 	<passdb>Dft56Point</passdb>

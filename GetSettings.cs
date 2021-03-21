@@ -20,6 +20,7 @@ namespace ParserTenders
         public readonly string LogPathTektorgRzd;
         public readonly string LogPathTenders223;
         public readonly string LogPathTenders44;
+        public readonly string LogPathReq44;
         public readonly string LogPathTenders615;
         public readonly string LogPathTendersWeb;
         public readonly string LogPathTendersWeb44;
@@ -45,6 +46,7 @@ namespace ParserTenders
         public readonly string TempPathTektorgRzd;
         public readonly string TempPathTenders223;
         public readonly string TempPathTenders44;
+        public readonly string TempPathReq44;
         public readonly string TempPathTenders615;
         public readonly string TempPathTendersWeb;
         public readonly string TempPathTendersWeb44;
@@ -192,6 +194,14 @@ namespace ParserTenders
                             TempPathSignProj44 =
                                 $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
+                        case "logdir_preq44":
+                            LogPathReq44 =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_preq44":
+                            TempPathReq44 =
+                                $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
                         case "prefix":
                             Prefix = xnode.InnerText;
                             break;
@@ -245,6 +255,7 @@ namespace ParserTenders
                 String.IsNullOrEmpty(TempPathTektorgRzd) || String.IsNullOrEmpty(LogPathTenders615) ||
                 String.IsNullOrEmpty(TempPathTenders615) || String.IsNullOrEmpty(LogPathTendersWeb44) ||
                 String.IsNullOrEmpty(TempPathTendersWeb44) || String.IsNullOrEmpty(LogPathSignProj44) ||
+                String.IsNullOrEmpty(TempPathReq44) || String.IsNullOrEmpty(LogPathReq44) ||
                 String.IsNullOrEmpty(TempPathSignProj44))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");

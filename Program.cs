@@ -10,7 +10,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44, currreq44, prevreq44, lastreq44";
 
         private static string _database;
         private static string _tempPath44;
@@ -49,6 +49,8 @@ namespace ParserTenders
         private static string _logTektorgRzd;
         private static string _tempPathWeb44;
         private static string _logPathWeb44;
+        private static string _tempPathRequestQ44;
+        private static string _logPathRequestQ44;
         private static string _prefix;
         private static string _user;
         private static string _pass;
@@ -122,6 +124,8 @@ namespace ParserTenders
         public static int UpTektorgInterRao = 0;
         public static int AddTektorgRzd = 0;
         public static int UpTektorgRzd = 0;
+        public static int AddRequestQ44 = 0;
+        public static int UpdateRequestQ44 = 0;
         public static string Database => _database;
         public static string Prefix => _prefix;
         public static string User => _user;
@@ -189,6 +193,10 @@ namespace ParserTenders
                     case TypeArguments.LastSignProj44:
                     case TypeArguments.PrevSignProj44:
                         return _tempSignProj44;
+                    case TypeArguments.CurrReq44:
+                    case TypeArguments.PrevReq44:
+                    case TypeArguments.LastReq44:
+                        return _tempPathRequestQ44;
                     default:
                         return "";
                 }
@@ -249,6 +257,10 @@ namespace ParserTenders
                     case TypeArguments.LastSignProj44:
                     case TypeArguments.PrevSignProj44:
                         return _logSignProj44;
+                    case TypeArguments.CurrReq44:
+                    case TypeArguments.PrevReq44:
+                    case TypeArguments.LastReq44:
+                        return _logPathRequestQ44;
                     default:
                         return "";
                 }
@@ -415,6 +427,21 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserSignProj44(Periodparsing);
                     break;
+                case "lastreq44":
+                    Periodparsing = TypeArguments.LastReq44;
+                    Init(Periodparsing);
+                    ParserRequestQ44(Periodparsing);
+                    break;
+                case "prevreq44":
+                    Periodparsing = TypeArguments.PrevReq44;
+                    Init(Periodparsing);
+                    ParserRequestQ44(Periodparsing);
+                    break;
+                case "currreq44":
+                    Periodparsing = TypeArguments.CurrReq44;
+                    Init(Periodparsing);
+                    ParserRequestQ44(Periodparsing);
+                    break;
                 default:
                     Console.WriteLine(
                         $"Неправильно указан аргумент, используйте {Arguments}");
@@ -472,6 +499,8 @@ namespace ParserTenders
             _logTektorgRzd = set.LogPathTektorgRzd;
             _tempSignProj44 = set.TempPathSignProj44;
             _logSignProj44 = set.LogPathSignProj44;
+            _tempPathRequestQ44 = set.TempPathReq44;
+            _logPathRequestQ44 = set.LogPathReq44;
             TableArchiveSign223 = $"{Prefix}arhiv_tender223_sign";
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
@@ -573,6 +602,11 @@ namespace ParserTenders
                 case TypeArguments.PrevSignProj44:
                 case TypeArguments.LastSignProj44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}SignProject44_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.CurrReq44:
+                case TypeArguments.LastReq44:
+                case TypeArguments.PrevReq44:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}RequestQ44_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -1030,6 +1064,30 @@ namespace ParserTenders
 
             Log.Logger($"Добавили SignProj44", AddTenderSignProj44);
             Log.Logger("Время окончания парсинга");
+        }
+        
+        private static void ParserRequestQ44(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга RequestQ44");
+            try
+            {
+                var t44 = new ParserRequestQ44(Periodparsing);
+                t44.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
+            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
+            FileInfo f =
+                new FileInfo(
+                    "/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/222.xml");
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);*/
+
+            Log.Logger("Добавили tender44", AddRequestQ44);
+            Log.Logger("Обновили tender44", UpdateRequestQ44);
+            Log.Logger("Время окончания парсинга RequestQ44");
         }
     }
 }
