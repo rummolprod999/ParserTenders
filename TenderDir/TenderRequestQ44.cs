@@ -82,15 +82,41 @@ namespace ParserTenders.TenderDir
                     var noticeVersion = "";
                     var numVersion = 0;
                     var cancelStatus = 0;
+                    var idEtp = 0;
+                    var EtpName = "Единая информационная система в сфере закупок";
+                    var EtpUrl = "https://zakupki.gov.ru/";
+                    var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE name = @name AND url = @url";
+                    var cmd7 = new MySqlCommand(selectEtp, connect);
+                    cmd7.Prepare();
+                    cmd7.Parameters.AddWithValue("@name", EtpName);
+                    cmd7.Parameters.AddWithValue("@url", EtpUrl);
+                    var dt5 = new DataTable();
+                    var adapter5 = new MySqlDataAdapter {SelectCommand = cmd7};
+                    adapter5.Fill(dt5);
+                    if (dt5.Rows.Count > 0)
+                    {
+                        idEtp = (int) dt5.Rows[0].ItemArray[0];
+                    }
+                    else
+                    {
+                        var insertEtp =
+                            $"INSERT INTO {Program.Prefix}etp SET name = @name, url = @url, conf=0";
+                        var cmd8 = new MySqlCommand(insertEtp, connect);
+                        cmd8.Prepare();
+                        cmd8.Parameters.AddWithValue("@name", EtpName);
+                        cmd8.Parameters.AddWithValue("@url", EtpUrl);
+                        cmd8.ExecuteNonQuery();
+                        idEtp = (int) cmd8.LastInsertedId;
+                    }
                     if (!String.IsNullOrEmpty(docPublishDate))
                     {
                         var selectDateT =
-                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number AND id_xml = @id_xml";
+                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number AND id_etp = @id_etp";
                         var cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", RegionId);
                         cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
-                        cmd2.Parameters.AddWithValue("@id_xml", idT);
+                        cmd2.Parameters.AddWithValue("@id_etp", idEtp);
                         var dt = new DataTable();
                         var adapter = new MySqlDataAdapter {SelectCommand = cmd2};
                         adapter.Fill(dt);
@@ -193,32 +219,6 @@ namespace ParserTenders.TenderDir
                     }
 
                     GetPlacingWay(connect, out var idPlacingWay, "Запрос цен");
-                    var idEtp = 0;
-                    var EtpName = "Единая информационная система в сфере закупок";
-                    var EtpUrl = "https://zakupki.gov.ru/";
-                    var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE name = @name AND url = @url";
-                    var cmd7 = new MySqlCommand(selectEtp, connect);
-                    cmd7.Prepare();
-                    cmd7.Parameters.AddWithValue("@name", EtpName);
-                    cmd7.Parameters.AddWithValue("@url", EtpUrl);
-                    var dt5 = new DataTable();
-                    var adapter5 = new MySqlDataAdapter {SelectCommand = cmd7};
-                    adapter5.Fill(dt5);
-                    if (dt5.Rows.Count > 0)
-                    {
-                        idEtp = (int) dt5.Rows[0].ItemArray[0];
-                    }
-                    else
-                    {
-                        var insertEtp =
-                            $"INSERT INTO {Program.Prefix}etp SET name = @name, url = @url, conf=0";
-                        var cmd8 = new MySqlCommand(insertEtp, connect);
-                        cmd8.Prepare();
-                        cmd8.Parameters.AddWithValue("@name", EtpName);
-                        cmd8.Parameters.AddWithValue("@url", EtpUrl);
-                        cmd8.ExecuteNonQuery();
-                        idEtp = (int) cmd8.LastInsertedId;
-                    }
 
                     var endDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.request.endDate") ?? "") ??
