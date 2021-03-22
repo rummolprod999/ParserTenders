@@ -94,14 +94,46 @@ namespace ParserTenders.TenderDir
                     var noticeVersion = "";
                     var numVersion = (int?) tender.SelectToken("versionNumber") ?? 1;
                     var cancelStatus = 0;
+                    var idEtp = 0;
+                    var etpCode = ((string) tender.SelectToken("commonInfo.ETP.code") ?? "").Trim();
+                    var etpName = ((string) tender.SelectToken("commonInfo.ETP.name") ?? "").Trim();
+                    var etpUrl = ((string) tender.SelectToken("commonInfo.ETP.url") ?? "").Trim();
+                    if (!String.IsNullOrEmpty(etpCode))
+                    {
+                        var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
+                        var cmd7 = new MySqlCommand(selectEtp, connect);
+                        cmd7.Prepare();
+                        cmd7.Parameters.AddWithValue("@code", etpCode);
+                        var reader4 = cmd7.ExecuteReader();
+                        if (reader4.HasRows)
+                        {
+                            reader4.Read();
+                            idEtp = reader4.GetInt32("id_etp");
+                            reader4.Close();
+                        }
+                        else
+                        {
+                            reader4.Close();
+                            var insertEtp =
+                                $"INSERT INTO {Program.Prefix}etp SET code= @code, name= @name, url= @url, conf=0";
+                            var cmd8 = new MySqlCommand(insertEtp, connect);
+                            cmd8.Prepare();
+                            cmd8.Parameters.AddWithValue("@code", etpCode);
+                            cmd8.Parameters.AddWithValue("@name", etpName);
+                            cmd8.Parameters.AddWithValue("@url", etpUrl);
+                            cmd8.ExecuteNonQuery();
+                            idEtp = (int) cmd8.LastInsertedId;
+                        }
+                    }
                     if (!String.IsNullOrEmpty(docPublishDate))
                     {
                         var selectDateT =
-                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number";
+                            $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number AND id_etp = @id_etp";
                         var cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", RegionId);
                         cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
+                        cmd2.Parameters.AddWithValue("@id_etp", idEtp);
                         var dt = new DataTable();
                         var adapter = new MySqlDataAdapter {SelectCommand = cmd2};
                         adapter.Fill(dt);
@@ -248,39 +280,6 @@ namespace ParserTenders.TenderDir
                             idPlacingWay = (int) cmd7.LastInsertedId;
                         }
                     }
-
-                    var idEtp = 0;
-                    var etpCode = ((string) tender.SelectToken("commonInfo.ETP.code") ?? "").Trim();
-                    var etpName = ((string) tender.SelectToken("commonInfo.ETP.name") ?? "").Trim();
-                    var etpUrl = ((string) tender.SelectToken("commonInfo.ETP.url") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(etpCode))
-                    {
-                        var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
-                        var cmd7 = new MySqlCommand(selectEtp, connect);
-                        cmd7.Prepare();
-                        cmd7.Parameters.AddWithValue("@code", etpCode);
-                        var reader4 = cmd7.ExecuteReader();
-                        if (reader4.HasRows)
-                        {
-                            reader4.Read();
-                            idEtp = reader4.GetInt32("id_etp");
-                            reader4.Close();
-                        }
-                        else
-                        {
-                            reader4.Close();
-                            var insertEtp =
-                                $"INSERT INTO {Program.Prefix}etp SET code= @code, name= @name, url= @url, conf=0";
-                            var cmd8 = new MySqlCommand(insertEtp, connect);
-                            cmd8.Prepare();
-                            cmd8.Parameters.AddWithValue("@code", etpCode);
-                            cmd8.Parameters.AddWithValue("@name", etpName);
-                            cmd8.Parameters.AddWithValue("@url", etpUrl);
-                            cmd8.ExecuteNonQuery();
-                            idEtp = (int) cmd8.LastInsertedId;
-                        }
-                    }
-
                     var endDate =
                         (JsonConvert.SerializeObject(
                              tender.SelectToken("notificationInfo.procedureInfo.collectingInfo.endDT") ?? "") ??
