@@ -899,6 +899,8 @@ namespace ParserTenders.TenderDir
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                                 drugsInfo.AddRange(GetElements(drugPurchaseObjectInfo,
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
+                                drugsInfo.AddRange(GetElements(drugPurchaseObjectInfo,
+                                    "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeReferenceInfo.drugInfo"));
                                 foreach (var drugInfo in drugsInfo)
                                 {
                                     var okpd2Code = ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "")
