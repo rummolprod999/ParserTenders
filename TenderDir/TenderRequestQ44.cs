@@ -51,6 +51,8 @@ namespace ParserTenders.TenderDir
                     Log.Logger("У тендера нет registryNum", FilePath);
                 }
 
+                purchaseNumber = $"{purchaseNumber}_PR";
+
                 using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
