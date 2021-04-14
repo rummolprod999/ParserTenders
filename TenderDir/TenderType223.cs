@@ -269,6 +269,9 @@ namespace ParserTenders.TenderDir
                     var endDate =
                     (JsonConvert.SerializeObject(tender.SelectToken("submissionCloseDateTime") ?? "") ??
                      "").Trim('"');
+                    var scoringDateNew = (JsonConvert.SerializeObject(tender.SelectToken("$..extendField[?(@.description == 'Дата и время окончания срока подачи ценовых предложений')].value.dateTime") ?? "") ??
+                                          "").Trim('"');
+                    Console.WriteLine(scoringDateNew);
                     var scoringDate = GetScogingDate(tender);
                     var biddingDate = GetBiddingDate(tender);
                     if (_purchase == TypeFile223.PurchaseNotice)
@@ -291,7 +294,10 @@ namespace ParserTenders.TenderDir
                         (JsonConvert.SerializeObject(tender.SelectToken("quotationExaminationTime") ?? "") ??
                          "").Trim('"');
                     }
-
+                    if (!String.IsNullOrEmpty(scoringDateNew))
+                    {
+                        scoringDate = scoringDateNew;
+                    }
                     _extendScoringDate = tender.SelectToken("extendFields")?.ToString() ?? "";
                     _extendScoringDate = Regex.Replace(_extendScoringDate, @"\s+", "").Trim();
 
