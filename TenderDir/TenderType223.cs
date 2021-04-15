@@ -141,7 +141,7 @@ namespace ParserTenders.TenderDir
                     if (string.IsNullOrEmpty(href))
                     {
                         href =
-                            $"http://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
+                            $"https://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
                     }
                     var purchaseObjectInfo = ((string) tender.SelectToken("name") ?? "").Trim();
 
@@ -150,6 +150,11 @@ namespace ParserTenders.TenderDir
                     var printform = ((string) tender.SelectToken("urlOOS") ?? "").Trim();
                     if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                         printform = printform.Substring(9, printform.Length - 12);
+                    if (!href.Contains("zakupki.gov.ru") && string.IsNullOrEmpty(printform))
+                    {
+                        printform =
+                            $"https://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
+                    }
                     var organizerFullName = ((string) tender.SelectToken("placer.mainInfo.fullName") ?? "").Trim();
                     var organizerPostAddress = ((string) tender.SelectToken("placer.mainInfo.postalAddress") ?? "")
                         .Trim();
