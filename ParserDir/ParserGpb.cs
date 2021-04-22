@@ -336,7 +336,12 @@ namespace ParserTenders.ParserDir
                         if (pr.BiddingDate == DateTime.MinValue)
                         {
                             pr.BiddingDate =
-                                (DateTime?) lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
+                                (DateTime?) lots[0].SelectToken("date_end_second_parts_review") ?? DateTime.MinValue;
+                            if (pr.BiddingDate == DateTime.MinValue)
+                            {
+                                pr.BiddingDate =
+                                    (DateTime?) lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
+                            }
                         }
 
                         pr.ScoringDate = (DateTime?) lots[0].SelectToken("date_end_first_parts_review") ??
