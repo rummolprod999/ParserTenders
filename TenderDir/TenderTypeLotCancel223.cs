@@ -48,7 +48,7 @@ namespace ParserTenders.TenderDir
                 var lots = GetElements(tender, "cancelledLots.cancelledLot");
                 if (lots.Count == 0)
                 {
-                    Log.Logger("Can not find lots in lotcancellation", FilePath);
+                    Log.Logger("cannot find lots in lotcancellation", FilePath);
                     return;
                 }
 

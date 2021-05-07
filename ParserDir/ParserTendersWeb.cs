@@ -223,7 +223,7 @@ namespace ParserTenders.ParserDir
             }
             else
             {
-                Log.Logger("Can not find root tag in xml", url);
+                Log.Logger("cannot find root tag in xml", url);
             }
         }
 

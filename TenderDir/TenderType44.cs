@@ -1092,7 +1092,7 @@ namespace ParserTenders.TenderDir
 
                     if (!PoExist)
                     {
-                        //Log.Logger("Can not find purchase objects in ", FilePath);
+                        //Log.Logger("cannot find purchase objects in ", FilePath);
                     }
 
                     /*if(pils){

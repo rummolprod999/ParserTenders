@@ -159,7 +159,7 @@ namespace ParserTenders.ParserDir
                 }
                 else
                 {
-                    Log.Logger("Can not define type tender", url);
+                    Log.Logger("cannot define type tender", url);
                 }
             }
         }

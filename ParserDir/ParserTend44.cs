@@ -240,7 +240,7 @@ namespace ParserTenders.ParserDir
                 if (!f.Name.Contains("PlacementResult_") && !f.Name.Contains("NotificationEA615_") &&
                     !f.Name.Contains("NotificationPO615_"))
                 {
-                    Log.Logger("!!!Can not parse this file", f.FullName, region);
+                    Log.Logger("!!!cannot parse this file", f.FullName, region);
                     Log.Logger("\n");
                 }
 
