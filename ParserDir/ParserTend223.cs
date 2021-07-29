@@ -15,8 +15,7 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTend223 : Parser
     {
-        private string[] _purchaseDir = new[]
-        {
+        private string[] _purchaseDir = {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
             "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection",
             "purchaseNoticeZPESMBO", "purchaseNoticeZKESMBO", "purchaseNoticeKESMBO", "purchaseNoticeAESMBO"

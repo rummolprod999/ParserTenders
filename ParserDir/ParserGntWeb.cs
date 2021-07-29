@@ -10,8 +10,7 @@ namespace ParserTenders.ParserDir
         public static string _site = "https://www.gazneftetorg.ru";
         //private string _url_list = "/trades/energo/ProposalRequest/?action=list_published&from=";
 
-        private TypeGnt[] _listUrls = new[]
-        {
+        private TypeGnt[] _listUrls = {
             new TypeGnt()
             {
                 Type = GntType.ProposalRequest,

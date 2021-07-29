@@ -12,8 +12,7 @@ namespace ParserTenders.ParserDir
         }
         public static string _site = "https://www.sstorg.ru";
 
-        private TypeSpecTorg[] _listUrls = new[]
-        {
+        private TypeSpecTorg[] _listUrls = {
             new TypeSpecTorg()
             {
                 Type = SpecTorgType.Advert,

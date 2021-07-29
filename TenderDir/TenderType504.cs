@@ -163,6 +163,15 @@ namespace ParserTenders.TenderDir
 
                     var purchaseObjectInfo =
                         ((string) tender.SelectToken("commonInfo.purchaseObjectInfo") ?? "").Trim();
+                    if (string.IsNullOrEmpty(purchaseObjectInfo))
+                    {
+                        var elT = GetElements(tender, "..purchaseObjectsInfo.purchaseObject");
+                        if (elT.Count > 0)
+                        {
+                            purchaseObjectInfo =
+                                elT.Select(z => ((string)z.SelectToken("name")?? "").Trim()).Aggregate((x, y) => $"{x}, {y}".Trim(',').Trim());
+                        }
+                    }
                     var organizerRegNum =
                         ((string) tender.SelectToken("purchaseResponsibleInfo.responsibleOrgInfo.regNum") ?? "").Trim();
                     var organizerFullName =
@@ -427,6 +436,19 @@ namespace ParserTenders.TenderDir
                                 ((string) customerRequirement.SelectToken(
                                      "contractConditionsInfo.deliveryPlacesInfo.deliveryPlaceInfo[0].kladr.fullName[0].deliveryPlace") ??
                                  "").Trim();
+                        if (String.IsNullOrEmpty(deliveryPlace))
+                        {
+                            var deliveryPlace1 =
+                                ((string) tender.SelectToken(
+                                     "..notificationInfo.contractConditionsInfo.deliveryPlaceInfo.OKTMO.name") ??
+                                 "").Trim();
+                            var deliveryPlace2 =
+                                ((string) tender.SelectToken(
+                                     "..notificationInfo.contractConditionsInfo.deliveryPlaceInfo.deliveryPlace") ??
+                                 "").Trim();
+                            deliveryPlace = $"{deliveryPlace1} {deliveryPlace2}";
+                        }
+
                         var deliveryTerm =
                             ((string) customerRequirement.SelectToken("contractConditionsInfo.deliveryTerm") ?? "")
                             .Trim();
@@ -636,6 +658,8 @@ namespace ParserTenders.TenderDir
 
                     var purchaseobjects = GetElements(tender,
                         "notificationInfo.purchaseObjectsInfo.notDrugPurchaseObjectsInfo.purchaseObject");
+                    purchaseobjects.AddRange(GetElements(tender,
+                        "notificationInfo.purchaseObjectsInfo.purchaseObject"));
                     foreach (var purchaseobject in purchaseobjects)
                     {
                         var okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.OKPDCode") ?? "").Trim();

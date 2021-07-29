@@ -16,8 +16,7 @@ namespace ParserTenders.ParserDir
     {
         protected DataTable DtRegion;
 
-        private string[] _fileExp223 = new[]
-            {"explanation_"};
+        private string[] _fileExp223 = {"explanation_"};
 
         public ParserExp(TypeArguments arg) : base(arg)
         {

@@ -16,8 +16,7 @@ namespace ParserTenders.ParserDir
     {
         protected DataTable DtRegion;
 
-        private string[] _fileXml44 = new[]
-        {
+        private string[] _fileXml44 = {
             "fcsrequestforquotation_"
         };
 

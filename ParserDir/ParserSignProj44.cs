@@ -14,7 +14,7 @@ namespace ParserTenders.ParserDir
 {
     public class ParserSignProj44 : Parser
     {
-        private string[] _fileSign = new[] {"cpcontractsign_"};
+        private string[] _fileSign = {"cpcontractsign_"};
 
         protected DataTable DtRegion;
 

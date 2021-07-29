@@ -16,25 +16,23 @@ namespace ParserTenders.ParserDir
     {
         readonly List<string> summList;
 
-        private string[] _fileCancel = new[] {"notificationcancel_"};
-        private string[] _fileCancelFailure = new[] {"cancelfailure_"};
-        private string[] _fileClarification = new[] {"clarification_", "epclarificationdoc_"};
-        private string[] _fileClarificationResult = new[] {"epclarificationresult_"};
-        private string[] _fileDatechange = new[] {"datechange_"};
-        private string[] _fileLotcancel = new[] {"lotcancel_"};
-        private string[] _fileOrgchange = new[] {"orgchange_"};
-        private string[] _fileProlongation = new[] {"prolongation"};
-        private string[] _fileSign = new[] {"contractsign_"};
+        private string[] _fileCancel = {"notificationcancel_"};
+        private string[] _fileCancelFailure = {"cancelfailure_"};
+        private string[] _fileClarification = {"clarification_", "epclarificationdoc_"};
+        private string[] _fileClarificationResult = {"epclarificationresult_"};
+        private string[] _fileDatechange = {"datechange_"};
+        private string[] _fileLotcancel = {"lotcancel_"};
+        private string[] _fileOrgchange = {"orgchange_"};
+        private string[] _fileProlongation = {"prolongation"};
+        private string[] _fileSign = {"contractsign_"};
 
-        private string[] _fileXml44 = new[]
-        {
+        private string[] _fileXml44 = {
             "ea44_", "ep44_", "ok44_", "okd44_", "oku44_", "po44_", "za44_", "zk44_",
             "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_", "inm111_"
         };
 
-        private string[] _fileXml504 = new[]
-        {
-            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_"
+        private string[] _fileXml504 = {
+            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_"
         };
 
         protected DataTable DtRegion;

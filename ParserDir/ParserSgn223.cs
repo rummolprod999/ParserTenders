@@ -16,8 +16,7 @@ namespace ParserTenders.ParserDir
     {
         protected DataTable DtRegion;
 
-        private string[] _fileSign223 = new[]
-            {"contract_"};
+        private string[] _fileSign223 = {"contract_"};
 
         public ParserSgn223(TypeArguments arg) : base(arg)
         {

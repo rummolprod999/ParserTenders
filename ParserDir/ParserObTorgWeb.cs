@@ -9,8 +9,7 @@ namespace ParserTenders.ParserDir
     {
         public static string _site = "https://www.oborontorg.ru";
         
-        private TypeObTorg[] _listUrls = new[]
-        {
+        private TypeObTorg[] _listUrls = {
             new TypeObTorg()
             {
                 Type = ObTorgType.ProposalRequest,
