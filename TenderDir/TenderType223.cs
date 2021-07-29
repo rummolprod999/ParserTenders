@@ -53,14 +53,14 @@ namespace ParserTenders.TenderDir
             {
                 var tender = tend.Value;
                 var idT = ((string) tender.SelectToken("guid") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У тендера нет id", FilePath);
                     return;
                 }
 
                 var purchaseNumber = ((string) tender.SelectToken("registrationNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                 }
@@ -88,7 +88,7 @@ namespace ParserTenders.TenderDir
                      "").Trim('"');
                     var dateVersion = (JsonConvert.SerializeObject(tender.SelectToken("modificationDate") ?? "") ??
                                        "").Trim('"');
-                    if (String.IsNullOrEmpty(dateVersion))
+                    if (string.IsNullOrEmpty(dateVersion))
                     {
                         dateVersion = docPublishDate;
                     }
@@ -103,7 +103,7 @@ namespace ParserTenders.TenderDir
                         Log.Logger("Ошибка при получении часового пояса", e, docPublishDate);
                     }*/
                     var cancelStatus = 0;
-                    if (!String.IsNullOrEmpty(dateVersion))
+                    if (!string.IsNullOrEmpty(dateVersion))
                     {
                         var selectDateT =
                             $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
@@ -148,7 +148,7 @@ namespace ParserTenders.TenderDir
                     var numVersion = ((string) tender.SelectToken("version") ?? "").Trim();
                     var noticeVersion = ((string) tender.SelectToken("modificationDescription") ?? "").Trim();
                     var printform = ((string) tender.SelectToken("urlOOS") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
+                    if (!string.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                         printform = printform.Substring(9, printform.Length - 12);
                     if (!href.Contains("zakupki.gov.ru") && string.IsNullOrEmpty(printform))
                     {
@@ -166,7 +166,7 @@ namespace ParserTenders.TenderDir
                     var organizerPhone = ((string) tender.SelectToken("placer.mainInfo.phone") ?? "").Trim();
                     var organizerFax = ((string) tender.SelectToken("placer.mainInfo.fax") ?? "").Trim();
                     var idOrganizer = 0;
-                    if (!String.IsNullOrEmpty(organizerInn))
+                    if (!string.IsNullOrEmpty(organizerInn))
                     {
                         var selectOrg =
                             $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE inn = @inn AND kpp = @kpp";
@@ -209,7 +209,7 @@ namespace ParserTenders.TenderDir
                     var placingWayCode = ((string) tender.SelectToken("purchaseMethodCode") ?? "").Trim();
                     var placingWayName = ((string) tender.SelectToken("purchaseCodeName") ?? "").Trim();
                     var conformity = GetConformity(placingWayName);
-                    if (!String.IsNullOrEmpty(placingWayCode))
+                    if (!string.IsNullOrEmpty(placingWayCode))
                     {
                         var selectPlacingWay =
                             $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE code = @code";
@@ -243,7 +243,7 @@ namespace ParserTenders.TenderDir
                         ((string) tender.SelectToken("electronicPlaceInfo.electronicPlaceId") ?? "").Trim();
                     var etpName = ((string) tender.SelectToken("electronicPlaceInfo.name") ?? "").Trim();
                     var etpUrl = ((string) tender.SelectToken("electronicPlaceInfo.url") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(etpCode))
+                    if (!string.IsNullOrEmpty(etpCode))
                     {
                         var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
                         var cmd6 = new MySqlCommand(selectEtp, connect);
@@ -281,7 +281,7 @@ namespace ParserTenders.TenderDir
                     var biddingDate = GetBiddingDate(tender);
                     if (_purchase == TypeFile223.PurchaseNotice)
                     {
-                        if (String.IsNullOrEmpty(biddingDate) && !String.IsNullOrEmpty(scoringDate))
+                        if (string.IsNullOrEmpty(biddingDate) && !string.IsNullOrEmpty(scoringDate))
                         {
                             biddingDate = scoringDate;
                         }
@@ -299,7 +299,7 @@ namespace ParserTenders.TenderDir
                         (JsonConvert.SerializeObject(tender.SelectToken("quotationExaminationTime") ?? "") ??
                          "").Trim('"');
                     }
-                    if (!String.IsNullOrEmpty(scoringDateNew))
+                    if (!string.IsNullOrEmpty(scoringDateNew))
                     {
                         scoringDate = scoringDateNew;
                     }
@@ -367,7 +367,7 @@ namespace ParserTenders.TenderDir
                     var cusContact = $"{cusLn} {cusFn} {cusMn}".Trim();
                     var idCustomer = 0;
                     var customerRegNumber = "";
-                    if (!String.IsNullOrEmpty(customerInn))
+                    if (!string.IsNullOrEmpty(customerInn))
                     {
                         var selectOdCustomer =
                             $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -383,7 +383,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         reader4.Close();
-                        if (String.IsNullOrEmpty(customerRegNumber))
+                        if (string.IsNullOrEmpty(customerRegNumber))
                         {
                             var selectOdCustomerFromFtp =
                                 $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -401,7 +401,7 @@ namespace ParserTenders.TenderDir
                             reader5.Close();
                         }
 
-                        if (String.IsNullOrEmpty(customerRegNumber))
+                        if (string.IsNullOrEmpty(customerRegNumber))
                         {
                             var selectOdCustomerFromFtp223 =
                                 $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -419,7 +419,7 @@ namespace ParserTenders.TenderDir
                             reader6.Close();
                         }
 
-                        if (!String.IsNullOrEmpty(customerRegNumber))
+                        if (!string.IsNullOrEmpty(customerRegNumber))
                         {
                             var selectCustomer =
                                 $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
@@ -550,7 +550,7 @@ namespace ParserTenders.TenderDir
                             var okei = ((string) lotitem.SelectToken("okei.name") ?? "").Trim();
                             var okpd2GroupCode = 0;
                             var okpd2GroupLevel1Code = "";
-                            if (!String.IsNullOrEmpty(okpd2Code))
+                            if (!string.IsNullOrEmpty(okpd2Code))
                             {
                                 GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }
@@ -575,9 +575,9 @@ namespace ParserTenders.TenderDir
                             var deliveryPlace =
                                 ((string) lotitem.SelectToken("deliveryPlace.address") ?? "")
                                 .Trim();
-                            if (String.IsNullOrEmpty(deliveryPlace))
+                            if (string.IsNullOrEmpty(deliveryPlace))
                                 deliveryPlace = deliveryPlaceLot;
-                            if (!String.IsNullOrEmpty(deliveryPlace) || !string.IsNullOrEmpty(planNumber) || !string.IsNullOrEmpty(positionNumber))
+                            if (!string.IsNullOrEmpty(deliveryPlace) || !string.IsNullOrEmpty(planNumber) || !string.IsNullOrEmpty(positionNumber))
                             {
                                 var insertCustomerRequirement =
                                 $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, plan_number = @plan_number, position_number = @position_number, application_guarantee_amount = @application_guarantee_amount, max_price = @max_price";
@@ -608,7 +608,7 @@ namespace ParserTenders.TenderDir
                                 ((string) lotitem.SelectToken("customerInfo.kpp") ?? "").Trim();
                             var idCustomerJoin = 0;
                             var customerRegNumberJoin = "";
-                            if (!String.IsNullOrEmpty(customerInnJoin))
+                            if (!string.IsNullOrEmpty(customerInnJoin))
                             {
                                 var selectOdCustomer =
                                     $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -624,7 +624,7 @@ namespace ParserTenders.TenderDir
                                 }
 
                                 reader4.Close();
-                                if (String.IsNullOrEmpty(customerRegNumberJoin))
+                                if (string.IsNullOrEmpty(customerRegNumberJoin))
                                 {
                                     var selectOdCustomerFromFtp =
                                         $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -642,7 +642,7 @@ namespace ParserTenders.TenderDir
                                     reader5.Close();
                                 }
 
-                                if (String.IsNullOrEmpty(customerRegNumberJoin))
+                                if (string.IsNullOrEmpty(customerRegNumberJoin))
                                 {
                                     var selectOdCustomerFromFtp223 =
                                         $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -660,7 +660,7 @@ namespace ParserTenders.TenderDir
                                     reader6.Close();
                                 }
 
-                                if (!String.IsNullOrEmpty(customerRegNumberJoin))
+                                if (!string.IsNullOrEmpty(customerRegNumberJoin))
                                 {
                                     var selectCustomer =
                                         $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
@@ -735,11 +735,11 @@ namespace ParserTenders.TenderDir
                             var deliveryPlaceJoin =
                                 ((string) lotitem.SelectToken("lotCustomerData.deliveryPlace.address") ?? "")
                                 .Trim();
-                            if (String.IsNullOrEmpty(deliveryPlaceJoin))
+                            if (string.IsNullOrEmpty(deliveryPlaceJoin))
                                 deliveryPlaceJoin = deliveryPlaceLot;
                             var sumJoin = ((string) lotitem.SelectToken("lotCustomerData.initialSum") ?? "")
                                 .Trim();
-                            if (!String.IsNullOrEmpty(deliveryPlaceJoin) || !string.IsNullOrEmpty(planNumberJoin) ||
+                            if (!string.IsNullOrEmpty(deliveryPlaceJoin) || !string.IsNullOrEmpty(planNumberJoin) ||
                                 !string.IsNullOrEmpty(positionNumberJoin))
                             {
                                 var insertCustomerRequirement =
@@ -769,7 +769,7 @@ namespace ParserTenders.TenderDir
                                 var okei = ((string) item.SelectToken("okei.name") ?? "").Trim();
                                 var okpd2GroupCode = 0;
                                 var okpd2GroupLevel1Code = "";
-                                if (!String.IsNullOrEmpty(okpd2Code))
+                                if (!string.IsNullOrEmpty(okpd2Code))
                                 {
                                     GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                                 }
@@ -836,19 +836,19 @@ namespace ParserTenders.TenderDir
             scoringDate =
             (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.examinationDateTime") ?? "") ??
              "").Trim('"');
-            if (String.IsNullOrEmpty(scoringDate))
+            if (string.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("applExamPeriodTime") ?? "") ??
                                "").Trim('"');
             }
 
-            if (String.IsNullOrEmpty(scoringDate))
+            if (string.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = (JsonConvert.SerializeObject(ten.SelectToken("examinationDateTime") ?? "") ??
                                "").Trim('"');
             }
 
-            if (String.IsNullOrEmpty(scoringDate))
+            if (string.IsNullOrEmpty(scoringDate))
             {
                 scoringDate = ParsingScoringDate(ten);
             }
@@ -862,14 +862,14 @@ namespace ParserTenders.TenderDir
             biddingDate =
             (JsonConvert.SerializeObject(ten.SelectToken("auctionTime") ?? "") ??
              "").Trim('"');
-            if (String.IsNullOrEmpty(biddingDate))
+            if (string.IsNullOrEmpty(biddingDate))
             {
                 biddingDate =
                 (JsonConvert.SerializeObject(ten.SelectToken("placingProcedure.summingupDateTime") ?? "") ??
                  "").Trim('"');
             }
 
-            if (String.IsNullOrEmpty(biddingDate))
+            if (string.IsNullOrEmpty(biddingDate))
             {
                 biddingDate = ParsingBiddingDate(ten);
             }
@@ -892,14 +892,14 @@ namespace ParserTenders.TenderDir
                         desc.ToLower().IndexOf("рассмотр", StringComparison.Ordinal) != -1)
                     {
                         var dm = ((string) b.SelectToken("value.text") ?? "").Trim();
-                        if (String.IsNullOrEmpty(dm))
+                        if (string.IsNullOrEmpty(dm))
                         {
                             return (JsonConvert.SerializeObject(b.SelectToken("value.dateTime") ?? "") ??
                                     "").Trim('"');
                         }
 
                         date = FindDate(dm);
-                        if (String.IsNullOrEmpty(date))
+                        if (string.IsNullOrEmpty(date))
                         {
                             _extendScoringDate = dm;
                         }
@@ -927,14 +927,14 @@ namespace ParserTenders.TenderDir
                         desc.ToLower().IndexOf("подвед", StringComparison.Ordinal) != -1)
                     {
                         var dm = ((string) b.SelectToken("value.text") ?? "").Trim();
-                        if (String.IsNullOrEmpty(dm))
+                        if (string.IsNullOrEmpty(dm))
                         {
                             return (JsonConvert.SerializeObject(b.SelectToken("value.dateTime") ?? "") ??
                                     "").Trim('"');
                         }
 
                         date = FindDate(dm);
-                        if (String.IsNullOrEmpty(date))
+                        if (string.IsNullOrEmpty(date))
                         {
                             _extendBiddingDate = dm;
                         }

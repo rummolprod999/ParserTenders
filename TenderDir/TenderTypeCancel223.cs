@@ -39,7 +39,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = tend.Value;
                 var purchaseNumber = ((string) tender.SelectToken("cancelNoticeRegistrationNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                     return;

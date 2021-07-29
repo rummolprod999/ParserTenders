@@ -29,7 +29,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
                     return;
@@ -55,7 +55,7 @@ namespace ParserTenders.TenderDir
                 using (var connect = ConnectToDb.GetDbConnection())
                 {
                     connect.Open();
-                    if (!String.IsNullOrEmpty(collectingEndDate) && !String.IsNullOrEmpty(collectingProlongationDate))
+                    if (!string.IsNullOrEmpty(collectingEndDate) && !string.IsNullOrEmpty(collectingProlongationDate))
                     {
                         var updateTenderEnd =
                             $"UPDATE {Program.Prefix}tender SET end_date = @end_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
@@ -68,7 +68,7 @@ namespace ParserTenders.TenderDir
                         AddProlongation?.Invoke(resEnd);
                     }
 
-                    if (!String.IsNullOrEmpty(scoringDate) && !String.IsNullOrEmpty(scoringProlongationDate))
+                    if (!string.IsNullOrEmpty(scoringDate) && !string.IsNullOrEmpty(scoringProlongationDate))
                     {
                         var updateTenderScor =
                             $"UPDATE {Program.Prefix}tender SET scoring_date = @scoring_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
@@ -81,8 +81,8 @@ namespace ParserTenders.TenderDir
                         AddProlongation?.Invoke(resScor);
                     }
 
-                    if (String.IsNullOrEmpty(collectingProlongationDate) &&
-                        String.IsNullOrEmpty(scoringProlongationDate))
+                    if (string.IsNullOrEmpty(collectingProlongationDate) &&
+                        string.IsNullOrEmpty(scoringProlongationDate))
                     {
                         Log.Logger("Не могу найти изменяемые даты у TenderProlongation", FilePath);
                     }
@@ -95,7 +95,7 @@ namespace ParserTenders.TenderDir
                 {
                     var tender = firstOrDefault.Value;
                     var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
-                    if (String.IsNullOrEmpty(purchaseNumber))
+                    if (string.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
                         return;
@@ -133,8 +133,8 @@ namespace ParserTenders.TenderDir
                     using (var connect = ConnectToDb.GetDbConnection())
                     {
                         connect.Open();
-                        if (!String.IsNullOrEmpty(collectingEndDate) &&
-                            !String.IsNullOrEmpty(collectingProlongationDate))
+                        if (!string.IsNullOrEmpty(collectingEndDate) &&
+                            !string.IsNullOrEmpty(collectingProlongationDate))
                         {
                             var updateTenderEnd =
                                 $"UPDATE {Program.Prefix}tender SET end_date = @end_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
@@ -147,7 +147,7 @@ namespace ParserTenders.TenderDir
                             AddProlongation?.Invoke(resEnd);
                         }
 
-                        if (!String.IsNullOrEmpty(scoringProlongationDate))
+                        if (!string.IsNullOrEmpty(scoringProlongationDate))
                         {
                             var updateTenderScor =
                                 $"UPDATE {Program.Prefix}tender SET scoring_date = @scoring_date WHERE id_region = @id_region AND purchase_number = @purchase_number";
@@ -160,8 +160,8 @@ namespace ParserTenders.TenderDir
                             AddProlongation?.Invoke(resScor);
                         }
 
-                        if (String.IsNullOrEmpty(collectingProlongationDate) &&
-                            String.IsNullOrEmpty(scoringProlongationDate))
+                        if (string.IsNullOrEmpty(collectingProlongationDate) &&
+                            string.IsNullOrEmpty(scoringProlongationDate))
                         {
                             Log.Logger("Не могу найти изменяемые даты у TenderProlongation", FilePath);
                         }

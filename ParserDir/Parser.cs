@@ -142,42 +142,42 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
+        public virtual List<string> GetListArchLast(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
+        public virtual List<string> GetListArchCurr(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
+        public virtual List<string> GetListArchPrev(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
+        public virtual List<string> GetListArchLast(string pathParse, string regionPath, string purchase)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
+        public virtual List<string> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchDaily(string pathParse, string regionPath)
+        public virtual List<string> GetListArchDaily(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 

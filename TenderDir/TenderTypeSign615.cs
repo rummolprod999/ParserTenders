@@ -30,7 +30,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var purchaseNumber = ((string) tender.SelectToken("id") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", FilePath);
                     //return;

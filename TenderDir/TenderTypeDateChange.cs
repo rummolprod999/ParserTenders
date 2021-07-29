@@ -29,7 +29,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderDateChange", FilePath);
                     return;
@@ -47,7 +47,7 @@ namespace ParserTenders.TenderDir
                     (JsonConvert.SerializeObject(tender.SelectToken("auctionTime") ?? "") ?? "").Trim('"');
                 var newAuctionDate = (JsonConvert.SerializeObject(tender.SelectToken("newAuctionDate") ?? "") ?? "")
                     .Trim('"');
-                if (String.IsNullOrEmpty(newAuctionDate) || String.IsNullOrEmpty(auctionTime))
+                if (string.IsNullOrEmpty(newAuctionDate) || string.IsNullOrEmpty(auctionTime))
                 {
                     Log.Logger("Не могу найти newAuctionDate or newAuctionDate у TenderDateChange");
                     return;

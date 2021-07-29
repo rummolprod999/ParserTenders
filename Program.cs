@@ -512,7 +512,7 @@ namespace ParserTenders
                 _years.Add(s);
             }
 
-            if (String.IsNullOrEmpty(TempPath) || String.IsNullOrEmpty(LogPath))
+            if (string.IsNullOrEmpty(TempPath) || string.IsNullOrEmpty(LogPath))
             {
                 Console.WriteLine("Не получится создать папки для парсинга");
                 Environment.Exit(0);

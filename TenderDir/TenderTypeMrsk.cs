@@ -45,7 +45,7 @@ namespace ParserTenders.TenderDir
                 }
 
                 var s = DownloadString.DownL(_tend.Href);
-                if (String.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in Parsing()", _tend.Href);
                     return;
@@ -95,7 +95,7 @@ namespace ParserTenders.TenderDir
                     (navT?.SelectSingleNode(
                          "//table/tbody/tr[td[position()=1]/b= 'Способ размещения заказа']/td[last()]")?.Value ?? "")
                     .Trim();
-                if (!String.IsNullOrEmpty(pwName))
+                if (!string.IsNullOrEmpty(pwName))
                 {
                     var selectPlacingWay =
                         $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE name = @name";

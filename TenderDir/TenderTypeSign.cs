@@ -31,7 +31,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var purchaseNumber = ((string) tender.SelectToken("foundation.order.purchaseNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", FilePath);
                     //return;
@@ -126,7 +126,7 @@ namespace ParserTenders.TenderDir
                         Log.Logger("У TenderSign несколько supplier", FilePath);
                     }
                     var idCustomer = 0;
-                    if (!String.IsNullOrEmpty(customerRegNum))
+                    if (!string.IsNullOrEmpty(customerRegNum))
                     {
                         var selectCustomer =
                             $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
@@ -152,7 +152,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     var idSupplier = 0;
-                    if (!String.IsNullOrEmpty(supplierInn))
+                    if (!string.IsNullOrEmpty(supplierInn))
                     {
                         var selectSupplier =
                             $"SELECT id_supplier FROM {Program.Prefix}supplier WHERE inn_supplier = @inn_supplier AND kpp_supplier = @kpp_supplier";

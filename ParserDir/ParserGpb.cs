@@ -57,7 +57,7 @@ namespace ParserTenders.ParserDir
                     var lotNumSt = ((string) lt.SelectToken("@number") ?? "").Trim();
                     //Console.WriteLine(lotNumSt);
                     var lotNum = 0;
-                    lotNum = Int32.TryParse(lotNumSt, out lotNum) ? Int32.Parse(lotNumSt) : 0;
+                    lotNum = int.TryParse(lotNumSt, out lotNum) ? int.Parse(lotNumSt) : 0;
                     var status = (int?) lt.SelectToken("status") ?? 0;
                     try
                     {
@@ -155,7 +155,7 @@ namespace ParserTenders.ParserDir
 
                     var cancelStatus = 0;
                     var update = false;
-                    if (!String.IsNullOrEmpty(pr.RegistryNumber))
+                    if (!string.IsNullOrEmpty(pr.RegistryNumber))
                     {
                         var selectDateT =
                             $"SELECT id_tender, date_version, cancel FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
@@ -213,7 +213,7 @@ namespace ParserTenders.ParserDir
                         org.Inn = ((string) customers[0].SelectToken("inn") ?? "").Trim();
                         org.Kpp = ((string) customers[0].SelectToken("kpp") ?? "").Trim();
                         org.FullName = ((string) customers[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(org.FullName) && org.FullName.IndexOf("CDATA") != -1)
+                        if (!string.IsNullOrEmpty(org.FullName) && org.FullName.IndexOf("CDATA") != -1)
                             org.FullName = org.FullName.Substring(9, org.FullName.Length - 12);
                         org.PostAddress = ((string) customers[0].SelectToken("addr_post") ?? "").Trim();
                         org.FactAddress = ((string) customers[0].SelectToken("addr_main") ?? "").Trim();
@@ -225,7 +225,7 @@ namespace ParserTenders.ParserDir
                     }
 
                     pr.IdOrg = 0;
-                    if (!String.IsNullOrEmpty(org.Inn))
+                    if (!string.IsNullOrEmpty(org.Inn))
                     {
                         var selectOrg =
                             $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE inn = @inn AND kpp = @kpp";
@@ -269,7 +269,7 @@ namespace ParserTenders.ParserDir
                     var pw = new PlacingWayGpB {Code = "", Name = ""};
                     pw.Code = ((string) proc.SelectToken("procedure_type") ?? "").Trim();
                     pw.Name = ((string) proc.SelectToken("procedure_type_name") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(pw.Code) && !String.IsNullOrEmpty(pw.Name))
+                    if (!string.IsNullOrEmpty(pw.Code) && !string.IsNullOrEmpty(pw.Name))
                     {
                         var selectPlacingWay =
                             $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE code = @code AND name = @name";
@@ -449,7 +449,7 @@ namespace ParserTenders.ParserDir
                             cust.Inn = ((string) customerslot[0].SelectToken("inn") ?? "").Trim();
                             cust.Kpp = ((string) customerslot[0].SelectToken("kpp") ?? "").Trim();
                             cust.FullName = ((string) customerslot[0].SelectToken("full_name") ?? "").Trim();
-                            if (!String.IsNullOrEmpty(cust.Inn))
+                            if (!string.IsNullOrEmpty(cust.Inn))
                             {
                                 //Console.WriteLine(cust.Inn);
                                 var selectOdCustomer =
@@ -466,7 +466,7 @@ namespace ParserTenders.ParserDir
                                 }
 
                                 reader4.Close();
-                                if (String.IsNullOrEmpty(cust.CustomerRegNumber))
+                                if (string.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     var selectOdCustomerFromFtp =
                                         $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -484,7 +484,7 @@ namespace ParserTenders.ParserDir
                                     reader5.Close();
                                 }
 
-                                if (String.IsNullOrEmpty(cust.CustomerRegNumber))
+                                if (string.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     var selectOdCustomerFromFtp223 =
                                         $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
@@ -502,7 +502,7 @@ namespace ParserTenders.ParserDir
                                     reader6.Close();
                                 }
 
-                                if (!String.IsNullOrEmpty(cust.CustomerRegNumber))
+                                if (!string.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     var selectCustomer =
                                         $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
@@ -563,7 +563,7 @@ namespace ParserTenders.ParserDir
                                         {
                                             cust.FullName =
                                                 ((string) cst[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
-                                            if (!String.IsNullOrEmpty(cust.FullName) &&
+                                            if (!string.IsNullOrEmpty(cust.FullName) &&
                                                 cust.FullName.IndexOf("CDATA") != -1)
                                                 cust.FullName = cust.FullName.Substring(9, cust.FullName.Length - 12);
                                             cust.PostAddress = ((string) cst[0].SelectToken("addr_post") ?? "").Trim();
@@ -648,7 +648,7 @@ namespace ParserTenders.ParserDir
                             var okei = ((string) lotitem.SelectToken("okei_name") ?? "").Trim();
                             var okpd2GroupCode = 0;
                             var okpd2GroupLevel1Code = "";
-                            if (!String.IsNullOrEmpty(okpd2Code))
+                            if (!string.IsNullOrEmpty(okpd2Code))
                             {
                                 Tender.GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                             }

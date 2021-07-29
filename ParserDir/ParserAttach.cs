@@ -215,7 +215,7 @@ namespace ParserTenders.ParserDir
                         Log.Logger("Слишком большой файл", att.UrlAttach);
                     }
                 }
-                if (!String.IsNullOrEmpty(attachtext))
+                if (!string.IsNullOrEmpty(attachtext))
                 {
                     using (var connect = ConnectToDb.GetDbConnection())
                     {

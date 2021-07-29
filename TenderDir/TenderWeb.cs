@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -61,7 +60,7 @@ namespace ParserTenders.TenderDir
                     var okpd2GroupCodeTemp = okpd2Code.Substring(0, dot);
                     okpd2GroupCodeTemp = okpd2GroupCodeTemp.Substring(0, 2);
                     int tempOkpd2GroupCode;
-                    if (!Int32.TryParse(okpd2GroupCodeTemp, out tempOkpd2GroupCode))
+                    if (!int.TryParse(okpd2GroupCodeTemp, out tempOkpd2GroupCode))
                     {
                         tempOkpd2GroupCode = 0;
                     }

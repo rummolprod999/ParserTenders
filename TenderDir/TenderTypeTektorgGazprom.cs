@@ -40,7 +40,7 @@ namespace ParserTenders.TenderDir
         public void Parsing()
         {
             var s = DownloadString.DownL(UrlTender);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     UrlTender);

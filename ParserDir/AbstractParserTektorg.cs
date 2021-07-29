@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AngleSharp.Parser.Html;
 
 namespace ParserTenders.ParserDir
@@ -17,7 +16,7 @@ namespace ParserTenders.ParserDir
         {
             var i = 1;
             var s = DownloadString.DownL(url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     url);

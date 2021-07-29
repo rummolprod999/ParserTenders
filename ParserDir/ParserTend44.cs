@@ -102,7 +102,7 @@ namespace ParserTenders.ParserDir
             var filea = "";
             var pathUnzip = "";
             filea = GetArch44(arch, pathParse);
-            if (!String.IsNullOrEmpty(filea))
+            if (!string.IsNullOrEmpty(filea))
             {
                 pathUnzip = Unzipped.Unzip(filea);
                 if (pathUnzip != "")
@@ -315,7 +315,7 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        public override List<String> GetListArchLast(string pathParse, string regionPath)
+        public override List<string> GetListArchLast(string pathParse, string regionPath)
         {
             var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
@@ -325,7 +325,7 @@ namespace ParserTenders.ParserDir
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<String> GetListArchCurr(string pathParse, string regionPath)
+        public override List<string> GetListArchCurr(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             //List<string> archtemp = new List<string>();
@@ -372,7 +372,7 @@ namespace ParserTenders.ParserDir
             return arch;
         }
 
-        public List<String> GetListArchCurrLast(string pathParse, string regionPath)
+        public List<string> GetListArchCurrLast(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             var newLs = GetListFtp44New(pathParse);
@@ -414,7 +414,7 @@ namespace ParserTenders.ParserDir
             return arch;
         }
 
-        public override List<String> GetListArchPrev(string pathParse, string regionPath)
+        public override List<string> GetListArchPrev(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             //List<string> archtemp = new List<string>();

@@ -19,7 +19,7 @@ namespace ParserTenders
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
-                d = Decimal.Parse(s, formatter);
+                d = decimal.Parse(s, formatter);
             }
             catch (Exception e)
             {
@@ -38,7 +38,7 @@ namespace ParserTenders
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = "."};
-                d = Decimal.Parse(s, formatter);
+                d = decimal.Parse(s, formatter);
             }
             catch (Exception)
             {
@@ -57,7 +57,7 @@ namespace ParserTenders
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
-                d = Decimal.Parse(s, formatter);
+                d = decimal.Parse(s, formatter);
             }
             catch (Exception)
             {
@@ -70,7 +70,7 @@ namespace ParserTenders
         {
             
             var d = DateTime.MinValue;
-            if (!String.IsNullOrEmpty(s))
+            if (!string.IsNullOrEmpty(s))
             {
                 try
                 {
@@ -88,7 +88,7 @@ namespace ParserTenders
         {
             
             var d = DateTime.MinValue;
-            if (!String.IsNullOrEmpty(s))
+            if (!string.IsNullOrEmpty(s))
             {
                 try
                 {

@@ -39,7 +39,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = tend.Value;
                 var purchaseNumber = ((string) tender.SelectToken("purchaseInfo.purchaseNoticeNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                     return;
@@ -58,7 +58,7 @@ namespace ParserTenders.TenderDir
                     foreach (var l in lots)
                     {
                         var lotNumber = ((string) l.SelectToken("ordinalNumber") ?? "").Trim();
-                        if (String.IsNullOrEmpty(lotNumber))
+                        if (string.IsNullOrEmpty(lotNumber))
                         {
                             Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);
                             continue;

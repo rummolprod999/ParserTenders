@@ -32,7 +32,7 @@ namespace ParserTenders.ParserDir
         private void ParsingPage(string url)
         {
             var s = DownloadString.DownL(url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
                 return;
@@ -59,7 +59,7 @@ namespace ParserTenders.ParserDir
         private void ParserLink(HtmlNode n, string url)
         {
             var href = (n.SelectSingleNode(".//a[@class = \"b-link\"]")?.Attributes["href"]?.Value ?? "").Trim();
-            if (String.IsNullOrEmpty(href))
+            if (string.IsNullOrEmpty(href))
             {
                 Log.Logger("Empty href", url);
                 return;
@@ -73,7 +73,7 @@ namespace ParserTenders.ParserDir
                 idTender = matches[0].Groups[1].Value;
             }
 
-            if (String.IsNullOrEmpty(idTender))
+            if (string.IsNullOrEmpty(idTender))
             {
                 Log.Logger("Empty idTender", url);
                 return;

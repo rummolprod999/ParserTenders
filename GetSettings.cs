@@ -215,16 +215,16 @@ namespace ParserTenders
                             Server = xnode.InnerText;
                             break;
                         case "port":
-                            Port = Int32.TryParse(xnode.InnerText, out Port) ? Int32.Parse(xnode.InnerText) : 3306;
+                            Port = int.TryParse(xnode.InnerText, out Port) ? int.Parse(xnode.InnerText) : 3306;
                             break;
                         case "max_thread":
-                            MaxThread = Int32.TryParse(xnode.InnerText, out MaxThread)
-                                ? Int32.Parse(xnode.InnerText)
+                            MaxThread = int.TryParse(xnode.InnerText, out MaxThread)
+                                ? int.Parse(xnode.InnerText)
                                 : 20;
                             break;
                         case "max_try_down":
-                            MaxTryDown = Int32.TryParse(xnode.InnerText, out MaxTryDown)
-                                ? Int32.Parse(xnode.InnerText)
+                            MaxTryDown = int.TryParse(xnode.InnerText, out MaxTryDown)
+                                ? int.Parse(xnode.InnerText)
                                 : 250;
                             break;
                         case "years":
@@ -234,29 +234,29 @@ namespace ParserTenders
                 }
             }
 
-            if (String.IsNullOrEmpty(LogPathTenders44) || String.IsNullOrEmpty(TempPathTenders44) ||
-                String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDb) || String.IsNullOrEmpty(Server) ||
-                String.IsNullOrEmpty(Years) || String.IsNullOrEmpty(TempPathTenders223) ||
-                String.IsNullOrEmpty(LogPathTenders223) || String.IsNullOrEmpty(LogPathAttach) ||
-                String.IsNullOrEmpty(TempPathAttach) ||
-                String.IsNullOrEmpty(TempPathSign223) ||
-                String.IsNullOrEmpty(LogPathSign223) || String.IsNullOrEmpty(LogPathGazProm) ||
-                String.IsNullOrEmpty(TempPathGazProm) || String.IsNullOrEmpty(LogPathExp223) ||
-                String.IsNullOrEmpty(TempPathExp223) || String.IsNullOrEmpty(LogGntWeb) ||
-                String.IsNullOrEmpty(TempGntWeb) || String.IsNullOrEmpty(LogObTorgWeb) ||
-                String.IsNullOrEmpty(TempObTorgWeb) || String.IsNullOrEmpty(LogSpecTorgWeb) ||
-                String.IsNullOrEmpty(TempSpecTorgWeb) || String.IsNullOrEmpty(LogPathTendersWeb) ||
-                String.IsNullOrEmpty(TempPathTendersWeb) || String.IsNullOrEmpty(LogMrsk) ||
-                String.IsNullOrEmpty(TempMrsk) || String.IsNullOrEmpty(LogRosneft) ||
-                String.IsNullOrEmpty(TempRosneft) || String.IsNullOrEmpty(LogSakhalin) ||
-                String.IsNullOrEmpty(TempSakhalin) || String.IsNullOrEmpty(LogPathTektorgGazprom) ||
-                String.IsNullOrEmpty(TempPathTektorgGazprom) || String.IsNullOrEmpty(LogPathTektorgInterRao) ||
-                String.IsNullOrEmpty(TempPathTektorgInterRao) || String.IsNullOrEmpty(LogPathTektorgRzd) ||
-                String.IsNullOrEmpty(TempPathTektorgRzd) || String.IsNullOrEmpty(LogPathTenders615) ||
-                String.IsNullOrEmpty(TempPathTenders615) || String.IsNullOrEmpty(LogPathTendersWeb44) ||
-                String.IsNullOrEmpty(TempPathTendersWeb44) || String.IsNullOrEmpty(LogPathSignProj44) ||
-                String.IsNullOrEmpty(TempPathReq44) || String.IsNullOrEmpty(LogPathReq44) ||
-                String.IsNullOrEmpty(TempPathSignProj44))
+            if (string.IsNullOrEmpty(LogPathTenders44) || string.IsNullOrEmpty(TempPathTenders44) ||
+                string.IsNullOrEmpty(Database) || string.IsNullOrEmpty(UserDb) || string.IsNullOrEmpty(Server) ||
+                string.IsNullOrEmpty(Years) || string.IsNullOrEmpty(TempPathTenders223) ||
+                string.IsNullOrEmpty(LogPathTenders223) || string.IsNullOrEmpty(LogPathAttach) ||
+                string.IsNullOrEmpty(TempPathAttach) ||
+                string.IsNullOrEmpty(TempPathSign223) ||
+                string.IsNullOrEmpty(LogPathSign223) || string.IsNullOrEmpty(LogPathGazProm) ||
+                string.IsNullOrEmpty(TempPathGazProm) || string.IsNullOrEmpty(LogPathExp223) ||
+                string.IsNullOrEmpty(TempPathExp223) || string.IsNullOrEmpty(LogGntWeb) ||
+                string.IsNullOrEmpty(TempGntWeb) || string.IsNullOrEmpty(LogObTorgWeb) ||
+                string.IsNullOrEmpty(TempObTorgWeb) || string.IsNullOrEmpty(LogSpecTorgWeb) ||
+                string.IsNullOrEmpty(TempSpecTorgWeb) || string.IsNullOrEmpty(LogPathTendersWeb) ||
+                string.IsNullOrEmpty(TempPathTendersWeb) || string.IsNullOrEmpty(LogMrsk) ||
+                string.IsNullOrEmpty(TempMrsk) || string.IsNullOrEmpty(LogRosneft) ||
+                string.IsNullOrEmpty(TempRosneft) || string.IsNullOrEmpty(LogSakhalin) ||
+                string.IsNullOrEmpty(TempSakhalin) || string.IsNullOrEmpty(LogPathTektorgGazprom) ||
+                string.IsNullOrEmpty(TempPathTektorgGazprom) || string.IsNullOrEmpty(LogPathTektorgInterRao) ||
+                string.IsNullOrEmpty(TempPathTektorgInterRao) || string.IsNullOrEmpty(LogPathTektorgRzd) ||
+                string.IsNullOrEmpty(TempPathTektorgRzd) || string.IsNullOrEmpty(LogPathTenders615) ||
+                string.IsNullOrEmpty(TempPathTenders615) || string.IsNullOrEmpty(LogPathTendersWeb44) ||
+                string.IsNullOrEmpty(TempPathTendersWeb44) || string.IsNullOrEmpty(LogPathSignProj44) ||
+                string.IsNullOrEmpty(TempPathReq44) || string.IsNullOrEmpty(LogPathReq44) ||
+                string.IsNullOrEmpty(TempPathSignProj44))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

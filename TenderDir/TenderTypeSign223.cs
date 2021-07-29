@@ -40,7 +40,7 @@ namespace ParserTenders.TenderDir
                 var purchaseNumber =
                     ((string) c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
                 //Console.WriteLine(purchaseNumber);
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
                     //return;
@@ -125,7 +125,7 @@ namespace ParserTenders.TenderDir
                         supplierContactPhone = ((string) sp.SelectToken("address.phone") ?? "").Trim();
                         supplierContactFax = ((string) sp.SelectToken("address.fax") ?? "").Trim();
                         supplierInn = ((string) sp.SelectToken("inn") ?? "").Trim();
-                        if (String.IsNullOrEmpty(supplierInn))
+                        if (string.IsNullOrEmpty(supplierInn))
                         {
                             supplierInn = ((string) sp.SelectToken("code") ?? "").Trim();
                         }
@@ -135,19 +135,19 @@ namespace ParserTenders.TenderDir
                         organizationName = ((string) sp.SelectToken("name") ?? "").Trim();
                         countryFullName = ((string) sp.SelectToken("address.country.name") ?? "").Trim();
                         regSup = ((string) sp.SelectToken("address.region.name") ?? "").Trim();
-                        if (String.IsNullOrEmpty(regSup))
+                        if (string.IsNullOrEmpty(regSup))
                         {
                             regSup = ((string) sp.SelectToken("address.region.fullName") ?? "").Trim();
                         }
 
                         citySup = ((string) sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
-                        if (String.IsNullOrEmpty(citySup))
+                        if (string.IsNullOrEmpty(citySup))
                         {
                             citySup = ((string) sp.SelectToken("address.city.fullName") ?? "").Trim();
                         }
 
                         streetSup = ((string) sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
-                        if (String.IsNullOrEmpty(streetSup))
+                        if (string.IsNullOrEmpty(streetSup))
                         {
                             streetSup = ((string) sp.SelectToken("address.street.fullName") ?? "").Trim();
                         }
@@ -156,7 +156,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     var idCustomer = 0;
-                    if (!String.IsNullOrEmpty(customerInn))
+                    if (!string.IsNullOrEmpty(customerInn))
                     {
                         var selectCustomer =
                             $"SELECT id_customer FROM {Program.Prefix}customer WHERE inn = @inn";
@@ -182,7 +182,7 @@ namespace ParserTenders.TenderDir
                     }
 
                     var idSupplier = 0;
-                    if (!String.IsNullOrEmpty(supplierInn))
+                    if (!string.IsNullOrEmpty(supplierInn))
                     {
                         var selectSupplier =
                             $"SELECT id_supplier FROM {Program.Prefix}supplier WHERE inn_supplier = @inn_supplier AND kpp_supplier = @kpp_supplier";
@@ -287,7 +287,7 @@ namespace ParserTenders.TenderDir
                     var purchaseNumber =
                         ((string) c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
                     //Console.WriteLine(purchaseNumber);
-                    if (String.IsNullOrEmpty(purchaseNumber))
+                    if (string.IsNullOrEmpty(purchaseNumber))
                     {
                         //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
                         //return;
@@ -373,7 +373,7 @@ namespace ParserTenders.TenderDir
                             supplierContactPhone = ((string) sp.SelectToken("address.phone") ?? "").Trim();
                             supplierContactFax = ((string) sp.SelectToken("address.fax") ?? "").Trim();
                             supplierInn = ((string) sp.SelectToken("inn") ?? "").Trim();
-                            if (String.IsNullOrEmpty(supplierInn))
+                            if (string.IsNullOrEmpty(supplierInn))
                             {
                                 supplierInn = ((string) sp.SelectToken("code") ?? "").Trim();
                             }
@@ -383,19 +383,19 @@ namespace ParserTenders.TenderDir
                             organizationName = ((string) sp.SelectToken("name") ?? "").Trim();
                             countryFullName = ((string) sp.SelectToken("address.country.name") ?? "").Trim();
                             regSup = ((string) sp.SelectToken("address.region.name") ?? "").Trim();
-                            if (String.IsNullOrEmpty(regSup))
+                            if (string.IsNullOrEmpty(regSup))
                             {
                                 regSup = ((string) sp.SelectToken("address.region.fullName") ?? "").Trim();
                             }
 
                             citySup = ((string) sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
-                            if (String.IsNullOrEmpty(citySup))
+                            if (string.IsNullOrEmpty(citySup))
                             {
                                 citySup = ((string) sp.SelectToken("address.city.fullName") ?? "").Trim();
                             }
 
                             streetSup = ((string) sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
-                            if (String.IsNullOrEmpty(streetSup))
+                            if (string.IsNullOrEmpty(streetSup))
                             {
                                 streetSup = ((string) sp.SelectToken("address.street.fullName") ?? "").Trim();
                             }
@@ -404,7 +404,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         var idCustomer = 0;
-                        if (!String.IsNullOrEmpty(customerInn))
+                        if (!string.IsNullOrEmpty(customerInn))
                         {
                             var selectCustomer =
                                 $"SELECT id_customer FROM {Program.Prefix}customer WHERE inn = @inn";
@@ -430,7 +430,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         var idSupplier = 0;
-                        if (!String.IsNullOrEmpty(supplierInn))
+                        if (!string.IsNullOrEmpty(supplierInn))
                         {
                             var selectSupplier =
                                 $"SELECT id_supplier FROM {Program.Prefix}supplier WHERE inn_supplier = @inn_supplier AND kpp_supplier = @kpp_supplier";

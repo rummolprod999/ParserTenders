@@ -35,14 +35,14 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var idT = ((string) tender.SelectToken("id") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У тендера нет id", FilePath);
                     return;
                 }
 
                 var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
                 }
@@ -84,12 +84,12 @@ namespace ParserTenders.TenderDir
                         printform = ((string) tender.SelectToken("printFormInfo.url") ?? "").Trim();
                     }
 
-                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
+                    if (!string.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                         printform = printform.Substring(9, printform.Length - 12);
                     var noticeVersion = "";
                     var numVersion = (int?) tender.SelectToken("versionNumber") ?? 1;
                     var cancelStatus = 0;
-                    if (!String.IsNullOrEmpty(docPublishDate))
+                    if (!string.IsNullOrEmpty(docPublishDate))
                     {
                         var selectDateT =
                             $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE id_region = @id_region AND purchase_number = @purchase_number";
@@ -170,7 +170,7 @@ namespace ParserTenders.TenderDir
                         .Trim();
                     var idOrganizer = 0;
                     var idCustomer = 0;
-                    if (!String.IsNullOrEmpty(organizerRegNum))
+                    if (!string.IsNullOrEmpty(organizerRegNum))
                     {
                         var selectOrg =
                             $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
@@ -214,7 +214,7 @@ namespace ParserTenders.TenderDir
                     var idPlacingWay = 0;
                     var placingWayCode = ((string) tender.SelectToken("placingWayInfo.code") ?? "").Trim();
                     var placingWayName = ((string) tender.SelectToken("placingWayInfo.name") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(placingWayCode))
+                    if (!string.IsNullOrEmpty(placingWayCode))
                     {
                         var selectPlacingWay =
                             $"SELECT id_placing_way FROM {Program.Prefix}placing_way WHERE code = @code";
@@ -248,7 +248,7 @@ namespace ParserTenders.TenderDir
                     var etpCode = ((string) tender.SelectToken("notificationInfo.ETPInfo.code") ?? "").Trim();
                     var etpName = ((string) tender.SelectToken("notificationInfo.ETPInfo.name") ?? "").Trim();
                     var etpUrl = ((string) tender.SelectToken("notificationInfo.ETPInfo.url") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(etpCode))
+                    if (!string.IsNullOrEmpty(etpCode))
                     {
                         var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
                         var cmd7 = new MySqlCommand(selectEtp, connect);
@@ -347,7 +347,7 @@ namespace ParserTenders.TenderDir
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
                         var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
                         var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(attachName))
+                        if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
@@ -385,7 +385,7 @@ namespace ParserTenders.TenderDir
                         if (idLot < 1)
                             Log.Logger("Не получили id лота", FilePath);
                         lotNumber++;
-                        if (!String.IsNullOrEmpty(organizerRegNum))
+                        if (!string.IsNullOrEmpty(organizerRegNum))
                         {
                             var selectCustomer =
                                 $"SELECT id_customer FROM {Program.Prefix}customer WHERE reg_num = @reg_num";
@@ -403,7 +403,7 @@ namespace ParserTenders.TenderDir
                             {
                                 reader5.Close();
                                 var customerInn = "";
-                                if (!String.IsNullOrEmpty(organizerInn))
+                                if (!string.IsNullOrEmpty(organizerInn))
                                 {
                                     customerInn = organizerInn;
                                 }

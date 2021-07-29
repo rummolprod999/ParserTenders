@@ -73,7 +73,7 @@ namespace ParserTenders.ParserDir
                 //Console.WriteLine(maxNumPage);
                 if (!string.IsNullOrEmpty(maxNumPage))
                 {
-                    if (Int32.TryParse(maxNumPage, out var page))
+                    if (int.TryParse(maxNumPage, out var page))
                     {
                         var lPage = new List<string>();
                         var i = 0;

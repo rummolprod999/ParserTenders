@@ -18,7 +18,7 @@ namespace ParserTenders
         {
             
             var d = DateTime.MinValue;
-            if (!String.IsNullOrEmpty(s))
+            if (!string.IsNullOrEmpty(s))
             {
                 try
                 {

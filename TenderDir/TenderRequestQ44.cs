@@ -39,14 +39,14 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var idT = ((string) tender.SelectToken("id") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У тендера нет id", FilePath);
                     return;
                 }
 
                 var purchaseNumber = ((string) tender.SelectToken("registryNum") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет registryNum", FilePath);
                 }
@@ -76,7 +76,7 @@ namespace ParserTenders.TenderDir
                     var dateVersion = docPublishDate;
                     var href = ((string) tender.SelectToken("href") ?? "").Trim();
                     var printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
+                    if (!string.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                     {
                         printform = printform.Substring(9, printform.Length - 12);
                     }
@@ -110,7 +110,7 @@ namespace ParserTenders.TenderDir
                         cmd8.ExecuteNonQuery();
                         idEtp = (int) cmd8.LastInsertedId;
                     }
-                    if (!String.IsNullOrEmpty(docPublishDate))
+                    if (!string.IsNullOrEmpty(docPublishDate))
                     {
                         var selectDateT =
                             $"SELECT id_tender, doc_publish_date FROM {Program.Prefix}tender WHERE (id_region = @id_region OR id_region = 0) AND purchase_number = @purchase_number AND id_etp = @id_etp";
@@ -180,7 +180,7 @@ namespace ParserTenders.TenderDir
                         ((string) tender.SelectToken("responsibleInfo.contactPhone") ?? "").Trim();
                     var idOrganizer = 0;
                     var idCustomer = 0;
-                    if (!String.IsNullOrEmpty(organizerRegNum))
+                    if (!string.IsNullOrEmpty(organizerRegNum))
                     {
                         var selectOrg =
                             $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
@@ -264,7 +264,7 @@ namespace ParserTenders.TenderDir
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
                         var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
                         var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(attachName))
+                        if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
@@ -358,7 +358,7 @@ namespace ParserTenders.TenderDir
                     {
                         var okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.code")
                                          ?? "").Trim();
-                        if (String.IsNullOrEmpty(okpd2Code))
+                        if (string.IsNullOrEmpty(okpd2Code))
                         {
                             okpd2Code = ((string) purchaseobject.SelectToken("KTRU.code")
                                          ?? "").Trim();
@@ -366,13 +366,13 @@ namespace ParserTenders.TenderDir
 
                         var okpdName = ((string) purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
                         var name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
-                        if (String.IsNullOrEmpty(name))
+                        if (string.IsNullOrEmpty(name))
                         {
                             name = ((string) purchaseobject.SelectToken("KTRU.name")
                                     ?? "").Trim();
                         }
 
-                        if (!String.IsNullOrEmpty(name))
+                        if (!string.IsNullOrEmpty(name))
                             name = Regex.Replace(name, @"\s+", " ");
                         var quantityValue = ((string) purchaseobject.SelectToken("quantity") ?? "")
                             .Trim();

@@ -153,7 +153,7 @@ namespace ParserTenders
                                  ?.Value ?? "").Trim();
                         orgTel = System.Net.WebUtility.HtmlDecode(orgTel);
                         //WriteLine(orgTel);
-                        if (!String.IsNullOrEmpty(orgInn))
+                        if (!string.IsNullOrEmpty(orgInn))
                         {
                             var selectOrg =
                                 $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE inn = @inn AND kpp = @kpp";

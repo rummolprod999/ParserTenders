@@ -92,7 +92,7 @@ namespace ParserTenders
                 var ip = proxy.Substring(0, proxy.IndexOf(":"));
                 //ip = "67.205.191.44";
                 var portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                var port = Int32.Parse(portS);
+                var port = int.Parse(portS);
                 //port = 8083;
                 var useragent = useragents[new Random().Next(useragents.Count)];
                 try
@@ -154,7 +154,7 @@ namespace ParserTenders
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
                     var portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                    var port = Int32.Parse(portS);
+                    var port = int.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
                     var useragent = useragents[new Random().Next(useragents.Count)];
@@ -276,7 +276,7 @@ namespace ParserTenders
                     //ip = "107.170.23.30";
                     //Console.WriteLine(ip);
                     var portS = proxy.Substring(proxy.IndexOf(":") + 1);
-                    var port = Int32.Parse(portS);
+                    var port = int.Parse(portS);
                     //port = 88;
                     //Console.WriteLine(port);
                     var useragent = useragents[new Random().Next(useragents.Count)];

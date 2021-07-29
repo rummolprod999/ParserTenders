@@ -205,7 +205,7 @@ namespace ParserTenders.ParserDir
             var filea = "";
             var pathUnzip = "";
             filea = GetArch223(arch, pathParse);
-            if (String.IsNullOrEmpty(filea)) return;
+            if (string.IsNullOrEmpty(filea)) return;
             pathUnzip = Unzipped.Unzip(filea);
             if (pathUnzip != "")
             {
@@ -325,7 +325,7 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        public override List<String> GetListArchLast(string pathParse, string regionPath, string purchase)
+        public override List<string> GetListArchLast(string pathParse, string regionPath, string purchase)
         {
             var archtemp = new List<string>();
             archtemp = GetListFtp223(pathParse);
@@ -333,7 +333,7 @@ namespace ParserTenders.ParserDir
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<String> GetListArchDaily(string pathParse, string regionPath, string purchase)
+        public override List<string> GetListArchDaily(string pathParse, string regionPath, string purchase)
         {
             var arch = new List<string>();
             //List<string> archtemp = new List<string>();

@@ -40,7 +40,7 @@ namespace ParserTenders.TenderDir
         public void Parsing()
         {
             var s = DownloadString.DownL(UrlTender);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     UrlTender);
@@ -280,7 +280,7 @@ namespace ParserTenders.TenderDir
                     var okpd2Code = okpd2Temp.GetDateFromRegex(@"^(\d[\.|\d]*\d)");
                     var okpd2GroupCode = 0;
                     var okpd2GroupLevel1Code = "";
-                    if (!String.IsNullOrEmpty(okpd2Code))
+                    if (!string.IsNullOrEmpty(okpd2Code))
                     {
                         Tender.GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                     }

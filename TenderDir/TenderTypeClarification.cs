@@ -32,14 +32,14 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var idT = ((string) tender.SelectToken("id") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет id", FilePath);
                     return;
                 }
                 var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
                 var docNumber = ((string) tender.SelectToken("docNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У clarification нет purchaseNumber", FilePath);
                     return;
@@ -88,7 +88,7 @@ namespace ParserTenders.TenderDir
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
                         var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
                         var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(attachName))
+                        if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}clarif_attachments SET id_clarification = @id_clarification, file_name = @file_name, url = @url, description = @description";
@@ -110,14 +110,14 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var idT = ((string) tender.SelectToken("id") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет id", FilePath);
                     return;
                 }
                 var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                 var docNumber = ((string) tender.SelectToken("commonInfo.docNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У clarification нет purchaseNumber", FilePath);
                     return;
@@ -166,7 +166,7 @@ namespace ParserTenders.TenderDir
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
                         var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
                         var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(attachName))
+                        if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}clarif_attachments SET id_clarification = @id_clarification, file_name = @file_name, url = @url, description = @description";

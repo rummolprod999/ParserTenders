@@ -31,13 +31,13 @@ namespace ParserTenders.TenderDir
                 var purchaseNumber =
                     ((string) c.SelectToken("purchaseRegNum") ?? "").Trim();
                 //Console.WriteLine(purchaseNumber);
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
                     return;
                 }
                 var idT = ((string) c.SelectToken("guid") ?? "").Trim();
-                if (String.IsNullOrEmpty(idT))
+                if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет guid", FilePath);
                     return;
@@ -62,7 +62,7 @@ namespace ParserTenders.TenderDir
                     reader.Close();
                     var docPublishDate = (JsonConvert.SerializeObject(c.SelectToken("publishDate") ?? "") ??
                                           "").Trim('"');
-                    if (String.IsNullOrEmpty(docPublishDate))
+                    if (string.IsNullOrEmpty(docPublishDate))
                     {
                         docPublishDate = (JsonConvert.SerializeObject(c.SelectToken("modificationDate") ?? "") ??
                                           "").Trim('"');
@@ -91,7 +91,7 @@ namespace ParserTenders.TenderDir
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
                         var attachDescription = ((string) att.SelectToken("description") ?? "").Trim();
                         var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(attachName))
+                        if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}clarif_attachments SET id_clarification = @id_clarification, file_name = @file_name, url = @url, description = @description";

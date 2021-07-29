@@ -28,7 +28,7 @@ namespace ParserTenders.TenderDir
             {
                 var tender = firstOrDefault.Value;
                 var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(purchaseNumber))
+                if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderCancel", FilePath);
                     return;
@@ -62,7 +62,7 @@ namespace ParserTenders.TenderDir
                 {
                     var tender = firstOrDefault.Value;
                     var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
-                    if (String.IsNullOrEmpty(purchaseNumber))
+                    if (string.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderCancel", FilePath);
                         return;
