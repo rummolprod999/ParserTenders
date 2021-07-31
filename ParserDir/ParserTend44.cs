@@ -355,15 +355,8 @@ namespace ParserTenders.ParserDir
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
+                    if (true)
                     {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
-                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
-                        cmd1.ExecuteNonQuery();
                         arch.Add(a.Item1);
                     }
                 }
@@ -397,15 +390,8 @@ namespace ParserTenders.ParserDir
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
+                    if (true)
                     {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
-                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
-                        cmd1.ExecuteNonQuery();
                         arch.Add(a.Item1);
                     }
                 }
@@ -437,15 +423,8 @@ namespace ParserTenders.ParserDir
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
+                    if (true)
                     {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", prevA);
-                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
-                        cmd1.ExecuteNonQuery();
                         arch.Add(a.Item1);
                     }
                 }
