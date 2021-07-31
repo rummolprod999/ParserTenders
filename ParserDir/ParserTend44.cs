@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
@@ -343,23 +342,7 @@ namespace ParserTenders.ParserDir
                     continue;
                 }
 
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a.Item1);
-                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (true)
-                    {
-                        arch.Add(a.Item1);
-                    }
-                }
+                arch.Add(a.Item1);
             }
 
             return arch;
@@ -378,23 +361,7 @@ namespace ParserTenders.ParserDir
                     continue;
                 }
 
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a.Item1);
-                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (true)
-                    {
-                        arch.Add(a.Item1);
-                    }
-                }
+                arch.Add(a.Item1);
             }
 
             return arch;
@@ -410,24 +377,7 @@ namespace ParserTenders.ParserDir
             //string serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in newLs)
             {
-                var prevA = $"prev_{a}";
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", prevA);
-                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (true)
-                    {
-                        arch.Add(a.Item1);
-                    }
-                }
+                arch.Add(a.Item1);
             }
 
             return arch;
