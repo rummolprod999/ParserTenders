@@ -32,7 +32,7 @@ namespace ParserTenders.ParserDir
         };
 
         private string[] _fileXml504 = {
-            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_"
+            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_", "ef2020_"
         };
 
         protected DataTable DtRegion;

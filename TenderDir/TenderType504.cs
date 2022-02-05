@@ -37,6 +37,7 @@ namespace ParserTenders.TenderDir
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epN"));
             if (firstOrDefault != null)
             {
+                var rootName = firstOrDefault.Name;
                 var tender = firstOrDefault.Value;
                 var idT = ((string) tender.SelectToken("id") ?? "").Trim();
                 if (string.IsNullOrEmpty(idT))
@@ -323,9 +324,27 @@ namespace ParserTenders.TenderDir
                              "").Trim('"');
                     }
 
+                    var biddingDate = "";
+                    var dop_info = "{}";
+                    if (rootName == "epNotificationEF2020")
+                    {
+                        biddingDate =
+                            (JsonConvert.SerializeObject(
+                                 tender.SelectToken(
+                                     "notificationInfo.procedureInfo.summarizingDate") ?? "") ??
+                             "").Trim('"');
+                        scoringDate =
+                            (JsonConvert.SerializeObject(
+                                 tender.SelectToken(
+                                     "notificationInfo.procedureInfo.biddingDate") ?? "") ??
+                             "").Trim('"');
+                        dop_info = GetElements(tender, "..customerRequirementInfo.contractConditionsInfo")[0]?.ToString() ?? "{}";
+                    }
+
                     var scoringDateT = scoringDate.ParseDateUn("yyyy-MM-ddzzz");
+                    var biddingDateT = biddingDate.ParseDateUn("yyyy-MM-ddzzz");
                     var insertTender =
-                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
+                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, dop_info = @dop_info";
                     var cmd9 = new MySqlCommand(insertTender, connect);
                     cmd9.Prepare();
                     cmd9.Parameters.AddWithValue("@id_region", RegionId);
@@ -348,13 +367,14 @@ namespace ParserTenders.TenderDir
                         cmd9.Parameters.AddWithValue("@scoring_date", scoringDateT);
                     }
 
-                    cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
+                    cmd9.Parameters.AddWithValue("@bidding_date", biddingDateT);
                     cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
                     cmd9.Parameters.AddWithValue("@date_version", dateVersion);
                     cmd9.Parameters.AddWithValue("@num_version", numVersion);
                     cmd9.Parameters.AddWithValue("@notice_version", noticeVersion);
                     cmd9.Parameters.AddWithValue("@xml", xml);
                     cmd9.Parameters.AddWithValue("@print_form", printform);
+                    cmd9.Parameters.AddWithValue("@dop_info", dop_info);
                     var resInsertTender = cmd9.ExecuteNonQuery();
                     var idTender = (int) cmd9.LastInsertedId;
                     AddTender504?.Invoke(resInsertTender);
@@ -485,9 +505,21 @@ namespace ParserTenders.TenderDir
                              "").Trim();
                         var purchaseObjectDescription =
                             ((string) customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
+                        var oneSideRejectionSt95 = ((string) customerRequirement.SelectToken("contractConditionsInfo.oneSideRejectionSt95") ?? "")
+                            .Trim();
+                        var procedureInfo = ((string) customerRequirement.SelectToken("contractGuarantee.procedureInfo") ?? "")
+                            .Trim();
                         if (!string.IsNullOrEmpty(purchaseObjectDescription))
                         {
-                            deliveryTerm = $"{deliveryTerm} {purchaseObjectDescription}".Trim();
+                            deliveryTerm = $"{deliveryTerm} | {purchaseObjectDescription}".Trim();
+                        }
+                        if (!string.IsNullOrEmpty(procedureInfo))
+                        {
+                            deliveryTerm = $"{deliveryTerm} | {procedureInfo}".Trim();
+                        }
+                        if (!string.IsNullOrEmpty(oneSideRejectionSt95))
+                        {
+                            deliveryTerm = $"{deliveryTerm} | {oneSideRejectionSt95}".Trim();
                         }
 
                         if (!string.IsNullOrEmpty(customerRegNum))
