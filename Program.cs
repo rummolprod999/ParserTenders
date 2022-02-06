@@ -618,19 +618,19 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders44");
             try
             {
-                var t44 = new ParserTend44(Periodparsing);
-                t44.Parsing();
+                //var t44 = new ParserTend44(Periodparsing);
+                //t44.Parsing();
             }
             catch (Exception e)
             {
                 Log.Logger(e);
             }
 
-            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
+            ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f =
                 new FileInfo(
                     "/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/222.xml");
-            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);*/
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);
 
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Обновили tender44", UpdateTender44);
