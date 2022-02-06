@@ -338,7 +338,11 @@ namespace ParserTenders.TenderDir
                                  tender.SelectToken(
                                      "notificationInfo.procedureInfo.biddingDate") ?? "") ??
                              "").Trim('"');
-                        dop_info = GetElements(tender, "..customerRequirementInfo.contractConditionsInfo")[0]?.ToString() ?? "{}";
+                        var dop = GetElements(tender, "..customerRequirementInfo.contractConditionsInfo");
+                        if (dop.Count > 0)
+                        {
+                            dop_info = dop[0]?.ToString() ?? "{}";
+                        }
                     }
 
                     var scoringDateT = scoringDate.ParseDateUn("yyyy-MM-ddzzz");
