@@ -83,6 +83,7 @@ namespace ParserTenders.TenderDir
                     var idClar = (int) cmd2.LastInsertedId;
                     AddClarification44?.Invoke(resInsertC);
                     var attachments = GetElements(tender, "attachments.attachment");
+                    attachments.AddRange(GetElements(tender, "attachmentsInfo.attachmentInfo"));
                     foreach (var att in attachments)
                     {
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
@@ -161,6 +162,7 @@ namespace ParserTenders.TenderDir
                     var idClar = (int) cmd2.LastInsertedId;
                     AddClarification44?.Invoke(resInsertC);
                     var attachments = GetElements(tender, "attachments.attachment");
+                    attachments.AddRange(GetElements(tender, "attachmentsInfo.attachmentInfo"));
                     foreach (var att in attachments)
                     {
                         var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
