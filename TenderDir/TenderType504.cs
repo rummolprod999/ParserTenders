@@ -82,7 +82,7 @@ namespace ParserTenders.TenderDir
                         (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.publishDTInEIS") ?? "") ??
                          "").Trim('"');
                     var dateVersion = docPublishDate;
-                    if (rootName == "epNotificationEOK2020")
+                    if (rootName == "epNotificationEOK2020" || rootName == "epNotificationEZK2020")
                     {
                         dateVersion = (JsonConvert.SerializeObject(
                                            tender.SelectToken(
@@ -358,7 +358,7 @@ namespace ParserTenders.TenderDir
 
                     var extend_scoring_date = "";
                     var extend_bidding_date = "";
-                    if (rootName == "epNotificationEOK2020")
+                    if (rootName == "epNotificationEOK2020" || rootName == "epNotificationEZK2020")
                     {
                         biddingDate =
                             (JsonConvert.SerializeObject(
@@ -655,7 +655,7 @@ namespace ParserTenders.TenderDir
                             ((string) customerRequirement.SelectToken("provisionWarranty.part") ?? "")
                             .Trim();
                         var cusReqDopInfo = "{}";
-                        if (rootName == "epNotificationEOK2020")
+                        if (rootName == "epNotificationEOK2020" || rootName == "epNotificationEZK2020")
                         {
                             var dop = GetElements(customerRequirement, "..contractGuarantee");
                             if (dop.Count > 0)
