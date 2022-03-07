@@ -337,9 +337,9 @@ namespace ParserTenders.TenderDir
                         scoringDate = scoringDateNew;
                     }
                     _extendScoringDate = tender.SelectToken("extendFields")?.ToString() ?? "";
-                    _extendScoringDate = Regex.Replace(_extendScoringDate, @"\s+", "").Trim();
+                    _extendScoringDate = Regex.Replace(_extendScoringDate, @"\s+", " ").Trim();
                     var insertTender =
-                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, extend_scoring_date = @extend_scoring_date, extend_bidding_date = @extend_bidding_date";
+                        $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form, extend_scoring_date = @extend_scoring_date, extend_bidding_date = @extend_bidding_date, dop_info = @dop_info";
                     var cmd8 = new MySqlCommand(insertTender, connect);
                     cmd8.Prepare();
                     cmd8.Parameters.AddWithValue("@id_region", RegionId);
@@ -361,8 +361,9 @@ namespace ParserTenders.TenderDir
                     cmd8.Parameters.AddWithValue("@notice_version", noticeVersion);
                     cmd8.Parameters.AddWithValue("@xml", xml);
                     cmd8.Parameters.AddWithValue("@print_form", printform);
-                    cmd8.Parameters.AddWithValue("@extend_scoring_date", _extendScoringDate);
+                    cmd8.Parameters.AddWithValue("@extend_scoring_date", "");
                     cmd8.Parameters.AddWithValue("@extend_bidding_date", _extendBiddingDate);
+                    cmd8.Parameters.AddWithValue("@dop_info", _extendScoringDate);
                     var resInsertTender = cmd8.ExecuteNonQuery();
                     var idTender = (int) cmd8.LastInsertedId;
                     AddTender223?.Invoke(resInsertTender);
