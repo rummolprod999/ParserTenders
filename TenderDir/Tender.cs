@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ParserTenders.TenderDir
@@ -45,21 +46,28 @@ namespace ParserTenders.TenderDir
         public List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();
-            var elsObj = j.SelectToken(s);
-            if (elsObj != null && elsObj.Type != JTokenType.Null)
+            try
             {
-                switch (elsObj.Type)
+                var elsObj = j.SelectToken(s);
+                if (elsObj != null && elsObj.Type != JTokenType.Null)
                 {
-                    case JTokenType.Object:
-                        els.Add(elsObj);
-                        break;
-                    case JTokenType.Array:
-                        els.AddRange(elsObj);
-                        break;
+                    switch (elsObj.Type)
+                    {
+                        case JTokenType.Object:
+                            els.Add(elsObj);
+                            break;
+                        case JTokenType.Array:
+                            els.AddRange(elsObj);
+                            break;
+                    }
                 }
-            }
 
-            return els;
+                return els;
+            }
+            catch (JsonException e)
+            {
+                return j.SelectTokens(s).ToList();
+            }
         }
 
         public static void GetOkpd(string okpd2Code, out int okpd2GroupCode, out string okpd2GroupLevel1Code)

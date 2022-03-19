@@ -678,6 +678,19 @@ namespace ParserTenders.TenderDir
                             ((string) customerRequirement.SelectToken("provisionWarranty.part") ?? "")
                             .Trim();
                         var cusReqDopInfo = "{}";
+                        if (rootName == "epNotificationEF2020")
+                        {
+                            provWarAmount =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "")
+                                .Trim();
+                            provWarPart =
+                                ((string) customerRequirement.SelectToken("contractGuarantee.part") ?? "")
+                                .Trim();
+                        }
+                        var OKPD2_code = ((string) customerRequirement.SelectToken("..OKPD2.OKPDCode") ?? "")
+                            .Trim();
+                        var OKPD2_name = ((string) customerRequirement.SelectToken("..OKPD2.OKPDName") ?? "")
+                            .Trim();
                         if (rootName == "epNotificationEOK2020" || rootName == "epNotificationEZK2020")
                         {
                             var dop = GetElements(customerRequirement, "..contractGuarantee");
@@ -693,7 +706,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         var insertCustomerRequirement =
-                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info";
+                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name";
                         var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                         cmd16.Prepare();
                         cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -718,6 +731,8 @@ namespace ParserTenders.TenderDir
                         cmd16.Parameters.AddWithValue("@prov_war_amount", provWarAmount);
                         cmd16.Parameters.AddWithValue("@prov_war_part", provWarPart);
                         cmd16.Parameters.AddWithValue("@dop_info", cusReqDopInfo);
+                        cmd16.Parameters.AddWithValue("@OKPD2_code", OKPD2_code);
+                        cmd16.Parameters.AddWithValue("@OKPD2_name", OKPD2_name);
                         cmd16.ExecuteNonQuery();
                         if (idCustomer == 0)
                         {
@@ -780,10 +795,17 @@ namespace ParserTenders.TenderDir
                     foreach (var purchaseobject in purchaseobjects)
                     {
                         var okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.OKPDCode") ?? "").Trim();
+                        if (string.IsNullOrEmpty(okpd2Code))
+                        {
+                            okpd2Code = ((string) purchaseobject.SelectToken("KTRU.code") ?? "").Trim().GetDateFromRegex(@"(.+?)-");
+                        }
+                            
                         var okpdCode = ((string) purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
                         var okpdName = ((string) purchaseobject.SelectToken("OKPD2.OKPDName") ?? "").Trim();
                         if (string.IsNullOrEmpty(okpdName))
                             okpdName = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
+                        if (string.IsNullOrEmpty(okpdName))
+                            okpdName = ((string) purchaseobject.SelectToken("KTRU.name") ?? "").Trim();
                         var name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
                         if (!string.IsNullOrEmpty(name))
                             name = Regex.Replace(name, @"\s+", " ");
@@ -800,7 +822,7 @@ namespace ParserTenders.TenderDir
                         {
                             GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                         }
-                        var dop_info_pur_obj = "{}";
+                        var dop_info_pur_obj = purchaseobject.ToString();
                         var customerquantities =
                             GetElements(purchaseobject, "customerQuantities.customerQuantity");
                         foreach (var customerquantity in customerquantities)
