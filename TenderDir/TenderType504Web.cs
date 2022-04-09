@@ -1030,7 +1030,7 @@ namespace ParserTenders.TenderDir
                                     ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "").Trim();
                                 price = price.Replace(",", ".");
                                 var sumP =
-                                    ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
+                                    ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
@@ -1053,7 +1053,7 @@ namespace ParserTenders.TenderDir
 
                             var drugsInfoRef = GetElements(drugPurchaseObjectInfo,
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
-                            drugsInfo.AddRange(GetElements(drugPurchaseObjectInfo,
+                            drugsInfoRef.AddRange(GetElements(drugPurchaseObjectInfo,
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
                             foreach (var drugInfo in drugsInfoRef)
                             {
