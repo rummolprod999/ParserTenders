@@ -107,10 +107,9 @@ namespace ParserTenders.ParserDir
             var url =
                 (n.SelectSingleNode(".//a[contains(@href, 'print-form')]")?.Attributes["href"]?.Value ?? "").Trim();
             if (!url.Contains("223/purchase")) return;
-            var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
-                               ?.Attributes["href"]?.Value ?? "").Trim();
+            var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")?.InnerText.Replace("№", "") ?? "").Trim();
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
-            var purNum = purNumT.GetDateFromRegex(@"regNumber=(\d+)");
+            var purNum = purNumT;
             if (purNum == "")
             {
                 Log.Logger("purNum not found");
