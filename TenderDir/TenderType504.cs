@@ -1032,6 +1032,8 @@ namespace ParserTenders.TenderDir
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                             drugsInfoRef.AddRange(GetElements(drugPurchaseObjectInfo,
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
+                            drugsInfoRef.AddRange(GetElements(drugPurchaseObjectInfo,
+                                "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeReferenceInfo.drugInfo"));
                             foreach (var drugInfo in drugsInfoRef)
                             {
                                 var okpd2Code =
@@ -1057,9 +1059,13 @@ namespace ParserTenders.TenderDir
                                 {
                                     okei = ((string) drugInfo.SelectToken("..manualUserOKEI.name") ?? "").Trim();
                                 }
-
                                 var price =
-                                    ((string) drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "").Trim();
+                                    ((string) drugInfo.SelectToken("..averagePriceValue") ?? "").Trim();
+                                if (price == "")
+                                {
+                                    price =
+                                        ((string) drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "").Trim();
+                                }
                                 price = price.Replace(",", ".");
                                 var sumP =
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();

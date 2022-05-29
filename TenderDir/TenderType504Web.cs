@@ -1055,6 +1055,8 @@ namespace ParserTenders.TenderDir
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                             drugsInfoRef.AddRange(GetElements(drugPurchaseObjectInfo,
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeManualInfo.drugInfo"));
+                            drugsInfoRef.AddRange(GetElements(drugPurchaseObjectInfo,
+                                "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeReferenceInfo.drugInfo"));
                             foreach (var drugInfo in drugsInfoRef)
                             {
                                 var okpd2Code =

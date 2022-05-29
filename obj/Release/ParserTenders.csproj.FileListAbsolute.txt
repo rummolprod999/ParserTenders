@@ -72,7 +72,7 @@
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/tr/FSharp.Core.resources.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/zh-Hans/FSharp.Core.resources.dll
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/zh-Hant/FSharp.Core.resources.dll
-/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csprojAssemblyReference.cache
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CopyComplete
 /home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/ParserTenders.pdb
 /home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.CoreCompileInputs.cache
+/home/alex/RiderProjects/ParserTenders/ParserTenders/obj/Release/ParserTenders.csproj.AssemblyReference.cache
