@@ -19,7 +19,7 @@ namespace ParserTenders.ParserDir
 
         public ParserGpb(TypeArguments a) : base(a)
         {
-            _urlListTenders = "https://etp.gpb.ru/api/procedures.php?late=0";
+            _urlListTenders = "https://etp.gpb.ru/api/procedures.php?late=3";
             _urlTender = "https://etp.gpb.ru/api/procedures.php?regid=";
             _urlCustomerId = "https://etp.gpb.ru/api/company.php?id=";
             _urlCustomerInnKpp = "https://etp.gpb.ru/api/company.php?inn={inn}&kpp={kpp}";
