@@ -247,14 +247,17 @@ namespace ParserTenders.TenderDir
                         {
                             reader1.Close();
                             var addOrganizer =
-                                $"INSERT INTO {Program.Prefix}organizer SET full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
+                                $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role, contact_person = @contact_person, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
                             var cmd3 = new MySqlCommand(addOrganizer, connect);
                             cmd3.Prepare();
+                            cmd3.Parameters.AddWithValue("@reg_num", organizerRegNum);
                             cmd3.Parameters.AddWithValue("@full_name", organizerFullName);
                             cmd3.Parameters.AddWithValue("@post_address", organizerPostAddress);
                             cmd3.Parameters.AddWithValue("@fact_address", organizerFactAddress);
                             cmd3.Parameters.AddWithValue("@inn", organizerInn);
                             cmd3.Parameters.AddWithValue("@kpp", organizerKpp);
+                            cmd3.Parameters.AddWithValue("@responsible_role", organizerResponsibleRole);
+                            cmd3.Parameters.AddWithValue("@contact_person", organizerContact);
                             cmd3.Parameters.AddWithValue("@contact_email", organizerEmail);
                             cmd3.Parameters.AddWithValue("@contact_phone", organizerPhone);
                             cmd3.Parameters.AddWithValue("@contact_fax", organizerFax);
