@@ -35,19 +35,19 @@ namespace ParserTenders.TenderDir
         {
             var additionalParametrs = new List<string>();
             var xml = GetXml(File.ToString());
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var idT = ((string) tender.SelectToken("id") ?? "").Trim();
+                var idT = ((string)tender.SelectToken("id") ?? "").Trim();
                 if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У тендера нет id", FilePath);
                     return;
                 }
 
-                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
@@ -116,20 +116,20 @@ namespace ParserTenders.TenderDir
                     var ttt = xmlt.XPathSelectElement("//docPublishDate");
                     Console.WriteLine(ttt.Value);*/
                     var pils = false;
-                    var href = ((string) tender.SelectToken("href") ?? "").Trim();
-                    var printform = ((string) tender.SelectToken("printForm.url") ?? "").Trim();
+                    var href = ((string)tender.SelectToken("href") ?? "").Trim();
+                    var printform = ((string)tender.SelectToken("printForm.url") ?? "").Trim();
                     if (!string.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
                     {
                         printform = printform.Substring(9, printform.Length - 12);
-                        
                     }
+
                     var noticeVersion = "";
                     var numVersion = 0;
                     var cancelStatus = 0;
                     var idEtp = 0;
-                    var etpCode = ((string) tender.SelectToken("ETP.code") ?? "").Trim();
-                    var etpName = ((string) tender.SelectToken("ETP.name") ?? "").Trim();
-                    var etpUrl = ((string) tender.SelectToken("ETP.url") ?? "").Trim();
+                    var etpCode = ((string)tender.SelectToken("ETP.code") ?? "").Trim();
+                    var etpName = ((string)tender.SelectToken("ETP.name") ?? "").Trim();
+                    var etpUrl = ((string)tender.SelectToken("ETP.url") ?? "").Trim();
                     if (!string.IsNullOrEmpty(etpCode))
                     {
                         var selectEtp = $"SELECT id_etp FROM {Program.Prefix}etp WHERE code = @code";
@@ -154,9 +154,10 @@ namespace ParserTenders.TenderDir
                             cmd8.Parameters.AddWithValue("@name", etpName);
                             cmd8.Parameters.AddWithValue("@url", etpUrl);
                             cmd8.ExecuteNonQuery();
-                            idEtp = (int) cmd8.LastInsertedId;
+                            idEtp = (int)cmd8.LastInsertedId;
                         }
                     }
+
                     if (!string.IsNullOrEmpty(docPublishDate))
                     {
                         var selectDateT =
@@ -167,7 +168,7 @@ namespace ParserTenders.TenderDir
                         cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
                         cmd2.Parameters.AddWithValue("@id_etp", idEtp);
                         var dt = new DataTable();
-                        var adapter = new MySqlDataAdapter {SelectCommand = cmd2};
+                        var adapter = new MySqlDataAdapter { SelectCommand = cmd2 };
                         adapter.Fill(dt);
                         if (dt.Rows.Count > 0)
                         {
@@ -175,14 +176,14 @@ namespace ParserTenders.TenderDir
                             foreach (DataRow row in dt.Rows)
                             {
                                 var dateNew = DateTime.Parse(docPublishDate);
-                                var dateOld = (DateTime) row["doc_publish_date"];
+                                var dateOld = (DateTime)row["doc_publish_date"];
                                 if (dateNew >= dateOld)
                                 {
                                     var updateTenderCancel =
                                         $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_tender = @id_tender";
                                     var cmd3 = new MySqlCommand(updateTenderCancel, connect);
                                     cmd3.Prepare();
-                                    cmd3.Parameters.AddWithValue("id_tender", (int) row["id_tender"]);
+                                    cmd3.Parameters.AddWithValue("id_tender", (int)row["id_tender"]);
                                     cmd3.ExecuteNonQuery();
                                 }
                                 else
@@ -193,84 +194,122 @@ namespace ParserTenders.TenderDir
                         }
                     }
 
-                    var purchaseObjectInfo = ((string) tender.SelectToken("purchaseObjectInfo") ?? "").Trim();
+                    var purchaseObjectInfo = ((string)tender.SelectToken("purchaseObjectInfo") ?? "").Trim();
                     var organizerRegNum =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.regNum") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.regNum") ?? "").Trim();
                     var organizerFullName =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.fullName") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.fullName") ?? "").Trim();
                     var organizerPostAddress =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.postAddress") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.postAddress") ?? "").Trim();
                     var organizerFactAddress =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.factAddress") ?? "").Trim();
-                    var organizerInn = ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.INN") ?? "")
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.factAddress") ?? "").Trim();
+                    var organizerInn = ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.INN") ?? "")
                         .Trim();
-                    var organizerKpp = ((string) tender.SelectToken("purchaseResponsible.responsibleOrg.KPP") ?? "")
+                    var organizerKpp = ((string)tender.SelectToken("purchaseResponsible.responsibleOrg.KPP") ?? "")
                         .Trim();
                     var organizerResponsibleRole =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleRole") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleRole") ?? "").Trim();
                     var organizerLastName =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.lastName") ??
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.lastName") ??
                          "").Trim();
                     var organizerFirstName =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.firstName") ??
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.firstName") ??
                          "").Trim();
                     var organizerMiddleName =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.middleName") ??
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactPerson.middleName") ??
                          "").Trim();
                     var organizerContact = $"{organizerLastName} {organizerFirstName} {organizerMiddleName}"
                         .Trim();
                     var organizerEmail =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactEMail") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactEMail") ?? "").Trim();
                     var organizerFax =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactFax") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactFax") ?? "").Trim();
                     var organizerPhone =
-                        ((string) tender.SelectToken("purchaseResponsible.responsibleInfo.contactPhone") ?? "").Trim();
+                        ((string)tender.SelectToken("purchaseResponsible.responsibleInfo.contactPhone") ?? "").Trim();
                     var idOrganizer = 0;
                     var idCustomer = 0;
-                    if (!string.IsNullOrEmpty(organizerRegNum))
+                    if (!string.IsNullOrEmpty(organizerInn))
                     {
                         var selectOrg =
-                            $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
-                        var cmd4 = new MySqlCommand(selectOrg, connect);
-                        cmd4.Prepare();
-                        cmd4.Parameters.AddWithValue("@reg_num", organizerRegNum);
-                        var reader2 = cmd4.ExecuteReader();
-                        if (reader2.HasRows)
+                            $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE inn = @inn AND kpp = @kpp";
+                        var cmd2 = new MySqlCommand(selectOrg, connect);
+                        cmd2.Prepare();
+                        cmd2.Parameters.AddWithValue("@inn", organizerInn);
+                        cmd2.Parameters.AddWithValue("@kpp", organizerKpp);
+                        var reader1 = cmd2.ExecuteReader();
+                        if (reader1.HasRows)
                         {
-                            reader2.Read();
-                            idOrganizer = reader2.GetInt32("id_organizer");
-                            reader2.Close();
+                            reader1.Read();
+                            idOrganizer = reader1.GetInt32("id_organizer");
+                            reader1.Close();
                         }
                         else
                         {
-                            reader2.Close();
+                            reader1.Close();
                             var addOrganizer =
-                                $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role, contact_person = @contact_person, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
-                            var cmd5 = new MySqlCommand(addOrganizer, connect);
-                            cmd5.Prepare();
-                            cmd5.Parameters.AddWithValue("@reg_num", organizerRegNum);
-                            cmd5.Parameters.AddWithValue("@full_name", organizerFullName);
-                            cmd5.Parameters.AddWithValue("@post_address", organizerPostAddress);
-                            cmd5.Parameters.AddWithValue("@fact_address", organizerFactAddress);
-                            cmd5.Parameters.AddWithValue("@inn", organizerInn);
-                            cmd5.Parameters.AddWithValue("@kpp", organizerKpp);
-                            cmd5.Parameters.AddWithValue("@responsible_role", organizerResponsibleRole);
-                            cmd5.Parameters.AddWithValue("@contact_person", organizerContact);
-                            cmd5.Parameters.AddWithValue("@contact_email", organizerEmail);
-                            cmd5.Parameters.AddWithValue("@contact_phone", organizerPhone);
-                            cmd5.Parameters.AddWithValue("@contact_fax", organizerFax);
-                            cmd5.ExecuteNonQuery();
-                            idOrganizer = (int) cmd5.LastInsertedId;
+                                $"INSERT INTO {Program.Prefix}organizer SET full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
+                            var cmd3 = new MySqlCommand(addOrganizer, connect);
+                            cmd3.Prepare();
+                            cmd3.Parameters.AddWithValue("@full_name", organizerFullName);
+                            cmd3.Parameters.AddWithValue("@post_address", organizerPostAddress);
+                            cmd3.Parameters.AddWithValue("@fact_address", organizerFactAddress);
+                            cmd3.Parameters.AddWithValue("@inn", organizerInn);
+                            cmd3.Parameters.AddWithValue("@kpp", organizerKpp);
+                            cmd3.Parameters.AddWithValue("@contact_email", organizerEmail);
+                            cmd3.Parameters.AddWithValue("@contact_phone", organizerPhone);
+                            cmd3.Parameters.AddWithValue("@contact_fax", organizerFax);
+                            cmd3.ExecuteNonQuery();
+                            idOrganizer = (int)cmd3.LastInsertedId;
                         }
                     }
                     else
                     {
-                        Log.Logger("Нет organizer_reg_num", FilePath);
+                        if (!string.IsNullOrEmpty(organizerRegNum))
+                        {
+                            var selectOrg =
+                                $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
+                            var cmd4 = new MySqlCommand(selectOrg, connect);
+                            cmd4.Prepare();
+                            cmd4.Parameters.AddWithValue("@reg_num", organizerRegNum);
+                            var reader2 = cmd4.ExecuteReader();
+                            if (reader2.HasRows)
+                            {
+                                reader2.Read();
+                                idOrganizer = reader2.GetInt32("id_organizer");
+                                reader2.Close();
+                            }
+                            else
+                            {
+                                reader2.Close();
+                                var addOrganizer =
+                                    $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role, contact_person = @contact_person, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
+                                var cmd5 = new MySqlCommand(addOrganizer, connect);
+                                cmd5.Prepare();
+                                cmd5.Parameters.AddWithValue("@reg_num", organizerRegNum);
+                                cmd5.Parameters.AddWithValue("@full_name", organizerFullName);
+                                cmd5.Parameters.AddWithValue("@post_address", organizerPostAddress);
+                                cmd5.Parameters.AddWithValue("@fact_address", organizerFactAddress);
+                                cmd5.Parameters.AddWithValue("@inn", organizerInn);
+                                cmd5.Parameters.AddWithValue("@kpp", organizerKpp);
+                                cmd5.Parameters.AddWithValue("@responsible_role", organizerResponsibleRole);
+                                cmd5.Parameters.AddWithValue("@contact_person", organizerContact);
+                                cmd5.Parameters.AddWithValue("@contact_email", organizerEmail);
+                                cmd5.Parameters.AddWithValue("@contact_phone", organizerPhone);
+                                cmd5.Parameters.AddWithValue("@contact_fax", organizerFax);
+                                cmd5.ExecuteNonQuery();
+                                idOrganizer = (int)cmd5.LastInsertedId;
+                            }
+                        }
+                        else
+                        {
+                            Log.Logger("Нет organizer_reg_num", FilePath);
+                        }
                     }
 
+
                     var idPlacingWay = 0;
-                    var placingWayCode = ((string) tender.SelectToken("placingWay.code") ?? "").Trim();
-                    var placingWayName = ((string) tender.SelectToken("placingWay.name") ?? "").Trim();
+                    var placingWayCode = ((string)tender.SelectToken("placingWay.code") ?? "").Trim();
+                    var placingWayName = ((string)tender.SelectToken("placingWay.name") ?? "").Trim();
                     if (!string.IsNullOrEmpty(placingWayCode))
                     {
                         var selectPlacingWay =
@@ -295,7 +334,7 @@ namespace ParserTenders.TenderDir
                             cmd7.Parameters.AddWithValue("@code", placingWayCode);
                             cmd7.Parameters.AddWithValue("@name", placingWayName);
                             cmd7.ExecuteNonQuery();
-                            idPlacingWay = (int) cmd7.LastInsertedId;
+                            idPlacingWay = (int)cmd7.LastInsertedId;
                         }
                     }
 
@@ -339,7 +378,7 @@ namespace ParserTenders.TenderDir
                     cmd9.Parameters.AddWithValue("@xml", xml);
                     cmd9.Parameters.AddWithValue("@print_form", printform);
                     var resInsertTender = cmd9.ExecuteNonQuery();
-                    var idTender = (int) cmd9.LastInsertedId;
+                    var idTender = (int)cmd9.LastInsertedId;
                     AddTender44?.Invoke(resInsertTender);
                     if (cancelStatus == 0)
                     {
@@ -356,9 +395,9 @@ namespace ParserTenders.TenderDir
                     attachments.AddRange(GetElements(tender, "notificationAttachments.attachment"));
                     foreach (var att in attachments)
                     {
-                        var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
-                        var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
+                        var attachName = ((string)att.SelectToken("fileName") ?? "").Trim();
+                        var attachDescription = ((string)att.SelectToken("docDescription") ?? "").Trim();
+                        var attachUrl = ((string)att.SelectToken("url") ?? "").Trim();
                         if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =
@@ -379,10 +418,10 @@ namespace ParserTenders.TenderDir
                         lots = GetElements(tender, "lots.lot");
                     foreach (var lot in lots)
                     {
-                        var lotMaxPrice = ((string) lot.SelectToken("maxPrice") ?? "").Trim();
-                        var lotCurrency = ((string) lot.SelectToken("currency.name") ?? "").Trim();
-                        var lotFinanceSource = ((string) lot.SelectToken("financeSource") ?? "").Trim();
-                        var lotName = ((string) lot.SelectToken("lotObjectInfo") ?? "").Trim();
+                        var lotMaxPrice = ((string)lot.SelectToken("maxPrice") ?? "").Trim();
+                        var lotCurrency = ((string)lot.SelectToken("currency.name") ?? "").Trim();
+                        var lotFinanceSource = ((string)lot.SelectToken("financeSource") ?? "").Trim();
+                        var lotName = ((string)lot.SelectToken("lotObjectInfo") ?? "").Trim();
                         var insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
                         var cmd12 = new MySqlCommand(insertLot, connect);
@@ -394,7 +433,7 @@ namespace ParserTenders.TenderDir
                         cmd12.Parameters.AddWithValue("@finance_source", lotFinanceSource);
                         cmd12.Parameters.AddWithValue("@lot_name", lotName);
                         cmd12.ExecuteNonQuery();
-                        var idLot = (int) cmd12.LastInsertedId;
+                        var idLot = (int)cmd12.LastInsertedId;
                         if (idLot < 1)
                             Log.Logger("Не получили id лота", FilePath);
                         lotNumber++;
@@ -403,25 +442,25 @@ namespace ParserTenders.TenderDir
                         foreach (var customerRequirement in customerRequirements)
                         {
                             var kladrPlace =
-                                ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
+                                ((string)customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
                                  "").Trim();
                             if (string.IsNullOrEmpty(kladrPlace))
                                 kladrPlace =
-                                    ((string) customerRequirement.SelectToken(
-                                         "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
+                                    ((string)customerRequirement.SelectToken(
+                                        "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
                             var deliveryPlace =
-                                ((string) customerRequirement.SelectToken("kladrPlaces.kladrPlace.deliveryPlace") ?? "")
+                                ((string)customerRequirement.SelectToken("kladrPlaces.kladrPlace.deliveryPlace") ?? "")
                                 .Trim();
                             if (string.IsNullOrEmpty(deliveryPlace))
                                 deliveryPlace =
-                                    ((string) customerRequirement.SelectToken(
-                                         "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
+                                    ((string)customerRequirement.SelectToken(
+                                        "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
                             var deliveryTerm =
-                                ((string) customerRequirement.SelectToken("deliveryTerm") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("deliveryTerm") ?? "").Trim();
                             var applicationGuaranteeAmount =
-                                ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
                             var contractGuaranteeAmount =
-                                ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
                             // TODO change it
                             /*if (string.IsNullOrEmpty(contractGuaranteeAmount))
                             {
@@ -441,29 +480,29 @@ namespace ParserTenders.TenderDir
                                 }
                             }*/
                             var applicationSettlementAccount =
-                                ((string) customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
+                                ((string)customerRequirement.SelectToken("applicationGuarantee.settlementAccount") ??
                                  "").Trim();
                             var applicationPersonalAccount =
-                                ((string) customerRequirement.SelectToken("applicationGuarantee.personalAccount") ?? "")
+                                ((string)customerRequirement.SelectToken("applicationGuarantee.personalAccount") ?? "")
                                 .Trim();
                             var applicationBik =
-                                ((string) customerRequirement.SelectToken("applicationGuarantee.bik") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("applicationGuarantee.bik") ?? "").Trim();
                             var contractSettlementAccount =
-                                ((string) customerRequirement.SelectToken("contractGuarantee.settlementAccount") ?? "")
+                                ((string)customerRequirement.SelectToken("contractGuarantee.settlementAccount") ?? "")
                                 .Trim();
                             var contractPersonalAccount =
-                                ((string) customerRequirement.SelectToken("contractGuarantee.personalAccount") ?? "")
+                                ((string)customerRequirement.SelectToken("contractGuarantee.personalAccount") ?? "")
                                 .Trim();
                             var contractBik =
-                                ((string) customerRequirement.SelectToken("contractGuarantee.bik") ?? "").Trim();
-                            var customerRegNum = ((string) customerRequirement.SelectToken("customer.regNum") ?? "")
+                                ((string)customerRequirement.SelectToken("contractGuarantee.bik") ?? "").Trim();
+                            var customerRegNum = ((string)customerRequirement.SelectToken("customer.regNum") ?? "")
                                 .Trim();
                             var customerFullName =
-                                ((string) customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("customer.fullName") ?? "").Trim();
                             var customerRequirementMaxPrice =
-                                ((string) customerRequirement.SelectToken("maxPrice") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("maxPrice") ?? "").Trim();
                             var purchaseObjectDescription =
-                                ((string) customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
+                                ((string)customerRequirement.SelectToken("purchaseObjectDescription") ?? "").Trim();
                             if (!string.IsNullOrEmpty(purchaseObjectDescription))
                             {
                                 deliveryTerm = $"{deliveryTerm} {purchaseObjectDescription}".Trim();
@@ -503,7 +542,7 @@ namespace ParserTenders.TenderDir
                                     cmd14.Parameters.AddWithValue("@full_name", customerFullName);
                                     cmd14.Parameters.AddWithValue("@inn", customerInn);
                                     cmd14.ExecuteNonQuery();
-                                    idCustomer = (int) cmd14.LastInsertedId;
+                                    idCustomer = (int)cmd14.LastInsertedId;
                                 }
                             }
                             else
@@ -528,45 +567,49 @@ namespace ParserTenders.TenderDir
                             }
 
                             var planNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "")
+                                ((string)customerRequirement.SelectToken("tenderPlanInfo.plan2017Number") ?? "")
                                 .Trim();
                             if (string.IsNullOrEmpty(planNumber))
                             {
-                                planNumber = ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ??
-                                              "").Trim();
+                                planNumber =
+                                    ((string)customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ??
+                                     "").Trim();
                             }
+
                             if (string.IsNullOrEmpty(planNumber))
                             {
-                                planNumber = ((string) customerRequirement.SelectToken("tenderPlanInfo.planNumber") ??
+                                planNumber = ((string)customerRequirement.SelectToken("tenderPlanInfo.planNumber") ??
                                               "").Trim();
                             }
 
                             var positionNumber =
-                                ((string) customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "")
+                                ((string)customerRequirement.SelectToken("tenderPlanInfo.position2017Number") ?? "")
                                 .Trim();
                             if (string.IsNullOrEmpty(positionNumber))
                             {
                                 positionNumber =
-                                    ((string) customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ?? "")
+                                    ((string)customerRequirement.SelectToken("tenderPlan2020Info.plan2020Number") ?? "")
                                     .Trim();
                             }
+
                             if (string.IsNullOrEmpty(positionNumber))
                             {
                                 positionNumber =
-                                    ((string) customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "")
+                                    ((string)customerRequirement.SelectToken("tenderPlanInfo.positionNumber") ?? "")
                                     .Trim();
                             }
+
                             var provWarAmount =
-                                ((string) customerRequirement.SelectToken("provisionWarranty.amount") ?? "")
+                                ((string)customerRequirement.SelectToken("provisionWarranty.amount") ?? "")
                                 .Trim();
                             var provWarPart =
-                                ((string) customerRequirement.SelectToken("provisionWarranty.part") ?? "")
+                                ((string)customerRequirement.SelectToken("provisionWarranty.part") ?? "")
                                 .Trim();
                             var okpdName =
-                                ((string) customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDName") ?? "")
+                                ((string)customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDName") ?? "")
                                 .Trim();
                             var okpdCode =
-                                ((string) customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDCode") ?? "")
+                                ((string)customerRequirement.SelectToken("IKZInfo.OKPD2Info.OKPD2.OKPDCode") ?? "")
                                 .Trim();
                             additionalParametrs.Add(okpdName);
                             additionalParametrs.Add(okpdCode);
@@ -607,7 +650,7 @@ namespace ParserTenders.TenderDir
                         var preferenses = GetElements(lot, "preferenses.preferense");
                         foreach (var preferense in preferenses)
                         {
-                            var preferenseName = ((string) preferense.SelectToken("name") ?? "").Trim();
+                            var preferenseName = ((string)preferense.SelectToken("name") ?? "").Trim();
                             var insertPreference =
                                 $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
                             var cmd17 = new MySqlCommand(insertPreference, connect);
@@ -620,9 +663,9 @@ namespace ParserTenders.TenderDir
                         var requirements = GetElements(lot, "requirements.requirement");
                         foreach (var requirement in requirements)
                         {
-                            var requirementName = ((string) requirement.SelectToken("name") ?? "").Trim();
-                            var requirementContent = ((string) requirement.SelectToken("content") ?? "").Trim();
-                            var requirementCode = ((string) requirement.SelectToken("code") ?? "").Trim();
+                            var requirementName = ((string)requirement.SelectToken("name") ?? "").Trim();
+                            var requirementContent = ((string)requirement.SelectToken("content") ?? "").Trim();
+                            var requirementCode = ((string)requirement.SelectToken("code") ?? "").Trim();
                             var insertRequirement =
                                 $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, name = @name, content = @content, code = @code";
                             var cmd18 = new MySqlCommand(insertRequirement, connect);
@@ -634,8 +677,8 @@ namespace ParserTenders.TenderDir
                             cmd18.ExecuteNonQuery();
                         }
 
-                        var restrictInfo = ((string) lot.SelectToken("restrictInfo") ?? "").Trim();
-                        var foreignInfo = ((string) lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
+                        var restrictInfo = ((string)lot.SelectToken("restrictInfo") ?? "").Trim();
+                        var foreignInfo = ((string)lot.SelectToken("restrictForeignsInfo") ?? "").Trim();
                         if (!string.IsNullOrEmpty(restrictInfo) || !string.IsNullOrEmpty(foreignInfo))
                         {
                             var insertRestrict =
@@ -652,8 +695,8 @@ namespace ParserTenders.TenderDir
                             var restricts = GetElements(lot, "restrictions.restriction");
                             foreach (var restrict in restricts)
                             {
-                                var rInfo = ((string) restrict.SelectToken("name") ?? "").Trim();
-                                var fInfo = ((string) restrict.SelectToken("content") ?? "").Trim();
+                                var rInfo = ((string)restrict.SelectToken("name") ?? "").Trim();
+                                var fInfo = ((string)restrict.SelectToken("content") ?? "").Trim();
                                 var insertRestrict =
                                     $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
                                 var cmd19 = new MySqlCommand(insertRestrict, connect);
@@ -668,20 +711,20 @@ namespace ParserTenders.TenderDir
                         var purchaseobjects = GetElements(lot, "purchaseObjects.purchaseObject");
                         foreach (var purchaseobject in purchaseobjects)
                         {
-                            var okpd2Code = ((string) purchaseobject.SelectToken("OKPD2.code") ?? "").Trim();
-                            var okpdCode = ((string) purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
-                            var okpdName = ((string) purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
+                            var okpd2Code = ((string)purchaseobject.SelectToken("OKPD2.code") ?? "").Trim();
+                            var okpdCode = ((string)purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
+                            var okpdName = ((string)purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
                             if (string.IsNullOrEmpty(okpdName))
-                                okpdName = ((string) purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
-                            var name = ((string) purchaseobject.SelectToken("name") ?? "").Trim();
+                                okpdName = ((string)purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
+                            var name = ((string)purchaseobject.SelectToken("name") ?? "").Trim();
                             if (!string.IsNullOrEmpty(name))
                                 name = Regex.Replace(name, @"\s+", " ");
-                            var quantityValue = ((string) purchaseobject.SelectToken("quantity.value") ?? "")
+                            var quantityValue = ((string)purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();
-                            var price = ((string) purchaseobject.SelectToken("price") ?? "").Trim();
+                            var price = ((string)purchaseobject.SelectToken("price") ?? "").Trim();
                             price = price.Replace(",", ".");
-                            var okei = ((string) purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
-                            var sumP = ((string) purchaseobject.SelectToken("sum") ?? "").Trim();
+                            var okei = ((string)purchaseobject.SelectToken("OKEI.nationalCode") ?? "").Trim();
+                            var sumP = ((string)purchaseobject.SelectToken("sum") ?? "").Trim();
                             sumP = sumP.Replace(",", ".");
                             var okpd2GroupCode = 0;
                             var okpd2GroupLevel1Code = "";
@@ -692,7 +735,7 @@ namespace ParserTenders.TenderDir
 
                             if (string.IsNullOrEmpty(okpd2Code))
                             {
-                                okpd2Code = ((string) purchaseobject.SelectToken("KTRU.code") ?? "").Trim();
+                                okpd2Code = ((string)purchaseobject.SelectToken("KTRU.code") ?? "").Trim();
                             }
 
                             var customerquantities =
@@ -700,11 +743,11 @@ namespace ParserTenders.TenderDir
                             foreach (var customerquantity in customerquantities)
                             {
                                 var customerQuantityValue =
-                                    ((string) customerquantity.SelectToken("quantity") ?? "").Trim();
-                                var custRegNum = ((string) customerquantity.SelectToken("customer.regNum") ?? "")
+                                    ((string)customerquantity.SelectToken("quantity") ?? "").Trim();
+                                var custRegNum = ((string)customerquantity.SelectToken("customer.regNum") ?? "")
                                     .Trim();
                                 var custFullName =
-                                    ((string) customerquantity.SelectToken("customer.fullName") ?? "").Trim();
+                                    ((string)customerquantity.SelectToken("customer.fullName") ?? "").Trim();
                                 var idCustomerQ = 0;
                                 if (!string.IsNullOrEmpty(custRegNum))
                                 {
@@ -730,7 +773,7 @@ namespace ParserTenders.TenderDir
                                         cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
                                         cmd21.Parameters.AddWithValue("@full_name", custFullName);
                                         cmd21.ExecuteNonQuery();
-                                        idCustomerQ = (int) cmd21.LastInsertedId;
+                                        idCustomerQ = (int)cmd21.LastInsertedId;
                                     }
                                 }
                                 else
@@ -806,7 +849,7 @@ namespace ParserTenders.TenderDir
                         foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                         {
                             pils = true;
-                            var isZnvlp = ((string) drugPurchaseObjectInfo.SelectToken("isZNVLP") ?? "").Trim();
+                            var isZnvlp = ((string)drugPurchaseObjectInfo.SelectToken("isZNVLP") ?? "").Trim();
                             var drugQuantityCustomersInfo =
                                 GetElements(drugPurchaseObjectInfo, "customerQuantities.customerQuantity");
                             drugQuantityCustomersInfo.AddRange(GetElements(drugPurchaseObjectInfo,
@@ -814,12 +857,12 @@ namespace ParserTenders.TenderDir
                             foreach (var drugQuantityCustomerInfo in drugQuantityCustomersInfo)
                             {
                                 var customerQuantityValue =
-                                    ((string) drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
+                                    ((string)drugQuantityCustomerInfo.SelectToken("quantity") ?? "").Trim();
                                 var custRegNum =
-                                    ((string) drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
+                                    ((string)drugQuantityCustomerInfo.SelectToken("customer.regNum") ?? "")
                                     .Trim();
                                 var custFullName =
-                                    ((string) drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
+                                    ((string)drugQuantityCustomerInfo.SelectToken("customer.fullName") ?? "").Trim();
                                 var idCustomerQ = 0;
                                 if (!string.IsNullOrEmpty(custRegNum))
                                 {
@@ -845,7 +888,7 @@ namespace ParserTenders.TenderDir
                                         cmd21.Parameters.AddWithValue("@reg_num", custRegNum);
                                         cmd21.Parameters.AddWithValue("@full_name", custFullName);
                                         cmd21.ExecuteNonQuery();
-                                        idCustomerQ = (int) cmd21.LastInsertedId;
+                                        idCustomerQ = (int)cmd21.LastInsertedId;
                                     }
                                 }
                                 else
@@ -877,33 +920,33 @@ namespace ParserTenders.TenderDir
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeReferenceInfo.drugInfo"));
                                 foreach (var drugInfo in drugsInfo)
                                 {
-                                    var okpd2Code = ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "")
+                                    var okpd2Code = ((string)drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "")
                                         .Trim();
-                                    var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
+                                    var name = ((string)drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                     var medicamentalFormName =
-                                        ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ??
+                                        ((string)drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
                                     name = $"{name} | {medicamentalFormName}";
 
                                     var dosageGrlsValue =
-                                        ((string) drugInfo.SelectToken("..dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("..dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
                                     if (!string.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
-                                    var quantityValue = ((string) drugInfo.SelectToken("..drugQuantity") ?? "")
+                                    var quantityValue = ((string)drugInfo.SelectToken("..drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
-                                        ((string) drugInfo.SelectToken("..dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("..dosageInfo.dosageUserOKEI.name") ?? "").Trim();
                                     if (okei == "")
                                     {
-                                        okei = ((string) drugInfo.SelectToken("..manualUserOKEI.name") ?? "").Trim();
+                                        okei = ((string)drugInfo.SelectToken("..manualUserOKEI.name") ?? "").Trim();
                                     }
 
-                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "")
+                                    var price = ((string)drugPurchaseObjectInfo.SelectToken("..pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
-                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "")
+                                    var sumP = ((string)drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "")
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =
@@ -929,34 +972,34 @@ namespace ParserTenders.TenderDir
                                     "objectInfoUsingTextForm.drugsInfo.drugInfo");
                                 foreach (var drugInfo in drugsInfoTextForm)
                                 {
-                                    var okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                    var okpd2Code = ((string)drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
                                         .Trim();
-                                    var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    var name = ((string)drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                     var medicamentalFormName =
-                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                        ((string)drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
                                     name = $"{name} | {medicamentalFormName}";
 
                                     var dosageGrlsValue =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
 
                                     if (!string.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
-                                    var quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
                                     if (okei == "")
                                     {
-                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                        okei = ((string)drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
                                     }
 
-                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                    var price = ((string)drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
-                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                    var sumP = ((string)drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =
@@ -985,34 +1028,34 @@ namespace ParserTenders.TenderDir
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                                 foreach (var drugInfo in drugsInfo)
                                 {
-                                    var okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                    var okpd2Code = ((string)drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
                                         .Trim();
-                                    var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    var name = ((string)drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                     var medicamentalFormName =
-                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                        ((string)drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
                                     name = $"{name} | {medicamentalFormName}";
 
                                     var dosageGrlsValue =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
-                                    
+
                                     if (!string.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
-                                    var quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
                                     if (okei == "")
                                     {
-                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                        okei = ((string)drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
                                     }
 
-                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                    var price = ((string)drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
-                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                    var sumP = ((string)drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =
@@ -1038,34 +1081,34 @@ namespace ParserTenders.TenderDir
                                     "objectInfoUsingReferenceInfo.drugsInfo.drugInfo");
                                 foreach (var drugInfo in drugsInfoTextForm)
                                 {
-                                    var okpd2Code = ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
+                                    var okpd2Code = ((string)drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "")
                                         .Trim();
-                                    var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
+                                    var name = ((string)drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                     var medicamentalFormName =
-                                        ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
+                                        ((string)drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ??
                                          "").Trim();
                                     name = $"{name} | {medicamentalFormName}";
 
                                     var dosageGrlsValue =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageGRLSValue") ?? "").Trim();
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
 
                                     if (!string.IsNullOrEmpty(name))
                                         name = Regex.Replace(name, @"\s+", " ");
-                                    var quantityValue = ((string) drugInfo.SelectToken("drugQuantity") ?? "")
+                                    var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
-                                        ((string) drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
+                                        ((string)drugInfo.SelectToken("dosageInfo.dosageUserOKEI.name") ?? "").Trim();
                                     if (okei == "")
                                     {
-                                        okei = ((string) drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
+                                        okei = ((string)drugInfo.SelectToken("manualUserOKEI.name") ?? "").Trim();
                                     }
 
-                                    var price = ((string) drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
+                                    var price = ((string)drugPurchaseObjectInfo.SelectToken("pricePerUnit") ?? "")
                                         .Trim();
                                     price = price.Replace(",", ".");
-                                    var sumP = ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
+                                    var sumP = ((string)drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "")
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =

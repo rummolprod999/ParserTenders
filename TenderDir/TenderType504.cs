@@ -228,45 +228,82 @@ namespace ParserTenders.TenderDir
                         .Trim();
                     var idOrganizer = 0;
                     var idCustomer = 0;
-                    if (!string.IsNullOrEmpty(organizerRegNum))
+                    if (!string.IsNullOrEmpty(organizerInn))
                     {
                         var selectOrg =
-                            $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
-                        var cmd4 = new MySqlCommand(selectOrg, connect);
-                        cmd4.Prepare();
-                        cmd4.Parameters.AddWithValue("@reg_num", organizerRegNum);
-                        var reader2 = cmd4.ExecuteReader();
-                        if (reader2.HasRows)
+                            $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE inn = @inn AND kpp = @kpp";
+                        var cmd2 = new MySqlCommand(selectOrg, connect);
+                        cmd2.Prepare();
+                        cmd2.Parameters.AddWithValue("@inn", organizerInn);
+                        cmd2.Parameters.AddWithValue("@kpp", organizerKpp);
+                        var reader1 = cmd2.ExecuteReader();
+                        if (reader1.HasRows)
                         {
-                            reader2.Read();
-                            idOrganizer = reader2.GetInt32("id_organizer");
-                            reader2.Close();
+                            reader1.Read();
+                            idOrganizer = reader1.GetInt32("id_organizer");
+                            reader1.Close();
                         }
                         else
                         {
-                            reader2.Close();
+                            reader1.Close();
                             var addOrganizer =
-                                $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role, contact_person = @contact_person, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
-                            var cmd5 = new MySqlCommand(addOrganizer, connect);
-                            cmd5.Prepare();
-                            cmd5.Parameters.AddWithValue("@reg_num", organizerRegNum);
-                            cmd5.Parameters.AddWithValue("@full_name", organizerFullName);
-                            cmd5.Parameters.AddWithValue("@post_address", organizerPostAddress);
-                            cmd5.Parameters.AddWithValue("@fact_address", organizerFactAddress);
-                            cmd5.Parameters.AddWithValue("@inn", organizerInn);
-                            cmd5.Parameters.AddWithValue("@kpp", organizerKpp);
-                            cmd5.Parameters.AddWithValue("@responsible_role", organizerResponsibleRole);
-                            cmd5.Parameters.AddWithValue("@contact_person", organizerContact);
-                            cmd5.Parameters.AddWithValue("@contact_email", organizerEmail);
-                            cmd5.Parameters.AddWithValue("@contact_phone", organizerPhone);
-                            cmd5.Parameters.AddWithValue("@contact_fax", organizerFax);
-                            cmd5.ExecuteNonQuery();
-                            idOrganizer = (int) cmd5.LastInsertedId;
+                                $"INSERT INTO {Program.Prefix}organizer SET full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
+                            var cmd3 = new MySqlCommand(addOrganizer, connect);
+                            cmd3.Prepare();
+                            cmd3.Parameters.AddWithValue("@full_name", organizerFullName);
+                            cmd3.Parameters.AddWithValue("@post_address", organizerPostAddress);
+                            cmd3.Parameters.AddWithValue("@fact_address", organizerFactAddress);
+                            cmd3.Parameters.AddWithValue("@inn", organizerInn);
+                            cmd3.Parameters.AddWithValue("@kpp", organizerKpp);
+                            cmd3.Parameters.AddWithValue("@contact_email", organizerEmail);
+                            cmd3.Parameters.AddWithValue("@contact_phone", organizerPhone);
+                            cmd3.Parameters.AddWithValue("@contact_fax", organizerFax);
+                            cmd3.ExecuteNonQuery();
+                            idOrganizer = (int)cmd3.LastInsertedId;
                         }
                     }
                     else
                     {
-                        Log.Logger("Нет organizer_reg_num", FilePath);
+                        if (!string.IsNullOrEmpty(organizerRegNum))
+                        {
+                            var selectOrg =
+                                $"SELECT id_organizer FROM {Program.Prefix}organizer WHERE reg_num = @reg_num";
+                            var cmd4 = new MySqlCommand(selectOrg, connect);
+                            cmd4.Prepare();
+                            cmd4.Parameters.AddWithValue("@reg_num", organizerRegNum);
+                            var reader2 = cmd4.ExecuteReader();
+                            if (reader2.HasRows)
+                            {
+                                reader2.Read();
+                                idOrganizer = reader2.GetInt32("id_organizer");
+                                reader2.Close();
+                            }
+                            else
+                            {
+                                reader2.Close();
+                                var addOrganizer =
+                                    $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role, contact_person = @contact_person, contact_email = @contact_email, contact_phone = @contact_phone, contact_fax = @contact_fax";
+                                var cmd5 = new MySqlCommand(addOrganizer, connect);
+                                cmd5.Prepare();
+                                cmd5.Parameters.AddWithValue("@reg_num", organizerRegNum);
+                                cmd5.Parameters.AddWithValue("@full_name", organizerFullName);
+                                cmd5.Parameters.AddWithValue("@post_address", organizerPostAddress);
+                                cmd5.Parameters.AddWithValue("@fact_address", organizerFactAddress);
+                                cmd5.Parameters.AddWithValue("@inn", organizerInn);
+                                cmd5.Parameters.AddWithValue("@kpp", organizerKpp);
+                                cmd5.Parameters.AddWithValue("@responsible_role", organizerResponsibleRole);
+                                cmd5.Parameters.AddWithValue("@contact_person", organizerContact);
+                                cmd5.Parameters.AddWithValue("@contact_email", organizerEmail);
+                                cmd5.Parameters.AddWithValue("@contact_phone", organizerPhone);
+                                cmd5.Parameters.AddWithValue("@contact_fax", organizerFax);
+                                cmd5.ExecuteNonQuery();
+                                idOrganizer = (int)cmd5.LastInsertedId;
+                            }
+                        }
+                        else
+                        {
+                            Log.Logger("Нет organizer_reg_num", FilePath);
+                        }
                     }
 
                     var idPlacingWay = 0;
