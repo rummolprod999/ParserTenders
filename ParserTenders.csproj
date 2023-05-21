@@ -253,6 +253,7 @@
     <Compile Include="TenderDir\TenderBase.cs" />
     <Compile Include="TenderDir\TenderRequestQ44.cs" />
     <Compile Include="TenderDir\TenderTypeClarificationResult.cs" />
+    <Compile Include="TenderDir\TenderTypeSign223New.cs" />
     <Compile Include="TenderDir\TenderTypeSignProj44.cs" />
     <Compile Include="TenderDir\TenderType223.cs" />
     <Compile Include="TenderDir\TenderType223Web.cs" />

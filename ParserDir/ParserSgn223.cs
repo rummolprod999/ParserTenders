@@ -65,7 +65,7 @@ namespace ParserTenders.ParserDir
                 doc.LoadXml(ftext);
                 var jsons = JsonConvert.SerializeXmlNode(doc);
                 var json = JObject.Parse(jsons);
-                var a = new TenderTypeSign223(f, region, regionId, json);
+                var a = new TenderTypeSign223New(f, region, regionId, json);
                 a.Parsing();
             }
         }
