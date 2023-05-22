@@ -250,12 +250,14 @@ namespace ParserTenders.TenderDir
                                          DateTime.MinValue;
                 var endExecutionDate = (DateTime?)c.SelectToken("endExecutionDate") ??
                                        DateTime.MinValue;
-                var typeEis = c.ToString();
+                var typeEis = "contract";
                 var d1 = c.SelectToken("purchaseTypeInfo")?.ToString() ?? "";
                 var d2 = ((string)c.SelectToken("subjectContract") ?? "").Trim();
                 var d3 = ((string)c.SelectToken("name") ?? "").Trim();
                 var d4 = ((string)c.SelectToken("modificationDescription") ?? "").Trim();
-                var dopInfo = d1 + " " + d2 + " " + d3 + " " + d4;
+                var dopInfo = c.ToString();
+                var indexOfSubstring = dopInfo.IndexOf("placer");
+                dopInfo = dopInfo.Substring(0, indexOfSubstring) + c.SelectToken("contractConfirmingDocs")?.ToString();
                 var insertContract =
                     $"insert into purchase_contracts223 set  guid = @guid, regnum = @regnum, current_contract_stage = @current_contract_stage, region_code = @region_code, url = @url, contr_create_date = @contr_create_date, create_date = @create_date,notification_number = @notification_number, contract_price = @contract_price, currency = @currency, version_number = @version_number, fulfillment_date = @fulfillment_date, id_customer = @id_customer, id_supplier = @id_supplier, cancel = @cancel, xml = @xml, address = @address, dop_info = @dop_info,startExecutionDate = @startExecutionDate, endExecutionDate = @endExecutionDate, type_eis = @type_eis";
                 var cmd77 = new MySqlCommand(insertContract, connect);
