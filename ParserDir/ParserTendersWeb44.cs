@@ -118,7 +118,7 @@ namespace ParserTenders.ParserDir
                 reader.Close();
             }
             url = url.Replace("view.html", "viewXml.html");
-            url = $"http://zakupki.gov.ru{url}";
+            url = $"https://zakupki.gov.ru{url}";
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
