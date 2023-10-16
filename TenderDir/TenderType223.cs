@@ -147,14 +147,7 @@ namespace ParserTenders.TenderDir
 
                     var numVersion = ((string) tender.SelectToken("version") ?? "").Trim();
                     var noticeVersion = ((string) tender.SelectToken("modificationDescription") ?? "").Trim();
-                    var printform = ((string) tender.SelectToken("urlOOS") ?? "").Trim();
-                    if (!string.IsNullOrEmpty(printform) && printform.IndexOf("CDATA") != -1)
-                        printform = printform.Substring(9, printform.Length - 12);
-                    if (!href.Contains("zakupki.gov.ru") && string.IsNullOrEmpty(printform))
-                    {
-                        printform =
-                            $"https://zakupki.gov.ru/223/purchase/public/purchase/info/common-info.html?regNumber={purchaseNumber}";
-                    }
+                    var printform = ((string)tender.SelectToken("urlEIS") ?? "").Trim();
                     var organizerFullName = ((string) tender.SelectToken("placer.mainInfo.fullName") ?? "").Trim();
                     var organizerPostAddress = ((string) tender.SelectToken("placer.mainInfo.postalAddress") ?? "")
                         .Trim();
