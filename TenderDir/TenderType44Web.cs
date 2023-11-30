@@ -974,7 +974,7 @@ namespace ParserTenders.TenderDir
                                         .Trim();
                                     sumP = sumP.Replace(",", ".");
                                     var insertCustomerquantity =
-                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, dop_info = @dop_info";
+                                        $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                     var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                                     cmd23.Prepare();
                                     cmd23.Parameters.AddWithValue("@id_lot", idLot);
