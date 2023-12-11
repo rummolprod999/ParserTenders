@@ -1112,7 +1112,7 @@ namespace ParserTenders.TenderDir
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
                                 var insertCustomerquantity =
-                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                                 cmd23.Prepare();
                                 cmd23.Parameters.AddWithValue("@id_lot", idLot);
@@ -1124,6 +1124,7 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@okei", okei);
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", customerQuantityValue);
+                                cmd23.Parameters.AddWithValue("@dop_info", drugInfo.ToString());
                                 cmd23.ExecuteNonQuery();
                                 PoExist = true;
                                 if (idCustomerQ == 0)
@@ -1168,7 +1169,7 @@ namespace ParserTenders.TenderDir
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
                                 var insertCustomerquantity =
-                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                                 cmd23.Prepare();
                                 cmd23.Parameters.AddWithValue("@id_lot", idLot);
@@ -1180,6 +1181,7 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@okei", okei);
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                cmd23.Parameters.AddWithValue("@dop_info", drugInfo.ToString());
                                 cmd23.ExecuteNonQuery();
                                 PoExist = true;
                                 if (idCustomer == 0)
@@ -1221,7 +1223,7 @@ namespace ParserTenders.TenderDir
                                     ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
                                 var insertCustomerquantity =
-                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                                    $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                                 cmd23.Prepare();
                                 cmd23.Parameters.AddWithValue("@id_lot", idLot);
@@ -1233,6 +1235,7 @@ namespace ParserTenders.TenderDir
                                 cmd23.Parameters.AddWithValue("@okei", okei);
                                 cmd23.Parameters.AddWithValue("@sum", sumP);
                                 cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
+                                cmd23.Parameters.AddWithValue("@dop_info", drugInfo.ToString());
                                 cmd23.ExecuteNonQuery();
                                 PoExist = true;
                                 if (idCustomer == 0)
