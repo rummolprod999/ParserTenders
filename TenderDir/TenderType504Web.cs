@@ -1043,7 +1043,7 @@ namespace ParserTenders.TenderDir
                             foreach (var drugInfo in drugsInfo)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1101,7 +1101,7 @@ namespace ParserTenders.TenderDir
                             foreach (var drugInfo in drugsInfoRef)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1158,7 +1158,7 @@ namespace ParserTenders.TenderDir
                             foreach (var drugInfo in drugsInfo)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1212,7 +1212,7 @@ namespace ParserTenders.TenderDir
                             foreach (var drugInfo in drugsInfoText)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")

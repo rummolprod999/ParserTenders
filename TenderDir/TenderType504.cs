@@ -1019,8 +1019,9 @@ namespace ParserTenders.TenderDir
                                 "objectInfoUsingTextForm.drugsInfo.drugInfo");
                             foreach (var drugInfo in drugsInfo)
                             {
-                                var okpd2Code =
-                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+
+                                var okpd2Code = TenderType504.okpd2Code(drugInfo);
+                                
                                 var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1077,8 +1078,7 @@ namespace ParserTenders.TenderDir
                                 "objectInfoUsingReferenceInfo.drugsInfo.drugInterchangeInfo.drugInterchangeReferenceInfo.drugInfo"));
                             foreach (var drugInfo in drugsInfoRef)
                             {
-                                var okpd2Code =
-                                    ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "").Trim();
+                                var okpd2Code = TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1139,7 +1139,7 @@ namespace ParserTenders.TenderDir
                             foreach (var drugInfo in drugsInfo)
                             {
                                 var okpd2Code =
-                                    ((string) drugInfo.SelectToken("..MNNInfo.MNNExternalCode") ?? "").Trim();
+                                    TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("..MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("..medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1192,8 +1192,7 @@ namespace ParserTenders.TenderDir
                                 "objectInfoUsingTextForm.drugsInfo.drugInfo");
                             foreach (var drugInfo in drugsInfoText)
                             {
-                                var okpd2Code =
-                                    ((string) drugInfo.SelectToken("MNNInfo.MNNExternalCode") ?? "").Trim();
+                                var okpd2Code = TenderType504.okpd2Code(drugInfo);
                                 var name = ((string) drugInfo.SelectToken("MNNInfo.MNNName") ?? "").Trim();
                                 var medicamentalFormName =
                                     ((string) drugInfo.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
@@ -1264,6 +1263,29 @@ namespace ParserTenders.TenderDir
             else
             {
                 Log.Logger("Не могу найти тег Tender504", FilePath);
+            }
+        }
+
+        public static string okpd2Code(JToken drugInfo)
+        {
+            try
+            {
+                var o1 = ((string)drugInfo.SelectToken("..OKPD2.OKPDCode") ?? "").Trim();
+                if (o1 == "")
+                {
+                    var o2 = ((string)drugInfo.SelectToken("..KTRU.code") ?? "").Trim();
+                    var tr = o2.Split('-');
+                    if (tr.Length > 1)
+                    {
+                        o1 = tr[0];
+                    }
+                }
+
+                return o1;
+            }
+            catch (Exception e)
+            {
+                return "";
             }
         }
 
