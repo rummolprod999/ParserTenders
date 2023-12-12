@@ -616,7 +616,7 @@ namespace ParserTenders
         private static void ParserTender44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Tenders44");
-            /*try
+            try
             {
                 var t44 = new ParserTend44(Periodparsing);
                 t44.Parsing();
@@ -624,13 +624,13 @@ namespace ParserTenders
             catch (Exception e)
             {
                 Log.Logger(e);
-            }*/
+            }
 
-            ParserTend44 t44 = new ParserTend44(Periodparsing);
+            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
             FileInfo f =
                 new FileInfo(
                     "/home/alex/RiderProjects/ParserTenders/epNotificationEZK2020_0873500001823011829_34488500.xml");
-            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);*/
 
             Log.Logger("Добавили tender44", AddTender44);
             Log.Logger("Обновили tender44", UpdateTender44);
