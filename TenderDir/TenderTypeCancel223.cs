@@ -49,7 +49,7 @@ namespace ParserTenders.TenderDir
                 {
                     connect.Open();
                     var updateTender =
-                        $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_region = @id_region AND purchase_number = @purchase_number";
+                        $"UPDATE {Program.Prefix}tender SET cancel = 1 WHERE id_region = @id_region AND purchase_number = @purchase_number AND type_fz = 223";
                     var cmd = new MySqlCommand(updateTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_region", RegionId);

@@ -69,7 +69,7 @@ namespace ParserTenders.TenderDir
                 {
                     connect.Open();
                     var selectTender =
-                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND id_region = @id_region AND purchase_number = @purchase_number";
+                        $"SELECT id_tender FROM {Program.Prefix}tender WHERE id_xml = @id_xml AND id_region = @id_region AND purchase_number = @purchase_number AND type_fz = 223";
                     var cmd = new MySqlCommand(selectTender, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", idT);
@@ -106,7 +106,7 @@ namespace ParserTenders.TenderDir
                     if (!string.IsNullOrEmpty(dateVersion))
                     {
                         var selectDateT =
-                            $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
+                            $"SELECT id_tender, date_version FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = 223";
                         var cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@purchase_number", purchaseNumber);
