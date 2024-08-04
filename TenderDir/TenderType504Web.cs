@@ -974,6 +974,7 @@ namespace ParserTenders.TenderDir
 
                     var drugPurchaseObjectsInfo = GetElements(tender,
                         "notificationInfo.purchaseObjectsInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+                    var quantityUndefined = (bool?)tender.SelectToken("..drugPurchaseObjectsInfo.quantityUndefined") ?? false;
                     foreach (var drugPurchaseObjectInfo in drugPurchaseObjectsInfo)
                     {
                         pils = true;
@@ -1072,6 +1073,15 @@ namespace ParserTenders.TenderDir
                                 var sumP =
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
+                                if (rootName == "epNotificationEF2020" && quantityUndefined)
+                                {
+                                    price = ((string) drugPurchaseObjectInfo.SelectToken("..quantityUndefined.price") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    sumP =
+                                        ((string) tender.SelectToken("..drugPurchaseObjectsInfo.total") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                }
+
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
@@ -1130,6 +1140,14 @@ namespace ParserTenders.TenderDir
                                 var sumP =
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
+                                if (rootName == "epNotificationEF2020" && quantityUndefined)
+                                {
+                                    price = ((string) drugPurchaseObjectInfo.SelectToken("..quantityUndefined.price") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    sumP =
+                                        ((string) tender.SelectToken("..drugPurchaseObjectsInfo.total") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                }
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
@@ -1187,6 +1205,14 @@ namespace ParserTenders.TenderDir
                                 var sumP =
                                     ((string) drugPurchaseObjectInfo.SelectToken("..positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
+                                if (rootName == "epNotificationEF2020" && quantityUndefined)
+                                {
+                                    price = ((string) drugPurchaseObjectInfo.SelectToken("..quantityUndefined.price") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    sumP =
+                                        ((string) tender.SelectToken("..drugPurchaseObjectsInfo.total") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                }
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
@@ -1241,6 +1267,14 @@ namespace ParserTenders.TenderDir
                                 var sumP =
                                     ((string) drugPurchaseObjectInfo.SelectToken("positionPrice") ?? "").Trim();
                                 sumP = sumP.Replace(",", ".");
+                                if (rootName == "epNotificationEF2020" && quantityUndefined)
+                                {
+                                    price = ((string) drugPurchaseObjectInfo.SelectToken("..quantityUndefined.price") ?? "").Trim();
+                                    price = price.Replace(",", ".");
+                                    sumP =
+                                        ((string) tender.SelectToken("..drugPurchaseObjectsInfo.total") ?? "").Trim();
+                                    sumP = sumP.Replace(",", ".");
+                                }
                                 var insertCustomerquantity =
                                     $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @dop_info";
                                 var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
