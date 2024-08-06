@@ -185,7 +185,7 @@ namespace ParserTenders.ParserDir
             }
             catch (Exception e)
             {
-                Log.Logger(e);
+                Log.Logger(e, url);
             }
         }
     }
