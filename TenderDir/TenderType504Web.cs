@@ -745,8 +745,15 @@ namespace ParserTenders.TenderDir
                             }
                         }
 
-                        var contractExecutionPaymentPlan =
-                            tender.SelectToken("..contractExecutionPaymentPlan")?.ToString() ?? "";
+                        var contractExecutionPaymentPlan = "";
+                        try
+                        {
+                            contractExecutionPaymentPlan = tender.SelectToken("..contractExecutionPaymentPlan")?.ToString() ?? "";
+                        }
+                        catch (Exception e)
+                        {
+                            
+                        }
 
                         var insertCustomerRequirement =
                             $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms";
