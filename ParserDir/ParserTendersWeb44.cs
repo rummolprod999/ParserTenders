@@ -105,7 +105,7 @@ namespace ParserTenders.ParserDir
             {
                 connect.Open();
                 var selectTender =
-                    $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
+                    $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = 504";
                 var cmd = new MySqlCommand(selectTender, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", purNum);

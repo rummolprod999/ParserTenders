@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Xml;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
@@ -120,7 +121,7 @@ namespace ParserTenders.ParserDir
             {
                 connect.Open();
                 var selectTender =
-                    $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number";
+                    $"SELECT id_tender FROM {Program.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = 223";
                 var cmd = new MySqlCommand(selectTender, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", purNum);
@@ -144,7 +145,7 @@ namespace ParserTenders.ParserDir
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var xml = (htmlDoc.DocumentNode.SelectSingleNode("//div[@id= \"tabs-2\"]")?.InnerText ?? "").Trim();
-            xml = System.Net.WebUtility.HtmlDecode(xml);
+            xml = WebUtility.HtmlDecode(xml);
             if (string.IsNullOrEmpty(xml))
             {
                 Log.Logger("empty xml in ParserLink", url);
