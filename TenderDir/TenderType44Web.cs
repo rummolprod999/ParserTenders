@@ -687,14 +687,16 @@ namespace ParserTenders.TenderDir
                             var requirementName = ((string) requirement.SelectToken("name") ?? "").Trim();
                             var requirementContent = ((string) requirement.SelectToken("content") ?? "").Trim();
                             var requirementCode = ((string) requirement.SelectToken("code") ?? "").Trim();
+                            var dri = requirement.ToString();
                             var insertRequirement =
-                                $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, name = @name, content = @content, code = @code";
+                                $"INSERT INTO {Program.Prefix}requirement SET id_lot = @id_lot, name = @name, content = @content, code = @code, dop_info = @dop_info";
                             var cmd18 = new MySqlCommand(insertRequirement, connect);
                             cmd18.Prepare();
                             cmd18.Parameters.AddWithValue("@id_lot", idLot);
                             cmd18.Parameters.AddWithValue("@name", requirementName);
                             cmd18.Parameters.AddWithValue("@content", requirementContent);
                             cmd18.Parameters.AddWithValue("@code", requirementCode);
+                            cmd18.Parameters.AddWithValue("@dop_info", dri);
                             cmd18.ExecuteNonQuery();
                         }
 
