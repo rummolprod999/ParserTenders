@@ -807,12 +807,13 @@ namespace ParserTenders.TenderDir
                         var rInfo = ((string) restrict.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
                         var fInfo = ((string) restrict.SelectToken("content") ?? "").Trim();
                         var insertRestrict =
-                            $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info";
+                            $"INSERT INTO {Program.Prefix}restricts SET id_lot = @id_lot, foreign_info = @foreign_info, info = @info, dop_info = @dop_info";
                         var cmd19 = new MySqlCommand(insertRestrict, connect);
                         cmd19.Prepare();
                         cmd19.Parameters.AddWithValue("@id_lot", idLot);
                         cmd19.Parameters.AddWithValue("@foreign_info", fInfo);
                         cmd19.Parameters.AddWithValue("@info", rInfo);
+                        cmd19.Parameters.AddWithValue("@dop_info", restrict.ToString());
                         cmd19.ExecuteNonQuery();
                     }
 
