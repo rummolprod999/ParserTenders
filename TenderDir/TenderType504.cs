@@ -771,12 +771,16 @@ namespace ParserTenders.TenderDir
                     {
                         var preferenseName =
                             ((string) preferense.SelectToken("preferenseRequirementInfo.name") ?? "").Trim();
+                        var prefValue =
+                            ((string) preferense.SelectToken("prefValue") ?? "").Trim();
                         var insertPreference =
-                            $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name";
+                            $"INSERT INTO {Program.Prefix}preferense SET id_lot = @id_lot, name = @name, dop_info = @dop_info, prefValue = @prefValue";
                         var cmd17 = new MySqlCommand(insertPreference, connect);
                         cmd17.Prepare();
                         cmd17.Parameters.AddWithValue("@id_lot", idLot);
                         cmd17.Parameters.AddWithValue("@name", preferenseName);
+                        cmd17.Parameters.AddWithValue("@dop_info", preferense.ToString());
+                        cmd17.Parameters.AddWithValue("@prefValue", prefValue);
                         cmd17.ExecuteNonQuery();
                     }
 
