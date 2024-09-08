@@ -584,15 +584,26 @@ namespace ParserTenders.TenderDir
                             ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
                         var applicationGuaranteeDopInfo = "";
                         var contractConditionsInfo_IKZInfo = "";
+                        var contractGuaranteeDopInfo = "";
+                        var contractConditionsInfo_TP2020Info = "";
+                        var paymentTerms_dop_info = "";
+                        var relative_terms_info_endDate = "";
+                        var deliveryPlacesInfo_dop_info = "";
+                        var addInfo = "";
+                        
                         if (rootName == "epNotificationEF2020")
                         {
                             contractConditionsInfo_IKZInfo =
                                 customerRequirement.SelectToken("contractConditionsInfo.IKZInfo")?.ToString() ?? "";
-                        }
-                        if (rootName == "epNotificationEF2020")
-                        {
                             applicationGuaranteeDopInfo =
                                 customerRequirement.SelectToken("applicationGuarantee")?.ToString() ?? "";
+                            contractGuaranteeDopInfo =
+                                customerRequirement.SelectToken("contractGuarantee")?.ToString() ?? "";
+                            contractConditionsInfo_TP2020Info = customerRequirement.SelectToken("contractConditionsInfo.tenderPlan2020Info")?.ToString() ?? "";
+                            paymentTerms_dop_info = customerRequirement.SelectToken("contractConditionsInfo.contractExecutionPaymentPlan")?.ToString() ?? "";
+                            relative_terms_info_endDate = customerRequirement.SelectToken("..contractExecutionTermsInfo.endDate")?.ToString() ?? "";
+                            deliveryPlacesInfo_dop_info = customerRequirement.SelectToken("contractConditionsInfo.deliveryPlacesInfo")?.ToString() ?? "";
+                            addInfo = customerRequirement.SelectToken("contractConditionsInfo.addInfo")?.ToString() ?? "";
                         }
                         var contractGuaranteeAmount =
                             ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
@@ -606,12 +617,7 @@ namespace ParserTenders.TenderDir
                             .Trim();
                         var applicationBik =
                             ((string) customerRequirement.SelectToken("applicationGuarantee.account.bik") ?? "").Trim();
-                        var contractGuaranteeDopInfo = "";
-                        if (rootName == "epNotificationEF2020")
-                        {
-                            contractGuaranteeDopInfo =
-                                customerRequirement.SelectToken("contractGuarantee")?.ToString() ?? "";
-                        }
+                        
                         var contractSettlementAccount =
                             ((string) customerRequirement.SelectToken("contractGuarantee.account.settlementAccount") ??
                              "")
@@ -774,7 +780,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         var insertCustomerRequirement =
-                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms, applicationGuarantee_dop_info = @applicationGuarantee_dop_info, contractGuarantee_dop_info = @contractGuarantee_dop_info, contractConditionsInfo_IKZInfo = @contractConditionsInfo_IKZInfo";
+                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms, applicationGuarantee_dop_info = @applicationGuarantee_dop_info, contractGuarantee_dop_info = @contractGuarantee_dop_info, contractConditionsInfo_IKZInfo = @contractConditionsInfo_IKZInfo, contractConditionsInfo_TP2020Info = @contractConditionsInfo_TP2020Info, paymentTerms_dop_info = @paymentTerms_dop_info, relative_terms_info_endDate = @relative_terms_info_endDate, deliveryPlacesInfo_dop_info = @deliveryPlacesInfo_dop_info, addInfo = @addInfo";
                         var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                         cmd16.Prepare();
                         cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -794,6 +800,16 @@ namespace ParserTenders.TenderDir
                             applicationPersonalAccount);
                         cmd16.Parameters.AddWithValue("@contractConditionsInfo_IKZInfo",
                             contractConditionsInfo_IKZInfo);
+                        cmd16.Parameters.AddWithValue("@contractConditionsInfo_TP2020Info",
+                            contractConditionsInfo_TP2020Info);
+                        cmd16.Parameters.AddWithValue("@paymentTerms_dop_info",
+                            paymentTerms_dop_info);
+                        cmd16.Parameters.AddWithValue("@relative_terms_info_endDate",
+                            relative_terms_info_endDate);
+                        cmd16.Parameters.AddWithValue("@deliveryPlacesInfo_dop_info",
+                            deliveryPlacesInfo_dop_info);
+                        cmd16.Parameters.AddWithValue("@addInfo",
+                            addInfo);
                         cmd16.Parameters.AddWithValue("@application_bik", applicationBik);
                         cmd16.Parameters.AddWithValue("@contract_guarantee_amount", contractGuaranteeAmount);
                         cmd16.Parameters.AddWithValue("@contract_settlement_account", contractSettlementAccount);
