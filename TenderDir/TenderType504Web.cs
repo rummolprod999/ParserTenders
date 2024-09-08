@@ -582,6 +582,18 @@ namespace ParserTenders.TenderDir
                             .Trim();
                         var applicationGuaranteeAmount =
                             ((string) customerRequirement.SelectToken("applicationGuarantee.amount") ?? "").Trim();
+                        var applicationGuaranteeDopInfo = "";
+                        var contractConditionsInfo_IKZInfo = "";
+                        if (rootName == "epNotificationEF2020")
+                        {
+                            contractConditionsInfo_IKZInfo =
+                                customerRequirement.SelectToken("contractConditionsInfo.IKZInfo")?.ToString() ?? "";
+                        }
+                        if (rootName == "epNotificationEF2020")
+                        {
+                            applicationGuaranteeDopInfo =
+                                customerRequirement.SelectToken("applicationGuarantee")?.ToString() ?? "";
+                        }
                         var contractGuaranteeAmount =
                             ((string) customerRequirement.SelectToken("contractGuarantee.amount") ?? "").Trim();
                         var applicationSettlementAccount =
@@ -594,6 +606,12 @@ namespace ParserTenders.TenderDir
                             .Trim();
                         var applicationBik =
                             ((string) customerRequirement.SelectToken("applicationGuarantee.account.bik") ?? "").Trim();
+                        var contractGuaranteeDopInfo = "";
+                        if (rootName == "epNotificationEF2020")
+                        {
+                            contractGuaranteeDopInfo =
+                                customerRequirement.SelectToken("contractGuarantee")?.ToString() ?? "";
+                        }
                         var contractSettlementAccount =
                             ((string) customerRequirement.SelectToken("contractGuarantee.account.settlementAccount") ??
                              "")
@@ -756,7 +774,7 @@ namespace ParserTenders.TenderDir
                         }
 
                         var insertCustomerRequirement =
-                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms";
+                            $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms, applicationGuarantee_dop_info = @applicationGuarantee_dop_info, contractGuarantee_dop_info = @contractGuarantee_dop_info, contractConditionsInfo_IKZInfo = @contractConditionsInfo_IKZInfo";
                         var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                         cmd16.Prepare();
                         cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -766,10 +784,16 @@ namespace ParserTenders.TenderDir
                         cmd16.Parameters.AddWithValue("@delivery_term", deliveryTerm);
                         cmd16.Parameters.AddWithValue("@application_guarantee_amount",
                             applicationGuaranteeAmount);
+                        cmd16.Parameters.AddWithValue("@applicationGuarantee_dop_info",
+                            applicationGuaranteeDopInfo);
+                        cmd16.Parameters.AddWithValue("@contractGuarantee_dop_info",
+                            contractGuaranteeDopInfo);
                         cmd16.Parameters.AddWithValue("@application_settlement_account",
                             applicationSettlementAccount);
                         cmd16.Parameters.AddWithValue("@application_personal_account",
                             applicationPersonalAccount);
+                        cmd16.Parameters.AddWithValue("@contractConditionsInfo_IKZInfo",
+                            contractConditionsInfo_IKZInfo);
                         cmd16.Parameters.AddWithValue("@application_bik", applicationBik);
                         cmd16.Parameters.AddWithValue("@contract_guarantee_amount", contractGuaranteeAmount);
                         cmd16.Parameters.AddWithValue("@contract_settlement_account", contractSettlementAccount);
