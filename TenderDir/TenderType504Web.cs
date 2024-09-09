@@ -771,9 +771,13 @@ namespace ParserTenders.TenderDir
                                 customerRequirement.SelectToken("contractGuarantee")?.ToString() ?? "";
                             contractConditionsInfo_TP2020Info = customerRequirement.SelectToken("contractConditionsInfo.tenderPlan2020Info")?.ToString() ?? "";
                             paymentTerms_dop_info = customerRequirement.SelectToken("contractConditionsInfo.contractExecutionPaymentPlan")?.ToString() ?? "";
-                            relative_terms_info_endDate = customerRequirement.SelectToken("..contractExecutionTermsInfo.endDate")?.ToString() ?? "";
+                            relative_terms_info_endDate = (JsonConvert.SerializeObject(
+                                                               customerRequirement.SelectToken("..contractExecutionTermsInfo.notRelativeTermsInfo.endDate") ?? "") ??
+                                                           "").Trim('"');
+                            Console.WriteLine((relative_terms_info_endDate));
                             deliveryPlacesInfo_dop_info = customerRequirement.SelectToken("contractConditionsInfo.deliveryPlacesInfo")?.ToString() ?? "";
                             addInfo = customerRequirement.SelectToken("contractConditionsInfo.addInfo")?.ToString() ?? "";
+                            cusReqDopInfo = "";
                         }
                         var insertCustomerRequirement =
                             $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, dop_info = @dop_info, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms_dop_info = @paymentTerms, applicationGuarantee_dop_info = @applicationGuarantee_dop_info, contractGuarantee_dop_info = @contractGuarantee_dop_info, contractConditionsInfo_IKZInfo = @contractConditionsInfo_IKZInfo, contractConditionsInfo_TP2020Info = @contractConditionsInfo_TP2020Info, relative_terms_info_endDate = @relative_terms_info_endDate, deliveryPlacesInfo_dop_info = @deliveryPlacesInfo_dop_info, addInfo = @addInfo";
