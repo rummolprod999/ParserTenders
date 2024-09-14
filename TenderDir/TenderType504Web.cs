@@ -776,7 +776,7 @@ namespace ParserTenders.TenderDir
                                                            "").Trim('"');
                             Console.WriteLine((relative_terms_info_endDate));
                             deliveryPlacesInfo_dop_info = customerRequirement.SelectToken("contractConditionsInfo.deliveryPlacesInfo")?.ToString() ?? "";
-                            addInfo = customerRequirement.SelectToken("contractConditionsInfo.addInfo")?.ToString() ?? "";
+                            addInfo = customerRequirement.SelectToken("addInfo")?.ToString() ?? "";
                             cusReqDopInfo = "";
                         }
                         var insertCustomerRequirement =
