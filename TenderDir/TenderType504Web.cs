@@ -774,7 +774,6 @@ namespace ParserTenders.TenderDir
                             relative_terms_info_endDate = (JsonConvert.SerializeObject(
                                                                customerRequirement.SelectToken("..contractExecutionTermsInfo.notRelativeTermsInfo.endDate") ?? "") ??
                                                            "").Trim('"');
-                            Console.WriteLine((relative_terms_info_endDate));
                             deliveryPlacesInfo_dop_info = customerRequirement.SelectToken("contractConditionsInfo.deliveryPlacesInfo")?.ToString() ?? "";
                             addInfo = customerRequirement.SelectToken("addInfo")?.ToString() ?? "";
                             cusReqDopInfo = "";

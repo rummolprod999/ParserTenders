@@ -269,7 +269,6 @@ namespace ParserTenders.TenderDir
                      "").Trim('"');
                     var scoringDateNew = (JsonConvert.SerializeObject(tender.SelectToken("$..extendField[?(@.description == 'Дата и время окончания срока подачи ценовых предложений')].value.dateTime") ?? "") ??
                                           "").Trim('"');
-                    Console.WriteLine(scoringDateNew);
                     var scoringDate = GetScogingDate(tender);
                     var biddingDate = GetBiddingDate(tender);
                     if (_purchase == TypeFile223.PurchaseNotice)

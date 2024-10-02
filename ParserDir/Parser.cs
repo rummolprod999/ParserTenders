@@ -186,13 +186,13 @@ namespace ParserTenders.ParserDir
 
         public WorkWithFtp ClientFtp44_old()
         {
-            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
+            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             return ftpCl;
         }
 
         public FtpClient ClientFtp44()
         {
-            var client = new FtpClient("ftp.zakupki.gov.ru", "free", "free");
+            var client = new FtpClient("ftp.zakupki.gov.ru", "free", "otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             client.Connect();
             return client;
         }

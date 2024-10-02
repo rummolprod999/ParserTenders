@@ -74,6 +74,7 @@ namespace ParserTenders.ParserDir
             var tens = htmlDoc.DocumentNode.SelectNodes(
                            "//div[contains(@class, 'search-registry-entry-block')]/div[contains(@class, 'row')][1]") ??
                        new HtmlNodeCollection(null);
+            //Log.Logger("count tender on page " + url + ": " + tens.Count);
             foreach (var a in tens)
             {
                 try
