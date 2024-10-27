@@ -105,8 +105,20 @@ namespace ParserTenders.ParserDir
         private void ParserLink(HtmlNode n)
         {
             if (DownloadString.MaxDownload > 1000) return;
+            var urlT =
+                (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")?.Attributes["href"]?.Value ?? "").Trim();
+            var u = "https://zakupki.gov.ru/" + urlT;
+            var st = DownloadString.DownLUserAgentEis(u);
+            if (string.IsNullOrEmpty(st))
+            {
+                Log.Logger("Empty string in ParserPage()", u);
+                return;
+            }
+
+            var htmlDocT = new HtmlDocument();
+            htmlDocT.LoadHtml(st);
             var url =
-                (n.SelectSingleNode(".//a[contains(@href, 'print-form')]")?.Attributes["href"]?.Value ?? "").Trim();
+                (htmlDocT.DocumentNode.SelectSingleNode(".//a[contains(@href, 'print-form')]")?.Attributes["href"]?.Value ?? "").Trim();
             if (!url.Contains("223/purchase")) return;
             var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")?.InnerText.Replace("№", "") ?? "").Trim();
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
@@ -134,7 +146,7 @@ namespace ParserTenders.ParserDir
 
                 reader.Close();
             }
-
+            if (DownloadString.MaxDownload > 1000) return;
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
