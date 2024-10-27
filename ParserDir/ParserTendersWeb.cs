@@ -12,7 +12,7 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTendersWeb : ParserWeb
     {
-        private const int PageCount = 20;
+        private const int PageCount = 10;
 
         private readonly List<string> _listUrls = new List<string>
         {
