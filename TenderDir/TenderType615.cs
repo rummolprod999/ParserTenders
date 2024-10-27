@@ -479,6 +479,18 @@ namespace ParserTenders.TenderDir
                             cmd24.Parameters.AddWithValue("@name", name);
                             cmd24.ExecuteNonQuery();
                         }
+
+                        if (purchaseobjects.Count == 0)
+                        {
+                            var insertCustomerquantity =
+                                $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
+                            var cmd24 = new MySqlCommand(insertCustomerquantity, connect);
+                            cmd24.Prepare();
+                            cmd24.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd24.Parameters.AddWithValue("@id_customer", idCustomer);
+                            cmd24.Parameters.AddWithValue("@name", lotName);
+                            cmd24.ExecuteNonQuery();
+                        }
                     }
                     TenderKwords(connect, idTender);
                 }
