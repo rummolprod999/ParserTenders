@@ -761,7 +761,7 @@ namespace ParserTenders.TenderDir
                         var relative_terms_info_endDate = "";
                         var deliveryPlacesInfo_dop_info = "";
                         var addInfo = "";
-                        if (rootName == "epNotificationEF2020")
+                        if (rootName == "epNotificationEF2020" || rootName == "epNotificationEOK2020")
                         {
                             contractConditionsInfo_IKZInfo =
                                 customerRequirement.SelectToken("contractConditionsInfo.IKZInfo")?.ToString() ?? "";
@@ -776,6 +776,11 @@ namespace ParserTenders.TenderDir
                                                            "").Trim('"');
                             deliveryPlacesInfo_dop_info = customerRequirement.SelectToken("contractConditionsInfo.deliveryPlacesInfo")?.ToString() ?? "";
                             addInfo = customerRequirement.SelectToken("addInfo")?.ToString() ?? "";
+                            var warrantyInfo = customerRequirement.SelectToken("addInfo")?.ToString() ?? "";
+                            if (warrantyInfo != "")
+                            {
+                                addInfo = addInfo + warrantyInfo;
+                            }
                             cusReqDopInfo = "";
                         }
                         var insertCustomerRequirement =
