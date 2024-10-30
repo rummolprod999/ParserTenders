@@ -52,6 +52,7 @@ namespace ParserTenders
         private static string _tempPathRequestQ44;
         private static string _logPathRequestQ44;
         private static string _prefix;
+        private static string _useWeb;
         private static string _user;
         private static string _pass;
         private static string _server;
@@ -457,6 +458,7 @@ namespace ParserTenders
             _logPath615 = set.LogPathTenders615;
             _logPath223 = set.LogPathTenders223;
             _prefix = set.Prefix;
+            _useWeb = set.UseWeb;
             _user = set.UserDb;
             _pass = set.PassDb;
             _tempPath44 = set.TempPathTenders44;
@@ -618,8 +620,14 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders44");
             try
             {
-                var t44 = new ParserTend44(Periodparsing);
-                t44.Parsing();
+                if (Convert.ToBoolean(_useWeb))
+                {
+                    new ParserTend44Api(Periodparsing).Parsing();
+                }
+                else
+                {
+                    new ParserTend44(Periodparsing).Parsing();
+                }
             }
             catch (Exception e)
             {
@@ -652,8 +660,14 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders615");
             try
             {
-                var t615 = new ParserTend615(Periodparsing);
-                t615.Parsing();
+                if (Convert.ToBoolean(_useWeb))
+                {
+                    new ParserTend615Api(Periodparsing).Parsing();
+                }
+                else
+                {
+                    new ParserTend615(Periodparsing).Parsing();
+                }
             }
             catch (Exception e)
             {
@@ -677,10 +691,18 @@ namespace ParserTenders
             Log.Logger("Время начала парсинга Tenders223");
             try
             {
-                var t223 = new ParserTend223(Periodparsing);
-                t223.Parsing();
-                t223.ParserLostTens();
-                t223.ParsingAst();
+                if (Convert.ToBoolean(_useWeb))
+                {
+                    new ParserTend223Api(Periodparsing).Parsing();
+                }
+                else
+                {
+                    var t223 = new ParserTend223(Periodparsing);
+                    t223.Parsing();
+                    t223.ParserLostTens();
+                    t223.ParsingAst();
+                }
+                
             }
             catch (Exception e)
             {

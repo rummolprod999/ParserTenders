@@ -38,7 +38,7 @@ namespace ParserTenders.ParserDir
 
         public override void Parsing()
         {
-            _listUrls.Shuffle();
+            //_listUrls.Shuffle();
             _listUrls.ForEach(ParsingPage);
         }
 

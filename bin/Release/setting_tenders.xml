@@ -42,6 +42,7 @@
 	<tempdir_preq44>temp_preq44</tempdir_preq44>
 	<logdir_preq44>log_preq44</logdir_preq44>
 	<prefix></prefix>
+	<useweb>true</useweb>
 	<userdb>parser</userdb>
 	<passdb>Dft56Point</passdb>
 	<server>localhost</server>

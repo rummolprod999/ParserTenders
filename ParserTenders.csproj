@@ -235,8 +235,11 @@
     <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
     <Compile Include="ParserDir\ParserTektorgRzd.cs" />
     <Compile Include="ParserDir\ParserTend223.cs" />
+    <Compile Include="ParserDir\ParserTend223Api.cs" />
     <Compile Include="ParserDir\ParserTend44.cs" />
+    <Compile Include="ParserDir\ParserTend44Api.cs" />
     <Compile Include="ParserDir\ParserTend615.cs" />
+    <Compile Include="ParserDir\ParserTend615Api.cs" />
     <Compile Include="ParserDir\ParserTendersWeb.cs" />
     <Compile Include="ParserDir\ParserTendersWeb44.cs" />
     <Compile Include="ParserDir\ParserWeb.cs" />

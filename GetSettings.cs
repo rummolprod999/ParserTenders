@@ -32,6 +32,7 @@ namespace ParserTenders
         public readonly string PassDb;
         public readonly int Port;
         public readonly string Prefix;
+        public readonly string UseWeb;
         public readonly string Server;
         public readonly string TempGntWeb;
         public readonly string TempMrsk;
@@ -204,6 +205,9 @@ namespace ParserTenders
                             break;
                         case "prefix":
                             Prefix = xnode.InnerText;
+                            break;
+                        case "useweb":
+                            UseWeb = xnode.InnerText;
                             break;
                         case "userdb":
                             UserDb = xnode.InnerText;

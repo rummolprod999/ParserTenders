@@ -12,7 +12,7 @@ namespace ParserTenders.ParserDir
 {
     public class ParserTendersWeb : ParserWeb
     {
-        private const int PageCount = 10;
+        private const int PageCount = 20;
 
         private readonly List<string> _listUrls = new List<string>
         {
@@ -53,7 +53,7 @@ namespace ParserTenders.ParserDir
 
         public override void Parsing()
         {
-            _listUrls.Shuffle();
+            //_listUrls.Shuffle();
             _listUrls.ForEach(ParsingPage);
         }
 
