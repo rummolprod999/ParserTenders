@@ -277,7 +277,7 @@ namespace ParserTenders
                     var prevday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
                     var request = $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-le/ws\">\n    <soapenv:Header/>\n    <soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>PRIZ</subsystemType>\n    <documentType44>{type}</documentType44>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
                     var response = "";
-                    using (WebClient wc = new WebClient())
+                    using (WebClient wc = new TimedWebClient())
                     {
                         wc.Headers[HttpRequestHeader.ContentType] = "text/xml; charset=utf-8";
                         response = wc.UploadString("https://int44.zakupki.gov.ru/eis-integration/services/getDocsLE2", request);
@@ -307,12 +307,12 @@ namespace ParserTenders
             {
                 try
                 {
-            var guid = System.Guid.NewGuid();
+            var guid = Guid.NewGuid();
             var currDate = DateTime.Now.ToString("s");
             var prevday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
             var request = $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz223/get-docs-le/ws\">\n    <soapenv:Header/>\n    <soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>PRIZ</subsystemType>\n    <documentType44>{type}</documentType44>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
             var response = "";
-            using (WebClient wc = new WebClient())
+            using (WebClient wc = new TimedWebClient())
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "text/xml; charset=utf-8";
                 response = wc.UploadString("https://int223.zakupki.gov.ru/eis-integration/services/getDocsLE2", request);
