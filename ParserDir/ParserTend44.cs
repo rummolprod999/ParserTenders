@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,29 +12,34 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserTend44 : Parser
     {
-        readonly List<string> summList;
+        private readonly List<string> summList;
 
-        private string[] _fileCancel = {"notificationcancel_"};
-        private string[] _fileCancelFailure = {"cancelfailure_"};
-        private string[] _fileClarification = {"clarification_", "epclarificationdoc_"};
-        private string[] _fileClarificationResult = {"epclarificationresult_"};
-        private string[] _fileDatechange = {"datechange_"};
-        private string[] _fileLotcancel = {"lotcancel_"};
-        private string[] _fileOrgchange = {"orgchange_"};
-        private string[] _fileProlongation = {"prolongation"};
-        private string[] _fileSign = {"contractsign_"};
+        private readonly string[] _fileCancel = { "notificationcancel_" };
+        private readonly string[] _fileCancelFailure = { "cancelfailure_" };
+        private readonly string[] _fileClarification = { "clarification_", "epclarificationdoc_" };
+        private readonly string[] _fileClarificationResult = { "epclarificationresult_" };
+        private readonly string[] _fileDatechange = { "datechange_" };
+        private readonly string[] _fileLotcancel = { "lotcancel_" };
+        private readonly string[] _fileOrgchange = { "orgchange_" };
+        private readonly string[] _fileProlongation = { "prolongation" };
+        private readonly string[] _fileSign = { "contractsign_" };
 
-        private string[] _fileXml44 = {
+        private readonly string[] _fileXml44 =
+        {
             "ea44_", "ep44_", "ok44_", "okd44_", "oku44_", "po44_", "za44_", "zk44_",
             "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_", "inm111_"
         };
 
-        private string[] _fileXml504 = {
-            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_", "ef2020_", "eok2020_"
+        private readonly string[] _fileXml504 =
+        {
+            "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_", "ef2020_",
+            "eok2020_"
         };
 
         protected DataTable DtRegion;
@@ -54,7 +61,7 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path"];
+                var regionPath = (string)row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last44:
@@ -83,7 +90,7 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
 
@@ -335,7 +342,7 @@ namespace ParserTenders.ParserDir
             var yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"notification{y}").ToList());
             foreach (var a in newLs.Where(a =>
-                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 if (a.Item2 == 0)
                 {
@@ -377,7 +384,7 @@ namespace ParserTenders.ParserDir
             var arch = new List<string>();
             var newLs = GetListFtp44New(pathParse);
             foreach (var a in newLs.Where(a =>
-                a.Item1.Contains($"_{Program.LocalDate:yyyy}")))
+                         a.Item1.Contains($"_{Program.LocalDate:yyyy}")))
             {
                 if (a.Item2 == 0)
                 {

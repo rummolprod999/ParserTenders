@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,33 +20,33 @@ namespace ParserTenders.TenderDir
             AddOrgChange += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddOrgChange++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchase.purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchase.purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderOrgChange", FilePath);
                     return;
                 }
-                else
+
+                if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                 {
-                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                    {
-                        /*Log.Logger("Тестовый тендер TenderOrgChange", purchaseNumber, file_path);*/
-                        return;
-                    }
+                    /*Log.Logger("Тестовый тендер TenderOrgChange", purchaseNumber, file_path);*/
+                    return;
                 }
 
-                var newRespOrgRegNum = ((string) tender.SelectToken("newRespOrg.regNum") ?? "").Trim();
+                var newRespOrgRegNum = ((string)tender.SelectToken("newRespOrg.regNum") ?? "").Trim();
                 if (string.IsNullOrEmpty(newRespOrgRegNum))
                 {
                     Log.Logger("Не могу найти newRespOrg_regNum у TenderOrgChange", FilePath);
@@ -69,15 +73,15 @@ namespace ParserTenders.TenderDir
                         reader.Close();
                         var addOrg =
                             $"INSERT INTO {Program.Prefix}organizer SET reg_num = @reg_num, full_name = @full_name, post_address = @post_address, fact_address = @fact_address, inn = @inn, kpp = @kpp, responsible_role = @responsible_role";
-                        var newRespOrgFullName = ((string) tender.SelectToken("newRespOrg.fullName") ?? "").Trim();
-                        var newRespOrgPostAddress = ((string) tender.SelectToken("newRespOrg.postAddress") ?? "")
+                        var newRespOrgFullName = ((string)tender.SelectToken("newRespOrg.fullName") ?? "").Trim();
+                        var newRespOrgPostAddress = ((string)tender.SelectToken("newRespOrg.postAddress") ?? "")
                             .Trim();
-                        var newRespOrgFactAddress = ((string) tender.SelectToken("newRespOrg.factAddress") ?? "")
+                        var newRespOrgFactAddress = ((string)tender.SelectToken("newRespOrg.factAddress") ?? "")
                             .Trim();
-                        var newRespOrgInn = ((string) tender.SelectToken("newRespOrg.INN") ?? "").Trim();
-                        var newRespOrgKpp = ((string) tender.SelectToken("newRespOrg.KPP") ?? "").Trim();
+                        var newRespOrgInn = ((string)tender.SelectToken("newRespOrg.INN") ?? "").Trim();
+                        var newRespOrgKpp = ((string)tender.SelectToken("newRespOrg.KPP") ?? "").Trim();
                         var newRespOrgResponsibleRole =
-                            ((string) tender.SelectToken("newRespOrg.responsibleRole") ?? "").Trim();
+                            ((string)tender.SelectToken("newRespOrg.responsibleRole") ?? "").Trim();
                         var cmd1 = new MySqlCommand(addOrg, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@reg_num", newRespOrgRegNum);
@@ -88,8 +92,9 @@ namespace ParserTenders.TenderDir
                         cmd1.Parameters.AddWithValue("@kpp", newRespOrgKpp);
                         cmd1.Parameters.AddWithValue("@responsible_role", newRespOrgResponsibleRole);
                         cmd1.ExecuteNonQuery();
-                        idOrganizer = (int) cmd1.LastInsertedId;
+                        idOrganizer = (int)cmd1.LastInsertedId;
                     }
+
                     var updateTender =
                         $"UPDATE {Program.Prefix}tender SET id_organizer = @id_organizer WHERE id_region = @id_region AND purchase_number = @purchase_number AND cancel=0";
                     var cmd2 = new MySqlCommand(updateTender, connect);

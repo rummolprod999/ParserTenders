@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -17,18 +21,20 @@ namespace ParserTenders.TenderDir
             AddDateChange += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddDateChange615++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderDateChange615", FilePath);

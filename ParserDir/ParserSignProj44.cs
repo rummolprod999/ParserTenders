@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,11 +12,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserSignProj44 : Parser
     {
-        private string[] _fileSign = {"cpcontractsign_"};
+        private readonly string[] _fileSign = { "cpcontractsign_" };
 
         protected DataTable DtRegion;
 
@@ -29,7 +33,7 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path"];
+                var regionPath = (string)row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.LastSignProj44:
@@ -54,7 +58,7 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
         }
@@ -62,10 +66,22 @@ namespace ParserTenders.ParserDir
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             var filea = GetArch44(arch, pathParse);
-            if (string.IsNullOrEmpty(filea)) return;
+            if (string.IsNullOrEmpty(filea))
+            {
+                return;
+            }
+
             var pathUnzip = Unzipped.Unzip(filea);
-            if (pathUnzip == "") return;
-            if (!Directory.Exists(pathUnzip)) return;
+            if (pathUnzip == "")
+            {
+                return;
+            }
+
+            if (!Directory.Exists(pathUnzip))
+            {
+                return;
+            }
+
             var dirInfo = new DirectoryInfo(pathUnzip);
             var filelist = dirInfo.GetFiles();
             var arrayXmlSignProj44 = filelist
@@ -129,7 +145,7 @@ namespace ParserTenders.ParserDir
             var yearsSearch = Program.Years.Select(y => $"contractproject_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"contractproject{y}").ToList());
             foreach (var a in newLs.Where(a =>
-                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 if (a.Item2 == 0)
                 {

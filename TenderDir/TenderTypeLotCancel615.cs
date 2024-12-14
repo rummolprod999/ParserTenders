@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,18 +20,20 @@ namespace ParserTenders.TenderDir
             AddLotCancel += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddLotCancel615++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderLotCancel615", FilePath);
@@ -57,6 +63,7 @@ namespace ParserTenders.TenderDir
                         reader.Read();
                         idTender = reader.GetInt32("id_tender");
                     }
+
                     reader.Close();
                     if (idTender == 0)
                     {

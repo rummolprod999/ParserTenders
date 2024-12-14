@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,17 +20,25 @@ namespace ParserTenders.TenderDir
             AddTenderSign223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddSign223++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить TenderSign223", FilePath);
+                }
             };
 
             UpdateTenderSign223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.UpdateSign223++;
+                }
                 else
+                {
                     Log.Logger("Не удалось обновить TenderSign223", FilePath);
+                }
             };
         }
 
@@ -34,11 +46,11 @@ namespace ParserTenders.TenderDir
         {
             var xml = GetXml(File.ToString());
             var upd = 0;
-            var c = (JObject) T.SelectToken("contract.body.item.contractData");
+            var c = (JObject)T.SelectToken("contract.body.item.contractData");
             if (!c.IsNullOrEmpty())
             {
                 var purchaseNumber =
-                    ((string) c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
+                    ((string)c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
                 //Console.WriteLine(purchaseNumber);
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
@@ -69,7 +81,7 @@ namespace ParserTenders.TenderDir
                         //return;
                     }
 
-                    var idSign = ((string) c.SelectToken("guid") ?? "").Trim();
+                    var idSign = ((string)c.SelectToken("guid") ?? "").Trim();
                     var selectSign =
                         $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE id_tender = @id_tender AND id_sign = @id_sign";
                     var cmd1 = new MySqlCommand(selectSign, connect);
@@ -86,7 +98,7 @@ namespace ParserTenders.TenderDir
                     reader1.Close();
 
                     //Console.WriteLine(idcSign);
-                    var signNumber = ((string) c.SelectToken("contractRegNumber") ?? "").Trim();
+                    var signNumber = ((string)c.SelectToken("contractRegNumber") ?? "").Trim();
                     var idcSignNumber = 0;
                     var selectSignNum =
                         $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE purchase_number = @purchase_number AND sign_number = @sign_number";
@@ -104,14 +116,17 @@ namespace ParserTenders.TenderDir
 
                     reader22.Close();
                     if (idcSignNumber != 0)
+                    {
                         upd = 1;
-                    var signDate = (DateTime?) c.SelectToken("contractDate") ?? DateTime.MinValue;
+                    }
+
+                    var signDate = (DateTime?)c.SelectToken("contractDate") ?? DateTime.MinValue;
                     //Console.WriteLine(signDate);
-                    var customerInn = ((string) c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
-                    var contractSignPrice = (decimal?) c.SelectToken("price") ?? 0.0m;
-                    var signCurrency = ((string) c.SelectToken("currency.name") ?? "").Trim();
+                    var customerInn = ((string)c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
+                    var contractSignPrice = (decimal?)c.SelectToken("price") ?? 0.0m;
+                    var signCurrency = ((string)c.SelectToken("currency.name") ?? "").Trim();
                     var concludeContractRight = 0;
-                    var protocoleDate = (DateTime?) c.SelectToken("contractConfirmingDocs.contractDoc.docDate") ??
+                    var protocoleDate = (DateTime?)c.SelectToken("contractConfirmingDocs.contractDoc.docDate") ??
                                         DateTime.MinValue;
                     var (supplierContact, supplierEmail, supplierContactPhone, supplierContactFax, supplierInn,
                             supplierKpp, participantType, organizationName, countryFullName, factualAddress,
@@ -121,35 +136,35 @@ namespace ParserTenders.TenderDir
                     if (suppl.Count > 0)
                     {
                         var sp = suppl[0];
-                        supplierEmail = ((string) sp.SelectToken("address.email") ?? "").Trim();
-                        supplierContactPhone = ((string) sp.SelectToken("address.phone") ?? "").Trim();
-                        supplierContactFax = ((string) sp.SelectToken("address.fax") ?? "").Trim();
-                        supplierInn = ((string) sp.SelectToken("inn") ?? "").Trim();
+                        supplierEmail = ((string)sp.SelectToken("address.email") ?? "").Trim();
+                        supplierContactPhone = ((string)sp.SelectToken("address.phone") ?? "").Trim();
+                        supplierContactFax = ((string)sp.SelectToken("address.fax") ?? "").Trim();
+                        supplierInn = ((string)sp.SelectToken("inn") ?? "").Trim();
                         if (string.IsNullOrEmpty(supplierInn))
                         {
-                            supplierInn = ((string) sp.SelectToken("code") ?? "").Trim();
+                            supplierInn = ((string)sp.SelectToken("code") ?? "").Trim();
                         }
 
-                        supplierKpp = ((string) sp.SelectToken("kpp") ?? "").Trim();
-                        participantType = ((string) sp.SelectToken("type") ?? "").Trim();
-                        organizationName = ((string) sp.SelectToken("name") ?? "").Trim();
-                        countryFullName = ((string) sp.SelectToken("address.country.name") ?? "").Trim();
-                        regSup = ((string) sp.SelectToken("address.region.name") ?? "").Trim();
+                        supplierKpp = ((string)sp.SelectToken("kpp") ?? "").Trim();
+                        participantType = ((string)sp.SelectToken("type") ?? "").Trim();
+                        organizationName = ((string)sp.SelectToken("name") ?? "").Trim();
+                        countryFullName = ((string)sp.SelectToken("address.country.name") ?? "").Trim();
+                        regSup = ((string)sp.SelectToken("address.region.name") ?? "").Trim();
                         if (string.IsNullOrEmpty(regSup))
                         {
-                            regSup = ((string) sp.SelectToken("address.region.fullName") ?? "").Trim();
+                            regSup = ((string)sp.SelectToken("address.region.fullName") ?? "").Trim();
                         }
 
-                        citySup = ((string) sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
+                        citySup = (sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
                         if (string.IsNullOrEmpty(citySup))
                         {
-                            citySup = ((string) sp.SelectToken("address.city.fullName") ?? "").Trim();
+                            citySup = ((string)sp.SelectToken("address.city.fullName") ?? "").Trim();
                         }
 
-                        streetSup = ((string) sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
+                        streetSup = (sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
                         if (string.IsNullOrEmpty(streetSup))
                         {
-                            streetSup = ((string) sp.SelectToken("address.street.fullName") ?? "").Trim();
+                            streetSup = ((string)sp.SelectToken("address.street.fullName") ?? "").Trim();
                         }
 
                         factualAddress = $"{regSup} {citySup} {streetSup}".Trim();
@@ -216,14 +231,11 @@ namespace ParserTenders.TenderDir
                             cmd4.Parameters.AddWithValue("@phone", supplierContactPhone);
                             cmd4.Parameters.AddWithValue("@fax", supplierContactFax);
                             cmd4.ExecuteNonQuery();
-                            idSupplier = (int) cmd4.LastInsertedId;
+                            idSupplier = (int)cmd4.LastInsertedId;
                         }
                     }
-                    else
-                    {
-                        //Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
-                    }
 
+                    //Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
                     if (upd == 0)
                     {
                         var insertContract =
@@ -281,11 +293,11 @@ namespace ParserTenders.TenderDir
             }
             else
             {
-                c = (JObject) T.SelectToken("subcontractorInfo.body.item.subcontractorInfoData");
+                c = (JObject)T.SelectToken("subcontractorInfo.body.item.subcontractorInfoData");
                 if (!c.IsNullOrEmpty())
                 {
                     var purchaseNumber =
-                        ((string) c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
+                        ((string)c.SelectToken("purchaseNoticeInfo.purchaseNoticeNumber") ?? "").Trim();
                     //Console.WriteLine(purchaseNumber);
                     if (string.IsNullOrEmpty(purchaseNumber))
                     {
@@ -316,7 +328,7 @@ namespace ParserTenders.TenderDir
                             //return;
                         }
 
-                        var idSign = ((string) c.SelectToken("guid") ?? "").Trim();
+                        var idSign = ((string)c.SelectToken("guid") ?? "").Trim();
                         var selectSign =
                             $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE id_tender = @id_tender AND id_sign = @id_sign";
                         var cmd1 = new MySqlCommand(selectSign, connect);
@@ -333,7 +345,7 @@ namespace ParserTenders.TenderDir
                         reader1.Close();
 
                         //Console.WriteLine(idcSign);
-                        var signNumber = ((string) c.SelectToken("contractRegNumber") ?? "").Trim();
+                        var signNumber = ((string)c.SelectToken("contractRegNumber") ?? "").Trim();
                         var idcSignNumber = 0;
                         var selectSignNum =
                             $"SELECT id_contract_sign FROM {Program.Prefix}contract_sign WHERE purchase_number = @purchase_number AND sign_number = @sign_number";
@@ -351,15 +363,18 @@ namespace ParserTenders.TenderDir
 
                         reader22.Close();
                         if (idcSignNumber != 0)
+                        {
                             upd = 1;
-                        var signDate = (DateTime?) c.SelectToken("contractDate") ?? DateTime.MinValue;
+                        }
+
+                        var signDate = (DateTime?)c.SelectToken("contractDate") ?? DateTime.MinValue;
                         //Console.WriteLine(signDate);
-                        var customerInn = ((string) c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
-                        var contractSignPrice = (decimal?) c.SelectToken("price") ?? 0.0m;
-                        var signCurrency = ((string) c.SelectToken("currency.name") ?? "").Trim();
+                        var customerInn = ((string)c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
+                        var contractSignPrice = (decimal?)c.SelectToken("price") ?? 0.0m;
+                        var signCurrency = ((string)c.SelectToken("currency.name") ?? "").Trim();
                         var concludeContractRight = 0;
                         var protocoleDate =
-                            (DateTime?) c.SelectToken("contractConfirmingDocs.contractDoc.docDate") ??
+                            (DateTime?)c.SelectToken("contractConfirmingDocs.contractDoc.docDate") ??
                             DateTime.MinValue;
                         var (supplierContact, supplierEmail, supplierContactPhone, supplierContactFax, supplierInn,
                                 supplierKpp, participantType, organizationName, countryFullName, factualAddress,
@@ -369,35 +384,35 @@ namespace ParserTenders.TenderDir
                         if (suppl.Count > 0)
                         {
                             var sp = suppl[0];
-                            supplierEmail = ((string) sp.SelectToken("address.email") ?? "").Trim();
-                            supplierContactPhone = ((string) sp.SelectToken("address.phone") ?? "").Trim();
-                            supplierContactFax = ((string) sp.SelectToken("address.fax") ?? "").Trim();
-                            supplierInn = ((string) sp.SelectToken("inn") ?? "").Trim();
+                            supplierEmail = ((string)sp.SelectToken("address.email") ?? "").Trim();
+                            supplierContactPhone = ((string)sp.SelectToken("address.phone") ?? "").Trim();
+                            supplierContactFax = ((string)sp.SelectToken("address.fax") ?? "").Trim();
+                            supplierInn = ((string)sp.SelectToken("inn") ?? "").Trim();
                             if (string.IsNullOrEmpty(supplierInn))
                             {
-                                supplierInn = ((string) sp.SelectToken("code") ?? "").Trim();
+                                supplierInn = ((string)sp.SelectToken("code") ?? "").Trim();
                             }
 
-                            supplierKpp = ((string) sp.SelectToken("kpp") ?? "").Trim();
-                            participantType = ((string) sp.SelectToken("type") ?? "").Trim();
-                            organizationName = ((string) sp.SelectToken("name") ?? "").Trim();
-                            countryFullName = ((string) sp.SelectToken("address.country.name") ?? "").Trim();
-                            regSup = ((string) sp.SelectToken("address.region.name") ?? "").Trim();
+                            supplierKpp = ((string)sp.SelectToken("kpp") ?? "").Trim();
+                            participantType = ((string)sp.SelectToken("type") ?? "").Trim();
+                            organizationName = ((string)sp.SelectToken("name") ?? "").Trim();
+                            countryFullName = ((string)sp.SelectToken("address.country.name") ?? "").Trim();
+                            regSup = ((string)sp.SelectToken("address.region.name") ?? "").Trim();
                             if (string.IsNullOrEmpty(regSup))
                             {
-                                regSup = ((string) sp.SelectToken("address.region.fullName") ?? "").Trim();
+                                regSup = ((string)sp.SelectToken("address.region.fullName") ?? "").Trim();
                             }
 
-                            citySup = ((string) sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
+                            citySup = (sp.SelectToken("address.city").CheckIsObjOrString() ?? "").Trim();
                             if (string.IsNullOrEmpty(citySup))
                             {
-                                citySup = ((string) sp.SelectToken("address.city.fullName") ?? "").Trim();
+                                citySup = ((string)sp.SelectToken("address.city.fullName") ?? "").Trim();
                             }
 
-                            streetSup = ((string) sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
+                            streetSup = (sp.SelectToken("address.street").CheckIsObjOrString() ?? "").Trim();
                             if (string.IsNullOrEmpty(streetSup))
                             {
-                                streetSup = ((string) sp.SelectToken("address.street.fullName") ?? "").Trim();
+                                streetSup = ((string)sp.SelectToken("address.street.fullName") ?? "").Trim();
                             }
 
                             factualAddress = $"{regSup} {citySup} {streetSup}".Trim();
@@ -464,14 +479,11 @@ namespace ParserTenders.TenderDir
                                 cmd4.Parameters.AddWithValue("@phone", supplierContactPhone);
                                 cmd4.Parameters.AddWithValue("@fax", supplierContactFax);
                                 cmd4.ExecuteNonQuery();
-                                idSupplier = (int) cmd4.LastInsertedId;
+                                idSupplier = (int)cmd4.LastInsertedId;
                             }
                         }
-                        else
-                        {
-                            //Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
-                        }
 
+                        //Log.Logger("Нет supplier_inn в TenderSign223", FilePath);
                         if (upd == 0)
                         {
                             var insertContract =

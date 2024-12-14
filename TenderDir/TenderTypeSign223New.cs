@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.IO;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,17 +20,25 @@ namespace ParserTenders.TenderDir
             AddTenderSign223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddSign223++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить TenderSign223", FilePath);
+                }
             };
 
             UpdateTenderSign223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.UpdateSign223++;
+                }
                 else
+                {
                     Log.Logger("Не удалось обновить TenderSign223", FilePath);
+                }
             };
         }
 
@@ -69,7 +81,7 @@ namespace ParserTenders.TenderDir
                 var guid = ((string)c.SelectToken("guid") ?? "").Trim();
                 var version = (int?)c.SelectToken("version") ?? 0;
                 var selectSign =
-                    $"SELECT guid FROM purchase_contracts223 WHERE guid = @guid AND version_number = @version_number";
+                    "SELECT guid FROM purchase_contracts223 WHERE guid = @guid AND version_number = @version_number";
                 var cmd1 = new MySqlCommand(selectSign, connect);
                 cmd1.Prepare();
                 cmd1.Parameters.AddWithValue("@guid", guid);
@@ -110,7 +122,7 @@ namespace ParserTenders.TenderDir
                 var customerInn = ((string)c.SelectToken("customer.mainInfo.inn") ?? "").Trim();
                 var postalAddressCustomer =
                     ((string)c.SelectToken("customer.mainInfo.postalAddress") ?? "").Trim();
-                if (!String.IsNullOrEmpty(customerInn))
+                if (!string.IsNullOrEmpty(customerInn))
                 {
                     var selectCustomer =
                         $"SELECT id FROM {Program.Prefix}od_customer WHERE inn = @inn_customer";
@@ -143,11 +155,11 @@ namespace ParserTenders.TenderDir
                         var contactNameCustomer = "";
                         var addCustomer =
                             $"INSERT INTO {Program.Prefix}od_customer SET regNumber = @customer_regnumber, inn = @inn_customer, " +
-                            $"kpp = @kpp_customer, contracts_count = @contracts_count_customer, contracts223_count = @contracts223_count_customer," +
-                            $"contracts_sum = @contracts_sum_customer, contracts223_sum = @contracts223_sum_customer," +
-                            $"ogrn = @ogrn_customer, region_code = @region_code_customer, full_name = @full_name_customer," +
-                            $"postal_address = @postal_address_customer, phone = @phone_customer, fax = @fax_customer," +
-                            $"email = @email_customer, contact_name = @contact_name_customer";
+                            "kpp = @kpp_customer, contracts_count = @contracts_count_customer, contracts223_count = @contracts223_count_customer," +
+                            "contracts_sum = @contracts_sum_customer, contracts223_sum = @contracts223_sum_customer," +
+                            "ogrn = @ogrn_customer, region_code = @region_code_customer, full_name = @full_name_customer," +
+                            "postal_address = @postal_address_customer, phone = @phone_customer, fax = @fax_customer," +
+                            "email = @email_customer, contact_name = @contact_name_customer";
                         var cmd4 = new MySqlCommand(addCustomer, connect);
                         cmd4.Prepare();
                         cmd4.Parameters.AddWithValue("@customer_regnumber", "");
@@ -171,7 +183,7 @@ namespace ParserTenders.TenderDir
                 }
 
                 var supplierInn = ((string)c.SelectToken("placer.mainInfo.inn") ?? "").Trim();
-                if (!String.IsNullOrEmpty(supplierInn))
+                if (!string.IsNullOrEmpty(supplierInn))
                 {
                     var kppSupplier = ((string)c.SelectToken("placer.mainInfo.kpp") ?? "").Trim();
                     var selectSupplier =
@@ -210,12 +222,12 @@ namespace ParserTenders.TenderDir
                         var contactNameSupplier = "";
                         var addSupplier =
                             $"INSERT INTO {Program.Prefix}od_supplier SET inn = @supplier_inn, kpp = @kpp_supplier, " +
-                            $"contracts_count = @contracts_count, " +
-                            $"contracts223_count = @contracts223_count, contracts_sum = @contracts_sum, " +
-                            $"contracts223_sum = @contracts223_sum, ogrn = @ogrn,region_code = @region_code, " +
-                            $"organizationName = @organizationName,postal_address = @postal_address, " +
-                            $"contactPhone = @contactPhone,contactFax = @contactFax, " +
-                            $"contactEMail = @contactEMail,contact_name = @contact_name";
+                            "contracts_count = @contracts_count, " +
+                            "contracts223_count = @contracts223_count, contracts_sum = @contracts_sum, " +
+                            "contracts223_sum = @contracts223_sum, ogrn = @ogrn,region_code = @region_code, " +
+                            "organizationName = @organizationName,postal_address = @postal_address, " +
+                            "contactPhone = @contactPhone,contactFax = @contactFax, " +
+                            "contactEMail = @contactEMail,contact_name = @contact_name";
                         var cmd6 = new MySqlCommand(addSupplier, connect);
                         cmd6.Prepare();
                         cmd6.Parameters.AddWithValue("@supplier_inn", supplierInn);
@@ -257,9 +269,9 @@ namespace ParserTenders.TenderDir
                 var d4 = ((string)c.SelectToken("modificationDescription") ?? "").Trim();
                 var dopInfo = c.ToString();
                 var indexOfSubstring = dopInfo.IndexOf("placer");
-                dopInfo = dopInfo.Substring(0, indexOfSubstring) + c.SelectToken("contractConfirmingDocs")?.ToString();
+                dopInfo = dopInfo.Substring(0, indexOfSubstring) + c.SelectToken("contractConfirmingDocs");
                 var insertContract =
-                    $"insert into purchase_contracts223 set  guid = @guid, regnum = @regnum, current_contract_stage = @current_contract_stage, region_code = @region_code, url = @url, contr_create_date = @contr_create_date, create_date = @create_date,notification_number = @notification_number, contract_price = @contract_price, currency = @currency, version_number = @version_number, fulfillment_date = @fulfillment_date, id_customer = @id_customer, id_supplier = @id_supplier, cancel = @cancel, xml = @xml, address = @address, dop_info = @dop_info,startExecutionDate = @startExecutionDate, endExecutionDate = @endExecutionDate, type_eis = @type_eis";
+                    "insert into purchase_contracts223 set  guid = @guid, regnum = @regnum, current_contract_stage = @current_contract_stage, region_code = @region_code, url = @url, contr_create_date = @contr_create_date, create_date = @create_date,notification_number = @notification_number, contract_price = @contract_price, currency = @currency, version_number = @version_number, fulfillment_date = @fulfillment_date, id_customer = @id_customer, id_supplier = @id_supplier, cancel = @cancel, xml = @xml, address = @address, dop_info = @dop_info,startExecutionDate = @startExecutionDate, endExecutionDate = @endExecutionDate, type_eis = @type_eis";
                 var cmd77 = new MySqlCommand(insertContract, connect);
                 cmd77.Prepare();
                 cmd77.Parameters.AddWithValue("@guid", guid);
@@ -303,7 +315,7 @@ namespace ParserTenders.TenderDir
                     var curName = ((string)p.SelectToken("currency.name") ?? "").Trim();
                     var curCode = ((string)p.SelectToken("currency.digitalCode") ?? "").Trim();
                     var insertP =
-                        $"insert into purchase_products223 set  id_purchase_contract = @id_purchase_contract, name = @name, okpd_code = @okpd_code, okpd_name = @okpd_name, okved_code = @okved_code, okved_name = @okved_name, quantity = @quantity, okei = @okei, dop_info = @dop_info, countryOfOrigin_name = @countryOfOrigin_name, countryOfOrigin_code = @countryOfOrigin_code, unit_Price = @unit_Price, currency_name = @currency_name, currency_code = @currency_code, guid = @guid";
+                        "insert into purchase_products223 set  id_purchase_contract = @id_purchase_contract, name = @name, okpd_code = @okpd_code, okpd_name = @okpd_name, okved_code = @okved_code, okved_name = @okved_name, quantity = @quantity, okei = @okei, dop_info = @dop_info, countryOfOrigin_name = @countryOfOrigin_name, countryOfOrigin_code = @countryOfOrigin_code, unit_Price = @unit_Price, currency_name = @currency_name, currency_code = @currency_code, guid = @guid";
                     var cmd88 = new MySqlCommand(insertP, connect);
                     cmd88.Prepare();
                     cmd88.Parameters.AddWithValue("@guid", guidP);

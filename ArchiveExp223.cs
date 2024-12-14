@@ -1,18 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#region
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
+#endregion
 
 namespace ParserTenders
 {
     public class ArchiveExp223
     {
-        [Key, DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
-        
-        [Column("arhiv")]
-        public string Archive { get; set; }
-        
-        [Column("region")]
-        public string Region { get; set; }
+
+        [Column("arhiv")] public string Archive { get; set; }
+
+        [Column("region")] public string Region { get; set; }
     }
 }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -62,7 +66,11 @@ namespace ParserTenders.ParserDir
 
         private void ParserPage(string url)
         {
-            if(DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
@@ -91,18 +99,27 @@ namespace ParserTenders.ParserDir
 
         private void ParserLink(HtmlNode n)
         {
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var url =
                 (n.SelectSingleNode(".//a[contains(@href, 'printForm/view')]")?.Attributes["href"]?.Value ?? "").Trim();
             var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
-                               ?.Attributes["href"]?.Value ?? "").Trim();
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
+                ?.Attributes["href"]?.Value ?? "").Trim();
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT))
+            {
+                return;
+            }
+
             var purNum = purNumT.GetDateFromRegex(@"regNumber=(\d+)");
             if (purNum == "")
             {
                 Log.Logger("purNum not found");
                 return;
             }
+
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -117,8 +134,10 @@ namespace ParserTenders.ParserDir
                     reader.Close();
                     return;
                 }
+
                 reader.Close();
             }
+
             url = url.Replace("view.html", "viewXml.html");
             url = $"https://zakupki.gov.ru{url}";
             var s = DownloadString.DownLUserAgentEis(url);

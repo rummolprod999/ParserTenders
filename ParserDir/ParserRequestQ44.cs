@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,13 +12,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserRequestQ44 : Parser
     {
         protected DataTable DtRegion;
 
-        private string[] _fileXml44 = {
+        private readonly string[] _fileXml44 =
+        {
             "fcsrequestforquotation_"
         };
 
@@ -31,7 +36,7 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path"];
+                var regionPath = (string)row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.LastReq44:
@@ -56,7 +61,7 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
         }
@@ -78,7 +83,7 @@ namespace ParserTenders.ParserDir
             var yearsSearch = Program.Years.Select(y => $"requestquotation_{regionPath}{y}").ToList();
             yearsSearch.AddRange(Program.Years.Select(y => $"requestquotation{y}").ToList());
             foreach (var a in newLs.Where(a =>
-                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 if (a.Item2 == 0)
                 {
@@ -150,7 +155,7 @@ namespace ParserTenders.ParserDir
 
             return arch;
         }
-        
+
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             var filea = "";
@@ -169,7 +174,7 @@ namespace ParserTenders.ParserDir
                             .Where(a => _fileXml44.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        
+
                         foreach (var f in arrayXml44)
                         {
                             Bolter(f, region, regionId, TypeFile44.TypeRequestQ44);
@@ -180,14 +185,14 @@ namespace ParserTenders.ParserDir
                 }
             }
         }
-        
+
         public override void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
             if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))
             {
                 return;
             }
-            
+
             try
             {
                 ParsingXml(f, region, regionId, typefile);
@@ -197,7 +202,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при парсинге xml", e, f);
             }
         }
-        
+
         public void ParsingXml(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
             using (var sr = new StreamReader(f.ToString(), Encoding.Default))

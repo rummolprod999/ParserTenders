@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,29 +8,30 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 
 {
     public class ParserTend615Api : Parser
     {
-        private string[] _fileCancel = {"notificationcancel_"};
-        private string[] _filecontract = {"contract_"};
-        private string[] _fileDatechange = {"datechange_", "timeef_"};
-        private string[] _fileLotcancel = {"lotcancel_"};
-        private string[] _fileXml615 = {"notificationef_", "notificationpo_"};
+        private readonly string[] _fileCancel = { "notificationcancel_" };
+        private readonly string[] _filecontract = { "contract_" };
+        private readonly string[] _fileDatechange = { "datechange_", "timeef_" };
+        private readonly string[] _fileLotcancel = { "lotcancel_" };
+        private readonly string[] _fileXml615 = { "notificationef_", "notificationpo_" };
         protected DataTable DtRegion;
 
-        private string[] types =
+        private readonly string[] types =
         {
             "pprf615NotificationEF",
             "pprf615NotificationPO"
         };
-        
+
         public ParserTend615Api(TypeArguments arg) : base(arg)
         {
         }
@@ -87,7 +90,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при обновлении инн", e);
             }
         }
-        
+
 
         public void GetListFileArch(string arch, string region, int regionId)
         {
@@ -258,6 +261,5 @@ namespace ParserTenders.ParserDir
 
             return dest;
         }
-        
     }
 }

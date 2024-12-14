@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Xml;
@@ -7,6 +9,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -77,7 +81,11 @@ namespace ParserTenders.ParserDir
 
         private void ParserPage(string url)
         {
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
@@ -105,12 +113,25 @@ namespace ParserTenders.ParserDir
 
         private void ParserLink(HtmlNode n)
         {
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var url =
                 (n.SelectSingleNode(".//a[contains(@href, 'print-form')]")?.Attributes["href"]?.Value ?? "").Trim();
-            if (!url.Contains("223/purchase")) return;
-            var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")?.InnerText.Replace("№", "") ?? "").Trim();
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
+            if (!url.Contains("223/purchase"))
+            {
+                return;
+            }
+
+            var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
+                ?.InnerText.Replace("№", "") ?? "").Trim();
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT))
+            {
+                return;
+            }
+
             var purNum = purNumT;
             if (purNum == "")
             {

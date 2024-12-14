@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,6 +8,8 @@ using ClassFSAharp;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -28,7 +32,7 @@ namespace ParserTenders.TenderDir
 
         public string GetXml()
         {
-            return this.FilePath;
+            return FilePath;
         }
 
         public List<JToken> GetElements(JToken j, string s)
@@ -103,7 +107,8 @@ namespace ParserTenders.TenderDir
             }
         }
 
-         public static void TenderKwords(MySqlConnection connect, int idTender, bool pils = false, params string[] additionParametrs)
+        public static void TenderKwords(MySqlConnection connect, int idTender, bool pils = false,
+            params string[] additionParametrs)
         {
             var resString = "";
             if (pils)
@@ -117,14 +122,14 @@ namespace ParserTenders.TenderDir
             cmd0.Prepare();
             cmd0.Parameters.AddWithValue("@id_tender", idTender);
             var dt0 = new DataTable();
-            var adapter0 = new MySqlDataAdapter {SelectCommand = cmd0};
+            var adapter0 = new MySqlDataAdapter { SelectCommand = cmd0 };
             adapter0.Fill(dt0);
             if (dt0.Rows.Count > 0)
             {
                 var distrDt = dt0.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var lotName = !row.IsNull("lot_name") ? ((string) row["lot_name"]) : "";
+                    var lotName = !row.IsNull("lot_name") ? (string)row["lot_name"] : "";
                     resString += $"{lotName} ";
                 }
             }
@@ -135,15 +140,15 @@ namespace ParserTenders.TenderDir
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@id_tender", idTender);
             var dt = new DataTable();
-            var adapter = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter.Fill(dt);
             if (dt.Rows.Count > 0)
             {
                 var distrDt = dt.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var name = !row.IsNull("name") ? ((string) row["name"]) : "";
-                    var okpdName = (!row.IsNull("okpd_name")) ? ((string) row["okpd_name"]) : "";
+                    var name = !row.IsNull("name") ? (string)row["name"] : "";
+                    var okpdName = !row.IsNull("okpd_name") ? (string)row["okpd_name"] : "";
                     resString += $"{name} {okpdName} ";
                 }
             }
@@ -154,14 +159,14 @@ namespace ParserTenders.TenderDir
             cmd7.Prepare();
             cmd7.Parameters.AddWithValue("@id_tender", idTender);
             var dt7 = new DataTable();
-            var adapter7 = new MySqlDataAdapter {SelectCommand = cmd7};
+            var adapter7 = new MySqlDataAdapter { SelectCommand = cmd7 };
             adapter7.Fill(dt7);
             if (dt7.Rows.Count > 0)
             {
                 var distrDeliv = dt7.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDeliv)
                 {
-                    var delivTerm = !row.IsNull("delivery_term") ? ((string) row["delivery_term"]) : "";
+                    var delivTerm = !row.IsNull("delivery_term") ? (string)row["delivery_term"] : "";
                     resString += $"{delivTerm} ";
                 }
             }
@@ -171,14 +176,14 @@ namespace ParserTenders.TenderDir
             cmd2.Prepare();
             cmd2.Parameters.AddWithValue("@id_tender", idTender);
             var dt2 = new DataTable();
-            var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+            var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
             adapter2.Fill(dt2);
             if (dt2.Rows.Count > 0)
             {
                 var distrDt = dt2.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var attName = (!row.IsNull("file_name")) ? ((string) row["file_name"]) : "";
+                    var attName = !row.IsNull("file_name") ? (string)row["file_name"] : "";
                     resString += $" {attName}";
                 }
             }
@@ -190,23 +195,23 @@ namespace ParserTenders.TenderDir
             cmd3.Prepare();
             cmd3.Parameters.AddWithValue("@id_tender", idTender);
             var dt3 = new DataTable();
-            var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+            var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
             adapter3.Fill(dt3);
             if (dt3.Rows.Count > 0)
             {
                 foreach (DataRow row in dt3.Rows)
                 {
-                    var purOb = (!row.IsNull("purchase_object_info"))
-                        ? ((string) row["purchase_object_info"])
+                    var purOb = !row.IsNull("purchase_object_info")
+                        ? (string)row["purchase_object_info"]
                         : "";
-                    idOrg = (!row.IsNull("id_organizer")) ? (int) row["id_organizer"] : 0;
+                    idOrg = !row.IsNull("id_organizer") ? (int)row["id_organizer"] : 0;
                     resString = $"{purOb} {resString}";
                 }
             }
 
             var innOrg = "";
             var nameOrg = "";
-            
+
             if (idOrg != 0)
             {
                 var selectOrg =
@@ -215,14 +220,14 @@ namespace ParserTenders.TenderDir
                 cmd4.Prepare();
                 cmd4.Parameters.AddWithValue("@id_organizer", idOrg);
                 var dt4 = new DataTable();
-                var adapter4 = new MySqlDataAdapter {SelectCommand = cmd4};
+                var adapter4 = new MySqlDataAdapter { SelectCommand = cmd4 };
                 adapter4.Fill(dt4);
                 if (dt4.Rows.Count > 0)
                 {
                     foreach (DataRow row in dt4.Rows)
                     {
-                        innOrg = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
-                        nameOrg = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
+                        innOrg = !row.IsNull("inn") ? (string)row["inn"] : "";
+                        nameOrg = !row.IsNull("full_name") ? (string)row["full_name"] : "";
                         resString += $" {innOrg} {nameOrg}";
                     }
                 }
@@ -234,16 +239,16 @@ namespace ParserTenders.TenderDir
             cmd6.Prepare();
             cmd6.Parameters.AddWithValue("@id_tender", idTender);
             var dt5 = new DataTable();
-            var adapter5 = new MySqlDataAdapter {SelectCommand = cmd6};
+            var adapter5 = new MySqlDataAdapter { SelectCommand = cmd6 };
             adapter5.Fill(dt5);
             if (dt5.Rows.Count > 0)
             {
                 var distrDt = dt5.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var innC = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
-                    var fullNameC = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
-                    if ((innC != innOrg) || (fullNameC != nameOrg))
+                    var innC = !row.IsNull("inn") ? (string)row["inn"] : "";
+                    var fullNameC = !row.IsNull("full_name") ? (string)row["full_name"] : "";
+                    if (innC != innOrg || fullNameC != nameOrg)
                     {
                         resString += $" {innC} {fullNameC}";
                     }
@@ -276,7 +281,7 @@ namespace ParserTenders.TenderDir
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
             var dt1 = new DataTable();
-            var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter1 = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter1.Fill(dt1);
             if (dt1.Rows.Count > 0)
             {
@@ -284,7 +289,7 @@ namespace ParserTenders.TenderDir
                     $"UPDATE {Program.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
                 foreach (DataRow ten in dt1.Rows)
                 {
-                    var idTender = (int) ten["id_tender"];
+                    var idTender = (int)ten["id_tender"];
                     var cmd2 = new MySqlCommand(updateTender, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_tender", idTender);

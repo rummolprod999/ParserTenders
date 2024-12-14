@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using ParserTenders.ParserDir;
+
+#endregion
 
 namespace ParserTenders
 {
@@ -12,7 +16,6 @@ namespace ParserTenders
         private const string Arguments =
             "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44, currreq44, prevreq44, lastreq44";
 
-        private static string _database;
         private static string _tempPath44;
         private static string _logPath44;
         private static string _tempPath615;
@@ -51,17 +54,9 @@ namespace ParserTenders
         private static string _logPathWeb44;
         private static string _tempPathRequestQ44;
         private static string _logPathRequestQ44;
-        private static string _prefix;
         private static string _useWeb;
-        private static string _user;
-        private static string _pass;
-        private static string _server;
-        private static int _port;
-        private static int _maxthread;
-        private static int _maxtrydown;
         private static string _tempSignProj44;
         private static string _logSignProj44;
-        private static List<string> _years = new List<string>();
         public static readonly DateTime LocalDate = DateTime.Now;
 
         public static string FileLog;
@@ -103,8 +98,8 @@ namespace ParserTenders
         public static int NotAddAttach = 0;
         public static int AddSign223 = 0;
         public static int UpdateSign223 = 0;
-        public static int AddGazprom = 0;
-        public static int UpGazprom = 0;
+        public static int AddGazprom;
+        public static int UpGazprom;
         public static int AddClarification = 0;
         public static int AddClarification223 = 0;
         public static int AddGntWeb = 0;
@@ -127,16 +122,23 @@ namespace ParserTenders
         public static int UpTektorgRzd = 0;
         public static int AddRequestQ44 = 0;
         public static int UpdateRequestQ44 = 0;
-        public static string Database => _database;
-        public static string Prefix => _prefix;
-        public static string User => _user;
-        public static string Pass => _pass;
-        public static string Server => _server;
-        public static int Port => _port;
-        public static List<string> Years => _years;
-        public static int DownCount => _maxtrydown;
+        public static string Database { get; private set; }
 
-        public static int MaxThread => _maxthread;
+        public static string Prefix { get; private set; }
+
+        public static string User { get; private set; }
+
+        public static string Pass { get; private set; }
+
+        public static string Server { get; private set; }
+
+        public static int Port { get; private set; }
+
+        public static List<string> Years { get; } = new List<string>();
+
+        public static int DownCount { get; private set; }
+
+        public static int MaxThread { get; private set; }
         //public static string LogAttach => _logAttach;
         //public static string TempAttach => _tempAttach;
 
@@ -279,7 +281,11 @@ namespace ParserTenders
 
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
                 .CodeBase);
-            if (path != null) PathProgram = path.Substring(5);
+            if (path != null)
+            {
+                PathProgram = path.Substring(5);
+            }
+
             StrArg = args[0];
             switch (args[0])
             {
@@ -453,23 +459,23 @@ namespace ParserTenders
         private static void Init(TypeArguments arg)
         {
             var set = new GetSettings();
-            _database = set.Database;
+            Database = set.Database;
             _logPath44 = set.LogPathTenders44;
             _logPath615 = set.LogPathTenders615;
             _logPath223 = set.LogPathTenders223;
-            _prefix = set.Prefix;
+            Prefix = set.Prefix;
             _useWeb = set.UseWeb;
-            _user = set.UserDb;
-            _pass = set.PassDb;
+            User = set.UserDb;
+            Pass = set.PassDb;
             _tempPath44 = set.TempPathTenders44;
             _tempPath615 = set.TempPathTenders615;
             _tempPath223 = set.TempPathTenders223;
-            _server = set.Server;
-            _port = set.Port;
+            Server = set.Server;
+            Port = set.Port;
             _logAttach = set.LogPathAttach;
             _tempAttach = set.TempPathAttach;
-            _maxthread = set.MaxThread;
-            _maxtrydown = set.MaxTryDown;
+            MaxThread = set.MaxThread;
+            DownCount = set.MaxTryDown;
             var tmp = set.Years;
             _tempSign223 = set.TempPathSign223;
             _logSign223 = set.LogPathSign223;
@@ -507,11 +513,11 @@ namespace ParserTenders
             TableArchiveExp223 = $"{Prefix}arhiv_explanation223";
             TableContractsSign = $"{Prefix}contract_sign";
             TableSuppliers = $"{Prefix}supplier";
-            var tempYears = tmp.Split(new char[] {','});
+            var tempYears = tmp.Split(',');
 
             foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
             {
-                _years.Add(s);
+                Years.Add(s);
             }
 
             if (string.IsNullOrEmpty(TempPath) || string.IsNullOrEmpty(LogPath))
@@ -702,7 +708,6 @@ namespace ParserTenders
                     t223.ParserLostTens();
                     t223.ParsingAst();
                 }
-                
             }
             catch (Exception e)
             {
@@ -1073,7 +1078,7 @@ namespace ParserTenders
 
         private static void ParserSignProj44(TypeArguments arg)
         {
-            Log.Logger($"Время начала парсинга SignProj44");
+            Log.Logger("Время начала парсинга SignProj44");
             try
             {
                 var p = new ParserSignProj44(arg);
@@ -1084,10 +1089,10 @@ namespace ParserTenders
                 Log.Logger(e);
             }
 
-            Log.Logger($"Добавили SignProj44", AddTenderSignProj44);
+            Log.Logger("Добавили SignProj44", AddTenderSignProj44);
             Log.Logger("Время окончания парсинга");
         }
-        
+
         private static void ParserRequestQ44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга RequestQ44");

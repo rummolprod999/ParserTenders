@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -33,6 +37,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Empty string in ParserPage()", url);
                 return;
             }
+
             var parser = new HtmlParser();
             var document = parser.Parse(s);
             var tens = document.All.Where(m => m.ClassList.Contains("vacancies__list__item") && m.TagName == "LI");
@@ -57,16 +62,19 @@ namespace ParserTenders.ParserDir
             {
                 purNum = urlT.GetDateFromRegex("ID=(.*)");
             }
+
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Cannot find purchase number", urlT);
                 return;
             }
+
             var url = $"http://www.sakhalinenergy.ru/ru/contractors/tenders/{urlT}";
             if (urlT.Contains("contractors/tenders"))
             {
                 url = $"http://www.sakhalinenergy.ru{urlT}";
             }
+
             try
             {
                 var ten = new TenderTypeSakhalin(purNum, url);
@@ -77,6 +85,5 @@ namespace ParserTenders.ParserDir
                 Log.Logger(e, url);
             }
         }
-        
     }
 }

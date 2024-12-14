@@ -1,329 +1,329 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6431B4E9-74D3-48FF-AF3F-EFFC5A407018}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ParserTenders</RootNamespace>
-    <AssemblyName>ParserTenders</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ParserTenders.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyConf|AnyCPU'">
-    <OutputPath>bin\MyConf\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea">
-      <HintPath>..\packages\AngleSharp.0.9.9.2\lib\net45\AngleSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.5.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.5.1\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
-      <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ftp, Version=2.0.18072.1324, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
-      <HintPath>..\packages\Ftp.dll.2.0.18072.1324\lib\net45\Ftp.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.7.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-      <HintPath>..\packages\HtmlAgilityPack.1.7.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
-    </Reference>
-    <Reference Include="jint, Version=2.10.4.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f">
-      <HintPath>..\packages\jint.2.10.4\lib\net45\jint.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MySql.Data, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\packages\MySql.Data.6.10.7\lib\net452\MySql.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\packages\MySql.Data.Entity.6.10.7\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RandonUaNET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>bin\Release\RandonUaNET.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="TikaOnDotNet, Version=1.17.0.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3">
-      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.0\lib\TikaOnDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="TikaOnDotNet.TextExtraction, Version=1.17.0.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3">
-      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.0\lib\TikaOnDotNet.TextExtraction.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ArchiveExp223.cs" />
-    <Compile Include="ArchiveExp223Context.cs" />
-    <Compile Include="ArchiveSign223.cs" />
-    <Compile Include="ArchiveSign223Context.cs" />
-    <Compile Include="AttachStruct.cs" />
-    <Compile Include="ClearText.cs" />
-    <Compile Include="ConnectToDb.cs" />
-    <Compile Include="ContractSign.cs" />
-    <Compile Include="ContractsSignContext.cs" />
-    <Compile Include="CustomerGpB.cs" />
-    <Compile Include="DownloadFile.cs" />
-    <Compile Include="DownloadString.cs" />
-    <Compile Include="GetSettings.cs" />
-    <Compile Include="GntType.cs" />
-    <Compile Include="GntWebTender.cs" />
-    <Compile Include="JsonExtensions.cs" />
-    <Compile Include="ListExtension.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="LotGpB.cs" />
-    <Compile Include="ObTorgType.cs" />
-    <Compile Include="ObTorgWebTender.cs" />
-    <Compile Include="OrganizerGpB.cs" />
-    <Compile Include="ParserDir\AbstractParserTektorg.cs" />
-    <Compile Include="ParserDir\IParser.cs" />
-    <Compile Include="ParserDir\IParserWeb.cs" />
-    <Compile Include="ParserDir\Parser.cs" />
-    <Compile Include="ParserDir\ParserAttach.cs" />
-    <Compile Include="ParserDir\ParserExp.cs" />
-    <Compile Include="ParserDir\ParserGntWeb.cs" />
-    <Compile Include="ParserDir\ParserGpb.cs" />
-    <Compile Include="ParserDir\ParserGpbGaz.cs" />
-    <Compile Include="ParserDir\ParserMrsk.cs" />
-    <Compile Include="ParserDir\ParserObTorgWeb.cs" />
-    <Compile Include="ParserDir\ParserRequestQ44.cs" />
-    <Compile Include="ParserDir\ParserRosneft.cs" />
-    <Compile Include="ParserDir\ParserSakhalin.cs" />
-    <Compile Include="ParserDir\ParserSgn223.cs" />
-    <Compile Include="ParserDir\ParserSignProj44.cs" />
-    <Compile Include="ParserDir\ParserSpecTorgWeb.cs" />
-    <Compile Include="ParserDir\ParserTektorgGazprom.cs" />
-    <Compile Include="ParserDir\ParserTektorgInterRao.cs" />
-    <Compile Include="ParserDir\ParserTektorgRzd.cs" />
-    <Compile Include="ParserDir\ParserTend223.cs" />
-    <Compile Include="ParserDir\ParserTend223Api.cs" />
-    <Compile Include="ParserDir\ParserTend44.cs" />
-    <Compile Include="ParserDir\ParserTend44Api.cs" />
-    <Compile Include="ParserDir\ParserTend615.cs" />
-    <Compile Include="ParserDir\ParserTend615Api.cs" />
-    <Compile Include="ParserDir\ParserTendersWeb.cs" />
-    <Compile Include="ParserDir\ParserTendersWeb44.cs" />
-    <Compile Include="ParserDir\ParserWeb.cs" />
-    <Compile Include="PlacingWayGpB.cs" />
-    <Compile Include="ProcedureGpB.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecTorgTender.cs" />
-    <Compile Include="SpecTorgType.cs" />
-    <Compile Include="StringExtension.cs" />
-    <Compile Include="Supplier.cs" />
-    <Compile Include="TenderDir\ITenderWeb.cs" />
-    <Compile Include="TenderDir\Tender.cs" />
-    <Compile Include="TenderDir\TenderBase.cs" />
-    <Compile Include="TenderDir\TenderRequestQ44.cs" />
-    <Compile Include="TenderDir\TenderTypeClarificationResult.cs" />
-    <Compile Include="TenderDir\TenderTypeSign223New.cs" />
-    <Compile Include="TenderDir\TenderTypeSignProj44.cs" />
-    <Compile Include="TenderDir\TenderType223.cs" />
-    <Compile Include="TenderDir\TenderType223Web.cs" />
-    <Compile Include="TenderDir\TenderType44.cs" />
-    <Compile Include="TenderDir\TenderType44Web.cs" />
-    <Compile Include="TenderDir\TenderType504.cs" />
-    <Compile Include="TenderDir\TenderType504Web.cs" />
-    <Compile Include="TenderDir\TenderType615.cs" />
-    <Compile Include="TenderDir\TenderTypeCancel.cs" />
-    <Compile Include="TenderDir\TenderTypeCancel223.cs" />
-    <Compile Include="TenderDir\TenderTypeCancel615.cs" />
-    <Compile Include="TenderDir\TenderTypeCancelFailure.cs" />
-    <Compile Include="TenderDir\TenderTypeClarification.cs" />
-    <Compile Include="TenderDir\TenderTypeDateChange.cs" />
-    <Compile Include="TenderDir\TenderTypeDateChange615.cs" />
-    <Compile Include="TenderDir\TenderTypeExp223.cs" />
-    <Compile Include="TenderDir\TenderTypeLotCancel.cs" />
-    <Compile Include="TenderDir\TenderTypeLotCancel223.cs" />
-    <Compile Include="TenderDir\TenderTypeLotCancel615.cs" />
-    <Compile Include="TenderDir\TenderTypeMrsk.cs" />
-    <Compile Include="TenderDir\TenderTypeOrgChange.cs" />
-    <Compile Include="TenderDir\TenderTypeProlongation.cs" />
-    <Compile Include="TenderDir\TenderTypeRosneft.cs" />
-    <Compile Include="TenderDir\TenderTypeSakhalin.cs" />
-    <Compile Include="TenderDir\TenderTypeSign.cs" />
-    <Compile Include="TenderDir\TenderTypeSign223.cs" />
-    <Compile Include="TenderDir\TenderTypeSign615.cs" />
-    <Compile Include="TenderDir\TenderTypeTektorgGazprom.cs" />
-    <Compile Include="TenderDir\TenderTypeTektorgInterRao.cs" />
-    <Compile Include="TenderDir\TenderTypeTektorgRzd.cs" />
-    <Compile Include="TenderDir\TenderWeb.cs" />
-    <Compile Include="TimedWebClient.cs" />
-    <Compile Include="TypeArguments.cs" />
-    <Compile Include="TypeFile223.cs" />
-    <Compile Include="TypeFile44.cs" />
-    <Compile Include="TypeFileAttachment.cs" />
-    <Compile Include="TypeGnt.cs" />
-    <Compile Include="TypeMrsk.cs" />
-    <Compile Include="TypeObTorg.cs" />
-    <Compile Include="TypeSpecTorg.cs" />
-    <Compile Include="TypeFile615.cs" />
-    <Compile Include="Unzipped.cs" />
-    <Compile Include="UtilsFromParsing.cs" />
-    <Compile Include="WebDownload.cs" />
-    <Compile Include="WorkWithFtp.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fz_223_test.xml" />
-    <Content Include="test.html" />
-    <Content Include="testorg.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClassFSAharp\ClassFSAharp.fsproj">
-      <Project>{09557ad3-1975-4c21-8ab1-862acb8dd1e1}</Project>
-      <Name>ClassFSAharp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{6431B4E9-74D3-48FF-AF3F-EFFC5A407018}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <OutputType>Exe</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>ParserTenders</RootNamespace>
+        <AssemblyName>ParserTenders</AssemblyName>
+        <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>7.2</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <DocumentationFile>bin\Debug\ParserTenders.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <DebugSymbols>false</DebugSymbols>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyConf|AnyCPU'">
+        <OutputPath>bin\MyConf\</OutputPath>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea">
+            <HintPath>..\packages\AngleSharp.0.9.9.2\lib\net45\AngleSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.5.1.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.5.1\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
+        </Reference>
+        <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+        </Reference>
+        <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+        </Reference>
+        <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f">
+            <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Ftp, Version=2.0.18072.1324, Culture=neutral, PublicKeyToken=6dc438ab78a525b3">
+            <HintPath>..\packages\Ftp.dll.2.0.18072.1324\lib\net45\Ftp.dll</HintPath>
+        </Reference>
+        <Reference Include="HtmlAgilityPack, Version=1.7.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+            <HintPath>..\packages\HtmlAgilityPack.1.7.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58">
+            <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
+        </Reference>
+        <Reference Include="jint, Version=2.10.4.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f">
+            <HintPath>..\packages\jint.2.10.4\lib\net45\jint.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="MySql.Data, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+            <HintPath>..\packages\MySql.Data.6.10.7\lib\net452\MySql.Data.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="MySql.Data.Entity.EF6, Version=6.10.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+            <HintPath>..\packages\MySql.Data.Entity.6.10.7\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+            <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="RandonUaNET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>bin\Release\RandonUaNET.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.ComponentModel"/>
+        <Reference Include="System.ComponentModel.Composition"/>
+        <Reference Include="System.ComponentModel.DataAnnotations"/>
+        <Reference Include="System.Configuration"/>
+        <Reference Include="System.Configuration.Install"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Drawing.Design"/>
+        <Reference Include="System.IO.Compression"/>
+        <Reference Include="System.IO.Compression.FileSystem"/>
+        <Reference Include="System.Management"/>
+        <Reference Include="System.Security"/>
+        <Reference Include="System.Transactions"/>
+        <Reference Include="System.Web"/>
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="TikaOnDotNet, Version=1.17.0.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3">
+            <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.0\lib\TikaOnDotNet.dll</HintPath>
+        </Reference>
+        <Reference Include="TikaOnDotNet.TextExtraction, Version=1.17.0.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3">
+            <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.0\lib\TikaOnDotNet.TextExtraction.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ArchiveExp223.cs"/>
+        <Compile Include="ArchiveExp223Context.cs"/>
+        <Compile Include="ArchiveSign223.cs"/>
+        <Compile Include="ArchiveSign223Context.cs"/>
+        <Compile Include="AttachStruct.cs"/>
+        <Compile Include="ClearText.cs"/>
+        <Compile Include="ConnectToDb.cs"/>
+        <Compile Include="ContractSign.cs"/>
+        <Compile Include="ContractsSignContext.cs"/>
+        <Compile Include="CustomerGpB.cs"/>
+        <Compile Include="DownloadFile.cs"/>
+        <Compile Include="DownloadString.cs"/>
+        <Compile Include="GetSettings.cs"/>
+        <Compile Include="GntType.cs"/>
+        <Compile Include="GntWebTender.cs"/>
+        <Compile Include="JsonExtensions.cs"/>
+        <Compile Include="ListExtension.cs"/>
+        <Compile Include="Log.cs"/>
+        <Compile Include="LotGpB.cs"/>
+        <Compile Include="ObTorgType.cs"/>
+        <Compile Include="ObTorgWebTender.cs"/>
+        <Compile Include="OrganizerGpB.cs"/>
+        <Compile Include="ParserDir\AbstractParserTektorg.cs"/>
+        <Compile Include="ParserDir\IParser.cs"/>
+        <Compile Include="ParserDir\IParserWeb.cs"/>
+        <Compile Include="ParserDir\Parser.cs"/>
+        <Compile Include="ParserDir\ParserAttach.cs"/>
+        <Compile Include="ParserDir\ParserExp.cs"/>
+        <Compile Include="ParserDir\ParserGntWeb.cs"/>
+        <Compile Include="ParserDir\ParserGpb.cs"/>
+        <Compile Include="ParserDir\ParserGpbGaz.cs"/>
+        <Compile Include="ParserDir\ParserMrsk.cs"/>
+        <Compile Include="ParserDir\ParserObTorgWeb.cs"/>
+        <Compile Include="ParserDir\ParserRequestQ44.cs"/>
+        <Compile Include="ParserDir\ParserRosneft.cs"/>
+        <Compile Include="ParserDir\ParserSakhalin.cs"/>
+        <Compile Include="ParserDir\ParserSgn223.cs"/>
+        <Compile Include="ParserDir\ParserSignProj44.cs"/>
+        <Compile Include="ParserDir\ParserSpecTorgWeb.cs"/>
+        <Compile Include="ParserDir\ParserTektorgGazprom.cs"/>
+        <Compile Include="ParserDir\ParserTektorgInterRao.cs"/>
+        <Compile Include="ParserDir\ParserTektorgRzd.cs"/>
+        <Compile Include="ParserDir\ParserTend223.cs"/>
+        <Compile Include="ParserDir\ParserTend223Api.cs"/>
+        <Compile Include="ParserDir\ParserTend44.cs"/>
+        <Compile Include="ParserDir\ParserTend44Api.cs"/>
+        <Compile Include="ParserDir\ParserTend615.cs"/>
+        <Compile Include="ParserDir\ParserTend615Api.cs"/>
+        <Compile Include="ParserDir\ParserTendersWeb.cs"/>
+        <Compile Include="ParserDir\ParserTendersWeb44.cs"/>
+        <Compile Include="ParserDir\ParserWeb.cs"/>
+        <Compile Include="PlacingWayGpB.cs"/>
+        <Compile Include="ProcedureGpB.cs"/>
+        <Compile Include="Program.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="SpecTorgTender.cs"/>
+        <Compile Include="SpecTorgType.cs"/>
+        <Compile Include="StringExtension.cs"/>
+        <Compile Include="Supplier.cs"/>
+        <Compile Include="TenderDir\ITenderWeb.cs"/>
+        <Compile Include="TenderDir\Tender.cs"/>
+        <Compile Include="TenderDir\TenderBase.cs"/>
+        <Compile Include="TenderDir\TenderRequestQ44.cs"/>
+        <Compile Include="TenderDir\TenderTypeClarificationResult.cs"/>
+        <Compile Include="TenderDir\TenderTypeSign223New.cs"/>
+        <Compile Include="TenderDir\TenderTypeSignProj44.cs"/>
+        <Compile Include="TenderDir\TenderType223.cs"/>
+        <Compile Include="TenderDir\TenderType223Web.cs"/>
+        <Compile Include="TenderDir\TenderType44.cs"/>
+        <Compile Include="TenderDir\TenderType44Web.cs"/>
+        <Compile Include="TenderDir\TenderType504.cs"/>
+        <Compile Include="TenderDir\TenderType504Web.cs"/>
+        <Compile Include="TenderDir\TenderType615.cs"/>
+        <Compile Include="TenderDir\TenderTypeCancel.cs"/>
+        <Compile Include="TenderDir\TenderTypeCancel223.cs"/>
+        <Compile Include="TenderDir\TenderTypeCancel615.cs"/>
+        <Compile Include="TenderDir\TenderTypeCancelFailure.cs"/>
+        <Compile Include="TenderDir\TenderTypeClarification.cs"/>
+        <Compile Include="TenderDir\TenderTypeDateChange.cs"/>
+        <Compile Include="TenderDir\TenderTypeDateChange615.cs"/>
+        <Compile Include="TenderDir\TenderTypeExp223.cs"/>
+        <Compile Include="TenderDir\TenderTypeLotCancel.cs"/>
+        <Compile Include="TenderDir\TenderTypeLotCancel223.cs"/>
+        <Compile Include="TenderDir\TenderTypeLotCancel615.cs"/>
+        <Compile Include="TenderDir\TenderTypeMrsk.cs"/>
+        <Compile Include="TenderDir\TenderTypeOrgChange.cs"/>
+        <Compile Include="TenderDir\TenderTypeProlongation.cs"/>
+        <Compile Include="TenderDir\TenderTypeRosneft.cs"/>
+        <Compile Include="TenderDir\TenderTypeSakhalin.cs"/>
+        <Compile Include="TenderDir\TenderTypeSign.cs"/>
+        <Compile Include="TenderDir\TenderTypeSign223.cs"/>
+        <Compile Include="TenderDir\TenderTypeSign615.cs"/>
+        <Compile Include="TenderDir\TenderTypeTektorgGazprom.cs"/>
+        <Compile Include="TenderDir\TenderTypeTektorgInterRao.cs"/>
+        <Compile Include="TenderDir\TenderTypeTektorgRzd.cs"/>
+        <Compile Include="TenderDir\TenderWeb.cs"/>
+        <Compile Include="TimedWebClient.cs"/>
+        <Compile Include="TypeArguments.cs"/>
+        <Compile Include="TypeFile223.cs"/>
+        <Compile Include="TypeFile44.cs"/>
+        <Compile Include="TypeFileAttachment.cs"/>
+        <Compile Include="TypeGnt.cs"/>
+        <Compile Include="TypeMrsk.cs"/>
+        <Compile Include="TypeObTorg.cs"/>
+        <Compile Include="TypeSpecTorg.cs"/>
+        <Compile Include="TypeFile615.cs"/>
+        <Compile Include="Unzipped.cs"/>
+        <Compile Include="UtilsFromParsing.cs"/>
+        <Compile Include="WebDownload.cs"/>
+        <Compile Include="WorkWithFtp.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="app.config"/>
+        <None Include="packages.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="fz_223_test.xml"/>
+        <Content Include="test.html"/>
+        <Content Include="testorg.html"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ClassFSAharp\ClassFSAharp.fsproj">
+            <Project>{09557ad3-1975-4c21-8ab1-862acb8dd1e1}</Project>
+            <Name>ClassFSAharp</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
 </Project>

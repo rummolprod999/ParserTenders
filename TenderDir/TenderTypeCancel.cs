@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,30 +20,30 @@ namespace ParserTenders.TenderDir
             AddCancel += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddCancel++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderCancel", FilePath);
                     return;
                 }
-                else
+
+                if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                 {
-                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                    {
-                        /*Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);*/
-                        return;
-                    }
+                    /*Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);*/
+                    return;
                 }
 
                 using (var connect = ConnectToDb.GetDbConnection())
@@ -61,19 +65,17 @@ namespace ParserTenders.TenderDir
                 if (firstOrDefault != null)
                 {
                     var tender = firstOrDefault.Value;
-                    var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                    var purchaseNumber = ((string)tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                     if (string.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderCancel", FilePath);
                         return;
                     }
-                    else
+
+                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
-                        if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                        {
-                            /*Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);*/
-                            return;
-                        }
+                        /*Log.Logger("Тестовый тендер TenderCancel", purchaseNumber, file_path);*/
+                        return;
                     }
 
                     using (var connect = ConnectToDb.GetDbConnection())

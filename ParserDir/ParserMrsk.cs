@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -80,12 +84,12 @@ namespace ParserTenders.ParserDir
             }
 
             var datePub =
-            (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][1]")
-                 ?.InnerText ?? "").Trim();
+                (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][1]")
+                    ?.InnerText ?? "").Trim();
             var dateUpd =
-            (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][2]")
-                 ?.InnerText ?? "").Trim();
-            var tn = new TypeMrsk() {Href = href, IdTender = idTender, DatePub = datePub, DateUpd = dateUpd};
+                (n.SelectSingleNode(".//ul[@class = 'b-purchase__footer b-clearfix']/li[@class = 'b-date' ][2]")
+                    ?.InnerText ?? "").Trim();
+            var tn = new TypeMrsk { Href = href, IdTender = idTender, DatePub = datePub, DateUpd = dateUpd };
             try
             {
                 var t = new TenderTypeMrsk(tn);

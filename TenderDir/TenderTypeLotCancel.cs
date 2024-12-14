@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,33 +20,33 @@ namespace ParserTenders.TenderDir
             AddLotCancel += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddLotCancel++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderLotCancel", FilePath);
                     return;
                 }
-                else
+
+                if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                 {
-                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                    {
-                        /*Log.Logger("Тестовый тендер TenderLotCancel", purchaseNumber, file_path);*/
-                        return;
-                    }
+                    /*Log.Logger("Тестовый тендер TenderLotCancel", purchaseNumber, file_path);*/
+                    return;
                 }
 
-                var lotNumber = ((string) tender.SelectToken("lot.lotNumber") ?? "").Trim();
+                var lotNumber = ((string)tender.SelectToken("lot.lotNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(lotNumber))
                 {
                     Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);
@@ -65,6 +69,7 @@ namespace ParserTenders.TenderDir
                         reader.Read();
                         idTender = reader.GetInt32("id_tender");
                     }
+
                     reader.Close();
                     if (idTender == 0)
                     {
@@ -84,8 +89,10 @@ namespace ParserTenders.TenderDir
             }
             else
             {
-                if(root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615")) == null)
-                Log.Logger("Не могу найти тег TenderLotCancel", FilePath);
+                if (root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615")) == null)
+                {
+                    Log.Logger("Не могу найти тег TenderLotCancel", FilePath);
+                }
             }
         }
     }

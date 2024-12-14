@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -10,17 +14,17 @@ namespace ParserTenders.ParserDir
 
         public ParserWeb(TypeArguments ar)
         {
-            this.Ar = ar;
+            Ar = ar;
         }
 
         public virtual void Parsing()
         {
         }
-        
+
         public virtual void ParsingProc(ProcedureGpB pr)
         {
         }
-        
+
         public List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();
@@ -40,10 +44,14 @@ namespace ParserTenders.ParserDir
 
             return els;
         }
-        
+
         protected int MaxPage(string u)
         {
-            if (DownloadString.MaxDownload >= 1000) return 1;
+            if (DownloadString.MaxDownload >= 1000)
+            {
+                return 1;
+            }
+
             var s = DownloadString.DownLUserAgentEis(u);
             if (string.IsNullOrEmpty(s))
             {

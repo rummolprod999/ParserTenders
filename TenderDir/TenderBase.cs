@@ -1,5 +1,9 @@
-﻿using System.Data;
+﻿#region
+
+using System.Data;
 using MySql.Data.MySqlClient;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -17,7 +21,7 @@ namespace ParserTenders.TenderDir
             cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
             cmd1.Parameters.AddWithValue("@typeFz", typeFz);
             var dt1 = new DataTable();
-            var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter1 = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter1.Fill(dt1);
             if (dt1.Rows.Count > 0)
             {
@@ -25,7 +29,7 @@ namespace ParserTenders.TenderDir
                     $"UPDATE {Program.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
                 foreach (DataRow ten in dt1.Rows)
                 {
-                    var idTender = (int) ten["id_tender"];
+                    var idTender = (int)ten["id_tender"];
                     var cmd2 = new MySqlCommand(updateTender, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_tender", idTender);
@@ -44,11 +48,11 @@ namespace ParserTenders.TenderDir
             cmd7.Parameters.AddWithValue("@name", etpName);
             cmd7.Parameters.AddWithValue("@url", etpUrl);
             var dt5 = new DataTable();
-            var adapter5 = new MySqlDataAdapter {SelectCommand = cmd7};
+            var adapter5 = new MySqlDataAdapter { SelectCommand = cmd7 };
             adapter5.Fill(dt5);
             if (dt5.Rows.Count > 0)
             {
-                idEtp = (int) dt5.Rows[0].ItemArray[0];
+                idEtp = (int)dt5.Rows[0].ItemArray[0];
             }
             else
             {
@@ -59,7 +63,7 @@ namespace ParserTenders.TenderDir
                 cmd8.Parameters.AddWithValue("@name", etpName);
                 cmd8.Parameters.AddWithValue("@url", etpUrl);
                 cmd8.ExecuteNonQuery();
-                idEtp = (int) cmd8.LastInsertedId;
+                idEtp = (int)cmd8.LastInsertedId;
             }
         }
 
@@ -73,11 +77,11 @@ namespace ParserTenders.TenderDir
                 cmd5.Prepare();
                 cmd5.Parameters.AddWithValue("@name", PlacingWay);
                 var dt4 = new DataTable();
-                var adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
+                var adapter4 = new MySqlDataAdapter { SelectCommand = cmd5 };
                 adapter4.Fill(dt4);
                 if (dt4.Rows.Count > 0)
                 {
-                    idPlacingWay = (int) dt4.Rows[0].ItemArray[0];
+                    idPlacingWay = (int)dt4.Rows[0].ItemArray[0];
                 }
                 else
                 {
@@ -89,7 +93,7 @@ namespace ParserTenders.TenderDir
                     cmd6.Parameters.AddWithValue("@name", PlacingWay);
                     cmd6.Parameters.AddWithValue("@conformity", conformity);
                     cmd6.ExecuteNonQuery();
-                    idPlacingWay = (int) cmd6.LastInsertedId;
+                    idPlacingWay = (int)cmd6.LastInsertedId;
                 }
             }
             else

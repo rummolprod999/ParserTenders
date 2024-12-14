@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,11 +13,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserTend223 : Parser
     {
-        private string[] _purchaseDir = {
+        private readonly string[] _purchaseDir =
+        {
             "purchaseNotice", "purchaseNoticeAE", "purchaseNoticeAE94", "purchaseNoticeEP", "purchaseNoticeIS",
             "purchaseNoticeOA", "purchaseNoticeOK", "purchaseNoticeZK", "lotCancellation", "purchaseRejection",
             "purchaseNoticeZPESMBO", "purchaseNoticeZKESMBO", "purchaseNoticeKESMBO", "purchaseNoticeAESMBO"
@@ -36,14 +41,14 @@ namespace ParserTenders.ParserDir
                 {
                     var arch = new List<string>();
                     var pathParse = "";
-                    var regionPath = (string) row["path223"];
+                    var regionPath = (string)row["path223"];
                     switch (Program.Periodparsing)
                     {
-                        case (TypeArguments.Last223):
+                        case TypeArguments.Last223:
                             pathParse = $"/out/published/{regionPath}/{purchase}/";
                             arch = GetListArchLast(pathParse, regionPath, purchase);
                             break;
-                        case (TypeArguments.Daily223):
+                        case TypeArguments.Daily223:
                             pathParse = $"/out/published/{regionPath}/{purchase}/daily/";
                             arch = GetListArchDaily(pathParse, regionPath, purchase);
                             break;
@@ -57,7 +62,7 @@ namespace ParserTenders.ParserDir
 
                     foreach (var v in arch)
                     {
-                        GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"], purchase);
+                        GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"], purchase);
                     }
                 }
             }
@@ -71,7 +76,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при обновлении инн", e);
             }
         }
-        
+
         public void ParsingAst()
         {
             DtRegion = GetRegions();
@@ -81,14 +86,14 @@ namespace ParserTenders.ParserDir
                 {
                     var arch = new List<string>();
                     var pathParse = "";
-                    var regionPath = (string) row["path223"];
+                    var regionPath = (string)row["path223"];
                     switch (Program.Periodparsing)
                     {
-                        case (TypeArguments.Last223):
+                        case TypeArguments.Last223:
                             pathParse = $"/out/published/ast/{regionPath}/{purchase}/";
                             arch = GetListArchLast(pathParse, regionPath, purchase);
                             break;
-                        case (TypeArguments.Daily223):
+                        case TypeArguments.Daily223:
                             pathParse = $"/out/published/ast/{regionPath}/{purchase}/daily/";
                             arch = GetListArchDaily(pathParse, regionPath, purchase);
                             break;
@@ -102,7 +107,7 @@ namespace ParserTenders.ParserDir
 
                     foreach (var v in arch)
                     {
-                        GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"], purchase);
+                        GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"], purchase);
                     }
                 }
             }
@@ -123,7 +128,11 @@ namespace ParserTenders.ParserDir
             var archtemp = GetListFtp223(rootPath);
             foreach (var a in archtemp)
             {
-                if (!a.Contains("0000")) continue;
+                if (!a.Contains("0000"))
+                {
+                    continue;
+                }
+
                 try
                 {
                     GetElementsFromFtp($"/{a}/");
@@ -205,7 +214,11 @@ namespace ParserTenders.ParserDir
             var filea = "";
             var pathUnzip = "";
             filea = GetArch223(arch, pathParse);
-            if (string.IsNullOrEmpty(filea)) return;
+            if (string.IsNullOrEmpty(filea))
+            {
+                return;
+            }
+
             pathUnzip = Unzipped.Unzip(filea);
             if (pathUnzip != "")
             {
@@ -341,7 +354,7 @@ namespace ParserTenders.ParserDir
             var newLs = GetListFtp223New(pathParse);
             var yearsSearch = Program.Years.Select(y => $"{purchase}_{regionPath}{y}").ToList();
             foreach (var a in newLs
-                .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 if (a.Item2 == 0)
                 {
@@ -363,7 +376,11 @@ namespace ParserTenders.ParserDir
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (resRead) continue;
+                    if (resRead)
+                    {
+                        continue;
+                    }
+
                     var addArch =
                         $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                     var cmd1 = new MySqlCommand(addArch, connect);
@@ -379,10 +396,10 @@ namespace ParserTenders.ParserDir
         }
 
 
-        class ListArchDailyLost: IEnumerable<string>
+        private class ListArchDailyLost : IEnumerable<string>
         {
-            private ParserTend223 tnd;
-            private string pathParse;
+            private readonly ParserTend223 tnd;
+            private readonly string pathParse;
 
             public ListArchDailyLost(ParserTend223 t, string pathParse)
             {
@@ -396,8 +413,8 @@ namespace ParserTenders.ParserDir
                 var newLs = tnd.GetListFtp223New(pathParse);
                 var yearsSearch = Program.Years.Select(y => $"{y}").ToList();
                 foreach (var a in newLs
-                    .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1))
-                    .Where(a => tnd._purchaseDir.Any(t => a.Item1.ToLower().Contains(t.ToLower()))).Reverse())
+                             .Where(a => yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1))
+                             .Where(a => tnd._purchaseDir.Any(t => a.Item1.ToLower().Contains(t.ToLower()))).Reverse())
                 {
                     if (a.Item2 == 0)
                     {
@@ -419,7 +436,11 @@ namespace ParserTenders.ParserDir
                         var reader = cmd.ExecuteReader();
                         var resRead = reader.HasRows;
                         reader.Close();
-                        if (resRead) continue;
+                        if (resRead)
+                        {
+                            continue;
+                        }
+
                         var addArch =
                             $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
                         var cmd1 = new MySqlCommand(addArch, connect);

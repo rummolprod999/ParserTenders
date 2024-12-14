@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml;
@@ -6,6 +8,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -48,17 +52,17 @@ namespace ParserTenders.ParserDir
             foreach (var proc in procedures)
             {
                 //Console.WriteLine(proc);
-                var registryNumber = ((string) proc.SelectToken("@registry_number") ?? "").Trim();
+                var registryNumber = ((string)proc.SelectToken("@registry_number") ?? "").Trim();
                 var lots = GetElements(proc, "lot");
                 //List<LotGpB> l = new List<LotGpB>();
                 var l = new Dictionary<int, int>();
                 foreach (var lt in lots)
                 {
-                    var lotNumSt = ((string) lt.SelectToken("@number") ?? "").Trim();
+                    var lotNumSt = ((string)lt.SelectToken("@number") ?? "").Trim();
                     //Console.WriteLine(lotNumSt);
                     var lotNum = 0;
                     lotNum = int.TryParse(lotNumSt, out lotNum) ? int.Parse(lotNumSt) : 0;
-                    var status = (int?) lt.SelectToken("status") ?? 0;
+                    var status = (int?)lt.SelectToken("status") ?? 0;
                     try
                     {
                         l.Add(lotNum, status);
@@ -116,10 +120,10 @@ namespace ParserTenders.ParserDir
             var procedures = GetElements(json, "procedures.procedure");
             foreach (var proc in procedures)
             {
-                pr.IdXml = ((string) proc.SelectToken("id") ?? "").Trim();
-                pr.Version = (int?) proc.SelectToken("version") ?? 0;
-                pr.DatePublished = (DateTime?) proc.SelectToken("date_published") ?? DateTime.MinValue;
-                pr.DateVersion = (DateTime?) proc.SelectToken("date_last_update") ?? DateTime.MinValue;
+                pr.IdXml = ((string)proc.SelectToken("id") ?? "").Trim();
+                pr.Version = (int?)proc.SelectToken("version") ?? 0;
+                pr.DatePublished = (DateTime?)proc.SelectToken("date_published") ?? DateTime.MinValue;
+                pr.DateVersion = (DateTime?)proc.SelectToken("date_last_update") ?? DateTime.MinValue;
                 //Console.WriteLine(pr.dateVersion);
                 if (pr.DateVersion == DateTime.MinValue)
                 {
@@ -146,7 +150,7 @@ namespace ParserTenders.ParserDir
                     cmd.Parameters.AddWithValue("@purchase_number", pr.RegistryNumber);
                     cmd.Parameters.AddWithValue("@date_version", pr.DateVersion);
                     var dt = new DataTable();
-                    var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                    var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                     adapter.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
@@ -162,7 +166,7 @@ namespace ParserTenders.ParserDir
                         var cmd2 = new MySqlCommand(selectDateT, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@purchase_number", pr.RegistryNumber);
-                        var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                        var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
                         var dt2 = new DataTable();
                         adapter2.Fill(dt2);
                         //Console.WriteLine(dt2.Rows.Count);
@@ -170,7 +174,7 @@ namespace ParserTenders.ParserDir
                         {
                             //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                             update = true;
-                            if (pr.DateVersion >= (DateTime) row["date_version"])
+                            if (pr.DateVersion >= (DateTime)row["date_version"])
                             {
                                 row["cancel"] = 1;
                                 //row.AcceptChanges();
@@ -183,17 +187,17 @@ namespace ParserTenders.ParserDir
                         }
 
                         var commandBuilder =
-                            new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                            new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                         //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                         adapter2.Update(dt2);
                     }
 
-                    pr.Href = ((string) proc.SelectToken("procedure_url") ?? "").Trim();
-                    pr.PurchaseObjectInfo = ((string) proc.SelectToken("title") ?? "").Trim();
+                    pr.Href = ((string)proc.SelectToken("procedure_url") ?? "").Trim();
+                    pr.PurchaseObjectInfo = ((string)proc.SelectToken("title") ?? "").Trim();
                     pr.NoticeVersion = "";
                     pr.Printform = pr.Xml;
                     var org = new OrganizerGpB();
-                    org.OrganiserCustomerId = ((string) proc.SelectToken("organizer_customer_id") ?? "").Trim();
+                    org.OrganiserCustomerId = ((string)proc.SelectToken("organizer_customer_id") ?? "").Trim();
                     var urlCus = $"{_urlCustomerId}{org.OrganiserCustomerId}";
                     var xmlCus = DownloadString.DownL(urlCus);
                     if (xmlCus.Length < 100)
@@ -210,18 +214,21 @@ namespace ParserTenders.ParserDir
                     if (customers.Count > 0)
                     {
                         //Console.WriteLine(customers[0]);
-                        org.Inn = ((string) customers[0].SelectToken("inn") ?? "").Trim();
-                        org.Kpp = ((string) customers[0].SelectToken("kpp") ?? "").Trim();
-                        org.FullName = ((string) customers[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
+                        org.Inn = ((string)customers[0].SelectToken("inn") ?? "").Trim();
+                        org.Kpp = ((string)customers[0].SelectToken("kpp") ?? "").Trim();
+                        org.FullName = ((string)customers[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
                         if (!string.IsNullOrEmpty(org.FullName) && org.FullName.IndexOf("CDATA") != -1)
+                        {
                             org.FullName = org.FullName.Substring(9, org.FullName.Length - 12);
-                        org.PostAddress = ((string) customers[0].SelectToken("addr_post") ?? "").Trim();
-                        org.FactAddress = ((string) customers[0].SelectToken("addr_main") ?? "").Trim();
+                        }
+
+                        org.PostAddress = ((string)customers[0].SelectToken("addr_post") ?? "").Trim();
+                        org.FactAddress = ((string)customers[0].SelectToken("addr_main") ?? "").Trim();
                         org.ResponsibleRole = "";
                         org.ContactPerson = "";
-                        org.ContactEmail = ((string) customers[0].SelectToken("email") ?? "").Trim();
-                        org.ContactPhone = ((string) customers[0].SelectToken("phone") ?? "").Trim();
-                        org.ContactFax = ((string) customers[0].SelectToken("fax") ?? "").Trim();
+                        org.ContactEmail = ((string)customers[0].SelectToken("email") ?? "").Trim();
+                        org.ContactPhone = ((string)customers[0].SelectToken("phone") ?? "").Trim();
+                        org.ContactFax = ((string)customers[0].SelectToken("fax") ?? "").Trim();
                     }
 
                     pr.IdOrg = 0;
@@ -234,11 +241,11 @@ namespace ParserTenders.ParserDir
                         cmd3.Parameters.AddWithValue("@inn", org.Inn);
                         cmd3.Parameters.AddWithValue("@kpp", org.Kpp);
                         var dt3 = new DataTable();
-                        var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                        var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                         adapter3.Fill(dt3);
                         if (dt3.Rows.Count > 0)
                         {
-                            pr.IdOrg = (int) dt3.Rows[0].ItemArray[0];
+                            pr.IdOrg = (int)dt3.Rows[0].ItemArray[0];
                         }
                         else
                         {
@@ -255,7 +262,7 @@ namespace ParserTenders.ParserDir
                             cmd4.Parameters.AddWithValue("@contact_phone", org.ContactPhone);
                             cmd4.Parameters.AddWithValue("@contact_fax", org.ContactFax);
                             cmd4.ExecuteNonQuery();
-                            pr.IdOrg = (int) cmd4.LastInsertedId;
+                            pr.IdOrg = (int)cmd4.LastInsertedId;
                         }
 
                         //Console.WriteLine(pr.IdOrg);
@@ -266,9 +273,9 @@ namespace ParserTenders.ParserDir
                     }
 
                     pr.IdPlacingWay = 0;
-                    var pw = new PlacingWayGpB {Code = "", Name = ""};
-                    pw.Code = ((string) proc.SelectToken("procedure_type") ?? "").Trim();
-                    pw.Name = ((string) proc.SelectToken("procedure_type_name") ?? "").Trim();
+                    var pw = new PlacingWayGpB { Code = "", Name = "" };
+                    pw.Code = ((string)proc.SelectToken("procedure_type") ?? "").Trim();
+                    pw.Name = ((string)proc.SelectToken("procedure_type_name") ?? "").Trim();
                     if (!string.IsNullOrEmpty(pw.Code) && !string.IsNullOrEmpty(pw.Name))
                     {
                         var selectPlacingWay =
@@ -278,11 +285,11 @@ namespace ParserTenders.ParserDir
                         cmd4.Parameters.AddWithValue("@code", pw.Code);
                         cmd4.Parameters.AddWithValue("@name", pw.Name);
                         var dt3 = new DataTable();
-                        var adapter3 = new MySqlDataAdapter {SelectCommand = cmd4};
+                        var adapter3 = new MySqlDataAdapter { SelectCommand = cmd4 };
                         adapter3.Fill(dt3);
                         if (dt3.Rows.Count > 0)
                         {
-                            pr.IdPlacingWay = (int) dt3.Rows[0].ItemArray[0];
+                            pr.IdPlacingWay = (int)dt3.Rows[0].ItemArray[0];
                         }
                         else
                         {
@@ -293,7 +300,7 @@ namespace ParserTenders.ParserDir
                             cmd5.Parameters.AddWithValue("@code", pw.Code);
                             cmd5.Parameters.AddWithValue("@name", pw.Name);
                             cmd5.ExecuteNonQuery();
-                            pr.IdPlacingWay = (int) cmd5.LastInsertedId;
+                            pr.IdPlacingWay = (int)cmd5.LastInsertedId;
                         }
                     }
 
@@ -307,11 +314,11 @@ namespace ParserTenders.ParserDir
                     cmd6.Parameters.AddWithValue("@name", etpName);
                     cmd6.Parameters.AddWithValue("@url", etpUrl);
                     var dt4 = new DataTable();
-                    var adapter4 = new MySqlDataAdapter {SelectCommand = cmd6};
+                    var adapter4 = new MySqlDataAdapter { SelectCommand = cmd6 };
                     adapter4.Fill(dt4);
                     if (dt4.Rows.Count > 0)
                     {
-                        pr.IdEtp = (int) dt4.Rows[0].ItemArray[0];
+                        pr.IdEtp = (int)dt4.Rows[0].ItemArray[0];
                     }
                     else
                     {
@@ -322,7 +329,7 @@ namespace ParserTenders.ParserDir
                         cmd7.Parameters.AddWithValue("@name", etpName);
                         cmd7.Parameters.AddWithValue("@url", etpUrl);
                         cmd7.ExecuteNonQuery();
-                        pr.IdEtp = (int) cmd7.LastInsertedId;
+                        pr.IdEtp = (int)cmd7.LastInsertedId;
                     }
 
                     pr.BiddingDate = DateTime.MinValue;
@@ -331,24 +338,24 @@ namespace ParserTenders.ParserDir
                     var lots = GetElements(proc, "lots.lot");
                     if (lots.Count > 0)
                     {
-                        pr.EndDate = (DateTime?) lots[0].SelectToken("date_end_registration") ?? DateTime.MinValue;
-                        pr.BiddingDate = (DateTime?) lots[0].SelectToken("date_applic_opened") ?? DateTime.MinValue;
+                        pr.EndDate = (DateTime?)lots[0].SelectToken("date_end_registration") ?? DateTime.MinValue;
+                        pr.BiddingDate = (DateTime?)lots[0].SelectToken("date_applic_opened") ?? DateTime.MinValue;
                         if (pr.BiddingDate == DateTime.MinValue)
                         {
                             pr.BiddingDate =
-                                (DateTime?) lots[0].SelectToken("date_end_second_parts_review") ?? DateTime.MinValue;
+                                (DateTime?)lots[0].SelectToken("date_end_second_parts_review") ?? DateTime.MinValue;
                             if (pr.BiddingDate == DateTime.MinValue)
                             {
                                 pr.BiddingDate =
-                                    (DateTime?) lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
+                                    (DateTime?)lots[0].SelectToken("date_begin_auction") ?? DateTime.MinValue;
                             }
                         }
 
-                        pr.ScoringDate = (DateTime?) lots[0].SelectToken("date_end_first_parts_review") ??
+                        pr.ScoringDate = (DateTime?)lots[0].SelectToken("date_end_first_parts_review") ??
                                          DateTime.MinValue;
                     }
 
-                    var typeFz = (int?) proc.SelectToken("FZ223") ?? 0;
+                    var typeFz = (int?)proc.SelectToken("FZ223") ?? 0;
                     typeFz = typeFz == 0 ? 1 : 223;
                     //Console.WriteLine(typeFz);
                     var insertTender =
@@ -375,7 +382,7 @@ namespace ParserTenders.ParserDir
                     cmd8.Parameters.AddWithValue("@xml", pr.Xml);
                     cmd8.Parameters.AddWithValue("@print_form", pr.Printform);
                     var resInsertTender = cmd8.ExecuteNonQuery();
-                    var idTender = (int) cmd8.LastInsertedId;
+                    var idTender = (int)cmd8.LastInsertedId;
                     if (update)
                     {
                         Program.UpGazprom++;
@@ -389,9 +396,9 @@ namespace ParserTenders.ParserDir
                     attachments.AddRange(GetElements(proc, "procedure_common_docs.doc"));
                     foreach (var att in attachments)
                     {
-                        var attachName = ((string) att.SelectToken("@file_name") ?? "").Trim();
-                        var attachDescription = ((string) att.SelectToken("@title") ?? "").Trim();
-                        var attachUrl = ((string) att.SelectToken("@url") ?? "").Trim();
+                        var attachName = ((string)att.SelectToken("@file_name") ?? "").Trim();
+                        var attachDescription = ((string)att.SelectToken("@title") ?? "").Trim();
+                        var attachUrl = ((string)att.SelectToken("@url") ?? "").Trim();
                         var insertAttach =
                             $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
                         var cmd9 = new MySqlCommand(insertAttach, connect);
@@ -406,11 +413,11 @@ namespace ParserTenders.ParserDir
                     foreach (var lot in lots)
                     {
                         var lt = new LotGpB();
-                        lt.LotNumber = (int?) lot.SelectToken("number") ?? 0;
+                        lt.LotNumber = (int?)lot.SelectToken("number") ?? 0;
                         lt.IdTender = idTender;
-                        lt.MaxPrice = (decimal?) lot.SelectToken("start_price") ?? 0.0m;
-                        lt.Subject = ((string) lot.SelectToken("subject") ?? "").Trim();
-                        lt.Currency = ((string) proc.SelectToken("currency_name") ?? "").Trim();
+                        lt.MaxPrice = (decimal?)lot.SelectToken("start_price") ?? 0.0m;
+                        lt.Subject = ((string)lot.SelectToken("subject") ?? "").Trim();
+                        lt.Currency = ((string)proc.SelectToken("currency_name") ?? "").Trim();
                         var insertLot =
                             $"INSERT INTO {Program.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                         var cmd18 = new MySqlCommand(insertLot, connect);
@@ -420,13 +427,13 @@ namespace ParserTenders.ParserDir
                         cmd18.Parameters.AddWithValue("@max_price", lt.MaxPrice);
                         cmd18.Parameters.AddWithValue("@currency", lt.Currency);
                         cmd18.ExecuteNonQuery();
-                        var idLot = (int) cmd18.LastInsertedId;
+                        var idLot = (int)cmd18.LastInsertedId;
                         var attachmentsL = GetElements(lot, "docs.doc");
                         foreach (var att in attachmentsL)
                         {
-                            var attachName = ((string) att.SelectToken("@file_name") ?? "").Trim();
-                            var attachDescription = ((string) att.SelectToken("@title") ?? "").Trim();
-                            var attachUrl = ((string) att.SelectToken("@url") ?? "").Trim();
+                            var attachName = ((string)att.SelectToken("@file_name") ?? "").Trim();
+                            var attachDescription = ((string)att.SelectToken("@title") ?? "").Trim();
+                            var attachUrl = ((string)att.SelectToken("@url") ?? "").Trim();
                             var insertAttach =
                                 $"INSERT INTO {Program.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
                             var cmd9 = new MySqlCommand(insertAttach, connect);
@@ -445,15 +452,15 @@ namespace ParserTenders.ParserDir
                         //Console.WriteLine(customerslot[0]);
                         if (customerslot.Count > 0)
                         {
-                            cust.OrganiserCustomerId = ((string) customerslot[0].SelectToken("@id") ?? "").Trim();
-                            cust.Inn = ((string) customerslot[0].SelectToken("inn") ?? "").Trim();
-                            cust.Kpp = ((string) customerslot[0].SelectToken("kpp") ?? "").Trim();
-                            cust.FullName = ((string) customerslot[0].SelectToken("full_name") ?? "").Trim();
+                            cust.OrganiserCustomerId = ((string)customerslot[0].SelectToken("@id") ?? "").Trim();
+                            cust.Inn = ((string)customerslot[0].SelectToken("inn") ?? "").Trim();
+                            cust.Kpp = ((string)customerslot[0].SelectToken("kpp") ?? "").Trim();
+                            cust.FullName = ((string)customerslot[0].SelectToken("full_name") ?? "").Trim();
                             if (!string.IsNullOrEmpty(cust.Inn))
                             {
                                 //Console.WriteLine(cust.Inn);
                                 var selectOdCustomer =
-                                    $"SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                    "SELECT regNumber FROM od_customer WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                                 var cmd10 = new MySqlCommand(selectOdCustomer, connect);
                                 cmd10.Prepare();
                                 cmd10.Parameters.AddWithValue("@inn", cust.Inn);
@@ -462,14 +469,14 @@ namespace ParserTenders.ParserDir
                                 if (reader4.HasRows)
                                 {
                                     reader4.Read();
-                                    cust.CustomerRegNumber = (string) reader4["regNumber"];
+                                    cust.CustomerRegNumber = (string)reader4["regNumber"];
                                 }
 
                                 reader4.Close();
                                 if (string.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     var selectOdCustomerFromFtp =
-                                        $"SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                        "SELECT regNumber FROM od_customer_from_ftp WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                                     var cmd11 = new MySqlCommand(selectOdCustomerFromFtp, connect);
                                     cmd11.Prepare();
                                     cmd11.Parameters.AddWithValue("@inn", cust.Inn);
@@ -478,7 +485,7 @@ namespace ParserTenders.ParserDir
                                     if (reader5.HasRows)
                                     {
                                         reader5.Read();
-                                        cust.CustomerRegNumber = (string) reader5["regNumber"];
+                                        cust.CustomerRegNumber = (string)reader5["regNumber"];
                                     }
 
                                     reader5.Close();
@@ -487,7 +494,7 @@ namespace ParserTenders.ParserDir
                                 if (string.IsNullOrEmpty(cust.CustomerRegNumber))
                                 {
                                     var selectOdCustomerFromFtp223 =
-                                        $"SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
+                                        "SELECT regNumber FROM od_customer_from_ftp223 WHERE inn = @inn AND kpp = @kpp AND regNumber IS NOT NULL";
                                     var cmd12 = new MySqlCommand(selectOdCustomerFromFtp223, connect);
                                     cmd12.Prepare();
                                     cmd12.Parameters.AddWithValue("@inn", cust.Inn);
@@ -496,7 +503,7 @@ namespace ParserTenders.ParserDir
                                     if (reader6.HasRows)
                                     {
                                         reader6.Read();
-                                        cust.CustomerRegNumber = (string) reader6["regNumber"];
+                                        cust.CustomerRegNumber = (string)reader6["regNumber"];
                                     }
 
                                     reader6.Close();
@@ -513,7 +520,7 @@ namespace ParserTenders.ParserDir
                                     if (reader7.HasRows)
                                     {
                                         reader7.Read();
-                                        idCustomer = (int) reader7["id_customer"];
+                                        idCustomer = (int)reader7["id_customer"];
                                         reader7.Close();
                                     }
                                     else
@@ -527,7 +534,7 @@ namespace ParserTenders.ParserDir
                                         cmd14.Parameters.AddWithValue("@full_name", cust.FullName);
                                         cmd14.Parameters.AddWithValue("@inn", cust.Inn);
                                         cmd14.ExecuteNonQuery();
-                                        idCustomer = (int) cmd14.LastInsertedId;
+                                        idCustomer = (int)cmd14.LastInsertedId;
                                     }
                                 }
                                 else
@@ -541,7 +548,7 @@ namespace ParserTenders.ParserDir
                                     if (reader8.HasRows)
                                     {
                                         reader8.Read();
-                                        idCustomer = (int) reader8["id_customer"];
+                                        idCustomer = (int)reader8["id_customer"];
                                         reader8.Close();
                                     }
                                     else
@@ -562,18 +569,21 @@ namespace ParserTenders.ParserDir
                                         if (cst.Count > 0)
                                         {
                                             cust.FullName =
-                                                ((string) cst[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
+                                                ((string)cst[0].SelectToken("full_name.#cdata-section") ?? "").Trim();
                                             if (!string.IsNullOrEmpty(cust.FullName) &&
                                                 cust.FullName.IndexOf("CDATA") != -1)
+                                            {
                                                 cust.FullName = cust.FullName.Substring(9, cust.FullName.Length - 12);
-                                            cust.PostAddress = ((string) cst[0].SelectToken("addr_post") ?? "").Trim();
-                                            cust.FactAddress = ((string) cst[0].SelectToken("addr_main") ?? "").Trim();
+                                            }
+
+                                            cust.PostAddress = ((string)cst[0].SelectToken("addr_post") ?? "").Trim();
+                                            cust.FactAddress = ((string)cst[0].SelectToken("addr_main") ?? "").Trim();
                                             cust.ResponsibleRole = "";
                                             cust.ContactPerson = "";
-                                            cust.ContactEmail = ((string) cst[0].SelectToken("email") ?? "").Trim();
-                                            cust.ContactPhone = ((string) cst[0].SelectToken("phone") ?? "").Trim();
-                                            cust.ContactFax = ((string) cst[0].SelectToken("fax") ?? "").Trim();
-                                            cust.Ogrn = ((string) cst[0].SelectToken("ogrn") ?? "").Trim();
+                                            cust.ContactEmail = ((string)cst[0].SelectToken("email") ?? "").Trim();
+                                            cust.ContactPhone = ((string)cst[0].SelectToken("phone") ?? "").Trim();
+                                            cust.ContactFax = ((string)cst[0].SelectToken("fax") ?? "").Trim();
+                                            cust.Ogrn = ((string)cst[0].SelectToken("ogrn") ?? "").Trim();
                                         }
 
                                         var regNum223 = $"00000223{cust.Inn}";
@@ -585,7 +595,7 @@ namespace ParserTenders.ParserDir
                                         cmd16.Parameters.AddWithValue("@full_name", cust.FullName);
                                         cmd16.Parameters.AddWithValue("@inn", cust.Inn);
                                         cmd16.ExecuteNonQuery();
-                                        idCustomer = (int) cmd16.LastInsertedId;
+                                        idCustomer = (int)cmd16.LastInsertedId;
                                         var insertCustomer223 =
                                             $"INSERT INTO {Program.Prefix}customer223 SET inn = @inn, full_name = @full_name, contact = @contact, kpp = @kpp, ogrn = @ogrn, post_address = @post_address, phone = @phone, fax = @fax, email = @email";
                                         var cmd17 = new MySqlCommand(insertCustomer223, connect);
@@ -609,11 +619,11 @@ namespace ParserTenders.ParserDir
                             }
                         }
 
-                        var deliveryPlace = ((string) lot.SelectToken("delivery_places.place") ?? "").Trim();
-                        var deliveryTerm = ((string) lot.SelectToken("delivery_places.term") ?? "").Trim();
+                        var deliveryPlace = ((string)lot.SelectToken("delivery_places.place") ?? "").Trim();
+                        var deliveryTerm = ((string)lot.SelectToken("delivery_places.term") ?? "").Trim();
                         var applicationGuaranteeAmount =
-                            ((string) lot.SelectToken("guarantee_application") ?? "").Trim();
-                        var contractGuaranteeAmount = ((string) lot.SelectToken("guarantee_contract") ?? "").Trim();
+                            ((string)lot.SelectToken("guarantee_application") ?? "").Trim();
+                        var contractGuaranteeAmount = ((string)lot.SelectToken("guarantee_contract") ?? "").Trim();
                         var insertCustomerRequirement =
                             $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price";
                         var cmd22 = new MySqlCommand(insertCustomerRequirement, connect);
@@ -639,13 +649,13 @@ namespace ParserTenders.ParserDir
                         var lotitems = GetElements(lot, "lot_units.unit");
                         foreach (var lotitem in lotitems)
                         {
-                            var okpd2Code = ((string) lotitem.SelectToken("okdp_code") ?? "").Trim();
-                            var okpdName = ((string) lotitem.SelectToken("okdp_name") ?? "").Trim();
-                            var name = ((string) lotitem.SelectToken("name") ?? "").Trim();
+                            var okpd2Code = ((string)lotitem.SelectToken("okdp_code") ?? "").Trim();
+                            var okpdName = ((string)lotitem.SelectToken("okdp_name") ?? "").Trim();
+                            var name = ((string)lotitem.SelectToken("name") ?? "").Trim();
                             name = $"{name} {lt.Subject}".Trim();
-                            var quantityValue = ((string) lotitem.SelectToken("quantity") ?? "")
+                            var quantityValue = ((string)lotitem.SelectToken("quantity") ?? "")
                                 .Trim();
-                            var okei = ((string) lotitem.SelectToken("okei_name") ?? "").Trim();
+                            var okei = ((string)lotitem.SelectToken("okei_name") ?? "").Trim();
                             var okpd2GroupCode = 0;
                             var okpd2GroupLevel1Code = "";
                             if (!string.IsNullOrEmpty(okpd2Code))

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -10,6 +12,8 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using TikaOnDotNet.TextExtraction;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserAttach
@@ -19,8 +23,8 @@ namespace ParserTenders.ParserDir
         protected List<string> ProxyList;
         protected List<string> ProxyListAuth;
         protected List<string> UseragentList;
-        private object _locker = new object();
-        private object _locker2 = new object();
+        private readonly object _locker = new object();
+        private readonly object _locker2 = new object();
         public event Action<int> AddAttachment;
         public event Action<int> NotAddAttachment;
 
@@ -29,30 +33,39 @@ namespace ParserTenders.ParserDir
             AddAttachment += delegate(int dd)
             {
                 if (dd > 0)
+                {
                     lock (_locker)
                     {
                         Program.AddAttach++;
                     }
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить attach");
+                }
             };
             NotAddAttachment += delegate(int dd)
             {
                 if (dd > 0)
+                {
                     lock (_locker2)
                     {
                         Program.NotAddAttach++;
                     }
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить notattach");
+                }
             };
-            this.Arg = a;
+            Arg = a;
             var d = GetAttachFromDb();
             var listAttachTmp = new List<int>();
             foreach (DataRow row in d.Rows)
             {
-                listAttachTmp.Add((int) row["id_attachment"]);
+                listAttachTmp.Add((int)row["id_attachment"]);
             }
+
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -81,6 +94,7 @@ namespace ParserTenders.ParserDir
                             ListAttach.Add(attch);
                         }
                     }
+
                     reader.Close();
                 }
             }
@@ -97,6 +111,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Не получили список прокси", e);
                 return;
             }
+
             try
             {
                 UseragentList = GetUserAgent();
@@ -106,10 +121,11 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Не получили список user agent", e);
                 return;
             }
+
             try
             {
-                Parallel.ForEach<AttachStruct>(ListAttach,
-                    new ParallelOptions {MaxDegreeOfParallelism = Program.MaxThread}, AddAttach);
+                Parallel.ForEach(ListAttach,
+                    new ParallelOptions { MaxDegreeOfParallelism = Program.MaxThread }, AddAttach);
                 /*foreach (var v in ListAttach)
                 {
                     AddAttach(v);
@@ -119,6 +135,7 @@ namespace ParserTenders.ParserDir
             {
                 Log.Logger("Ошибка при распараллеливании attach", e);
             }
+
             try
             {
                 DeleteOldAttach();
@@ -143,6 +160,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при получении файла", e, att.UrlAttach);
                 return;
             }
+
             try
             {
                 var attachtext = "";
@@ -174,6 +192,7 @@ namespace ParserTenders.ParserDir
                             {
                                 myProcess.Kill();
                             }
+
                             var fTxt = $"{att.IdAttach}.txt";
                             var fl = new FileInfo(fTxt);
                             if (fl.Exists)
@@ -186,6 +205,7 @@ namespace ParserTenders.ParserDir
                                         attachtext = Regex.Replace(attachtext, @"\s+", " ");
                                         attachtext = attachtext.Trim();
                                     }
+
                                     Log.Logger("Получили текст альтернативным методом", att.UrlAttach);
                                     fl.Delete();
                                 }
@@ -205,6 +225,7 @@ namespace ParserTenders.ParserDir
                             Log.Logger("Не Получили текст альтернативным методом", att.UrlAttach, b);
                         }
                     }
+
                     fileInf.Delete();
                 }
                 else
@@ -215,6 +236,7 @@ namespace ParserTenders.ParserDir
                         Log.Logger("Слишком большой файл", att.UrlAttach);
                     }
                 }
+
                 if (!string.IsNullOrEmpty(attachtext))
                 {
                     using (var connect = ConnectToDb.GetDbConnection())
@@ -243,6 +265,7 @@ namespace ParserTenders.ParserDir
                         var addAtt = cmd.ExecuteNonQuery();
                         NotAddAttachment?.Invoke(addAtt);
                     }
+
                     Log.Logger("Пустой текст", att.UrlAttach);
                 }
             }
@@ -265,9 +288,10 @@ namespace ParserTenders.ParserDir
                 var cmd = new MySqlCommand(selectA, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@EndDate", dateNow);
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
             }
+
             return dt;
         }
 
@@ -292,7 +316,7 @@ namespace ParserTenders.ParserDir
                 var f = new FileInfo(proxyPath);
                 if (f.Exists)
                 {
-                    using (var sr = new StreamReader(proxyPath, System.Text.Encoding.Default))
+                    using (var sr = new StreamReader(proxyPath, Encoding.Default))
                     {
                         string line;
                         while ((line = sr.ReadLine()) != null)
@@ -300,6 +324,7 @@ namespace ParserTenders.ParserDir
                             p.Add(line.Trim());
                         }
                     }
+
                     ProxyList = p;
                 }
             }
@@ -309,7 +334,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при попытке скачать список прокси без авторизации, берем старый", e);
                 var path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}proxy.txt";
                 var p = new List<string>();
-                using (var sr = new StreamReader(path, System.Text.Encoding.Default))
+                using (var sr = new StreamReader(path, Encoding.Default))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -317,8 +342,10 @@ namespace ParserTenders.ParserDir
                         p.Add(line.Trim());
                     }
                 }
+
                 ProxyList = p;
             }
+
             try
             {
                 var p = new List<string>();
@@ -329,7 +356,7 @@ namespace ParserTenders.ParserDir
                 var f = new FileInfo(proxyPath);
                 if (f.Exists)
                 {
-                    using (var sr = new StreamReader(proxyPath, System.Text.Encoding.Default))
+                    using (var sr = new StreamReader(proxyPath, Encoding.Default))
                     {
                         string line;
                         while ((line = sr.ReadLine()) != null)
@@ -337,6 +364,7 @@ namespace ParserTenders.ParserDir
                             p.Add(line.Trim());
                         }
                     }
+
                     ProxyListAuth = p;
                 }
             }
@@ -346,7 +374,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при попытке скачать список прокси с авторизацией, берем старый", e);
                 var path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}proxy_auth.txt";
                 var p = new List<string>();
-                using (var sr = new StreamReader(path, System.Text.Encoding.Default))
+                using (var sr = new StreamReader(path, Encoding.Default))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -354,6 +382,7 @@ namespace ParserTenders.ParserDir
                         p.Add(line.Trim());
                     }
                 }
+
                 ProxyListAuth = p;
             }
         }
@@ -362,7 +391,7 @@ namespace ParserTenders.ParserDir
         {
             var path = $"{Program.PathProgram}{Path.DirectorySeparatorChar}user_agents.txt";
             var p = new List<string>();
-            using (var sr = new StreamReader(path, System.Text.Encoding.Default))
+            using (var sr = new StreamReader(path, Encoding.Default))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)
@@ -370,6 +399,7 @@ namespace ParserTenders.ParserDir
                     p.Add(line.Trim());
                 }
             }
+
             return p;
         }
 
@@ -385,7 +415,7 @@ namespace ParserTenders.ParserDir
                 var cmd = new MySqlCommand(selectOldAttach, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@EndDate", dateNow);
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 foreach (DataRow row in dt.Rows)
                 {
@@ -393,7 +423,7 @@ namespace ParserTenders.ParserDir
                         $"UPDATE {Program.Prefix}attachment SET attach_text = '' WHERE id_attachment = @id_attachment";
                     var cmd1 = new MySqlCommand(updateA, connect);
                     cmd1.Prepare();
-                    cmd1.Parameters.AddWithValue("@id_attachment", (int) row["id_attachment"]);
+                    cmd1.Parameters.AddWithValue("@id_attachment", (int)row["id_attachment"]);
                     cmd1.ExecuteNonQuery();
                 }
             }

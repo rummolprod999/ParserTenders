@@ -1,41 +1,51 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
-    public class ParserSpecTorgWeb: ParserWeb
+    public class ParserSpecTorgWeb : ParserWeb
     {
         public ParserSpecTorgWeb(TypeArguments a) : base(a)
         {
         }
+
         public static string _site = "https://www.sstorg.ru";
 
-        private TypeSpecTorg[] _listUrls = {
-            new TypeSpecTorg()
+        private readonly TypeSpecTorg[] _listUrls =
+        {
+            new TypeSpecTorg
             {
                 Type = SpecTorgType.Advert,
                 UrlType = "/market/?action=list_public_pdo_multilot&type=5990&status_group=sg_active&from=",
-                UrlTypeList = "https://www.sstorg.ru/market/?action=list_public_pdo_multilot&type=5990&status_group=sg_active&from=0"
+                UrlTypeList =
+                    "https://www.sstorg.ru/market/?action=list_public_pdo_multilot&type=5990&status_group=sg_active&from=0"
             },
-            new TypeSpecTorg()
+            new TypeSpecTorg
             {
                 Type = SpecTorgType.RequestCustomer,
                 UrlType = "/market/?action=list_public_pdo_multilot&type=5360&status_group=sg_active&from=",
-                UrlTypeList = "https://www.sstorg.ru/market/?action=list_public_pdo_multilot&type=5360&status_group=sg_active&from=0"
+                UrlTypeList =
+                    "https://www.sstorg.ru/market/?action=list_public_pdo_multilot&type=5360&status_group=sg_active&from=0"
             },
-            new TypeSpecTorg()
+            new TypeSpecTorg
             {
                 Type = SpecTorgType.Request,
                 UrlType = "/trades/corporate/ProposalRequest/?action=list_published&from=",
                 UrlTypeList = "https://www.sstorg.ru/trades/corporate/ProposalRequest/?action=list_published&from=0"
             },
-            new TypeSpecTorg()
+            new TypeSpecTorg
             {
                 Type = SpecTorgType.Auction,
                 UrlType = "/market/?action=list_public_auctions&type=5560&status_group=sg_published&from=",
-                UrlTypeList = "https://www.sstorg.ru/market/?action=list_public_auctions&type=5560&status_group=sg_published&from=0"
+                UrlTypeList =
+                    "https://www.sstorg.ru/market/?action=list_public_auctions&type=5560&status_group=sg_published&from=0"
             }
         };
 
@@ -61,11 +71,12 @@ namespace ParserTenders.ParserDir
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                var maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"navbar\"]/a)[last()-1]")?.InnerText;
+                var maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"navbar\"]/a)[last()-1]")
+                    ?.InnerText;
                 //Console.WriteLine(maxNumPage);              
                 if (!string.IsNullOrEmpty(maxNumPage))
                 {
-                    maxNumPage = (System.Net.WebUtility.HtmlDecode(maxNumPage)).Trim();
+                    maxNumPage = WebUtility.HtmlDecode(maxNumPage).Trim();
                     if (int.TryParse(maxNumPage, out var page))
                     {
                         var lPage = new List<string>();
@@ -135,7 +146,6 @@ namespace ParserTenders.ParserDir
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
-                        
                     }
                     catch (Exception e)
                     {
@@ -153,20 +163,20 @@ namespace ParserTenders.ParserDir
             var title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
             var entity = $"{title2}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
-            entity = System.Net.WebUtility.HtmlDecode(entity);
+            entity = WebUtility.HtmlDecode(entity);
             var _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             var urlOrg = $"{_site}{_urlOrg}";
-            
+
             var _datePub =
                 (node.SelectSingleNode("td[5]/text()[1]")?.InnerText ?? "").Trim();
             var _dateOpen =
                 (node.SelectSingleNode("td[5]/text()[2]")?.InnerText ?? "").Trim();
             var datePub = UtilsFromParsing.ParseDateTend(_datePub);
             var dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
-            var t = new SpecTorgTender{UrlTender = urlT, Entity = entity, DateOpen = dateOpen, DatePub = datePub, TypeSpecTorgT = tp};
+            var t = new SpecTorgTender
+                { UrlTender = urlT, Entity = entity, DateOpen = dateOpen, DatePub = datePub, TypeSpecTorgT = tp };
             try
             {
-                
                 switch (tp.Type)
                 {
                     case SpecTorgType.Advert:
@@ -183,9 +193,8 @@ namespace ParserTenders.ParserDir
             {
                 Log.Logger(e, urlT);
             }
-            
         }
-        
+
         private void ParserTendAuction(TypeSpecTorg tp, HtmlNode node)
         {
             var urlT = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
@@ -194,7 +203,7 @@ namespace ParserTenders.ParserDir
             var title2 = (node.SelectSingleNode("td[3]/a").InnerText ?? "").Trim();
             var entity = $"{title2}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
-            entity = System.Net.WebUtility.HtmlDecode(entity);
+            entity = WebUtility.HtmlDecode(entity);
             var _urlOrg = (node.SelectSingleNode("td[2]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             var urlOrg = $"{_site}{_urlOrg}";
             var _price = (node.SelectSingleNode("td[5]").InnerText ?? "").Trim();
@@ -203,7 +212,7 @@ namespace ParserTenders.ParserDir
                 (node.SelectSingleNode("td[6]/text()[1]")?.InnerText ?? "").Trim();
             var _dateOpen =
                 (node.SelectSingleNode("td[6]/text()[2]")?.InnerText ?? "").Trim();
-            
+
             var _dateRes =
                 (node.SelectSingleNode("td[6]/text()[2]")?.InnerText ?? "")
                 .Trim();
@@ -225,26 +234,28 @@ namespace ParserTenders.ParserDir
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }*/
             var dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            var t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
+            var t = new SpecTorgTender
+            {
+                UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd,
+                DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp
+            };
             try
             {
                 switch (tp.Type)
                 {
-                    
                     case SpecTorgType.Auction:
                         t.ParseAuction();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
             }
             catch (Exception e)
             {
                 Log.Logger(e, urlT);
             }
         }
-        
+
         private void ParserRequest(TypeSpecTorg tp, HtmlNode node)
         {
             var urlT = (node.SelectSingleNode("td/a[@href]")?.Attributes["href"].Value ?? "").Trim();
@@ -253,7 +264,7 @@ namespace ParserTenders.ParserDir
             var title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
             var entity = $"{title2} {title1}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
-            entity = System.Net.WebUtility.HtmlDecode(entity);
+            entity = WebUtility.HtmlDecode(entity);
             var _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             var urlOrg = $"{_site}{_urlOrg}";
             var _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
@@ -262,7 +273,7 @@ namespace ParserTenders.ParserDir
                 (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]")?.InnerText ?? "").Trim();
             var _dateOpen =
                 (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]")?.InnerText ?? "").Trim();
-            
+
             var _dateRes =
                 (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]")?.InnerText ?? "")
                 .Trim();
@@ -273,18 +284,26 @@ namespace ParserTenders.ParserDir
             if (dateOpen == DateTime.MinValue)
             {
                 _dateOpen =
-                    (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]/strong")?.InnerText ?? "").Trim();
+                    (node.SelectSingleNode("td/span[@title = \"Дата окончания приема заявок\"]/strong")?.InnerText ??
+                     "").Trim();
                 dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             }
+
             var dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             if (dateRes == DateTime.MinValue)
             {
                 _dateRes =
-                    (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]/strong")?.InnerText ?? "").Trim();
+                    (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения заявок\"]/strong")?.InnerText ?? "")
+                    .Trim();
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }
+
             var dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
-            var t = new SpecTorgTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp};
+            var t = new SpecTorgTender
+            {
+                UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd,
+                DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeSpecTorgT = tp
+            };
             try
             {
                 t.ParseRequest();

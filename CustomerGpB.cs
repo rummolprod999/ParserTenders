@@ -4,6 +4,7 @@
     {
         public string Ogrn { get; set; }
         public string CustomerRegNumber { get; set; }
+
         public CustomerGpB()
         {
             Ogrn = "";

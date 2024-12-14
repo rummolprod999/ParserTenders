@@ -1,17 +1,23 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Net;
+
+#endregion
 
 namespace ParserTenders
 {
-    public class WebDownload: WebClient
+    public class WebDownload : WebClient
     {
         public int Timeout { get; set; }
 
-        public WebDownload() : this(60000) { }
+        public WebDownload() : this(60000)
+        {
+        }
 
         public WebDownload(int timeout)
         {
-            this.Timeout = timeout;
+            Timeout = timeout;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
@@ -19,8 +25,9 @@ namespace ParserTenders
             var request = base.GetWebRequest(address);
             if (request != null)
             {
-                request.Timeout = this.Timeout;
+                request.Timeout = Timeout;
             }
+
             return request;
         }
     }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
@@ -5,10 +7,12 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+#endregion
+
 namespace ParserTenders.TenderDir
 
 {
-    public class TenderTypeClarificationResult: Tender
+    public class TenderTypeClarificationResult : Tender
     {
         public event Action<int> AddClarification44;
 
@@ -18,28 +22,33 @@ namespace ParserTenders.TenderDir
             AddClarification44 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddClarification++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить ClarificationResult", FilePath);
+                }
             };
         }
 
         public override void Parsing()
         {
             var xml = GetXml(File.ToString());
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var idT = ((string) tender.SelectToken("id") ?? "").Trim();
+                var idT = ((string)tender.SelectToken("id") ?? "").Trim();
                 if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarificationResult нет id", FilePath);
                     return;
                 }
-                var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
-                var docNumber = ((string) tender.SelectToken("commonInfo.docNumber") ?? "").Trim();
+
+                var purchaseNumber = ((string)tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                var docNumber = ((string)tender.SelectToken("commonInfo.docNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У clarificationResult нет purchaseNumber", FilePath);
@@ -64,11 +73,12 @@ namespace ParserTenders.TenderDir
                     }
 
                     reader.Close();
-                    var docPublishDate = (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
-                                             "").Trim('"');
-                    var href = ((string) tender.SelectToken("commonInfo.href") ?? "").Trim();
-                    var question = ((string) tender.SelectToken("requestInfo.question") ?? "").Trim();
-                    var topic = ((string) tender.SelectToken("commonInfo.topic") ?? "").Trim();
+                    var docPublishDate =
+                        (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
+                         "").Trim('"');
+                    var href = ((string)tender.SelectToken("commonInfo.href") ?? "").Trim();
+                    var question = ((string)tender.SelectToken("requestInfo.question") ?? "").Trim();
+                    var topic = ((string)tender.SelectToken("commonInfo.topic") ?? "").Trim();
                     var insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
                     var cmd2 = new MySqlCommand(insertClarification, connect);
@@ -82,14 +92,14 @@ namespace ParserTenders.TenderDir
                     cmd2.Parameters.AddWithValue("@topic", topic);
                     cmd2.Parameters.AddWithValue("@xml", xml);
                     var resInsertC = cmd2.ExecuteNonQuery();
-                    var idClar = (int) cmd2.LastInsertedId;
+                    var idClar = (int)cmd2.LastInsertedId;
                     AddClarification44?.Invoke(resInsertC);
                     var attachments = GetElements(tender, "attachmentsInfo.attachmentInfo");
                     foreach (var att in attachments)
                     {
-                        var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        var attachDescription = ((string) att.SelectToken("docDescription") ?? "").Trim();
-                        var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
+                        var attachName = ((string)att.SelectToken("fileName") ?? "").Trim();
+                        var attachDescription = ((string)att.SelectToken("docDescription") ?? "").Trim();
+                        var attachUrl = ((string)att.SelectToken("url") ?? "").Trim();
                         if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =

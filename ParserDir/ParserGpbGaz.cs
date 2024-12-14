@@ -2,7 +2,6 @@
 {
     public class ParserGpbGaz : ParserGpb
     {
-        
         public ParserGpbGaz(TypeArguments a) : base(a)
         {
             _urlListTenders = "https://etpgaz.gazprombank.ru/api/procedures.php?late=3";

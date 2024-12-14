@@ -1,5 +1,10 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
+using System.Reflection;
 using AngleSharp.Parser.Html;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -18,7 +23,7 @@ namespace ParserTenders.ParserDir
             var s = DownloadString.DownL(url);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return i;
             }

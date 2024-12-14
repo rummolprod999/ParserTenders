@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using MySql.Data.MySqlClient;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -38,7 +42,9 @@ namespace ParserTenders.TenderDir
                 }
 
                 else
+                {
                     Log.Logger("Не удалось добавить Sakhalin", Url);
+                }
             };
         }
 
@@ -56,7 +62,10 @@ namespace ParserTenders.TenderDir
             var dateEnd = DateTime.MinValue;
             var dateEndT = (document.QuerySelector("td:contains('Финальная дата') +  td")?.TextContent ?? "").Trim();
             if (!string.IsNullOrEmpty(dateEndT))
+            {
                 dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
+            }
+
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -68,7 +77,7 @@ namespace ParserTenders.TenderDir
                 cmd.Parameters.AddWithValue("@end_date", dateEnd);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -84,14 +93,14 @@ namespace ParserTenders.TenderDir
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@purchase_number", PurNum);
                 cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-                var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
                 var dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                     update = true;
-                    if (DateUpd >= (DateTime) row["date_version"])
+                    if (DateUpd >= (DateTime)row["date_version"])
                     {
                         row["cancel"] = 1;
                         //row.AcceptChanges();
@@ -104,7 +113,7 @@ namespace ParserTenders.TenderDir
                 }
 
                 var commandBuilder =
-                    new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                    new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                 //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                 adapter2.Update(dt2);
                 var noticeVersion =
@@ -123,11 +132,11 @@ namespace ParserTenders.TenderDir
                     cmd3.Prepare();
                     cmd3.Parameters.AddWithValue("@full_name", orgFullName);
                     var dt3 = new DataTable();
-                    var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                    var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                     adapter3.Fill(dt3);
                     if (dt3.Rows.Count > 0)
                     {
-                        organiserId = (int) dt3.Rows[0].ItemArray[0];
+                        organiserId = (int)dt3.Rows[0].ItemArray[0];
                     }
                     else
                     {
@@ -148,7 +157,7 @@ namespace ParserTenders.TenderDir
                         cmd4.Parameters.AddWithValue("@contact_person", contactP);
                         cmd4.Parameters.AddWithValue("@contact_email", email);
                         cmd4.ExecuteNonQuery();
-                        organiserId = (int) cmd4.LastInsertedId;
+                        organiserId = (int)cmd4.LastInsertedId;
                     }
                 }
 
@@ -163,7 +172,7 @@ namespace ParserTenders.TenderDir
                     if (reader7.HasRows)
                     {
                         reader7.Read();
-                        customerId = (int) reader7["id_customer"];
+                        customerId = (int)reader7["id_customer"];
                         reader7.Close();
                     }
                     else
@@ -178,7 +187,7 @@ namespace ParserTenders.TenderDir
                         cmd14.Parameters.AddWithValue("@full_name", orgFullName);
                         cmd14.Parameters.AddWithValue("@inn", "6500010551");
                         cmd14.ExecuteNonQuery();
-                        customerId = (int) cmd14.LastInsertedId;
+                        customerId = (int)cmd14.LastInsertedId;
                     }
                 }
 
@@ -209,7 +218,7 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@xml", Url);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 AddTenderSakhalin?.Invoke(resInsertTender, update);
                 var docs = document.QuerySelectorAll(
                     "td:contains('Дополнительная информация') +  td a");
@@ -221,9 +230,9 @@ namespace ParserTenders.TenderDir
                 cmd18.Parameters.AddWithValue("@id_tender", idTender);
                 cmd18.Parameters.AddWithValue("@lot_number", 1);
                 cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = (int)cmd18.LastInsertedId;
                 var recName = (document.QuerySelector("td:contains('Требования') +  td")
-                                      ?.TextContent ?? "").Trim();
+                    ?.TextContent ?? "").Trim();
                 if (!string.IsNullOrEmpty(recName))
                 {
                     var recA = recName.Split('•');
@@ -234,11 +243,11 @@ namespace ParserTenders.TenderDir
                 }
 
                 var deliveryPlace = (document.QuerySelector("td:contains('Местоположение') +  td")
-                                         ?.TextContent ?? "").Trim();
+                    ?.TextContent ?? "").Trim();
                 var startD = (document.QuerySelector("td:contains('Планируемый период') +  td")
-                                  ?.TextContent ?? "").Trim();
+                    ?.TextContent ?? "").Trim();
                 var startS = (document.QuerySelector("td:contains('Планируемый срок') +  td")
-                                  ?.TextContent ?? "").Trim();
+                    ?.TextContent ?? "").Trim();
                 if (!string.IsNullOrEmpty(deliveryPlace) || !string.IsNullOrEmpty(startD) ||
                     !string.IsNullOrEmpty(startS))
                 {
@@ -256,11 +265,11 @@ namespace ParserTenders.TenderDir
                 }
 
                 var purObj = (document.QuerySelector("td:contains('Объём работ') +  td")
-                                  ?.TextContent ?? "").Trim();
+                    ?.TextContent ?? "").Trim();
                 if (string.IsNullOrEmpty(purObj))
                 {
                     purObj = (document.QuerySelector("td:contains('Объект') +  td")
-                                  ?.TextContent ?? "").Trim();
+                        ?.TextContent ?? "").Trim();
                 }
 
                 if (!string.IsNullOrEmpty(purObj))
@@ -306,7 +315,11 @@ namespace ParserTenders.TenderDir
             foreach (var doc in docs)
             {
                 var fName = (doc?.TextContent ?? "").Trim();
-                if (fName.Contains("@")) continue;
+                if (fName.Contains("@"))
+                {
+                    continue;
+                }
+
                 var urlAttT = (doc?.GetAttribute("href") ?? "").Trim();
                 var urlAtt = $"http://www.sakhalinenergy.ru{urlAttT}";
                 if (!string.IsNullOrEmpty(fName))

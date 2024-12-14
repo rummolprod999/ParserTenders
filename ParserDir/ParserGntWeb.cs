@@ -1,7 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -10,32 +15,33 @@ namespace ParserTenders.ParserDir
         public static string _site = "https://www.gazneftetorg.ru";
         //private string _url_list = "/trades/energo/ProposalRequest/?action=list_published&from=";
 
-        private TypeGnt[] _listUrls = {
-            new TypeGnt()
+        private readonly TypeGnt[] _listUrls =
+        {
+            new TypeGnt
             {
                 Type = GntType.ProposalRequest,
                 UrlType = "/trades/energo/ProposalRequest/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest/?action=list_published&from=0"
             },
-            new TypeGnt()
+            new TypeGnt
             {
                 Type = GntType.ProposalRequest,
                 UrlType = "/trades/energo/ProposalRequest2/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/ProposalRequest2/?action=list_published&from=0"
             },
-            new TypeGnt()
+            new TypeGnt
             {
                 Type = GntType.Tender,
                 UrlType = "/trades/energo/Tender/?action=list_published&from=",
                 UrlTypeList = "https://www.gazneftetorg.ru/trades/energo/Tender/?action=list_published&from=0"
             },
-            new TypeGnt()
+            new TypeGnt
             {
-            Type = GntType.ProposalRequest,
-            UrlType = "/trades/gaz/ProposalRequest/?action=list_published&from=",
-            UrlTypeList = "https://www.gazneftetorg.ru/trades/gaz/ProposalRequest/?action=list_published&from=0"
+                Type = GntType.ProposalRequest,
+                UrlType = "/trades/gaz/ProposalRequest/?action=list_published&from=",
+                UrlTypeList = "https://www.gazneftetorg.ru/trades/gaz/ProposalRequest/?action=list_published&from=0"
             },
-            new TypeGnt()
+            new TypeGnt
             {
                 Type = GntType.ProposalRequest,
                 UrlType = "/trades/corp/ProposalRequest/?action=list_published&from=",
@@ -69,7 +75,8 @@ namespace ParserTenders.ParserDir
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(str);
-                var maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"page_nav\"]/a)[last()-1]")?.InnerText;
+                var maxNumPage = htmlDoc.DocumentNode.SelectSingleNode("(//div[@class=\"page_nav\"]/a)[last()-1]")
+                    ?.InnerText;
                 //Console.WriteLine(maxNumPage);
                 if (!string.IsNullOrEmpty(maxNumPage))
                 {
@@ -144,7 +151,7 @@ namespace ParserTenders.ParserDir
             var title2 = (node.SelectSingleNode("td[2]/a").InnerText ?? "").Trim();
             var entity = $"{title2} {title1}".Trim();
             entity = Regex.Replace(entity, @"\s+", " ");
-            entity = System.Net.WebUtility.HtmlDecode(entity);
+            entity = WebUtility.HtmlDecode(entity);
             var _urlOrg = (node.SelectSingleNode("td[3]/a[@href]")?.Attributes["href"].Value ?? "").Trim();
             var urlOrg = $"{_site}{_urlOrg}";
             var _price = (node.SelectSingleNode("td[4]").InnerText ?? "").Trim();
@@ -153,7 +160,7 @@ namespace ParserTenders.ParserDir
                 (node.SelectSingleNode("td/span[@title = \"Дата публикации\"]/span")?.InnerText ?? "").Trim();
             var _dateOpen =
                 (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/span")?.InnerText ?? "").Trim();
-            
+
             var _dateRes =
                 (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/span")?.InnerText ?? "")
                 .Trim();
@@ -164,25 +171,35 @@ namespace ParserTenders.ParserDir
             if (dateOpen == DateTime.MinValue)
             {
                 _dateOpen =
-                    (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/strong/span")?.InnerText ?? "").Trim();
+                    (node.SelectSingleNode("td/span[@title = \"Дата вскрытия конвертов\"]/strong/span")?.InnerText ??
+                     "").Trim();
                 dateOpen = UtilsFromParsing.ParseDateTend(_dateOpen);
             }
+
             var dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             if (dateRes == DateTime.MinValue)
             {
                 _dateRes =
-                    (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/strong/span")?.InnerText ?? "").Trim();
+                    (node.SelectSingleNode("td/span[@title = \"Дата рассмотрения предложений\"]/strong/span")
+                        ?.InnerText ?? "").Trim();
                 dateRes = UtilsFromParsing.ParseDateTend(_dateRes);
             }
+
             var dateEnd = UtilsFromParsing.ParseDateTend(_dateEnd);
             var _dateOpenEnd =
-                (node.SelectSingleNode("td/span[@title = \"Дата окончания приема предложений\"]/span")?.InnerText ?? "").Trim();
+                (node.SelectSingleNode("td/span[@title = \"Дата окончания приема предложений\"]/span")?.InnerText ?? "")
+                .Trim();
             var dateOpenEnd = UtilsFromParsing.ParseDateTend(_dateOpenEnd);
             if (dateOpenEnd != DateTime.MinValue)
             {
                 dateOpen = dateOpenEnd;
             }
-            var t = new GntWebTender{UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd, DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeGnT = tp};
+
+            var t = new GntWebTender
+            {
+                UrlTender = urlT, UrlOrg = urlOrg, Entity = entity, MaxPrice = maxPrice, DateEnd = dateEnd,
+                DateOpen = dateOpen, DatePub = datePub, DateRes = dateRes, TypeGnT = tp
+            };
             try
             {
                 t.Parse();

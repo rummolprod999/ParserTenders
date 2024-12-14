@@ -1,16 +1,20 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
+#endregion
+
 namespace ParserTenders
 {
     public class WorkWithFtp
     {
-        private int _bufferSize = 1024;
-        private string _password;
+        private readonly int _bufferSize = 1024;
+        private readonly string _password;
         private string _uri;
-        private string _userName;
+        private readonly string _userName;
         public bool Binary = true;
         public bool EnableSsl = false;
         public bool Hash = false;
@@ -18,9 +22,9 @@ namespace ParserTenders
 
         public WorkWithFtp(string uri, string userName, string password)
         {
-            this._uri = uri;
-            this._userName = userName;
-            this._password = password;
+            _uri = uri;
+            _userName = userName;
+            _password = password;
         }
 
         public string ChangeWorkingDirectory(string path)
@@ -43,7 +47,7 @@ namespace ParserTenders
 
             var buffer = new byte[_bufferSize];
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 using (var stream = response.GetResponseStream())
                 {
@@ -54,7 +58,9 @@ namespace ParserTenders
                         while (readCount > 0)
                         {
                             if (Hash)
+                            {
                                 Console.Write("#");
+                            }
 
                             fs.Write(buffer, 0, readCount);
                             readCount = stream.Read(buffer, 0, _bufferSize);
@@ -70,7 +76,7 @@ namespace ParserTenders
         {
             var request = CreateRequest(Combine(_uri, fileName), WebRequestMethods.Ftp.GetDateTimestamp);
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 return response.LastModified;
             }
@@ -80,7 +86,7 @@ namespace ParserTenders
         {
             var request = CreateRequest(Combine(_uri, fileName), WebRequestMethods.Ftp.GetFileSize);
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 return response.ContentLength;
             }
@@ -92,7 +98,7 @@ namespace ParserTenders
 
             var request = CreateRequest(WebRequestMethods.Ftp.ListDirectory);
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 using (var stream = response.GetResponseStream())
                 {
@@ -115,7 +121,7 @@ namespace ParserTenders
 
             var request = CreateRequest(WebRequestMethods.Ftp.ListDirectoryDetails);
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 using (var stream = response.GetResponseStream())
                 {
@@ -143,7 +149,7 @@ namespace ParserTenders
 
             var request = CreateRequest(WebRequestMethods.Ftp.ListDirectoryDetails);
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 using (var stream = response.GetResponseStream())
                 {
@@ -196,7 +202,7 @@ namespace ParserTenders
 
             using (var stream = request.GetRequestStream())
             {
-                using (var fileStream = System.IO.File.Open(source, FileMode.Open))
+                using (var fileStream = File.Open(source, FileMode.Open))
                 {
                     int num;
 
@@ -205,7 +211,9 @@ namespace ParserTenders
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         if (Hash)
+                        {
                             Console.Write("#");
+                        }
 
                         stream.Write(buffer, 0, num);
                     }
@@ -221,7 +229,7 @@ namespace ParserTenders
 
             using (var stream = request.GetRequestStream())
             {
-                using (var fileStream = System.IO.File.Open(source, FileMode.Open))
+                using (var fileStream = File.Open(source, FileMode.Open))
                 {
                     int num;
 
@@ -230,14 +238,16 @@ namespace ParserTenders
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         if (Hash)
+                        {
                             Console.Write("#");
+                        }
 
                         stream.Write(buffer, 0, num);
                     }
                 }
             }
 
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 return Path.GetFileName(response.ResponseUri.ToString());
             }
@@ -250,7 +260,7 @@ namespace ParserTenders
 
         private FtpWebRequest CreateRequest(string uri, string method)
         {
-            var r = (FtpWebRequest) WebRequest.Create(uri);
+            var r = (FtpWebRequest)WebRequest.Create(uri);
 
             r.Credentials = new NetworkCredential(_userName, _password);
             r.Method = method;
@@ -263,7 +273,7 @@ namespace ParserTenders
 
         private string GetStatusDescription(FtpWebRequest request)
         {
-            using (var response = (FtpWebResponse) request.GetResponse())
+            using (var response = (FtpWebResponse)request.GetResponse())
             {
                 return response.StatusDescription;
             }

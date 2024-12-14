@@ -14,6 +14,6 @@ namespace ParserTenders
         TypeClarificationResult,
         TypeNull,
         TypeTen504,
-        TypeRequestQ44,
+        TypeRequestQ44
     }
 }

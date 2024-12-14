@@ -1,13 +1,18 @@
+#region
+
 using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
 
+#endregion
+
 namespace ParserTenders
 {
     public class Log
     {
-        private static object _locker = new object();
+        private static readonly object _locker = new object();
+
         public static void Logger(params object[] parametrs)
         {
             var s = "";

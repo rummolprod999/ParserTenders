@@ -1,6 +1,10 @@
+#region
+
 using System.Linq;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders
 {
@@ -8,18 +12,18 @@ namespace ParserTenders
     {
         public static bool IsNullOrEmpty(this JToken token)
         {
-            return (token == null) ||
+            return token == null ||
                    (token.Type == JTokenType.Array && !token.HasValues) ||
                    (token.Type == JTokenType.Object && !token.HasValues) ||
                    (token.Type == JTokenType.String && token.ToString() == string.Empty) ||
-                   (token.Type == JTokenType.Null);
+                   token.Type == JTokenType.Null;
         }
-        public static XElement StripNs(XElement root) {
+
+        public static XElement StripNs(XElement root)
+        {
             return new XElement(
                 root.Name.LocalName,
-                root.HasElements ? 
-                    root.Elements().Select(el => StripNs(el)) :
-                    (object)root.Value
+                root.HasElements ? root.Elements().Select(el => StripNs(el)) : (object)root.Value
             );
         }
 
@@ -29,14 +33,15 @@ namespace ParserTenders
             {
                 return null;
             }
+
             switch (token.Type)
             {
-              case JTokenType.String:
-                  return (string)token;
-              case JTokenType.Object:
-                  return null;
-              default:
-                  return null;
+                case JTokenType.String:
+                    return (string)token;
+                case JTokenType.Object:
+                    return null;
+                default:
+                    return null;
             }
         }
     }

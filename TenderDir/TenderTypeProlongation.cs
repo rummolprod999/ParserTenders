@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -17,30 +21,30 @@ namespace ParserTenders.TenderDir
             AddProlongation += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddProlongation++;
+                }
             };
         }
 
         public override void Parsing()
         {
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("fcs"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchaseNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
                     return;
                 }
-                else
+
+                if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                 {
-                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                    {
-                        /*Log.Logger("Тестовый тендер TenderProlongation", purchaseNumber, file_path);*/
-                        return;
-                    }
+                    /*Log.Logger("Тестовый тендер TenderProlongation", purchaseNumber, file_path);*/
+                    return;
                 }
 
                 var collectingEndDate =
@@ -94,42 +98,47 @@ namespace ParserTenders.TenderDir
                 if (firstOrDefault != null)
                 {
                     var tender = firstOrDefault.Value;
-                    var purchaseNumber = ((string) tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
+                    var purchaseNumber = ((string)tender.SelectToken("commonInfo.purchaseNumber") ?? "").Trim();
                     if (string.IsNullOrEmpty(purchaseNumber))
                     {
                         Log.Logger("Не могу найти purchaseNumber у TenderProlongation", FilePath);
                         return;
                     }
-                    else
+
+                    if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
-                        if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
-                        {
-                            /*Log.Logger("Тестовый тендер TenderProlongation", purchaseNumber, file_path);*/
-                            return;
-                        }
+                        /*Log.Logger("Тестовый тендер TenderProlongation", purchaseNumber, file_path);*/
+                        return;
                     }
 
                     var collectingEndDate =
-                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingEndDate") ?? "") ?? "").Trim('"');
-                    
+                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingEndDate") ?? "") ??
+                         "").Trim('"');
+
                     var collectingProlongationDate =
-                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.newCollectingEndDT") ?? "") ?? "")
+                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.newCollectingEndDT") ?? "") ??
+                         "")
                         .Trim('"');
                     if (collectingProlongationDate == "")
                     {
                         collectingProlongationDate =
-                            (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingInfo.endDT") ?? "") ?? "").Trim('"');
+                            (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.collectingInfo.endDT") ??
+                                                         "") ?? "").Trim('"');
                     }
+
                     var scoringDate =
-                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.firstPartsDT") ?? "") ?? "").Trim('"');
+                        (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.firstPartsDT") ?? "") ?? "")
+                        .Trim('"');
                     var scoringProlongationDate =
                         (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.firstPartsDT") ?? "") ?? "")
                         .Trim('"');
                     if (scoringProlongationDate == "")
                     {
                         scoringProlongationDate =
-                            (JsonConvert.SerializeObject(tender.SelectToken("prolongationInfo.scoringInfo.firstPartsDT") ?? "") ?? "").Trim('"');
+                            (JsonConvert.SerializeObject(
+                                tender.SelectToken("prolongationInfo.scoringInfo.firstPartsDT") ?? "") ?? "").Trim('"');
                     }
+
                     using (var connect = ConnectToDb.GetDbConnection())
                     {
                         connect.Open();

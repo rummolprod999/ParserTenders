@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -10,13 +12,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 {
     public class ParserExp : Parser
     {
         protected DataTable DtRegion;
 
-        private string[] _fileExp223 = {"explanation_"};
+        private readonly string[] _fileExp223 = { "explanation_" };
 
         public ParserExp(TypeArguments arg) : base(arg)
         {
@@ -29,14 +33,14 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path223"];
+                var regionPath = (string)row["path223"];
                 switch (Program.Periodparsing)
                 {
-                    case (TypeArguments.LastExp223):
+                    case TypeArguments.LastExp223:
                         pathParse = $"/out/published/{regionPath}/explanation/";
                         arch = GetListArchLast(pathParse, regionPath);
                         break;
-                    case (TypeArguments.DailyExp223):
+                    case TypeArguments.DailyExp223:
                         pathParse = $"/out/published/{regionPath}/explanation/daily/";
                         arch = GetListArchDaily(pathParse, regionPath);
                         break;
@@ -50,11 +54,11 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
         }
-        
+
         public override List<string> GetListArchLast(string pathParse, string regionPath)
         {
             /*FtpClient ftp = ClientFtp44();*/
@@ -62,13 +66,13 @@ namespace ParserTenders.ParserDir
             var yearsSearch = Program.Years.Select(y => $"explanation_{regionPath}{y}").ToList();
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
-        
+
         public override List<string> GetListArchDaily(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             var archtemp = GetListFtp223(pathParse);
             foreach (var a in archtemp
-                .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 /*using (ArchiveExp223Context db = new ArchiveExp223Context())
                 {
@@ -106,9 +110,10 @@ namespace ParserTenders.ParserDir
                     }
                 }
             }
+
             return arch;
         }
-        
+
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
             var filea = "";
@@ -138,13 +143,13 @@ namespace ParserTenders.ParserDir
                                 Log.Logger("Не удалось обработать файл", f, filea);
                             }
                         }
+
                         dirInfo.Delete(true);
                     }
-                    
                 }
             }
         }
-        
+
         public override void Bolter(FileInfo f, string region, int regionId)
         {
             if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))
@@ -167,7 +172,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Ошибка при парсинге xml", e, f);
             }
         }
-        
+
         public void ParsingXml(FileInfo f, string region, int regionId)
         {
             using (var sr = new StreamReader(f.ToString(), Encoding.Default))

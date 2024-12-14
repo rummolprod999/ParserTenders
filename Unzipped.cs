@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+
+#endregion
 
 namespace ParserTenders
 {
@@ -33,7 +37,7 @@ namespace ParserTenders
                     try
                     {
                         var myProcess = new Process
-                            {StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {lDir}")};
+                            { StartInfo = new ProcessStartInfo("unzip", $"-B {filea} -d {lDir}") };
                         myProcess.Start();
                         myProcess.WaitForExit();
                         Log.Logger("Извлекли файл альтернативным методом", filea);

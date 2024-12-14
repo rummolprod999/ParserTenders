@@ -1,16 +1,17 @@
+#region
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -25,7 +26,7 @@ namespace ParserTenders.ParserDir
 
         protected DataTable DtRegion;
 
-        private string[] types =
+        private readonly string[] types =
         {
             "purchaseNotice",
             "purchaseNoticeAE",
@@ -104,7 +105,11 @@ namespace ParserTenders.ParserDir
             var filea = "";
             var pathUnzip = "";
             filea = downloadArchive(arch);
-            if (string.IsNullOrEmpty(filea)) return;
+            if (string.IsNullOrEmpty(filea))
+            {
+                return;
+            }
+
             pathUnzip = Unzipped.Unzip(filea);
             if (pathUnzip != "")
             {

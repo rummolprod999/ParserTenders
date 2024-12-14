@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,7 +20,9 @@ namespace ParserTenders.TenderDir
             AddLotCancel223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddLotCancel223++;
+                }
             };
         }
 
@@ -25,20 +31,20 @@ namespace ParserTenders.TenderDir
             JProperty tend = null;
             var firstOrDefault = T.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("purchase", StringComparison.Ordinal));
-            var firstOrDefault2 = ((JObject) firstOrDefault?.Value)?.Properties()
+            var firstOrDefault2 = ((JObject)firstOrDefault?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("body", StringComparison.Ordinal));
-            var firstOrDefault3 = ((JObject) firstOrDefault2?.Value)?.Properties()
+            var firstOrDefault3 = ((JObject)firstOrDefault2?.Value)?.Properties()
                 .FirstOrDefault(p => p.Name.StartsWith("item", StringComparison.Ordinal));
             if (firstOrDefault3 != null)
             {
-                tend = ((JObject) firstOrDefault3.Value).Properties()
+                tend = ((JObject)firstOrDefault3.Value).Properties()
                     .FirstOrDefault(p => p.Name.StartsWith("purchase", StringComparison.Ordinal));
             }
 
             if (tend != null)
             {
                 var tender = tend.Value;
-                var purchaseNumber = ((string) tender.SelectToken("purchaseInfo.purchaseNoticeNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("purchaseInfo.purchaseNoticeNumber") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
@@ -57,7 +63,7 @@ namespace ParserTenders.TenderDir
                     connect.Open();
                     foreach (var l in lots)
                     {
-                        var lotNumber = ((string) l.SelectToken("ordinalNumber") ?? "").Trim();
+                        var lotNumber = ((string)l.SelectToken("ordinalNumber") ?? "").Trim();
                         if (string.IsNullOrEmpty(lotNumber))
                         {
                             Log.Logger("Не могу найти lotNumber у TenderLotCancel", FilePath);

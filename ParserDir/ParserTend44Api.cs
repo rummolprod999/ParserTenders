@@ -1,46 +1,48 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
     public class ParserTend44Api : Parser
     {
-        readonly List<string> summList;
+        private readonly List<string> summList;
 
-        private string[] _fileCancel = { "notificationcancel_" };
-        private string[] _fileCancelFailure = { "cancelfailure_" };
-        private string[] _fileClarification = { "clarification_", "epclarificationdoc_" };
-        private string[] _fileClarificationResult = { "epclarificationresult_" };
-        private string[] _fileDatechange = { "datechange_" };
-        private string[] _fileLotcancel = { "lotcancel_" };
-        private string[] _fileOrgchange = { "orgchange_" };
-        private string[] _fileProlongation = { "prolongation" };
-        private string[] _fileSign = { "contractsign_" };
+        private readonly string[] _fileCancel = { "notificationcancel_" };
+        private readonly string[] _fileCancelFailure = { "cancelfailure_" };
+        private readonly string[] _fileClarification = { "clarification_", "epclarificationdoc_" };
+        private readonly string[] _fileClarificationResult = { "epclarificationresult_" };
+        private readonly string[] _fileDatechange = { "datechange_" };
+        private readonly string[] _fileLotcancel = { "lotcancel_" };
+        private readonly string[] _fileOrgchange = { "orgchange_" };
+        private readonly string[] _fileProlongation = { "prolongation" };
+        private readonly string[] _fileSign = { "contractsign_" };
 
-        private string[] _fileXml44 =
+        private readonly string[] _fileXml44 =
         {
             "ea44_", "ep44_", "ok44_", "okd44_", "oku44_", "po44_", "za44_", "zk44_",
             "zkb44_", "zkk44_", "zkkd44_", "zkku44_", "zp44_", "protocolzkbi_", "inm111_"
         };
 
-        private string[] _fileXml504 =
+        private readonly string[] _fileXml504 =
         {
             "zk504_", "zp504_", "ok504_", "okd504_", "okou504_", "oku504_", "ezk2020_", "ezt2020_", "ef2020_",
             "eok2020_"
         };
 
-        private string[] types =
+        private readonly string[] types =
         {
             "epNotificationEZK2020",
             "epNotificationEF2020",

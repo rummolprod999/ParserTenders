@@ -1,8 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -26,14 +31,14 @@ namespace ParserTenders.ParserDir
             catch (Exception e)
             {
                 Log.Logger(
-                    $"Exception recieve count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Exception recieve count page in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     e, urlStart);
             }
 
             if (max == 0)
             {
                 Log.Logger(
-                    $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Null count page in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     urlStart);
                 max = 0;
             }
@@ -48,7 +53,7 @@ namespace ParserTenders.ParserDir
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, urlStart);
                 }
             }
@@ -59,7 +64,7 @@ namespace ParserTenders.ParserDir
             var s = DownloadString.DownL(url);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
             }
 
@@ -84,12 +89,16 @@ namespace ParserTenders.ParserDir
             var urlT = (t.QuerySelector("a.section-procurement__item-title")?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
             }
 
             var tenderUrl = urlT;
-            if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
+            if (!urlT.Contains("https://"))
+            {
+                tenderUrl = $"https://www.tektorg.ru{urlT}";
+            }
+
             try
             {
                 var ten = new TenderTypeTektorgGazprom("ТЭК Торг Газпром бурение",

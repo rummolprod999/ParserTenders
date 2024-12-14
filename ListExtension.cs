@@ -1,11 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace ParserTenders
 {
     public static class ListExtensions
     {
-        private static Random rng = new Random();
+        private static readonly Random rng = new Random();
 
         public static List<T> AddRangeAndReturnList<T>(this List<T> l, List<T> addList)
         {
@@ -15,11 +19,11 @@ namespace ParserTenders
 
         public static void Shuffle<T>(this IList<T> list)
         {
-            int n = list.Count;
+            var n = list.Count;
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
+                var k = rng.Next(n + 1);
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }

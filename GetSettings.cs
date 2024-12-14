@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.IO;
 using System.Xml;
+
+#endregion
 
 namespace ParserTenders
 {

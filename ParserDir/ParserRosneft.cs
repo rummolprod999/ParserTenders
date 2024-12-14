@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserTenders.TenderDir;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -10,15 +14,20 @@ namespace ParserTenders.ParserDir
     {
         private const int Count = 100;
         private bool ct = true;
+
         public ParserRosneft(TypeArguments ar) : base(ar)
         {
         }
-        
+
         public override void Parsing()
         {
             for (var i = 0; i <= Count; i++)
             {
-                if (!ct) break;
+                if (!ct)
+                {
+                    break;
+                }
+
                 var urlpage = $"http://zakupki.rosneft.ru/zakupki?page={i}";
                 try
                 {
@@ -39,6 +48,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Empty string in ParserPage()", url);
                 return;
             }
+
             var parser = new HtmlParser();
             var document = parser.Parse(s);
             var tens = document.All.Where(m => m.ClassList.Contains("even") || m.ClassList.Contains("odd"));
@@ -49,6 +59,7 @@ namespace ParserTenders.ParserDir
                 Log.Logger("Last page", url);
                 return;
             }
+
             foreach (var t in enumerable)
             {
                 try
@@ -65,7 +76,8 @@ namespace ParserTenders.ParserDir
         private void ParsingTender(IElement t)
         {
             var purNum = (t.QuerySelector("td.views-field-field-number-zakup-value > a")?.TextContent ?? "").Trim();
-            var url = (t.QuerySelector("td.views-field-field-number-zakup-value > a")?.GetAttribute("href") ?? "").Trim();
+            var url =
+                (t.QuerySelector("td.views-field-field-number-zakup-value > a")?.GetAttribute("href") ?? "").Trim();
             var placingWay = (t.QuerySelector("td.views-field-field-zakup-type-value")?.TextContent ?? "").Trim();
             var datePubT = (t.QuerySelector("td.views-field-created")?.TextContent ?? "").Trim();
             var dateEndT = (t.QuerySelector("td.views-field-field-zakup-end-value")?.TextContent ?? "").Trim();

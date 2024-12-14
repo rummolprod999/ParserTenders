@@ -1,11 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
+#endregion
+
 namespace ParserTenders.TenderDir
 {
-    public class TenderTypeSign615: Tender
+    public class TenderTypeSign615 : Tender
     {
         public event Action<int> AddTenderSign;
 
@@ -15,21 +19,25 @@ namespace ParserTenders.TenderDir
             AddTenderSign += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddTenderSign++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить TenderSign", FilePath);
+                }
             };
         }
 
         public override void Parsing()
         {
             var xml = GetXml(File.ToString());
-            var root = (JObject) T.SelectToken("export");
+            var root = (JObject)T.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("pprf615"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
-                var purchaseNumber = ((string) tender.SelectToken("id") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("id") ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("Не могу найти purchaseNumber у sign", FilePath);
@@ -40,16 +48,13 @@ namespace ParserTenders.TenderDir
                     if (purchaseNumber.StartsWith("9", StringComparison.Ordinal))
                     {
                         /*Log.Logger("Тестовый тендер sign", purchaseNumber, file_path);*/
-                        return;
                     }
                 }
-                
             }
             else
             {
                 Log.Logger("Не могу найти тег TenderSign615", FilePath);
             }
-
         }
     }
 }

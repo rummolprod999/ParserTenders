@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -5,6 +7,8 @@ using System.IO;
 using System.Threading;
 using FluentFTP;
 using MySql.Data.MySqlClient;
+
+#endregion
 
 namespace ParserTenders.ParserDir
 {
@@ -14,7 +18,7 @@ namespace ParserTenders.ParserDir
 
         public Parser(TypeArguments a)
         {
-            this.Arg = a;
+            Arg = a;
         }
 
         public virtual void Parsing()
@@ -134,7 +138,7 @@ namespace ParserTenders.ParserDir
                     {
                         return file;
                     }
-                    
+
                     Thread.Sleep(timeout);
                     count++;
                     timeout += 5000;
@@ -186,27 +190,31 @@ namespace ParserTenders.ParserDir
 
         public WorkWithFtp ClientFtp44_old()
         {
-            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
+            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free",
+                "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             return ftpCl;
         }
 
         public FtpClient ClientFtp44()
         {
-            var client = new FtpClient("ftp.zakupki.gov.ru", "free", "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
+            var client = new FtpClient("ftp.zakupki.gov.ru", "free",
+                "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             client.Connect();
             return client;
         }
 
         public FtpClient ClientFtp223()
         {
-            var client = new FtpClient("ftp.zakupki.gov.ru", "fz223free", "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
+            var client = new FtpClient("ftp.zakupki.gov.ru", "fz223free",
+                "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             client.Connect();
             return client;
         }
 
         public WorkWithFtp ClientFtp223_old()
         {
-            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free", "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
+            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "fz223free",
+                "VNIMANIE!_otkluchenie_FTP_s_01_01_2025_podrobnee_v_ATFF");
             return ftpCl;
         }
 
@@ -286,6 +294,7 @@ namespace ParserTenders.ParserDir
                         var sizeFile = ftpListItem.Size;
                         archtemp.Add((nameFile, sizeFile));
                     }
+
                     ftp.Disconnect();
                     if (count > 1)
                     {
@@ -413,7 +422,7 @@ namespace ParserTenders.ParserDir
                 var dt = ds.Tables[0];
                 foreach (DataRow row in dt.Rows)
                 {
-                    var regNum = (string) row["reg_num"];
+                    var regNum = (string)row["reg_num"];
                     var cmd = new MySqlCommand(getOrg, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@reg_num", regNum);

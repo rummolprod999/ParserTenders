@@ -1,8 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using MySql.Data.MySqlClient;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -17,16 +22,24 @@ namespace ParserTenders.TenderDir
             AddTender += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddTektorgRzd++;
+                }
                 else
+                {
                     Log.Logger($"Не удалось добавить {GetType().Name}", UrlTender);
+                }
             };
             UpdateTender += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.UpTektorgGazprom++;
+                }
                 else
+                {
                     Log.Logger("Не удалось обновить TektorgGazprom", UrlTender);
+                }
             };
         }
 
@@ -42,7 +55,7 @@ namespace ParserTenders.TenderDir
             var s = DownloadString.DownL(UrlTender);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     UrlTender);
             }
 
@@ -56,7 +69,7 @@ namespace ParserTenders.TenderDir
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty dates in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     UrlTender, datePubT, dateEndT);
                 return;
             }
@@ -66,7 +79,7 @@ namespace ParserTenders.TenderDir
             var purNum = (document.QuerySelector("td:contains('Номер процедуры') + td")?.TextContent ?? "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty purNum in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     UrlTender, purNum);
                 return;
             }
@@ -86,7 +99,7 @@ namespace ParserTenders.TenderDir
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", noticeVersion);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -103,14 +116,14 @@ namespace ParserTenders.TenderDir
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@purchase_number", purNum);
                 cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-                var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
                 var dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                     update = true;
-                    if (dateUpd >= (DateTime) row["date_version"])
+                    if (dateUpd >= (DateTime)row["date_version"])
                     {
                         row["cancel"] = 1;
                         //row.AcceptChanges();
@@ -123,7 +136,7 @@ namespace ParserTenders.TenderDir
                 }
 
                 var commandBuilder =
-                    new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                    new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                 //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                 adapter2.Update(dt2);
                 var printForm = UrlTender;
@@ -140,11 +153,11 @@ namespace ParserTenders.TenderDir
                     cmd3.Prepare();
                     cmd3.Parameters.AddWithValue("@full_name", orgFullName);
                     var dt3 = new DataTable();
-                    var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                    var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                     adapter3.Fill(dt3);
                     if (dt3.Rows.Count > 0)
                     {
-                        organiserId = (int) dt3.Rows[0].ItemArray[0];
+                        organiserId = (int)dt3.Rows[0].ItemArray[0];
                     }
                     else
                     {
@@ -152,7 +165,7 @@ namespace ParserTenders.TenderDir
                                      "")
                             .Trim();
                         var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                                         ?.TextContent ?? "")
+                                ?.TextContent ?? "")
                             .Trim();
                         var contactPerson =
                             (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")
@@ -166,7 +179,7 @@ namespace ParserTenders.TenderDir
                         cmd4.Parameters.AddWithValue("@contact_person", contactPerson);
                         cmd4.Parameters.AddWithValue("@contact_email", email);
                         cmd4.ExecuteNonQuery();
-                        organiserId = (int) cmd4.LastInsertedId;
+                        organiserId = (int)cmd4.LastInsertedId;
                     }
                 }
 
@@ -201,7 +214,7 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@xml", UrlTender);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 if (update)
                 {
                     UpdateTender?.Invoke(resInsertTender);
@@ -218,6 +231,7 @@ namespace ParserTenders.TenderDir
                     docs = document.QuerySelectorAll(
                         "div.procedure__item--documents a");
                 }
+
                 GetDocs(docs, connect, idTender);
                 var lots = document.QuerySelectorAll(
                     "div.procedure__lots > div.procedure__lot");
@@ -226,7 +240,11 @@ namespace ParserTenders.TenderDir
                     var lotNumT = (lot.QuerySelector("div.procedure__lot-header span")?.TextContent ?? "").Trim();
                     lotNumT = lotNumT.GetDateFromRegex(@"Лот (\d+)");
                     int.TryParse(lotNumT, out var lotNum);
-                    if (lotNum == 0) lotNum = 1;
+                    if (lotNum == 0)
+                    {
+                        lotNum = 1;
+                    }
+
                     var currency = (lot.QuerySelector("td:contains('Валюта:') +  td")?.TextContent ?? "").Trim();
                     var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
                         .Trim();
@@ -240,7 +258,7 @@ namespace ParserTenders.TenderDir
                     cmd18.Parameters.AddWithValue("@max_price", nmck);
                     cmd18.Parameters.AddWithValue("@currency", currency);
                     cmd18.ExecuteNonQuery();
-                    var idLot = (int) cmd18.LastInsertedId;
+                    var idLot = (int)cmd18.LastInsertedId;
                     var customerFullName =
                         (lot.QuerySelector("td:contains('Заказчик:') +  td")?.TextContent ?? "0.0").Trim();
                     if (!string.IsNullOrEmpty(customerFullName))
@@ -254,7 +272,7 @@ namespace ParserTenders.TenderDir
                         if (reader7.HasRows)
                         {
                             reader7.Read();
-                            customerId = (int) reader7["id_customer"];
+                            customerId = (int)reader7["id_customer"];
                             reader7.Close();
                         }
                         else
@@ -268,7 +286,7 @@ namespace ParserTenders.TenderDir
                             cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                             cmd14.Parameters.AddWithValue("@full_name", customerFullName);
                             cmd14.ExecuteNonQuery();
-                            customerId = (int) cmd14.LastInsertedId;
+                            customerId = (int)cmd14.LastInsertedId;
                         }
                     }
 

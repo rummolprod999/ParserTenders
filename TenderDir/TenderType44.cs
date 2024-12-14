@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,12 +10,14 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+#endregion
+
 namespace ParserTenders.TenderDir
 {
     public class TenderType44 : Tender
     {
-        private bool PoExist = default;
-        private bool Up = default;
+        private bool PoExist;
+        private bool Up;
 
         public TenderType44(FileInfo f, string region, int regionId, JObject json)
             : base(f, region, regionId, json)
@@ -21,11 +25,17 @@ namespace ParserTenders.TenderDir
             AddTender44 += delegate(int d)
             {
                 if (d > 0 && !Up)
+                {
                     Program.AddTender44++;
+                }
                 else if (d > 0 && Up)
+                {
                     Program.UpdateTender44++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить Tender44", FilePath);
+                }
             };
         }
 
@@ -418,7 +428,10 @@ namespace ParserTenders.TenderDir
                     var lotNumber = 1;
                     var lots = GetElements(tender, "lot");
                     if (lots.Count == 0)
+                    {
                         lots = GetElements(tender, "lots.lot");
+                    }
+
                     foreach (var lot in lots)
                     {
                         var lotMaxPrice = ((string)lot.SelectToken("maxPrice") ?? "").Trim();
@@ -438,7 +451,10 @@ namespace ParserTenders.TenderDir
                         cmd12.ExecuteNonQuery();
                         var idLot = (int)cmd12.LastInsertedId;
                         if (idLot < 1)
+                        {
                             Log.Logger("Не получили id лота", FilePath);
+                        }
+
                         lotNumber++;
                         var customerRequirements =
                             GetElements(lot, "customerRequirements.customerRequirement");
@@ -448,16 +464,22 @@ namespace ParserTenders.TenderDir
                                 ((string)customerRequirement.SelectToken("kladrPlaces.kladrPlace.kladr.fullName") ??
                                  "").Trim();
                             if (string.IsNullOrEmpty(kladrPlace))
+                            {
                                 kladrPlace =
                                     ((string)customerRequirement.SelectToken(
                                         "kladrPlaces.kladrPlace[0].kladr.fullName") ?? "").Trim();
+                            }
+
                             var deliveryPlace =
                                 ((string)customerRequirement.SelectToken("kladrPlaces.kladrPlace.deliveryPlace") ?? "")
                                 .Trim();
                             if (string.IsNullOrEmpty(deliveryPlace))
+                            {
                                 deliveryPlace =
                                     ((string)customerRequirement.SelectToken(
                                         "kladrPlaces.kladrPlace[0].deliveryPlace") ?? "").Trim();
+                            }
+
                             var deliveryTerm =
                                 ((string)customerRequirement.SelectToken("deliveryTerm") ?? "").Trim();
                             var applicationGuaranteeAmount =
@@ -720,10 +742,16 @@ namespace ParserTenders.TenderDir
                             var okpdCode = ((string)purchaseobject.SelectToken("OKPD.code") ?? "").Trim();
                             var okpdName = ((string)purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
                             if (string.IsNullOrEmpty(okpdName))
+                            {
                                 okpdName = ((string)purchaseobject.SelectToken("OKPD.name") ?? "").Trim();
+                            }
+
                             var name = ((string)purchaseobject.SelectToken("name") ?? "").Trim();
                             if (!string.IsNullOrEmpty(name))
+                            {
                                 name = Regex.Replace(name, @"\s+", " ");
+                            }
+
                             var quantityValue = ((string)purchaseobject.SelectToken("quantity.value") ?? "")
                                 .Trim();
                             var price = ((string)purchaseobject.SelectToken("price") ?? "").Trim();
@@ -822,7 +850,9 @@ namespace ParserTenders.TenderDir
                                 cmd23.ExecuteNonQuery();
                                 PoExist = true;
                                 if (idCustomerQ == 0)
+                                {
                                     Log.Logger("Нет id_customer_q", FilePath);
+                                }
                             }
 
                             if (customerquantities.Count == 0)
@@ -938,7 +968,10 @@ namespace ParserTenders.TenderDir
                                     name = $"{name} | {dosageGrlsValue}";
                                     name = $"{name} | {isZnvlp}";
                                     if (!string.IsNullOrEmpty(name))
+                                    {
                                         name = Regex.Replace(name, @"\s+", " ");
+                                    }
+
                                     var quantityValue = ((string)drugInfo.SelectToken("..drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
@@ -971,7 +1004,9 @@ namespace ParserTenders.TenderDir
                                     cmd23.ExecuteNonQuery();
                                     PoExist = true;
                                     if (idCustomerQ == 0)
+                                    {
                                         Log.Logger("Нет id_customer_q", FilePath);
+                                    }
                                 }
 
                                 var drugsInfoTextForm = GetElements(drugPurchaseObjectInfo,
@@ -992,7 +1027,10 @@ namespace ParserTenders.TenderDir
                                     name = $"{name} | {isZnvlp}";
 
                                     if (!string.IsNullOrEmpty(name))
+                                    {
                                         name = Regex.Replace(name, @"\s+", " ");
+                                    }
+
                                     var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
@@ -1024,7 +1062,9 @@ namespace ParserTenders.TenderDir
                                     cmd23.ExecuteNonQuery();
                                     PoExist = true;
                                     if (idCustomerQ == 0)
+                                    {
                                         Log.Logger("Нет id_customer_q", FilePath);
+                                    }
                                 }
                             }
 
@@ -1048,7 +1088,10 @@ namespace ParserTenders.TenderDir
                                     name = $"{name} | {isZnvlp}";
 
                                     if (!string.IsNullOrEmpty(name))
+                                    {
                                         name = Regex.Replace(name, @"\s+", " ");
+                                    }
+
                                     var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
@@ -1080,7 +1123,9 @@ namespace ParserTenders.TenderDir
                                     cmd23.ExecuteNonQuery();
                                     PoExist = true;
                                     if (idCustomer == 0)
+                                    {
                                         Log.Logger("Нет id_customer", FilePath);
+                                    }
                                 }
 
                                 var drugsInfoTextForm = GetElements(drugPurchaseObjectInfo,
@@ -1101,7 +1146,10 @@ namespace ParserTenders.TenderDir
                                     name = $"{name} | {isZnvlp}";
 
                                     if (!string.IsNullOrEmpty(name))
+                                    {
                                         name = Regex.Replace(name, @"\s+", " ");
+                                    }
+
                                     var quantityValue = ((string)drugInfo.SelectToken("drugQuantity") ?? "")
                                         .Trim();
                                     var okei =
@@ -1133,7 +1181,9 @@ namespace ParserTenders.TenderDir
                                     cmd23.ExecuteNonQuery();
                                     PoExist = true;
                                     if (idCustomer == 0)
+                                    {
                                         Log.Logger("Нет id_customer", FilePath);
+                                    }
                                 }
                             }
                         }

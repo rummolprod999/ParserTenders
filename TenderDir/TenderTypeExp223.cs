@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
@@ -16,32 +20,38 @@ namespace ParserTenders.TenderDir
             AddExp223 += delegate(int d)
             {
                 if (d > 0)
+                {
                     Program.AddClarification223++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить Explanation223", FilePath);
+                }
             };
         }
 
         public override void Parsing()
         {
             var xml = GetXml(File.ToString());
-            var c = (JObject) T.SelectToken("explanation.body.item.explanationData");
+            var c = (JObject)T.SelectToken("explanation.body.item.explanationData");
             if (!c.IsNullOrEmpty())
             {
                 var purchaseNumber =
-                    ((string) c.SelectToken("purchaseRegNum") ?? "").Trim();
+                    ((string)c.SelectToken("purchaseRegNum") ?? "").Trim();
                 //Console.WriteLine(purchaseNumber);
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     //Log.Logger("Не могу найти purchaseNumber у sign223", FilePath);
                     return;
                 }
-                var idT = ((string) c.SelectToken("guid") ?? "").Trim();
+
+                var idT = ((string)c.SelectToken("guid") ?? "").Trim();
                 if (string.IsNullOrEmpty(idT))
                 {
                     Log.Logger("У clarification нет guid", FilePath);
                     return;
                 }
+
                 var docNumber = "";
                 using (var connect = ConnectToDb.GetDbConnection())
                 {
@@ -67,9 +77,10 @@ namespace ParserTenders.TenderDir
                         docPublishDate = (JsonConvert.SerializeObject(c.SelectToken("modificationDate") ?? "") ??
                                           "").Trim('"');
                     }
-                    var href = ((string) c.SelectToken("urlOOS") ?? "").Trim();
-                    var question = ((string) c.SelectToken("requestSubjectInfo") ?? "").Trim();
-                    var topic = ((string) c.SelectToken("description") ?? "").Trim();
+
+                    var href = ((string)c.SelectToken("urlOOS") ?? "").Trim();
+                    var question = ((string)c.SelectToken("requestSubjectInfo") ?? "").Trim();
+                    var topic = ((string)c.SelectToken("description") ?? "").Trim();
                     var insertClarification =
                         $"INSERT INTO {Program.Prefix}clarifications SET id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, doc_number = @doc_number, question = @question, topic = @topic, xml = @xml";
                     var cmd2 = new MySqlCommand(insertClarification, connect);
@@ -83,14 +94,14 @@ namespace ParserTenders.TenderDir
                     cmd2.Parameters.AddWithValue("@topic", topic);
                     cmd2.Parameters.AddWithValue("@xml", xml);
                     var resInsertC = cmd2.ExecuteNonQuery();
-                    var idClar = (int) cmd2.LastInsertedId;
+                    var idClar = (int)cmd2.LastInsertedId;
                     AddExp223?.Invoke(resInsertC);
                     var attachments = GetElements(c, "attachments.document");
                     foreach (var att in attachments)
                     {
-                        var attachName = ((string) att.SelectToken("fileName") ?? "").Trim();
-                        var attachDescription = ((string) att.SelectToken("description") ?? "").Trim();
-                        var attachUrl = ((string) att.SelectToken("url") ?? "").Trim();
+                        var attachName = ((string)att.SelectToken("fileName") ?? "").Trim();
+                        var attachDescription = ((string)att.SelectToken("description") ?? "").Trim();
+                        var attachUrl = ((string)att.SelectToken("url") ?? "").Trim();
                         if (!string.IsNullOrEmpty(attachName))
                         {
                             var insertAttach =

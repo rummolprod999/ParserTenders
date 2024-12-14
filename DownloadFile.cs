@@ -1,15 +1,19 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 
+#endregion
+
 namespace ParserTenders
 {
     public class DownloadFile
     {
-        private static object _locker = new object();
-        private static object _locker2 = new object();
+        private static readonly object _locker = new object();
+        private static readonly object _locker2 = new object();
         private bool _downCount = true;
 
         public void DownloadF(string sSourceUrl, string sDestinationPath, string proxy, int port, string useragent)
@@ -25,25 +29,30 @@ namespace ParserTenders
                     new FileInfo(sDestinationPath);
                 iExistLen = fINfo.Length;
             }
+
             if (iExistLen > 0)
+            {
                 saveFileStream = new FileStream(sDestinationPath,
                     FileMode.Append, FileAccess.Write,
                     FileShare.ReadWrite);
+            }
             else
+            {
                 saveFileStream = new FileStream(sDestinationPath,
                     FileMode.Create, FileAccess.Write,
                     FileShare.ReadWrite);
+            }
 
             HttpWebRequest hwRq;
             HttpWebResponse hwRes;
-            hwRq = (HttpWebRequest) HttpWebRequest.Create(sSourceUrl);
+            hwRq = (HttpWebRequest)HttpWebRequest.Create(sSourceUrl);
             //hwRq.Proxy = new WebProxy(proxy, port);
             //hwRq.UserAgent = useragent;
-            hwRq.AddRange((int) iExistLen);
+            hwRq.AddRange((int)iExistLen);
             try
             {
                 Stream smRespStream;
-                hwRes = (HttpWebResponse) hwRq.GetResponse();
+                hwRes = (HttpWebResponse)hwRq.GetResponse();
                 smRespStream = hwRes.GetResponseStream();
                 iFileSize = hwRes.ContentLength;
                 int iByteSize;
@@ -53,19 +62,21 @@ namespace ParserTenders
                 {
                     saveFileStream.Write(downBuffer, 0, iByteSize);
                 }
+
                 saveFileStream.Dispose();
                 saveFileStream.Close();
                 saveFileStream = null;
             }
             catch (WebException ex)
             {
-                hwRes = (HttpWebResponse) ex.Response;
+                hwRes = (HttpWebResponse)ex.Response;
                 if (hwRes != null && (hwRes.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable ||
                                       hwRes.StatusCode == HttpStatusCode.NotFound))
                 {
                     _downCount = false;
                     Log.Logger("Ошибка скачивания", ex, sSourceUrl);
                 }
+
                 saveFileStream.Dispose();
                 saveFileStream.Close();
                 saveFileStream = null;
@@ -140,6 +151,7 @@ namespace ParserTenders
                     rnd = new Random().Next(proxies.Count);
                     proxy = proxies[rnd];
                 }
+
                 if (r == 1)
                 {
                     lock (_locker2)
@@ -148,6 +160,7 @@ namespace ParserTenders
                         proxy = proxiesAuth[rnd];
                     }
                 }
+
                 try
                 {
                     var ip = proxy.Substring(0, proxy.IndexOf(":"));
@@ -175,6 +188,7 @@ namespace ParserTenders
                         {
                             wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
                         }
+
                         client.Proxy = wp;
 
                         using (var stream = client.OpenRead(url))
@@ -185,6 +199,7 @@ namespace ParserTenders
                                 Log.Logger("Too many file", url);
                                 return patharch;
                             }
+
                             using (var file = File.Create(patharch))
                             {
                                 var buffer = new byte[4096];
@@ -196,11 +211,13 @@ namespace ParserTenders
                             }
                         }
                     }
+
                     var fileD = new FileInfo(patharch);
                     if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
                     }
+
                     return patharch;
                 }
                 catch (Exception)
@@ -212,12 +229,14 @@ namespace ParserTenders
                             {
                                 proxies.Remove(proxy);
                             }
+
                             break;
                         case 1:
                             lock (_locker2)
                             {
                                 proxiesAuth.Remove(proxy);
                             }
+
                             break;
                     }
                     //Console.WriteLine(e);
@@ -225,6 +244,7 @@ namespace ParserTenders
 
                 count++;
             }
+
             Log.Logger($"Не скачали файл за {count} попыток", url);
             try
             {
@@ -240,6 +260,7 @@ namespace ParserTenders
             {
                 Log.Logger("Не удалось скачать файл без прокси", url, e);
             }
+
             return patharch;
         }
 
@@ -270,6 +291,7 @@ namespace ParserTenders
                     rnd = new Random().Next(proxiesAuthCopy.Count);
                     proxy = proxiesAuthCopy[rnd];
                 }
+
                 try
                 {
                     var ip = proxy.Substring(0, proxy.IndexOf(":"));
@@ -297,6 +319,7 @@ namespace ParserTenders
                         {
                             wp.Credentials = new NetworkCredential("VIP233572", "YC2iFQFpOf");
                         }
+
                         client.Proxy = wp;
 
                         using (var stream = client.OpenRead(url))
@@ -307,6 +330,7 @@ namespace ParserTenders
                                 Log.Logger("Too lagre file!!!!", url);
                                 return patharch;
                             }
+
                             using (var file = File.Create(patharch))
                             {
                                 var buffer = new byte[4096];
@@ -318,11 +342,13 @@ namespace ParserTenders
                             }
                         }
                     }
+
                     var fileD = new FileInfo(patharch);
                     if (fileD.Exists && fileD.Length == 0)
                     {
                         continue;
                     }
+
                     return patharch;
                 }
                 catch (Exception e)
@@ -341,6 +367,7 @@ namespace ParserTenders
 
                 count++;
             }
+
             Log.Logger($"Не скачали файл за {count} попыток", url);
             try
             {
@@ -356,6 +383,7 @@ namespace ParserTenders
             {
                 Log.Logger("Не удалось скачать файл без прокси", url, e);
             }
+
             return patharch;
         }
     }

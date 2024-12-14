@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+
+#endregion
 
 namespace ParserTenders
 {
@@ -14,9 +18,9 @@ namespace ParserTenders
             var originalBytes = windows1251.GetBytes(s);
             return utf8.GetString(originalBytes);
         }
+
         public static DateTime ParseDateUn(this string s, string form)
         {
-            
             var d = DateTime.MinValue;
             if (!string.IsNullOrEmpty(s))
             {
@@ -29,6 +33,7 @@ namespace ParserTenders
                     // ignored
                 }
             }
+
             return d;
         }
 
@@ -48,6 +53,7 @@ namespace ParserTenders
             {
                 Log.Logger(e, r);
             }
+
             return ret;
         }
     }

@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+
+#endregion
 
 namespace ParserTenders
 {
@@ -18,7 +22,7 @@ namespace ParserTenders
             var d = 0.0m;
             try
             {
-                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
+                IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
                 d = decimal.Parse(s, formatter);
             }
             catch (Exception e)
@@ -28,6 +32,7 @@ namespace ParserTenders
 
             return d;
         }
+
         public static decimal ParsePriceMrsk(string s)
         {
             s = WebUtility.HtmlDecode(s);
@@ -37,7 +42,7 @@ namespace ParserTenders
             var d = 0.0m;
             try
             {
-                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = "."};
+                IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "." };
                 d = decimal.Parse(s, formatter);
             }
             catch (Exception)
@@ -47,6 +52,7 @@ namespace ParserTenders
 
             return d;
         }
+
         public static decimal ParsePriceRosneft(string s)
         {
             s = WebUtility.HtmlDecode(s);
@@ -56,7 +62,7 @@ namespace ParserTenders
             var d = 0.0m;
             try
             {
-                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
+                IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
                 d = decimal.Parse(s, formatter);
             }
             catch (Exception)
@@ -66,9 +72,9 @@ namespace ParserTenders
 
             return d;
         }
+
         public static DateTime ParseDateTend(string s)
         {
-            
             var d = DateTime.MinValue;
             if (!string.IsNullOrEmpty(s))
             {
@@ -81,12 +87,12 @@ namespace ParserTenders
                     // ignored
                 }
             }
+
             return d;
         }
-        
+
         public static DateTime ParseDateMrsk(string s)
         {
-            
             var d = DateTime.MinValue;
             if (!string.IsNullOrEmpty(s))
             {
@@ -99,9 +105,10 @@ namespace ParserTenders
                     // ignored
                 }
             }
+
             return d;
         }
-        
+
         public static int GetConformity(string conf)
         {
             var sLower = conf.ToLower();

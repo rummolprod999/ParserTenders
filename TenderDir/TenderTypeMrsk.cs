@@ -1,13 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data;
+using System.Net;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
+
+#endregion
 
 namespace ParserTenders.TenderDir
 {
     public class TenderTypeMrsk
     {
-        private TypeMrsk _tend;
+        private readonly TypeMrsk _tend;
         private string _etpUrl => "http://www.mrsksevzap.ru";
         private const int TypeFz = 9;
 
@@ -36,7 +41,7 @@ namespace ParserTenders.TenderDir
                 cmd.Parameters.AddWithValue("@date_version", dateUpd);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -61,7 +66,7 @@ namespace ParserTenders.TenderDir
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@purchase_number", _tend.IdTender);
                 cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-                var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
                 var dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 //Console.WriteLine(dt2.Rows.Count);
@@ -69,7 +74,7 @@ namespace ParserTenders.TenderDir
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                     update = true;
-                    if (dateUpd >= (DateTime) row["date_version"])
+                    if (dateUpd >= (DateTime)row["date_version"])
                     {
                         row["cancel"] = 1;
                         //row.AcceptChanges();
@@ -82,18 +87,18 @@ namespace ParserTenders.TenderDir
                 }
 
                 var commandBuilder =
-                    new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                    new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                 //Console.WriteLine(commandBuilder.GetUpdateCommand().CommandText);
                 adapter2.Update(dt2);
                 var noticeVersion = "";
                 var printForm = _tend.Href;
                 var customerId = 0;
                 var organiserId = 0;
-                var navT = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
+                var navT = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
                 var idPlacingWay = 0;
                 var pwName =
                     (navT?.SelectSingleNode(
-                         "//table/tbody/tr[td[position()=1]/b= 'Способ размещения заказа']/td[last()]")?.Value ?? "")
+                        "//table/tbody/tr[td[position()=1]/b= 'Способ размещения заказа']/td[last()]")?.Value ?? "")
                     .Trim();
                 if (!string.IsNullOrEmpty(pwName))
                 {
@@ -103,11 +108,11 @@ namespace ParserTenders.TenderDir
                     cmd5.Prepare();
                     cmd5.Parameters.AddWithValue("@name", pwName);
                     var dt4 = new DataTable();
-                    var adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
+                    var adapter4 = new MySqlDataAdapter { SelectCommand = cmd5 };
                     adapter4.Fill(dt4);
                     if (dt4.Rows.Count > 0)
                     {
-                        idPlacingWay = (int) dt4.Rows[0].ItemArray[0];
+                        idPlacingWay = (int)dt4.Rows[0].ItemArray[0];
                     }
                     else
                     {
@@ -117,7 +122,7 @@ namespace ParserTenders.TenderDir
                         cmd6.Prepare();
                         cmd6.Parameters.AddWithValue("@name", pwName);
                         cmd6.ExecuteNonQuery();
-                        idPlacingWay = (int) cmd6.LastInsertedId;
+                        idPlacingWay = (int)cmd6.LastInsertedId;
                     }
                 }
 
@@ -130,11 +135,11 @@ namespace ParserTenders.TenderDir
                 cmd7.Parameters.AddWithValue("@name", etpName);
                 cmd7.Parameters.AddWithValue("@url", _etpUrl);
                 var dt5 = new DataTable();
-                var adapter5 = new MySqlDataAdapter {SelectCommand = cmd7};
+                var adapter5 = new MySqlDataAdapter { SelectCommand = cmd7 };
                 adapter5.Fill(dt5);
                 if (dt5.Rows.Count > 0)
                 {
-                    idEtp = (int) dt5.Rows[0].ItemArray[0];
+                    idEtp = (int)dt5.Rows[0].ItemArray[0];
                 }
                 else
                 {
@@ -145,17 +150,17 @@ namespace ParserTenders.TenderDir
                     cmd8.Parameters.AddWithValue("@name", etpName);
                     cmd8.Parameters.AddWithValue("@url", _etpUrl);
                     cmd8.ExecuteNonQuery();
-                    idEtp = (int) cmd8.LastInsertedId;
+                    idEtp = (int)cmd8.LastInsertedId;
                 }
 
                 var _dateEnd =
                     (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Дата завершения']/td[last()]")
-                         ?.Value ?? "").Trim();
+                        ?.Value ?? "").Trim();
                 var dateEnd = UtilsFromParsing.ParseDateMrsk(_dateEnd);
                 var purObjInfo =
                     (navT?.SelectSingleNode("//table/tbody/tr[td[position()=1]/b= 'Наименование заказа']/td[last()]")
-                         ?.Value ?? "").Trim();
-                purObjInfo = System.Net.WebUtility.HtmlDecode(purObjInfo);
+                        ?.Value ?? "").Trim();
+                purObjInfo = WebUtility.HtmlDecode(purObjInfo);
                 var insertTender =
                     $"INSERT INTO {Program.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                 var cmd9 = new MySqlCommand(insertTender, connect);
@@ -180,7 +185,7 @@ namespace ParserTenders.TenderDir
                 cmd9.Parameters.AddWithValue("@xml", _tend.Href);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 if (update)
                 {
                     Program.UpMrsk++;
@@ -197,13 +202,13 @@ namespace ParserTenders.TenderDir
                 foreach (var att in attach)
                 {
                     var fName = (att.SelectSingleNode(".//div[@class = 'b-file__main']/a/span[@class = 'b-text']")
-                                        ?.InnerText ?? "").Trim();
+                        ?.InnerText ?? "").Trim();
                     var urlF = (att.SelectSingleNode(".//div[@class = 'b-file__main']/a[@href]")?.Attributes["href"]
-                                       ?.Value ?? "")
+                            ?.Value ?? "")
                         .Trim();
                     urlF = $"{_etpUrl}{urlF}";
                     var Desc = (att.SelectSingleNode(".//div[@class = 'b-file__size']")?.InnerText ?? "").Trim();
-                    Desc = System.Net.WebUtility.HtmlDecode(Desc);
+                    Desc = WebUtility.HtmlDecode(Desc);
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =
@@ -224,7 +229,7 @@ namespace ParserTenders.TenderDir
                              "//table/tbody/tr[td[position()=1]/b= 'Сумма']/td[last()]")
                          ?.Value ??
                      "").Trim();
-                prc = System.Net.WebUtility.HtmlDecode(prc);
+                prc = WebUtility.HtmlDecode(prc);
                 var maxP = UtilsFromParsing.ParsePriceMrsk(prc);
                 var currency = "";
                 if (!string.IsNullOrEmpty(prc))
@@ -245,7 +250,7 @@ namespace ParserTenders.TenderDir
                 cmd18.Parameters.AddWithValue("@currency", currency);
                 cmd18.Parameters.AddWithValue("@finance_source", "");
                 cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = (int)cmd18.LastInsertedId;
                 Tender.TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tend.IdTender);
             }
@@ -261,7 +266,7 @@ namespace ParserTenders.TenderDir
             cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
             cmd1.Parameters.AddWithValue("@type_fz", TypeFz);
             var dt1 = new DataTable();
-            var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter1 = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter1.Fill(dt1);
             if (dt1.Rows.Count > 0)
             {
@@ -269,7 +274,7 @@ namespace ParserTenders.TenderDir
                     $"UPDATE {Program.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
                 foreach (DataRow ten in dt1.Rows)
                 {
-                    var idTender = (int) ten["id_tender"];
+                    var idTender = (int)ten["id_tender"];
                     var cmd2 = new MySqlCommand(updateTender, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_tender", idTender);

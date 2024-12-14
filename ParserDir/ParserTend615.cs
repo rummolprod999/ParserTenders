@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -10,16 +12,18 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
 
+#endregion
+
 namespace ParserTenders.ParserDir
 
 {
     public class ParserTend615 : Parser
     {
-        private string[] _fileCancel = {"notificationcancel_"};
-        private string[] _filecontract = {"contract_"};
-        private string[] _fileDatechange = {"datechange_", "timeef_"};
-        private string[] _fileLotcancel = {"lotcancel_"};
-        private string[] _fileXml615 = {"notificationef_", "notificationpo_"};
+        private readonly string[] _fileCancel = { "notificationcancel_" };
+        private readonly string[] _filecontract = { "contract_" };
+        private readonly string[] _fileDatechange = { "datechange_", "timeef_" };
+        private readonly string[] _fileLotcancel = { "lotcancel_" };
+        private readonly string[] _fileXml615 = { "notificationef_", "notificationpo_" };
         protected DataTable DtRegion;
 
         public ParserTend615(TypeArguments arg) : base(arg)
@@ -33,7 +37,7 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path"];
+                var regionPath = (string)row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last615:
@@ -58,7 +62,7 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
 
@@ -79,7 +83,7 @@ namespace ParserTenders.ParserDir
             {
                 var arch = new List<string>();
                 var pathParse = "";
-                var regionPath = (string) row["path"];
+                var regionPath = (string)row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last615:
@@ -104,7 +108,7 @@ namespace ParserTenders.ParserDir
 
                 foreach (var v in arch)
                 {
-                    GetListFileArch(v, pathParse, (string) row["conf"], (int) row["id"]);
+                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
                 }
             }
 
@@ -257,7 +261,7 @@ namespace ParserTenders.ParserDir
             var newLs = GetListFtp44New(pathParse);
             var yearsSearch = Program.Years.Select(y => $"notification_{regionPath}{y}").ToList();
             foreach (var a in newLs.Where(a =>
-                yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
             {
                 if (a.Item2 == 0)
                 {
