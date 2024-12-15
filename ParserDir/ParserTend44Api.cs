@@ -372,7 +372,7 @@ namespace ParserTenders.ParserDir
                 {
                     if (count <= 0)
                     {
-                        Log.Logger($"Не удалось скачать {url} за {count} попыток");
+                        Log.Logger($"Не удалось скачать {url}");
                         break;
                     }
 

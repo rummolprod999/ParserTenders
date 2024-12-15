@@ -286,7 +286,7 @@ namespace ParserTenders
                 {
                     var guid = Guid.NewGuid();
                     var currDate = DateTime.Now.ToString("s");
-                    var prevday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                    var prevday = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
                     var request =
                         $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-le/ws\">\n    <soapenv:Header/>\n    <soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>PRIZ</subsystemType>\n    <documentType44>{type}</documentType44>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
                     var response = "";
@@ -324,7 +324,7 @@ namespace ParserTenders
                 {
                     var guid = Guid.NewGuid();
                     var currDate = DateTime.Now.ToString("s");
-                    var prevday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                    var prevday = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
                     var request =
                         $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-le/ws\">\n    <soapenv:Header/>\n    <soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>RI223</subsystemType>\n    <documentType223>{type}</documentType223>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
                     var response = "";
