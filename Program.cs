@@ -55,6 +55,9 @@ namespace ParserTenders
         private static string _tempPathRequestQ44;
         private static string _logPathRequestQ44;
         private static string _useWeb;
+        public static bool _newApi;
+        public static int _days;
+        public static string _token;
         private static string _tempSignProj44;
         private static string _logSignProj44;
         public static readonly DateTime LocalDate = DateTime.Now;
@@ -465,6 +468,9 @@ namespace ParserTenders
             _logPath223 = set.LogPathTenders223;
             Prefix = set.Prefix;
             _useWeb = set.UseWeb;
+            _newApi = set.NewApi;
+            _token = set.Token;
+            _days = set.Days;
             User = set.UserDb;
             Pass = set.PassDb;
             _tempPath44 = set.TempPathTenders44;

@@ -43,6 +43,9 @@
 	<logdir_preq44>log_preq44</logdir_preq44>
 	<prefix></prefix>
 	<useweb>true</useweb>
+	<newapi>false</newapi>
+	<token>edb04342-8607-49de-b5ee-ecc724fb220b</token>
+	<days>2</days>
 	<userdb>parser</userdb>
 	<passdb>Dft56Point</passdb>
 	<server>localhost</server>

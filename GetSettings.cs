@@ -37,6 +37,9 @@ namespace ParserTenders
         public readonly int Port;
         public readonly string Prefix;
         public readonly string UseWeb;
+        public readonly bool NewApi;
+        public readonly int Days;
+        public readonly string Token;
         public readonly string Server;
         public readonly string TempGntWeb;
         public readonly string TempMrsk;
@@ -212,6 +215,15 @@ namespace ParserTenders
                             break;
                         case "useweb":
                             UseWeb = xnode.InnerText;
+                            break;
+                        case "newapi":
+                            NewApi = Boolean.Parse(xnode.InnerText);
+                            break;
+                        case "token":
+                            Token = xnode.InnerText;
+                            break;
+                        case "days":
+                            Days = int.TryParse(xnode.InnerText, out Days) ? int.Parse(xnode.InnerText) : 3;
                             break;
                         case "userdb":
                             UserDb = xnode.InnerText;

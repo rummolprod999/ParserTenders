@@ -39,44 +39,47 @@ namespace ParserTenders.ParserDir
         public override void Parsing()
         {
             DtRegion = GetRegions();
-            foreach (DataRow row in DtRegion.Rows)
+            for (var i = Program._days; i >= 0; i--)
             {
-                foreach (var type in types)
+                foreach (DataRow row in DtRegion.Rows)
                 {
-                    try
+                    foreach (var type in types)
                     {
-                        var arch = new List<string>();
-                        var pathParse = "";
-                        var regionKladr = (string)row["conf"];
-                        switch (Program.Periodparsing)
+                        try
                         {
-                            case TypeArguments.Curr615:
-                                arch = GetListArchCurr(regionKladr, type);
-                                break;
-                        }
-
-                        if (arch.Count == 0)
-                        {
-                            Log.Logger($"Получен пустой список архивов регион {regionKladr} тип {type}");
-                            continue;
-                        }
-
-                        foreach (var v in arch)
-                        {
-                            try
+                            var arch = new List<string>();
+                            var pathParse = "";
+                            var regionKladr = (string)row["conf"];
+                            switch (Program.Periodparsing)
                             {
-                                GetListFileArch(v, (string)row["conf"], (int)row["id"]);
+                                case TypeArguments.Curr615:
+                                    arch = GetListArchCurr(regionKladr, type, i);
+                                    break;
                             }
-                            catch (Exception e)
+
+                            if (arch.Count == 0)
                             {
-                                Console.WriteLine(e);
-                                Log.Logger(v, e);
+                                Log.Logger($"Получен пустой список архивов регион {regionKladr} тип {type}");
+                                continue;
+                            }
+
+                            foreach (var v in arch)
+                            {
+                                try
+                                {
+                                    GetListFileArch(v, (string)row["conf"], (int)row["id"]);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                    Log.Logger(v, e);
+                                }
                             }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Logger("Ошибка ", e);
+                        catch (Exception e)
+                        {
+                            Log.Logger("Ошибка ", e);
+                        }
                     }
                 }
             }
@@ -213,10 +216,10 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        public List<string> GetListArchCurr(string regionKladr, string type)
+        public List<string> GetListArchCurr(string regionKladr, string type, int i)
         {
             var arch = new List<string>();
-            var resp = DownloadString.soap44(regionKladr, type);
+            var resp = DownloadString.soap44(regionKladr, type, i);
             var xDoc = new XmlDocument();
             xDoc.LoadXml(resp);
             var nodeList = xDoc.SelectNodes("//dataInfo/archiveUrl");
