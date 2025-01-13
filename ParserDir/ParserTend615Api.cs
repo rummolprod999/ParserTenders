@@ -243,6 +243,7 @@ namespace ParserTenders.ParserDir
                 {
                     using (var client = new TimedWebClient())
                     {
+                        client.Headers.Add("individualPerson_token", Program._token);
                         client.DownloadFile(url, dest);
                     }
 
