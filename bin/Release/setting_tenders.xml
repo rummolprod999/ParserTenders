@@ -45,7 +45,7 @@
 	<useweb>true</useweb>
 	<newapi>true</newapi>
 	<token>edb04342-8607-49de-b5ee-ecc724fb220b</token>
-	<days>3</days>
+	<days>1</days>
 	<userdb>parser</userdb>
 	<passdb>Dft56Point</passdb>
 	<server>localhost</server>

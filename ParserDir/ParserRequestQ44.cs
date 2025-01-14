@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -24,6 +25,12 @@ namespace ParserTenders.ParserDir
         {
             "fcsrequestforquotation_"
         };
+        
+        private readonly string[] types =
+        {
+            "fcsRequestForQuotation",
+            "fcsRequestForQuotationCancel"
+        };
 
         public ParserRequestQ44(TypeArguments arg) : base(arg)
         {
@@ -32,89 +39,71 @@ namespace ParserTenders.ParserDir
         public override void Parsing()
         {
             DtRegion = GetRegions();
-            foreach (DataRow row in DtRegion.Rows)
+            for (var i = Program._days; i >= 0; i--)
             {
-                var arch = new List<string>();
-                var pathParse = "";
-                var regionPath = (string)row["path"];
-                switch (Program.Periodparsing)
+                foreach (DataRow row in DtRegion.Rows)
                 {
-                    case TypeArguments.LastReq44:
-                        pathParse = $"/fcs_regions/{regionPath}/requestquotation/";
-                        arch = GetListArchLast(pathParse, regionPath);
-                        break;
-                    case TypeArguments.CurrReq44:
-                        pathParse = $"/fcs_regions/{regionPath}/requestquotation/currMonth/";
-                        arch = GetListArchCurr(pathParse, regionPath);
-                        break;
-                    case TypeArguments.PrevReq44:
-                        pathParse = $"/fcs_regions/{regionPath}/requestquotation/prevMonth/";
-                        arch = GetListArchPrev(pathParse, regionPath);
-                        break;
-                }
+                    foreach (var type in types)
+                    {
+                        try
+                        {
+                            var arch = new List<string>();
+                            var pathParse = "";
+                            var regionKladr = (string)row["conf"];
+                            switch (Program.Periodparsing)
+                            {
+                                case TypeArguments.CurrReq44:
+                                    arch = GetListArchCurr(regionKladr, type, i);
+                                    break;
+                            }
 
-                if (arch.Count == 0)
-                {
-                    Log.Logger("Получен пустой список архивов", pathParse);
-                    continue;
-                }
+                            if (arch.Count == 0)
+                            {
+                                Log.Logger($"Получен пустой список архивов регион {regionKladr} тип {type}");
+                                continue;
+                            }
 
-                foreach (var v in arch)
-                {
-                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
+                            foreach (var v in arch)
+                            {
+                                try
+                                {
+                                    GetListFileArch(v, (string)row["conf"], (int)row["id"]);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                    Log.Logger(v, e);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Logger("Ошибка ", e);
+                        }
+                    }
                 }
             }
         }
 
-        public override List<string> GetListArchLast(string pathParse, string regionPath)
-        {
-            var archtemp = new List<string>();
-            /*FtpClient ftp = ClientFtp44();*/
-            archtemp = GetListFtp44(pathParse);
-            var yearsSearch = Program.Years.Select(y => $"requestquotation_{regionPath}{y}").ToList();
-            yearsSearch.AddRange(Program.Years.Select(y => $"requestquotation{y}").ToList());
-            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
-        }
-
-        public override List<string> GetListArchCurr(string pathParse, string regionPath)
+        public List<string> GetListArchCurr(string regionKladr, string type, int i)
         {
             var arch = new List<string>();
-            var newLs = GetListFtp44New(pathParse);
-            var yearsSearch = Program.Years.Select(y => $"requestquotation_{regionPath}{y}").ToList();
-            yearsSearch.AddRange(Program.Years.Select(y => $"requestquotation{y}").ToList());
-            foreach (var a in newLs.Where(a =>
-                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+            var resp = DownloadString.soap44PriceReq(regionKladr, type, i);
+            var xDoc = new XmlDocument();
+            try
             {
-                if (a.Item2 == 0)
-                {
-                    Log.Logger("!!!archive size = 0", a.Item1);
-                    continue;
-                }
-
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tenders WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a.Item1);
-                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tenders SET arhiv = @archive, size_archive = @size_archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
-                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a.Item1);
-                    }
-                }
+                xDoc.LoadXml(resp);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            var nodeList = xDoc.SelectNodes("//dataInfo/archiveUrl");
+            foreach (XmlNode node in nodeList)
+            {
+                var nodeValue = node.InnerText;
+                arch.Add(nodeValue);
             }
 
             return arch;
@@ -156,11 +145,11 @@ namespace ParserTenders.ParserDir
             return arch;
         }
 
-        public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
+        public void GetListFileArch(string arch, string region, int regionId)
         {
             var filea = "";
             var pathUnzip = "";
-            filea = GetArch44(arch, pathParse);
+            filea = downloadArchive(arch);
             if (!string.IsNullOrEmpty(filea))
             {
                 pathUnzip = Unzipped.Unzip(filea);
@@ -223,6 +212,40 @@ namespace ParserTenders.ParserDir
                         throw new ArgumentOutOfRangeException(nameof(typefile), typefile, null);
                 }
             }
+        }
+        
+        private string downloadArchive(string url)
+        {
+            var count = 5;
+            var sleep = 5000;
+            var dest = $"{Program.TempPath}{Path.DirectorySeparatorChar}array.zip";
+            while (true)
+            {
+                try
+                {
+                    using (var client = new TimedWebClient())
+                    {
+                        client.Headers.Add("individualPerson_token", Program._token);
+                        client.DownloadFile(url, dest);
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        Log.Logger($"Не удалось скачать {url}");
+                        break;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
+
+            return dest;
         }
     }
 }
