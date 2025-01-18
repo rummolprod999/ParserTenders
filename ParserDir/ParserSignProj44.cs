@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -20,6 +22,11 @@ namespace ParserTenders.ParserDir
     {
         private readonly string[] _fileSign = { "cpcontractsign_" };
 
+        private readonly string[] types =
+        {
+            "cpContractSign"
+        };
+
         protected DataTable DtRegion;
 
         public ParserSignProj44(TypeArguments arg) : base(arg)
@@ -29,43 +36,41 @@ namespace ParserTenders.ParserDir
         public override void Parsing()
         {
             DtRegion = GetRegions();
-            foreach (DataRow row in DtRegion.Rows)
+            for (var i = Program._days; i >= 0; i--)
             {
-                var arch = new List<string>();
-                var pathParse = "";
-                var regionPath = (string)row["path"];
-                switch (Program.Periodparsing)
+                foreach (DataRow row in DtRegion.Rows)
                 {
-                    case TypeArguments.LastSignProj44:
-                        pathParse = $"/fcs_regions/{regionPath}/contractprojects/";
-                        arch = GetListArchLast(pathParse, regionPath);
-                        break;
-                    case TypeArguments.CurrSignProj44:
-                        pathParse = $"/fcs_regions/{regionPath}/contractprojects/currMonth/";
-                        arch = GetListArchCurr(pathParse, regionPath);
-                        break;
-                    case TypeArguments.PrevSignProj44:
-                        pathParse = $"/fcs_regions/{regionPath}/contractprojects/prevMonth/";
-                        arch = GetListArchPrev(pathParse, regionPath);
-                        break;
-                }
+                    foreach (var type in types)
+                    {
+                        var arch = new List<string>();
+                        var pathParse = "";
+                        var regionKladr = (string)row["conf"];
+                        switch (Program.Periodparsing)
+                        {
+                            case TypeArguments.CurrSignProj44:
+                                pathParse = $"";
+                                arch = GetListArchCurr(regionKladr, type, i);
+                                break;
+                        }
 
-                if (arch.Count == 0)
-                {
-                    Log.Logger("Получен пустой список архивов", pathParse);
-                    continue;
-                }
+                        if (arch.Count == 0)
+                        {
+                            Log.Logger("Получен пустой список архивов", pathParse);
+                            continue;
+                        }
 
-                foreach (var v in arch)
-                {
-                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
+                        foreach (var v in arch)
+                        {
+                            GetListFileArch(v, (string)row["conf"], (int)row["id"]);
+                        }
+                    }
                 }
             }
         }
 
-        public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
+        public void GetListFileArch(string arch, string region, int regionId)
         {
-            var filea = GetArch44(arch, pathParse);
+            var filea = downloadArchive(arch);
             if (string.IsNullOrEmpty(filea))
             {
                 return;
@@ -96,6 +101,40 @@ namespace ParserTenders.ParserDir
             }
 
             dirInfo.Delete(true);
+        }
+
+        private string downloadArchive(string url)
+        {
+            var count = 5;
+            var sleep = 5000;
+            var dest = $"{Program.TempPath}{Path.DirectorySeparatorChar}array.zip";
+            while (true)
+            {
+                try
+                {
+                    using (var client = new TimedWebClient())
+                    {
+                        client.Headers.Add("individualPerson_token", Program._token);
+                        client.DownloadFile(url, dest);
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        Log.Logger($"Не удалось скачать {url}");
+                        break;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
+
+            return dest;
         }
 
         public override void Bolter(FileInfo f, string region, int regionId)
@@ -138,48 +177,68 @@ namespace ParserTenders.ParserDir
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<string> GetListArchCurr(string pathParse, string regionPath)
+        public List<string> GetListArchCurr(string regionKladr, string type, int i)
         {
             var arch = new List<string>();
-            var newLs = GetListFtp44New(pathParse);
-            var yearsSearch = Program.Years.Select(y => $"contractproject_{regionPath}{y}").ToList();
-            yearsSearch.AddRange(Program.Years.Select(y => $"contractproject{y}").ToList());
-            foreach (var a in newLs.Where(a =>
-                         yearsSearch.Any(t => a.Item1.IndexOf(t, StringComparison.Ordinal) != -1)))
+            var resp = soap44(regionKladr, type, i);
+            var xDoc = new XmlDocument();
+            try
             {
-                if (a.Item2 == 0)
-                {
-                    Log.Logger("!!!archive size = 0", a.Item1);
-                    continue;
-                }
+                xDoc.LoadXml(resp);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_sign_proj44 WHERE arhiv = @archive AND size_archive IN(0, @size_archive)";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a.Item1);
-                    cmd.Parameters.AddWithValue("@size_archive", a.Item2);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_sign_proj44 SET arhiv = @archive, size_archive = @size_archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a.Item1);
-                        cmd1.Parameters.AddWithValue("@size_archive", a.Item2);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a.Item1);
-                    }
-                }
+            var nodeList = xDoc.SelectNodes("//dataInfo/archiveUrl");
+            foreach (XmlNode node in nodeList)
+            {
+                var nodeValue = node.InnerText;
+                arch.Add(nodeValue);
             }
 
             return arch;
+        }
+
+        public static string soap44(string regionKladr, string type, int i)
+        {
+            var count = 5;
+            var sleep = 2000;
+            while (true)
+            {
+                try
+                {
+                    var guid = Guid.NewGuid();
+                    var currDate = DateTime.Now.ToString("s");
+                    var prevday = DateTime.Now.AddDays(-1 * i).ToString("yyyy-MM-dd");
+                    var request =
+                        $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n<ws:getDocsByOrgRegionRequest>\n<index>\n<id>{guid}</id>\n<createDateTime>{currDate}</createDateTime>\n<mode>PROD</mode>\n</index>\n<selectionParams>\n<orgRegion>{regionKladr}</orgRegion>\n<subsystemType>RPEC</subsystemType>\n<documentType44>{type}</documentType44>\n<periodInfo><exactDate>{prevday}</exactDate></periodInfo>\n</selectionParams>\n</ws:getDocsByOrgRegionRequest>\n</soapenv:Body>\n</soapenv:Envelope>";
+                    var url = "https://int44.zakupki.gov.ru/eis-integration/services/getDocsIP";
+                    var response = "";
+                    using (WebClient wc = new TimedWebClient())
+                    {
+                        wc.Headers[HttpRequestHeader.ContentType] = "text/xml; charset=utf-8";
+                        response = wc.UploadString(url,
+                            request);
+                    }
+
+                    //Console.WriteLine(response);
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        throw;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
         }
 
         public override List<string> GetListArchPrev(string pathParse, string regionPath)
