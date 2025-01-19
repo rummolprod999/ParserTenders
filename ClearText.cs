@@ -5,6 +5,7 @@ namespace ParserTenders
         public static string ClearString(string s)
         {
             var st = s;
+            st = st.Replace("ns1:", "");
             st = st.Replace("ns2:", "");
             st = st.Replace("ns3:", "");
             st = st.Replace("ns4:", "");

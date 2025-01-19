@@ -46,7 +46,7 @@ namespace ParserTenders.TenderDir
         {
             var xml = GetXml(File.ToString());
             var upd = 0;
-            var c = (JObject)T.SelectToken("contract.body.item.contractData");
+            var c = (JObject)T.SelectToken("contractCutted.body.item.contractData");
             if (c.IsNullOrEmpty())
             {
                 return;
