@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
@@ -21,6 +22,11 @@ namespace ParserTenders.ParserDir
         protected DataTable DtRegion;
 
         private readonly string[] _fileSign223 = { "contract_" };
+        
+        private readonly string[] types =
+        {
+            "contractCutted"
+        };
 
         public ParserSgn223(TypeArguments arg) : base(arg)
         {
@@ -29,32 +35,33 @@ namespace ParserTenders.ParserDir
         public override void Parsing()
         {
             DtRegion = GetRegions();
-            foreach (DataRow row in DtRegion.Rows)
+            for (var i = Program._days; i >= 0; i--)
             {
-                var arch = new List<string>();
-                var pathParse = "";
-                var regionPath = (string)row["path223"];
-                switch (Program.Periodparsing)
+                foreach (DataRow row in DtRegion.Rows)
                 {
-                    case TypeArguments.LastSign223:
-                        pathParse = $"/out/published/{regionPath}/contract/";
-                        arch = GetListArchLast(pathParse, regionPath);
-                        break;
-                    case TypeArguments.DailySign223:
-                        pathParse = $"/out/published/{regionPath}/contract/daily/";
-                        arch = GetListArchDaily(pathParse, regionPath);
-                        break;
-                }
+                    foreach (var type in types)
+                    {
+                        var arch = new List<string>();
+                        var pathParse = "";
+                        var regionKladr = (string)row["conf"];
+                        switch (Program.Periodparsing)
+                        {
+                            case TypeArguments.DailySign223:
+                                arch = GetListArchDaily(regionKladr, type, i);
+                                break;
+                        }
 
-                if (arch.Count == 0)
-                {
-                    Log.Logger("Получен пустой список архивов", pathParse);
-                    continue;
-                }
+                        if (arch.Count == 0)
+                        {
+                            Log.Logger("Получен пустой список архивов", pathParse);
+                            continue;
+                        }
 
-                foreach (var v in arch)
-                {
-                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
+                        foreach (var v in arch)
+                        {
+                            GetListFileArch(v, (string)row["conf"], (int)row["id"]);
+                        }
+                    }
                 }
             }
         }
@@ -73,13 +80,47 @@ namespace ParserTenders.ParserDir
                 a.Parsing();
             }
         }
+        
+        private string downloadArchive(string url)
+        {
+            var count = 5;
+            var sleep = 5000;
+            var dest = $"{Program.TempPath}{Path.DirectorySeparatorChar}array.zip";
+            while (true)
+            {
+                try
+                {
+                    using (var client = new TimedWebClient())
+                    {
+                        client.Headers.Add("individualPerson_token", Program._token);
+                        client.DownloadFile(url, dest);
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        Log.Logger($"Не удалось скачать {url}");
+                        break;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
+
+            return dest;
+        }
 
 
-        public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
+        public void GetListFileArch(string arch, string region, int regionId)
         {
             var filea = "";
             var pathUnzip = "";
-            filea = GetArch223(arch, pathParse);
+            filea = downloadArchive(arch);
             if (!string.IsNullOrEmpty(filea))
             {
                 pathUnzip = Unzipped.Unzip(filea);
@@ -89,11 +130,7 @@ namespace ParserTenders.ParserDir
                     {
                         var dirInfo = new DirectoryInfo(pathUnzip);
                         var filelist = dirInfo.GetFiles();
-                        var arraySign223 = filelist
-                            .Where(a => _fileSign223.Any(
-                                            t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1) &&
-                                        a.Length != 0).ToList();
-                        foreach (var f in arraySign223)
+                        foreach (var f in filelist)
                         {
                             try
                             {
@@ -143,51 +180,67 @@ namespace ParserTenders.ParserDir
             return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
         }
 
-        public override List<string> GetListArchDaily(string pathParse, string regionPath)
+        public List<string> GetListArchDaily(string regionKladr, string type, int i)
         {
             var arch = new List<string>();
-            var archtemp = GetListFtp223(pathParse);
-            foreach (var a in archtemp
-                         .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            var resp = soapReq(regionKladr, type, i);
+            var xDoc = new XmlDocument();
+            try
             {
-                /*using (ArchiveSign223Context db = new ArchiveSign223Context())
-                {
-                    var archives = db.ArchiveSign223Results.Where(p => p.Archive == a).ToList();
-
-                    if (archives.Count == 0)
-                    {
-                        ArchiveSign223 ar = new ArchiveSign223 {Archive = a, Region = regionPath};
-                        db.ArchiveSign223Results.Add(ar);
-                        arch.Add(a);
-                        db.SaveChanges();
-                    }
-                }*/
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_tender223_sign WHERE arhiv = @archive";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_tender223_sign SET arhiv = @archive, region = @region";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
-                        cmd1.Parameters.AddWithValue("@region", regionPath);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a);
-                    }
-                }
+                xDoc.LoadXml(resp);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            var nodeList = xDoc.SelectNodes("//dataInfo/archiveUrl");
+            foreach (XmlNode node in nodeList)
+            {
+                var nodeValue = node.InnerText;
+                arch.Add(nodeValue);
             }
 
             return arch;
+        }
+        
+        public static string soapReq(string regionKladr, string type, int i)
+        {
+            var count = 5;
+            var sleep = 2000;
+            while (true)
+            {
+                try
+                {
+                    var guid = Guid.NewGuid();
+                    var currDate = DateTime.Now.ToString("s");
+                    var prevday = DateTime.Now.AddDays(-1 * i).ToString("yyyy-MM-dd");
+                    var request =
+                        $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n<ws:getDocsByOrgRegionRequest>\n<index>\n<id>{guid}</id>\n<createDateTime>{currDate}</createDateTime>\n<mode>PROD</mode>\n</index>\n<selectionParams>\n<orgRegion>{regionKladr}</orgRegion>\n<subsystemType>RD223</subsystemType>\n<documentType44>{type}</documentType44>\n<periodInfo><exactDate>{prevday}</exactDate></periodInfo>\n</selectionParams>\n</ws:getDocsByOrgRegionRequest>\n</soapenv:Body>\n</soapenv:Envelope>";
+                    var url = "https://int44.zakupki.gov.ru/eis-integration/services/getDocsIP";
+                    var response = "";
+                    using (WebClient wc = new TimedWebClient())
+                    {
+                        wc.Headers[HttpRequestHeader.ContentType] = "text/xml; charset=utf-8";
+                        response = wc.UploadString(url,
+                            request);
+                    }
+
+                    //Console.WriteLine(response);
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        throw;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
         }
     }
 }
