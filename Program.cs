@@ -202,6 +202,7 @@ namespace ParserTenders
                     case TypeArguments.CurrReq44:
                     case TypeArguments.PrevReq44:
                     case TypeArguments.LastReq44:
+                    case TypeArguments.Req44Web:
                         return _tempPathRequestQ44;
                     default:
                         return "";
@@ -266,6 +267,7 @@ namespace ParserTenders
                     case TypeArguments.CurrReq44:
                     case TypeArguments.PrevReq44:
                     case TypeArguments.LastReq44:
+                    case TypeArguments.Req44Web:
                         return _logPathRequestQ44;
                     default:
                         return "";
@@ -447,6 +449,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserRequestQ44(Periodparsing);
                     break;
+                case "req44web":
+                    Periodparsing = TypeArguments.Req44Web;
+                    Init(Periodparsing);
+                    ParserRequestQ44Web(Periodparsing);
+                    break;
                 case "currreq44":
                     Periodparsing = TypeArguments.CurrReq44;
                     Init(Periodparsing);
@@ -621,6 +628,9 @@ namespace ParserTenders
                 case TypeArguments.LastReq44:
                 case TypeArguments.PrevReq44:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}RequestQ44_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Req44Web:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}RequestQ44Web_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
@@ -1105,6 +1115,30 @@ namespace ParserTenders
             try
             {
                 var t44 = new ParserRequestQ44(Periodparsing);
+                t44.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
+            /*ParserTend44 t44 = new ParserTend44(Periodparsing);
+            FileInfo f =
+                new FileInfo(
+                    "/home/alex/RiderProjects/ParserTenders/ParserTenders/bin/Release/222.xml");
+            t44.ParsingXml(f, "br", 32, TypeFile44.TypeTen504);*/
+
+            Log.Logger("Добавили tender44", AddRequestQ44);
+            Log.Logger("Обновили tender44", UpdateRequestQ44);
+            Log.Logger("Время окончания парсинга RequestQ44");
+        }
+        
+        private static void ParserRequestQ44Web(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга RequestQ44");
+            try
+            {
+                var t44 = new ParserRequestQ44Web(Periodparsing);
                 t44.Parsing();
             }
             catch (Exception e)

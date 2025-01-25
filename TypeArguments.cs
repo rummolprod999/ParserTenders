@@ -33,6 +33,7 @@ namespace ParserTenders
         LastCurr44,
         CurrReq44,
         PrevReq44,
-        LastReq44
+        LastReq44,
+        Req44Web,
     }
 }
