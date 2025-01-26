@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
@@ -325,6 +324,7 @@ namespace ParserTenders.TenderDir
                     var deliveryTerm2 =
                         (JsonConvert.SerializeObject(tender.SelectToken("procedureInfo.purchase.endDate") ?? "") ??
                          "").Trim('"');
+                    var paymentTerms = ((string)tender.SelectToken("conditions.addInfo") ?? "").Trim();
                     var deliveryTerm3 =
                         ((string)tender.SelectToken("conditions.main") ?? "").Trim();
                     var deliveryTerm4 =
@@ -337,11 +337,13 @@ namespace ParserTenders.TenderDir
                         ((string)tender.SelectToken("conditions.addInfo") ?? "").Trim();
                     var deliveryTerm8 =
                         ((string)tender.SelectToken("conditions.contractGuarantee") ?? "").Trim();
+                    var deliveryTerm9 =
+                        ((string)tender.SelectToken("conditions.payment") ?? "").Trim();
                     var deliveryTerm =
-                        $"Предполагаемые сроки проведения закупки  | {deliveryTerm1} | {deliveryTerm2} | {deliveryTerm3} | {deliveryTerm4} | {deliveryTerm5} | {deliveryTerm6} | {deliveryTerm7} | обеспечение контракта:  {deliveryTerm8}"
+                        $"Предполагаемые сроки проведения закупки  | {deliveryTerm1} | {deliveryTerm2} | {deliveryTerm3} | {deliveryTerm4} | {deliveryTerm5} | гарантийный срок: {deliveryTerm6} | {deliveryTerm7} | гарантийные обязательства:  {deliveryTerm8} | {deliveryTerm9}"
                             .Trim();
                     var insertCustomerRequirement =
-                        $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name";
+                        $"INSERT INTO {Program.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, kladr_place = @kladr_place, delivery_place = @delivery_place, delivery_term = @delivery_term, application_guarantee_amount = @application_guarantee_amount, application_settlement_account = @application_settlement_account, application_personal_account = @application_personal_account, application_bik = @application_bik, contract_guarantee_amount = @contract_guarantee_amount, contract_settlement_account = @contract_settlement_account, contract_personal_account = @contract_personal_account, contract_bik = @contract_bik, max_price = @max_price, plan_number = @plan_number, position_number = @position_number, prov_war_amount = @prov_war_amount, prov_war_part = @prov_war_part, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, paymentTerms = @paymentTerms";
                     var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
                     cmd16.Prepare();
                     cmd16.Parameters.AddWithValue("@id_lot", idLot);
@@ -367,16 +369,25 @@ namespace ParserTenders.TenderDir
                     cmd16.Parameters.AddWithValue("@prov_war_part", "");
                     cmd16.Parameters.AddWithValue("@OKPD2_code", "");
                     cmd16.Parameters.AddWithValue("@OKPD2_name", "");
+                    cmd16.Parameters.AddWithValue("@paymentTerms", paymentTerms);
                     cmd16.ExecuteNonQuery();
                     var purchaseobjects = GetElements(tender, "products.product");
                     foreach (var purchaseobject in purchaseobjects)
                     {
                         var okpd2Code = ((string)purchaseobject.SelectToken("OKPD2.code")
                                          ?? "").Trim();
+                        if (okpd2Code.Contains("-"))
+                        {
+                            okpd2Code = okpd2Code.Split('-')[0];
+                        }
                         if (string.IsNullOrEmpty(okpd2Code))
                         {
                             okpd2Code = ((string)purchaseobject.SelectToken("KTRU.code")
                                          ?? "").Trim();
+                            if (okpd2Code.Contains("-"))
+                            {
+                                okpd2Code = okpd2Code.Split('-')[0];
+                            }
                         }
 
                         var okpdName = ((string)purchaseobject.SelectToken("OKPD2.name") ?? "").Trim();
@@ -396,7 +407,7 @@ namespace ParserTenders.TenderDir
                             .Trim();
                         var okei = ((string)purchaseobject.SelectToken("OKEI.name") ?? "").Trim();
                         var insertCustomerquantity =
-                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value";
+                            $"INSERT INTO {Program.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_code = @okpd_code, okpd_name = @okpd_name, name = @name, quantity_value = @quantity_value, price = @price, okei = @okei, sum = @sum, customer_quantity_value = @customer_quantity_value, info = @info";
                         var cmd23 = new MySqlCommand(insertCustomerquantity, connect);
                         cmd23.Prepare();
                         cmd23.Parameters.AddWithValue("@id_lot", idLot);
@@ -411,6 +422,7 @@ namespace ParserTenders.TenderDir
                         cmd23.Parameters.AddWithValue("@price", "");
                         cmd23.Parameters.AddWithValue("@okei", okei);
                         cmd23.Parameters.AddWithValue("@sum", "");
+                        cmd23.Parameters.AddWithValue("@info", purchaseobject.ToString());
                         cmd23.Parameters.AddWithValue("@customer_quantity_value", quantityValue);
                         cmd23.ExecuteNonQuery();
                         TenderKwords(connect, idTender, false, new List<string>().ToArray());
