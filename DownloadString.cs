@@ -276,7 +276,7 @@ namespace ParserTenders
             return tmp;
         }
 
-        public static string soap44(string regionKladr, string type, int i)
+        public static string soap44(string regionKladr, string type, int i, string subsystem = "PRIZ")
         {
             var count = 5;
             var sleep = 2000;
@@ -287,7 +287,7 @@ namespace ParserTenders
                     var guid = Guid.NewGuid();
                     var currDate = DateTime.Now.ToString("s");
                     var prevday = DateTime.Now.AddDays(-1 * i).ToString("yyyy-MM-dd");
-                    var oldRequest = $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>PRIZ</subsystemType>\n    <documentType44>{type}</documentType44>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
+                    var oldRequest = $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n    <ws:getDocsByOrgRegionRequest>\n    <index>\n    <id>{guid}</id>\n    <createDateTime>{currDate}</createDateTime>\n    <mode>PROD</mode>\n    </index>\n    <selectionParams>\n    <orgRegion>{regionKladr}</orgRegion>\n    <subsystemType>{subsystem}</subsystemType>\n    <documentType44>{type}</documentType44>\n    <periodInfo>\n    <exactDate>{prevday}</exactDate>\n    </periodInfo>\n    </selectionParams>\n    </ws:getDocsByOrgRegionRequest>\n    </soapenv:Body>\n    </soapenv:Envelope>";
                     var newRequest =
                         $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n<ws:getDocsByOrgRegionRequest>\n<index>\n<id>{guid}</id>\n<createDateTime>{currDate}</createDateTime>\n<mode>PROD</mode>\n</index>\n<selectionParams>\n<orgRegion>{regionKladr}</orgRegion>\n<subsystemType>PRIZ</subsystemType>\n<documentType44>{type}</documentType44>\n<periodInfo><exactDate>{prevday}</exactDate></periodInfo>\n</selectionParams>\n</ws:getDocsByOrgRegionRequest>\n</soapenv:Body>\n</soapenv:Envelope>";
                     var request = Program._newApi ? newRequest : oldRequest;

@@ -13,7 +13,7 @@ namespace ParserTenders
         protected override WebRequest GetWebRequest(Uri address)
         {
             var wr = base.GetWebRequest(address);
-            wr.Timeout = 300000;
+            wr.Timeout = 30000;
             return wr;
         }
     }
@@ -38,7 +38,7 @@ namespace ParserTenders
         {
             var wr = (HttpWebRequest)base.GetWebRequest(address);
             wr.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
-            wr.Timeout = 90000;
+            wr.Timeout = 30000;
             //wr.UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.131 Safari/537.36";
             wr.UserAgent = RandomUa.RandomUserAgent;
             //wr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,#1#*;q=0.8,application/signed-exchange;v=b3;q=0.9";

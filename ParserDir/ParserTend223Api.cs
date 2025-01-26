@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -248,39 +247,6 @@ namespace ParserTenders.ParserDir
 
             return arch;
         }
-
-        private string downloadArchive(string url)
-        {
-            var count = 5;
-            var sleep = 5000;
-            var dest = $"{Program.TempPath}{Path.DirectorySeparatorChar}array.zip";
-            while (true)
-            {
-                try
-                {
-                    using (var client = new TimedWebClient())
-                    {
-                        client.Headers.Add("individualPerson_token", Program._token);
-                        client.DownloadFile(url, dest);
-                    }
-
-                    break;
-                }
-                catch (Exception e)
-                {
-                    if (count <= 0)
-                    {
-                        Log.Logger($"Не удалось скачать {url}");
-                        break;
-                    }
-
-                    count--;
-                    Thread.Sleep(sleep);
-                    sleep *= 2;
-                }
-            }
-
-            return dest;
-        }
+        
     }
 }

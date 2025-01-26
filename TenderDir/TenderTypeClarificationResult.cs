@@ -36,7 +36,7 @@ namespace ParserTenders.TenderDir
         {
             var xml = GetXml(File.ToString());
             var root = (JObject)T.SelectToken("export");
-            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC"));
+            var firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC") || p.Name.Contains("pprf615C"));
             if (firstOrDefault != null)
             {
                 var tender = firstOrDefault.Value;
@@ -74,7 +74,7 @@ namespace ParserTenders.TenderDir
 
                     reader.Close();
                     var docPublishDate =
-                        (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
+                        (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? tender.SelectToken("commonInfo.docPublishDate") ?? "") ??
                          "").Trim('"');
                     var href = ((string)tender.SelectToken("commonInfo.href") ?? "").Trim();
                     var question = ((string)tender.SelectToken("requestInfo.question") ?? "").Trim();

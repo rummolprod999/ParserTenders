@@ -116,7 +116,7 @@ namespace ParserTenders.TenderDir
             }
             else
             {
-                firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC"));
+                firstOrDefault = root.Properties().FirstOrDefault(p => p.Name.Contains("epC") || p.Name.Contains("pprf615C"));
                 if (firstOrDefault != null)
                 {
                     var tender = firstOrDefault.Value;
@@ -154,9 +154,9 @@ namespace ParserTenders.TenderDir
 
                         reader.Close();
                         var docPublishDate =
-                            (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? "") ??
+                            (JsonConvert.SerializeObject(tender.SelectToken("commonInfo.docPublishDTInEIS") ?? tender.SelectToken("commonInfo.docPublishDate") ?? "") ??
                              "").Trim('"');
-                        var href = ((string)tender.SelectToken("href") ?? "").Trim();
+                        var href = ((string)tender.SelectToken("href") ?? (string)tender.SelectToken("commonInfo.href") ?? "").Trim();
                         var question = ((string)tender.SelectToken("question") ?? "").Trim();
                         var topic = ((string)tender.SelectToken("commonInfo.topic") ?? "").Trim();
                         var insertClarification =
