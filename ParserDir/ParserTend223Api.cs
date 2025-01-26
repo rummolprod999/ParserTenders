@@ -55,7 +55,6 @@ namespace ParserTenders.ParserDir
                         try
                         {
                             var arch = new List<string>();
-                            var pathParse = "";
                             var regionKladr = (string)row["conf"];
                             switch (Program.Periodparsing)
                             {

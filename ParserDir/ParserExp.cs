@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Xml;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ParserTenders.TenderDir;
@@ -22,6 +23,12 @@ namespace ParserTenders.ParserDir
 
         private readonly string[] _fileExp223 = { "explanation_" };
 
+        private readonly string[] types =
+        {
+            "explanation",
+            "explanationRequest"
+        };
+
         public ParserExp(TypeArguments arg) : base(arg)
         {
         }
@@ -29,96 +36,104 @@ namespace ParserTenders.ParserDir
         public override void Parsing()
         {
             DtRegion = GetRegions();
-            foreach (DataRow row in DtRegion.Rows)
+            for (var i = Program._days; i >= 0; i--)
             {
-                var arch = new List<string>();
-                var pathParse = "";
-                var regionPath = (string)row["path223"];
-                switch (Program.Periodparsing)
+                foreach (DataRow row in DtRegion.Rows)
                 {
-                    case TypeArguments.LastExp223:
-                        pathParse = $"/out/published/{regionPath}/explanation/";
-                        arch = GetListArchLast(pathParse, regionPath);
-                        break;
-                    case TypeArguments.DailyExp223:
-                        pathParse = $"/out/published/{regionPath}/explanation/daily/";
-                        arch = GetListArchDaily(pathParse, regionPath);
-                        break;
-                }
+                    foreach (var type in types)
+                    {
+                        try
+                        {
+                            var arch = new List<string>();
+                            var regionKladr = (string)row["conf"];
+                            switch (Program.Periodparsing)
+                            {
+                                case TypeArguments.DailyExp223:
+                                    arch = GetListArchDaily(regionKladr, type, i);
+                                    break;
+                            }
 
-                if (arch.Count == 0)
-                {
-                    Log.Logger("Получен пустой список архивов", pathParse);
-                    continue;
-                }
+                            if (arch.Count == 0)
+                            {
+                                Log.Logger($"Получен пустой список архивов регион {regionKladr} тип {type}");
+                                continue;
+                            }
 
-                foreach (var v in arch)
-                {
-                    GetListFileArch(v, pathParse, (string)row["conf"], (int)row["id"]);
+                            foreach (var v in arch)
+                            {
+                                GetListFileArch(v, (string)row["conf"], (int)row["id"], type);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Logger("Ошибка ", e);
+                        }
+                    }
                 }
             }
         }
 
-        public override List<string> GetListArchLast(string pathParse, string regionPath)
-        {
-            /*FtpClient ftp = ClientFtp44();*/
-            var archtemp = GetListFtp223(pathParse);
-            var yearsSearch = Program.Years.Select(y => $"explanation_{regionPath}{y}").ToList();
-            return archtemp.Where(a => yearsSearch.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)).ToList();
-        }
 
-        public override List<string> GetListArchDaily(string pathParse, string regionPath)
+        public List<string> GetListArchDaily(string regionKladr, string type, int i)
         {
             var arch = new List<string>();
-            var archtemp = GetListFtp223(pathParse);
-            foreach (var a in archtemp
-                         .Where(a => Program.Years.Any(t => a.IndexOf(t, StringComparison.Ordinal) != -1)))
+            var resp = soap223(regionKladr, type, i);
+            var xDoc = new XmlDocument();
+            xDoc.LoadXml(resp);
+            var nodeList = xDoc.SelectNodes("//dataInfo/archiveUrl");
+            foreach (XmlNode node in nodeList)
             {
-                /*using (ArchiveExp223Context db = new ArchiveExp223Context())
-                {
-                    var archives = db.ArchiveExp223Results.Where(p => p.Archive == a).ToList();
-
-                    if (archives.Count == 0)
-                    {
-                        ArchiveExp223 ar = new ArchiveExp223 {Archive = a, Region = regionPath};
-                        db.ArchiveExp223Results.Add(ar);
-                        arch.Add(a);
-                        db.SaveChanges();
-                    }
-                }*/
-                using (var connect = ConnectToDb.GetDbConnection())
-                {
-                    connect.Open();
-                    var selectArch =
-                        $"SELECT id FROM {Program.Prefix}arhiv_explanation223 WHERE arhiv = @archive";
-                    var cmd = new MySqlCommand(selectArch, connect);
-                    cmd.Prepare();
-                    cmd.Parameters.AddWithValue("@archive", a);
-                    var reader = cmd.ExecuteReader();
-                    var resRead = reader.HasRows;
-                    reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}arhiv_explanation223 SET arhiv = @archive, region = @region";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
-                        cmd1.Parameters.AddWithValue("@region", regionPath);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a);
-                    }
-                }
+                var nodeValue = node.InnerText;
+                arch.Add(nodeValue);
             }
 
             return arch;
         }
 
-        public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
+        public static string soap223(string regionKladr, string type, int i)
+        {
+            var count = 5;
+            var sleep = 2000;
+            while (true)
+            {
+                try
+                {
+                    var guid = Guid.NewGuid();
+                    var currDate = DateTime.Now.ToString("s");
+                    var prevday = DateTime.Now.AddDays(-1 * i).ToString("yyyy-MM-dd");
+                    var request =
+                        $"<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://zakupki.gov.ru/fz44/get-docs-ip/ws\">\n<soapenv:Header>\n<individualPerson_token>{Program._token}</individualPerson_token>\n</soapenv:Header>\n<soapenv:Body>\n<ws:getDocsByOrgRegionRequest>\n<index>\n<id>{guid}</id>\n<createDateTime>{currDate}</createDateTime>\n<mode>PROD</mode>\n</index>\n<selectionParams>\n<orgRegion>{regionKladr}</orgRegion>\n<subsystemType>RI223</subsystemType>\n<documentType223>{type}</documentType223>\n<periodInfo>\n<exactDate>{prevday}</exactDate>\n</periodInfo>  </selectionParams>\n</ws:getDocsByOrgRegionRequest>\n</soapenv:Body>\n</soapenv:Envelope>";
+                    var url = "https://int44.zakupki.gov.ru/eis-integration/services/getDocsIP";
+                    var response = "";
+                    using (WebClient wc = new TimedWebClient())
+                    {
+                        wc.Headers[HttpRequestHeader.ContentType] = "text/xml; charset=utf-8";
+                        response = wc.UploadString(url,
+                            request);
+                    }
+
+                    //Console.WriteLine(response);
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    if (count <= 0)
+                    {
+                        throw;
+                    }
+
+                    count--;
+                    Thread.Sleep(sleep);
+                    sleep *= 2;
+                }
+            }
+        }
+
+        public void GetListFileArch(string arch, string region, int regionId, string type)
         {
             var filea = "";
             var pathUnzip = "";
-            filea = GetArch223(arch, pathParse);
+            filea = downloadArchive(arch);
             if (!string.IsNullOrEmpty(filea))
             {
                 pathUnzip = Unzipped.Unzip(filea);
