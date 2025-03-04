@@ -176,7 +176,7 @@ namespace ParserTenders.ParserDir
 
             try
             {
-                Parser223Web(xml, url);
+                Parser223Web(xml, url, purNum);
             }
             catch (Exception e)
             {
@@ -184,7 +184,7 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        private void Parser223Web(string ftext, string url)
+        private void Parser223Web(string ftext, string url, string purNum)
         {
             ftext = ClearText.ClearString(ftext);
             var doc = new XmlDocument();
@@ -193,55 +193,55 @@ namespace ParserTenders.ParserDir
             var json = JObject.Parse(jsons);
             if (ftext.Contains("purchaseNoticeZPESMBO"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeZpesmbo);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeZpesmbo, purNum);
             }
 
             if (ftext.Contains("purchaseNoticeZKESMBO"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeZkesmbo);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeZkesmbo, purNum);
             }
 
             if (ftext.Contains("purchaseNoticeKESMBO"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeKesmbo);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeKesmbo, purNum);
             }
 
             if (ftext.Contains("purchaseNoticeAESMBO"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeAesmbo);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeAesmbo, purNum);
             }
 
             if (ftext.Contains("purchaseNoticeZK"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeZk);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeZk, purNum);
             }
             else if (ftext.Contains("purchaseNoticeOK"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeOk);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeOk, purNum);
             }
             else if (ftext.Contains("purchaseNoticeOA"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeOa);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeOa, purNum);
             }
             else if (ftext.Contains("purchaseNoticeIS"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeIs);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeIs, purNum);
             }
             else if (ftext.Contains("purchaseNoticeEP"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeEp);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeEp, purNum);
             }
             else if (ftext.Contains("purchaseNoticeAE94"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeAe94);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeAe94, purNum);
             }
             else if (ftext.Contains("purchaseNoticeAE"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNoticeAe);
+                Bolter223(url, json, TypeFile223.PurchaseNoticeAe, purNum);
             }
             else if (ftext.Contains("purchaseNotice"))
             {
-                Bolter223(url, json, TypeFile223.PurchaseNotice);
+                Bolter223(url, json, TypeFile223.PurchaseNotice, purNum);
             }
             else
             {
@@ -249,11 +249,11 @@ namespace ParserTenders.ParserDir
             }
         }
 
-        public void Bolter223(string url, JObject json, TypeFile223 typefile)
+        public void Bolter223(string url, JObject json, TypeFile223 typefile, string purNum)
         {
             try
             {
-                var a = new TenderType223Web(url, json, typefile);
+                var a = new TenderType223Web(url, json, typefile, purNum);
                 a.Parsing();
             }
             catch (Exception e)

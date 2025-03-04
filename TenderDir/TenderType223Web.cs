@@ -20,10 +20,12 @@ namespace ParserTenders.TenderDir
         private readonly TypeFile223 _purchase;
         private string _extendScoringDate = "";
         private string _extendBiddingDate = "";
+        private string _purNum;
 
-        public TenderType223Web(string url, JObject json, TypeFile223 p)
+        public TenderType223Web(string url, JObject json, TypeFile223 p, string purNum)
             : base(json, url)
         {
+            _purNum = purNum;
             _purchase = p;
             AddTender223 += delegate(int d)
             {
@@ -68,10 +70,11 @@ namespace ParserTenders.TenderDir
                     return;
                 }
 
-                var purchaseNumber = ((string)tender.SelectToken("registrationNumber") ?? "").Trim();
+                var purchaseNumber = ((string)tender.SelectToken("registrationNumber") ?? _purNum ?? "").Trim();
                 if (string.IsNullOrEmpty(purchaseNumber))
                 {
                     Log.Logger("У тендера нет purchaseNumber", FilePath);
+                    Log.Logger(tender.ToString());
                 }
 
                 using (var connect = ConnectToDb.GetDbConnection())
