@@ -35,5 +35,6 @@ namespace ParserTenders
         PrevReq44,
         LastReq44,
         Req44Web,
+        Web615
     }
 }

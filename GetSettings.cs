@@ -27,6 +27,7 @@ namespace ParserTenders
         public readonly string LogPathReq44;
         public readonly string LogPathTenders615;
         public readonly string LogPathTendersWeb;
+        public readonly string LogPathTendersWeb615;
         public readonly string LogPathTendersWeb44;
         public readonly string LogRosneft;
         public readonly string LogSakhalin;
@@ -57,6 +58,7 @@ namespace ParserTenders
         public readonly string TempPathReq44;
         public readonly string TempPathTenders615;
         public readonly string TempPathTendersWeb;
+        public readonly string TempPathTendersWeb615;
         public readonly string TempPathTendersWeb44;
         public readonly string TempRosneft;
         public readonly string TempSakhalin;
@@ -143,6 +145,12 @@ namespace ParserTenders
                             break;
                         case "tempdir_tenders_web":
                             TempPathTendersWeb = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "logdir_tenders_web615":
+                            LogPathTendersWeb615 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
+                            break;
+                        case "tempdir_tenders_web615":
+                            TempPathTendersWeb615 = $"{Program.PathProgram}{Path.DirectorySeparatorChar}{xnode.InnerText}";
                             break;
                         case "logdir_tenders_web44":
                             LogPathTendersWeb44 =
@@ -276,7 +284,8 @@ namespace ParserTenders
                 string.IsNullOrEmpty(TempPathTenders615) || string.IsNullOrEmpty(LogPathTendersWeb44) ||
                 string.IsNullOrEmpty(TempPathTendersWeb44) || string.IsNullOrEmpty(LogPathSignProj44) ||
                 string.IsNullOrEmpty(TempPathReq44) || string.IsNullOrEmpty(LogPathReq44) ||
-                string.IsNullOrEmpty(TempPathSignProj44))
+                string.IsNullOrEmpty(TempPathSignProj44) || string.IsNullOrEmpty(LogPathTendersWeb615) ||
+                string.IsNullOrEmpty(TempPathTendersWeb615))
             {
                 Console.WriteLine("Некоторые поля в файле настроек пустые");
                 Environment.Exit(0);

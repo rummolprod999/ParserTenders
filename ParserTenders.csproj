@@ -243,6 +243,7 @@
         <Compile Include="ParserDir\ParserTend615Api.cs"/>
         <Compile Include="ParserDir\ParserTendersWeb.cs"/>
         <Compile Include="ParserDir\ParserTendersWeb44.cs"/>
+        <Compile Include="ParserDir\ParserTendersWeb615.cs" />
         <Compile Include="ParserDir\ParserWeb.cs"/>
         <Compile Include="PlacingWayGpB.cs"/>
         <Compile Include="ProcedureGpB.cs"/>
@@ -257,6 +258,7 @@
         <Compile Include="TenderDir\TenderBase.cs"/>
         <Compile Include="TenderDir\TenderRequestQ44.cs"/>
         <Compile Include="TenderDir\TenderRequestQ44Web.cs" />
+        <Compile Include="TenderDir\TenderType615Web.cs" />
         <Compile Include="TenderDir\TenderTypeClarificationResult.cs"/>
         <Compile Include="TenderDir\TenderTypeSign223New.cs"/>
         <Compile Include="TenderDir\TenderTypeSignProj44.cs"/>

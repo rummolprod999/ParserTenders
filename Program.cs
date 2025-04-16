@@ -14,7 +14,7 @@ namespace ParserTenders
     internal static class Program
     {
         private const string Arguments =
-            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44, currreq44, prevreq44, lastreq44";
+            "last44, prev44, curr44, last223, daily223, attach, lastsign223, dailysign223, gpb, lastexp223, dailyexp223, gntweb, obtorgweb, spectorgweb, web, mrsk, rosneft, sakhalin, tekgpm, interrao, rzd, last615, prev615, curr615, web44, currsignproj44, lastsignproj44, prevsignproj44, lastcurr44, currreq44, prevreq44, lastreq44, web615";
 
         private static string _tempPath44;
         private static string _logPath44;
@@ -38,6 +38,8 @@ namespace ParserTenders
         private static string _tempSpecTorgWeb;
         private static string _tempPathWeb;
         private static string _logPathWeb;
+        private static string _tempPathWeb615;
+        private static string _logPathWeb615;
         private static string _tempMrsk;
         private static string _logMrsk;
         private static string _tempRosneft;
@@ -181,6 +183,8 @@ namespace ParserTenders
                         return _tempSpecTorgWeb;
                     case TypeArguments.Web:
                         return _tempPathWeb;
+                    case TypeArguments.Web615:
+                        return _tempPathWeb615;
                     case TypeArguments.Mrsk:
                         return _tempMrsk;
                     case TypeArguments.Rosneft:
@@ -246,6 +250,8 @@ namespace ParserTenders
                         return _logSpecTorgWeb;
                     case TypeArguments.Web:
                         return _logPathWeb;
+                    case TypeArguments.Web615:
+                        return _logPathWeb615;
                     case TypeArguments.Mrsk:
                         return _logMrsk;
                     case TypeArguments.Rosneft:
@@ -389,6 +395,11 @@ namespace ParserTenders
                     Init(Periodparsing);
                     ParserWeb(Periodparsing);
                     break;
+                case "web615":
+                    Periodparsing = TypeArguments.Web615;
+                    Init(Periodparsing);
+                    ParserWeb615(Periodparsing);
+                    break;
                 case "web44":
                     Periodparsing = TypeArguments.Web44;
                     Init(Periodparsing);
@@ -504,6 +515,8 @@ namespace ParserTenders
             _logSpecTorgWeb = set.LogSpecTorgWeb;
             _tempPathWeb = set.TempPathTendersWeb;
             _logPathWeb = set.LogPathTendersWeb;
+            _tempPathWeb615 = set.TempPathTendersWeb615;
+            _logPathWeb615 = set.LogPathTendersWeb615;
             _tempPathWeb44 = set.TempPathTendersWeb44;
             _logPathWeb44 = set.LogPathTendersWeb44;
             _tempMrsk = set.TempMrsk;
@@ -596,6 +609,9 @@ namespace ParserTenders
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Web:
+                    FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
+                    break;
+                case TypeArguments.Web615:
                     FileLog = $"{LogPath}{Path.DirectorySeparatorChar}{arg}_{LocalDate:dd_MM_yyyy}.log";
                     break;
                 case TypeArguments.Web44:
@@ -961,6 +977,26 @@ namespace ParserTenders
             Log.Logger("Обновили tender223", UpdateTender223);
             Log.Logger($"Количество скачиваний {DownloadString.MaxDownload}");
             Log.Logger("Время окончания парсинга Web");
+        }
+        private static void ParserWeb615(TypeArguments arg)
+        {
+            Log.Logger("Время начала парсинга Web615");
+            try
+            {
+                var p = new ParserTendersWeb615(arg);
+                p.Parsing();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
+            Log.Logger("Добавили tender615", AddTender615);
+            Log.Logger("Обновили tender615", UpdateTender615);
+            Log.Logger("Добавили LotCancel615", AddLotCancel615);
+            Log.Logger("Добавили Cancel615", AddCancel615);
+            Log.Logger("Добавили DateChange615", AddDateChange615);
+            Log.Logger("Время окончания парсинга Tenders615");
         }
 
         private static void ParserWeb44(TypeArguments arg)

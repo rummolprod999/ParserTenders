@@ -23,6 +23,8 @@
 	<tempdir_spectorgweb>temp_spectorg_web</tempdir_spectorgweb>
 	<tempdir_tenders_web>temp_tenders_web</tempdir_tenders_web>
 	<logdir_tenders_web>log_tenders_web</logdir_tenders_web>
+	<tempdir_tenders_web615>temp_tenders_web615</tempdir_tenders_web615>
+	<logdir_tenders_web615>log_tenders_web615</logdir_tenders_web615>
 	<tempdir_mrsk>temp_mrsk</tempdir_mrsk>
 	<logdir_mrsk>log_mrsk</logdir_mrsk>
 	<tempdir_rosneft>temp_rosneft</tempdir_rosneft>
