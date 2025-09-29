@@ -2,11 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Xml;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
@@ -129,7 +124,7 @@ namespace ParserTenders.ParserDir
             }
 
             url = url.Replace("view.html", "viewXml.html");
-            url = $"https://zakupki.gov.ru{url}";
+            url = url.Contains("https://zakupki.gov.ru") ? url : $"https://zakupki.gov.ru{url}";
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
